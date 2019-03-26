@@ -1,0 +1,13 @@
+G:\Utilities\Sonic 06 & Storybook Duology\Sonic06Randomiser\Sonic06Randomiser\bin\Debug\HedgeLib.dll
+G:\Utilities\Sonic 06 & Storybook Duology\Sonic06Randomiser\Sonic06Randomiser\bin\Debug\HedgeLib.pdb
+G:\Utilities\Sonic 06 & Storybook Duology\Sonic06Randomiser\Sonic06Randomiser\obj\Debug\Sonic06Randomiser.csprojAssemblyReference.cache
+G:\Utilities\Sonic 06 & Storybook Duology\Sonic06Randomiser\Sonic06Randomiser\obj\Debug\Sonic06Randomiser.csproj.GenerateResource.cache
+G:\Utilities\Sonic 06 & Storybook Duology\Sonic06Randomiser\Sonic06Randomiser\obj\Debug\Sonic06Randomiser.csproj.CoreCompileInputs.cache
+G:\Utilities\Sonic 06 & Storybook Duology\Sonic06Randomiser\Sonic06Randomiser\obj\Debug\Sonic06Randomiser.csproj.CopyComplete
+G:\Utilities\Sonic 06 & Storybook Duology\Sonic06Randomiser\Sonic06Randomiser\obj\Debug\Sonic06Randomiser.Form1.resources
+G:\Utilities\Sonic 06 & Storybook Duology\Sonic06Randomiser\Sonic06Randomiser\obj\Debug\Sonic06Randomiser.Properties.Resources.resources
+G:\Utilities\Sonic 06 & Storybook Duology\Sonic06Randomiser\Sonic06Randomiser\bin\Debug\Sonic06Randomiser.exe.config
+G:\Utilities\Sonic 06 & Storybook Duology\Sonic06Randomiser\Sonic06Randomiser\bin\Debug\Sonic06Randomiser.exe
+G:\Utilities\Sonic 06 & Storybook Duology\Sonic06Randomiser\Sonic06Randomiser\bin\Debug\Sonic06Randomiser.pdb
+G:\Utilities\Sonic 06 & Storybook Duology\Sonic06Randomiser\Sonic06Randomiser\obj\Debug\Sonic06Randomiser.exe
+G:\Utilities\Sonic 06 & Storybook Duology\Sonic06Randomiser\Sonic06Randomiser\obj\Debug\Sonic06Randomiser.pdb
