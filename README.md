@@ -7,6 +7,3 @@ A tool designed to randomise various elements of the Set Object Layout Data in S
 2: Open up the Sonic06Randomiser.sln file in Visual Studio. Right click on the References tab in the Solution Explorer and select Add Reference. Choose browse on the left then on the bottom and navigate to the HedgeLib.dll, choose Add then click OK in the Reference Manager (ensure the HedgeLib.dll actually has a checkmark).
 
 3: Build the program (selecting Start should suffice).
-
-# Usage
-1: Select an XML to
