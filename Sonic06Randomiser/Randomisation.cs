@@ -1,404 +1,574 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.IO;
+using System.Xml.Linq;
 
 namespace Sonic06Randomiser
 {
     class Randomisation
     {
-        static public void Randomise(string filepath, string rndSeed, string output, bool randomEnemies, bool randomItems, bool randomCharacters, bool altCharacters, bool randomVoices, bool spoilerLog, bool keepXML, bool sourceOutput)
+        static public void SetupRandomiser(bool randomEnemies, List<string> validEnemies, bool randomCharacters, List<string> validCharacters, bool randomItems, List<string> validItems, bool randomVoices, bool spoilerLog, bool keepXML, bool randomiseFolder, int outputFolderType, string filepath, string output, string rndSeed)
         {
-            string logSeed = rndSeed; //Store the old seed for the Spoiler Log
+            string xmlName = ""; //Set up xmlName because variables suck at being defined in if statements
+            Random rnd = new Random();
+            string logSeed = rndSeed;
+            if (outputFolderType == 0 && output == "") { outputFolderType = 1; } //Default to saving in the program directory if the user doesn't specify a path with Output Folder Type set to custom.
 
-            //Load XML
-            string file = filepath;
-            string xmlName = filepath.Remove(0, Path.GetDirectoryName(filepath).Length);
-            xmlName = xmlName.Remove(xmlName.Length - 4);
-            xmlName = xmlName.Replace("\\", "");
-
-            //Set RND Seed
-            Random rnd = new Random(); //Set up RND
-            if (rndSeed != "")
+            if (!randomiseFolder)
             {
-                rndSeed = rndSeed + xmlName;
-                rnd = new Random(rndSeed.GetHashCode()); //Override RND with seed if user inputs one
-            }
+                #region Load the XML if we're only randomising one
+                string file = filepath;
+                xmlName = filepath.Remove(0, Path.GetDirectoryName(filepath).Length);
+                xmlName = xmlName.Remove(xmlName.Length - 4);
+                xmlName = xmlName.Replace("\\", "");
+                XElement doc = XElement.Load(file);
+                #endregion
 
-            //Setup Spoiler Log
-            StreamWriter sw = new StreamWriter(xmlName + "_log.txt");
-            if (output != "")
-            {
-                sw.Close();
-                File.Delete(xmlName + "_log.txt");
-                File.Delete(output + "\\" + xmlName + "_log.txt");
-                sw = new StreamWriter(output + "\\" + xmlName + "_log.txt");
+                #region Set up the Random Number Generation
+                if (rndSeed != "")
+                {
+                    rndSeed = rndSeed + xmlName;
+                    rnd = new Random(rndSeed.GetHashCode()); //Override RND with seed if the box wasn't blank
+                }
+                #endregion
+
+                StreamWriter spoiler;
+                #region Bodge Spoiler Log
+                switch (outputFolderType)
+                {
+                    case 0: //Custom
+                        spoiler = new StreamWriter(output + "\\" + xmlName + "_log.txt");
+                        break;
+                    case 1: //Source
+                        spoiler = new StreamWriter(filepath.Remove(filepath.Length - 4) + "_log.txt");
+                        break;
+                    case 2: //Program
+                        spoiler = new StreamWriter(xmlName + "_log.txt");
+                        break;
+                    default: //Need this otherwise spoiler becomes invalid for some god forsaken reason
+                        spoiler = new StreamWriter(filepath.Remove(filepath.Length - 4) + "_log.txt");
+                        break;
+                }
+
+                spoiler.WriteLine("Seed: " + logSeed);
+                spoiler.WriteLine("Randomise Enemies: " + randomEnemies);
+                if (randomEnemies)
+                {
+                    spoiler.WriteLine("Valid Enemies:");
+                    validEnemies.ForEach(i => spoiler.Write("{0}, ", i));
+                    spoiler.Write(Environment.NewLine);
+                }
+                spoiler.WriteLine("Randomise Character Spawns: " + randomCharacters);
+                if (randomCharacters)
+                {
+                    spoiler.WriteLine("Valid Characters:");
+                    validCharacters.ForEach(i => spoiler.Write("{0}, ", i));
+                    spoiler.Write(Environment.NewLine);
+                }
+                spoiler.WriteLine("Randomise Item Capsules: " + randomItems);
+                if (randomItems)
+                {
+                    spoiler.WriteLine("Valid Item Capsules:");
+                    validItems.ForEach(i => spoiler.Write("{0}, ", i));
+                    spoiler.Write(Environment.NewLine);
+                }
+                spoiler.WriteLine("Randomise Voice Line Triggers: " + randomVoices);
+                spoiler.Write(Environment.NewLine);
+                #endregion
+
+                //Do the randomisation functions here
+                if (randomEnemies) { EnemyRandomiser(doc, rnd, spoiler, validEnemies); }
+                if (randomCharacters) { CharacterRandomiser(doc, rnd, spoiler, validCharacters); }
+                if (randomItems) { ItemRandomiser(doc, rnd, spoiler, validItems); }
+                if (randomVoices) { VoiceRandomiser(doc, rnd, spoiler); }
+                spoiler.Close();
+                string xml = "Not Used";
+                SetSave(randomiseFolder, outputFolderType, doc, output, xmlName, filepath, keepXML, spoilerLog, xml);
             }
             else
             {
-                if (sourceOutput)
+                #region Load the Folder of XMLs
+                string[] xmls = Directory.GetFiles(filepath, "*.xml", SearchOption.AllDirectories);
+                Console.WriteLine("Found " + xmls.Length + " xml files");
+                foreach (string xml in xmls)
                 {
-                    sw.Close();
-                    File.Delete(xmlName + "_log.txt");
-                    File.Delete(filepath.Remove(filepath.Length - 4) + "_log.txt");
-                    sw = new StreamWriter(filepath.Remove(filepath.Length - 4) + "_log.txt");
-                }
-            }
+                    //Load XML
+                    xmlName = xml.Remove(0, Path.GetDirectoryName(xml).Length);
+                    xmlName = xmlName.Remove(xmlName.Length - 4);
+                    xmlName = xmlName.Replace("\\", "");
+                    XElement doc = XElement.Load(xml);
+                    Console.WriteLine(xmlName);
+                #endregion
 
-            //Spoiler Log Seed
-            sw.WriteLine("Seed: " + logSeed);
-            sw.WriteLine("Randomise Enemies: " + randomEnemies);
-            sw.WriteLine("Randomise Item Capsules: " + randomItems);
-            sw.WriteLine("Randomise Character Spawns: " + randomCharacters);
-            sw.WriteLine("Randomise Voice Line Triggers: " + randomVoices);
-            sw.Write(Environment.NewLine);
-
-            //Enemy Randomisation Strings
-            var enemyNames = new List<string> { "cBiter", "cCrawler", "cGolem", "cTaker", "eBomber", "eCannon", "eCannon(Fly)", "eFlyer", "eGuardian", "eGunner", "eGunner(Fly)", "eLiner", "eRounder", "eSearcher" }; //Valid Enemy Names to switch in
-            var cBiterParams = new List<string> { "cBiter_Normal", "cBiter_Fix", "cBiter_Freeze", "cBiter_Wall_Fix", "cBiter_Wall_Normal" }; //Valid Parameters for the cBiter enemy
-            var cCrawlerParams = new List<string> { "cCrawler_Wall_Fix", "cCrawler_Fix" }; //Valid Parameters for the cCrawler enemy
-            var cGolemParams = new List<string> { "cGolem_Normal", "cGolem_Alarm", "cGolem_Fix" }; //Valid Parameters for the cGolem enemy
-            var cTakerParams = new List<string> { "cTaker_Fix", "cTaker_Homing" }; //Valid Parameters for the cTaker enemy
-            var eBomberParams = new List<string> { "eBomber_Normal", "eBomber_Fix", "eBomber_Wall_Fix", "eBomber_Wall_Normal" }; //Valid Parameters for the eBomber enemy
-            var eCannonParams = new List<string> { "eCannon_Normal", "eCannon_Fix", "eCannon_Fix_Laser", "eCannon_Trans" }; //Valid Parameters for the eCannon enemy
-            var eCannonFlyParams = new List<string> { "eCannonFly_Fix", "eCannonFly_Carrier", "eCannonFly_Normal" }; //Valid Parameters for the eCannon(Fly) enemy
-            var eFlyerParams = new List<string> { "eFlyer_Homing", "eFlyer_Fix", "eFlyer_Fix_Rocket", "eFlyer_Fix_Vulcan", "eFlyer_Normal" }; //Valid Parameters for the eFlyer enemy
-            var eGuardianParams = new List<string> { "eGuardian_Normal", "eGuardian_Fix", "eGuardian_Ball_Normal", "eGuardian_Ball_Fix", "eGuardian_Freeze" }; //Valid Parameters for the eGuardian enemy
-            var eGunnerParams = new List<string> { "eGunner_Normal", "eGunner_Fix_Vulcan", "eGunner_Fix", "eGunner_Trans", "eGunner_Fix_Rocket" }; //Valid Parameters for the eGunner enemy
-            var eGunnerFlyParams = new List<string> { "eGunnerFly_Fix", "eGunnerFly_Normal", "eGunnerFly_Homing", "eGunnerFly_Chase", "eGunnerFly_Fix_Vulcan", "eGunnerFly_Fix_Rocket" }; //Valid Parameters for the eGunner(Fly) enemy
-            var eLinerParams = new List<string> { "eLiner_Slave", "eLiner_Normal" }; //Valid Parameters for the eLiner enemy
-            var eRounderParams = new List<string> { "eRounder_Normal", "eRounder_Slave", "eRounder_Twn_Escape", "eRounder_Twn_Chase", "eRounder_Fix" }; //Valid Parameters for the eRounder enemy
-            var eSearcherParams = new List<string> { "eSearcher_Fix", "eSearcher_Normal", "eSearcher_Alarm", "eSearcher_Fix_Rocket", "eSearcher_Fix_Bomb" }; //Valid Parameters for the eSearcher enemy
-            var characterNames = new List<string> { "sonic_new", "tails", "knuckles", "shadow", "rouge", "omega", "silver", "blaze", "amy", "princess" }; //Valid Character Names to switch in
-            var characterNamesAlts = new List<string> { "sonic_new", "tails", "knuckles", "shadow", "rouge", "omega", "silver", "blaze", "amy", "princess", "snow_board_wap", "snow_board", "sonic_fast" }; //Valid Character Names to switch in when using vehicles
-
-            int index = 0; //Random Number
-            var randomisedNames = new List<String>();
-
-            XElement doc = XElement.Load(file);
-
-            if (randomEnemies)
-            {
-                sw.WriteLine("Enemy Randomisation Outcomes");
-                //Randomise Enemy Type
-                var elements = doc.Descendants().Where(e => (e.Value == "cBiter") || (e.Value == "cCrawler") || (e.Value == "cGolem") || (e.Value == "cTaker") || (e.Value == "eBomber") || (e.Value == "eCannon") || (e.Value == "eFlyer") || (e.Value == "eGuardian") || (e.Value == "eGunner") || (e.Value == "eLiner") || (e.Value == "eRounder") || (e.Value == "eSearcher"));
-                foreach (var ele in elements)
-                {
-                    index = rnd.Next(enemyNames.Count);
-                    sw.Write(ele.Value + " became: ");
-                    ele.Value = enemyNames[index];
-                    sw.Write(ele.Value + "." + Environment.NewLine);
-                    randomisedNames.Add(ele.Value);
-                }
-                sw.Write(Environment.NewLine);
-
-                //Randomise Enemy Attributes
-                var elements2 = doc.Descendants().Where(e => (e.Value == "cBiter_Normal") || (e.Value == "cBiter_Fix") || (e.Value == "cBiter_Freeze") || (e.Value == "cBiter_Wall_Fix") || (e.Value == "cBiter_Wall_Normal") || (e.Value == "cCrawler_Wall_Fix") || (e.Value == "cCrawler_Fix") || (e.Value == "cGolem_Normal") || (e.Value == "cGolem_Alarm") || (e.Value == "cGolem_Fix") || (e.Value == "cTaker_Fix") || (e.Value == "cTaker_Homing") || (e.Value == "eBomber_Normal") || (e.Value == "eBomber_Fix") || (e.Value == "eBomber_Wall_Fix") || (e.Value == "eBomber_Wall_Normal") || (e.Value == "eCannon_Normal") || (e.Value == "eCannon_Fix") || (e.Value == "eCannon_Fix_Laser") || (e.Value == "eCannon_Trans") || (e.Value == "eFlyer_Homing") || (e.Value == "eFlyer_Fix") || (e.Value == "eFlyer_Fix_Rocket") || (e.Value == "eFlyer_Fix_Vulcan") || (e.Value == "eFlyer_Normal") || (e.Value == "eGuardian_Normal") || (e.Value == "eGuardian_Fix") || (e.Value == "eGuardian_Ball_Normal") || (e.Value == "eGuardian_Ball_Fix") || (e.Value == "eGuardian_Freeze") || (e.Value == "eGunner_Normal") || (e.Value == "eGunner_Fix_Vulcan") || (e.Value == "eGunner_Fix") || (e.Value == "eGunner_Trans") || (e.Value == "eGunner_Fix_Rocket") || (e.Value == "eLiner_Slave") || (e.Value == "eLiner_Normal") || (e.Value == "eRounder_Normal") || (e.Value == "eRounder_Slave") || (e.Value == "eRounder_Twn_Escape") || (e.Value == "eRounder_Twn_Chase") || (e.Value == "eRounder_Fix") || (e.Value == "eSearcher_Fix") || (e.Value == "eSearcher_Normal") || (e.Value == "eSearcher_Alarm") || (e.Value == "eSearcher_Fix_Rocket") || (e.Value == "eSearcher_Fix_Bomb"));
-                int enemyNumber = 0;
-                foreach (var ele2 in elements2)
-                {
-                    sw.Write(ele2.Value + " paramater became: ");
-                    switch (randomisedNames[enemyNumber])
+                    #region Set up the Random Number Generation
+                    if (rndSeed != "")
                     {
-                        case "cBiter":
-                            index = rnd.Next(cBiterParams.Count);
-                            ele2.Value = cBiterParams[index];
+                        rndSeed = rndSeed + xmlName;
+                        rnd = new Random(rndSeed.GetHashCode()); //Override RND with seed if the box wasn't blank
+                    }
+                    #endregion
+
+                    StreamWriter spoiler;
+                    #region Bodge Spoiler Log
+                    switch (outputFolderType)
+                    {
+                        case 0: //Custom
+                            spoiler = new StreamWriter(output + "\\" + xmlName + "_log.txt");
                             break;
-                        case "cCrawler":
-                            index = rnd.Next(cCrawlerParams.Count);
-                            ele2.Value = cCrawlerParams[index];
+                        case 1: //Source
+                            spoiler = new StreamWriter(filepath + "\\" + xmlName + "_log.txt");
                             break;
-                        case "cGolem":
-                            index = rnd.Next(cGolemParams.Count);
-                            ele2.Value = cGolemParams[index];
+                        case 2: //Program
+                            spoiler = new StreamWriter(xmlName + "_log.txt");
                             break;
-                        case "cTaker":
-                            index = rnd.Next(cTakerParams.Count);
-                            ele2.Value = cTakerParams[index];
-                            break;
-                        case "eBomber":
-                            index = rnd.Next(eBomberParams.Count);
-                            ele2.Value = eBomberParams[index];
-                            break;
-                        case "eCannon":
-                            index = rnd.Next(eCannonParams.Count);
-                            ele2.Value = eCannonParams[index];
-                            break;
-                        case "eFlyer":
-                            index = rnd.Next(eFlyerParams.Count);
-                            ele2.Value = eFlyerParams[index];
-                            break;
-                        case "eGuardian":
-                            index = rnd.Next(eGuardianParams.Count);
-                            ele2.Value = eGuardianParams[index];
-                            break;
-                        case "eGunner":
-                            index = rnd.Next(eGunnerParams.Count);
-                            ele2.Value = eGunnerParams[index];
-                            break;
-                        case "eLiner":
-                            index = rnd.Next(eLinerParams.Count);
-                            ele2.Value = eLinerParams[index];
-                            break;
-                        case "eRounder":
-                            index = rnd.Next(eRounderParams.Count);
-                            ele2.Value = eRounderParams[index];
-                            break;
-                        case "eSearcher":
-                            index = rnd.Next(eSearcherParams.Count);
-                            ele2.Value = eSearcherParams[index];
-                            break;
-                        default:
-                            Console.WriteLine("Unknown Object?");
+                        default: //Need this otherwise spoiler becomes invalid for some god forsaken reason
+                            spoiler = new StreamWriter(filepath.Remove(filepath.Length - 4) + "_log.txt");
                             break;
                     }
-                    sw.Write(ele2.Value + "." + Environment.NewLine);
-                    enemyNumber++;
-                }
-                sw.Write(Environment.NewLine);
-            }
 
-            if (randomItems)
+                    spoiler.WriteLine("Seed: " + logSeed);
+                    spoiler.WriteLine("Randomise Enemies: " + randomEnemies);
+                    spoiler.WriteLine("Randomise Character Spawns: " + randomCharacters);
+                    spoiler.WriteLine("Randomise Item Capsules: " + randomItems);
+                    spoiler.WriteLine("Randomise Voice Line Triggers: " + randomVoices);
+                    spoiler.Write(Environment.NewLine);
+                    #endregion
+
+                    //Do the randomisation functions here
+                    if (randomEnemies) { EnemyRandomiser(doc, rnd, spoiler, validEnemies); }
+                    if (randomCharacters) { CharacterRandomiser(doc, rnd, spoiler, validCharacters); }
+                    if (randomItems) { ItemRandomiser(doc, rnd, spoiler, validItems); }
+                    if (randomVoices) { VoiceRandomiser(doc, rnd, spoiler); }
+                    spoiler.Close();
+                    SetSave(randomiseFolder, outputFolderType, doc, output, xmlName, filepath, keepXML, spoilerLog, xml);
+                }
+            }
+        }
+
+        static public void EnemyRandomiser(XElement doc, Random rnd, StreamWriter spoiler, List<String> validEnemies)
+        {
+            //Set up the Variables relating to enemy randomisation
+            string lastEnemyName = "";
+            int index = 0; //Int to use as a host for the random number generation
+
+            String rawBlacklist = Properties.Resources.s06EnemyBlacklist;
+            string[] blacklist = rawBlacklist.Split
+            (
+                new[] { "\r\n", "\r", "\n" },
+                StringSplitOptions.None
+            );
+
+            #region Enemy Paramters
+            var cBiterParams = new List<string> { "cBiter_Normal", "cBiter_Fix", "cBiter_Freeze", "cBiter_Wall_Fix", "cBiter_Wall_Normal" }; //Valid Parameters for the cBiter enemy
+            var cCrawlerParams = new List<string> { "cCrawler_Wall_Fix", "cCrawler_Fix" }; //Valid Parameters for the cCrawler enemy
+            var cGazerParams = new List<string> { "cGazer_Normal", "cGazer_Fix", "cGazer_Freeze", "cGazer_Alarm", "cGazer_Wall_Fix" }; //Valid Parameters for the cGazer enemy
+            var cGolemParams = new List<string> { "cGolem_Normal", "cGolem_Alarm", "cGolem_Fix" }; //Valid Parameters for the cGolem enemy
+            var cStalkerParams = new List<string> { "cStalker_Normal", "cStalker_Fix", "cStalker_Wall_Fix", "cStalker_Freeze" }; //Valid Parameters for the cTaker enemy
+            var cTakerParams = new List<string> { "cTaker_Fix", "cTaker_Homing", "cTaker_Chase_Bomb" }; //Valid Parameters for the cTaker enemy
+            var cTitanParams = new List<string> { "cTitan_Normal", "cTitan_Fix", "cTitan_Freeze", "cTitan_Alarm" }; //Valid Parameters for the cTitan enemy
+            var cTrickerParams = new List<string> { "cTricker_Fix", "cTricker_Normal", "cTricker_Slave", "cTricker_Master",
+                "cTricker_Homing", "cTricker_Alarm" }; //Valid Parameters for the cTricker enemy
+            var eArmorParams = new List<string> { "eArmor_Normal", "eArmor_Fix" }; //Valid Parameters for the eArmor enemy
+            var eBomberParams = new List<string> { "eBomber_Normal", "eBomber_Fix", "eBomber_Wall_Fix", "eBomber_Wall_Normal" }; //Valid Parameters for the eBomber enemy
+            var eBlusterParams = new List<string> { "eBluster_Homing", "eBluster_Fix", "eBluster_Normal", }; //Valid Parameters for the eBluster(?) enemy
+            var eBusterParams = new List<string> { "eBuster_Fix", "eBuster_Normal", }; //Valid Parameters for the eBuster enemy
+            var eCannonParams = new List<string> { "eCannon_Normal", "eCannon_Fix", "eCannon_Fix_Laser", "eCannon_Trans" }; //Valid Parameters for the eCannon enemy
+            var eCommanderParams = new List<string> { "eCommander_Master", "eCommander_Fix", "eCommander_Alarm", "eCommander_Normal" }; //Valid Parameters for the eCommander enemy
+            var eFlyerParams = new List<string> { "eFlyer_Homing", "eFlyer_Fix", "eFlyer_Fix_Rocket", "eFlyer_Fix_Vulcan", "eFlyer_Normal" }; //Valid Parameters for the eFlyer enemy
+            var eGuardianParams = new List<string> { "eGuardian_Normal", "eGuardian_Fix", "eGuardian_Ball_Normal", "eGuardian_Ball_Fix",
+                "eGuardian_Freeze" }; //Valid Parameters for the eGuardian enemy
+            var eGunnerParams = new List<string> { "eGunner_Normal", "eGunner_Fix_Vulcan", "eGunner_Fix", "eGunner_Trans",
+                "eGunner_Fix_Rocket" }; //Valid Parameters for the eGunner enemy
+            var eKeeperParams = new List<string> { "eKeeper_Normal", "eKeeper_Ball_Fix", "eKeeper_Fix", "eKeeper_Ball_Fix",
+                "eKeeper_Freeze" }; //Valid Parameters for the eKeeper enemy
+            var eLinerParams = new List<string> { "eLiner_Slave", "eLiner_Normal" }; //Valid Parameters for the eLiner enemy
+            var eLancerParams = new List<string> { "eLancer_Normal", "eLancer_Fix" }; //Valid Parameters for the eLancer enemy
+            var eRounderParams = new List<string> { "eRounder_Normal", "eRounder_Slave", "eRounder_Twn_Escape", "eRounder_Twn_Chase",
+                "eRounder_Fix" }; //Valid Parameters for the eRounder enemy
+            var eSearcherParams = new List<string> { "eSearcher_Fix", "eSearcher_Normal", "eSearcher_Alarm", "eSearcher_Fix_Rocket",
+                "eSearcher_Fix_Bomb" }; //Valid Parameters for the eSearcher enemy
+            var eStingerParams = new List<string> { "eStinger_Fix", "eStinger_Fix_Missile", "eStinger_Normal" }; //Valid Parameters for the eStinger enemy
+            var eSweeperParams = new List<string> { "eSweeper_Fix", "eSweeper_Wall_Fix" }; //Valid Parameters for the eSweeper enemy
+            var eHunterParams = new List<string> { "eHunter_Normal", "eHunter_Fix", "eHunter_Hide_Fix" }; //Valid Parameters for the eHunter enemy
+            var eWalkerParams = new List<string> { "eWalker_Normal", "eWalker_Fix" }; //Valid Parameters for the eWalker enemy
+            var eChaserParams = new List<string> { "eChaser_Master", "eChaser_Normal", "eChaser_Alarm" }; //Valid Parameters for the eChaser enemy
+
+            var eCerberusParams = new List<string> { "eCerberus_sonic", "eCerberus_shadow" }; //Valid Parameters for the Egg Cerberus
+            var eGenesisParams = new List<string> { "eGenesis_sonic", "eGenesis_silver" }; //Valid Parameters for the Egg Cerberus
+            var secondiblisParams = new List<string> { "secondIblis_sonic", "secondIblis_shadow" }; //Valid Parameters for Iblis Phase 2
+            var firstmefiressParams = new List<string> { "firstmefiress_shadow", "firstmefiress_omega" }; //Valid Parameters for Iblis Phase 2
+            #endregion
+
+            spoiler.WriteLine("Enemy Randomisation Outcomes:");
+
+            //Locate the enemy/enemyextra parts of the set data & home in on the string attributes.
+            IEnumerable<XElement> enemy =
+                from el in doc.Elements("Object")
+                where (string)el.Attribute("type") == "enemy" || (string)el.Attribute("type") == "enemyextra"
+                select el;
+            foreach (XElement el in enemy)
             {
-                sw.WriteLine("Item Capsule Randomisation Outcomes");
-                //Randomise Item Boxes (oh god this is ugly & I barely even know why it works)
-                IEnumerable<XElement> itembox =
-                    from el in doc.Elements("Object")
-                    where (string)el.Attribute("type") == "itemboxg" || (string)el.Attribute("type") == "itemboxa"
-                    select el;
-                foreach (XElement el in itembox)
+                IEnumerable<XElement> enemy2 =
+                    from el2 in el.Elements("Parameters")
+                    select el2;
+                foreach (XElement el2 in enemy2)
                 {
-                    IEnumerable<XElement> itembox2 =
-                        from el2 in el.Elements("Parameters")
-                        select el2;
-                    foreach (XElement el2 in itembox2)
+                    IEnumerable<XElement> enemy3 =
+                        from el3 in el2.Elements("Parameter")
+                        where (string)el3.Attribute("type") == "String"
+                        select el3;
+                    foreach (XElement el3 in enemy3)
                     {
-                        IEnumerable<XElement> itembox3 =
-                            from el3 in el2.Elements("Parameter")
-                            where (string)el3.Attribute("type") == "Int32"
-                            select el3;
-                        foreach (XElement el3 in itembox3)
+                        //Check the Value we're looking at is blacklisted, if so, skip it.
+                        if (blacklist.Contains(el3.Value))
                         {
-                            switch (el3.Value)
+                            if (el3.Value != "") { spoiler.Write("'" + el3.Value + "' skipped due to being a blacklisted value." + Environment.NewLine); Console.WriteLine("'" + el3.Value + "' skipped due to being a blacklisted value."); }
+                            continue;
+                        }
+
+                        if (lastEnemyName == "")
+                        {
+                            if (!validEnemies.Contains(el3.Value) && !blacklist.Contains(el3.Value)) { Console.WriteLine("Encountered unknown enemy " + el3.Value + "!"); } //Debug stuff to alert us if we've randomised an enemy that isn't in the list.
+                            spoiler.Write("'" + el3.Value + "' became: ");
+                            index = rnd.Next(validEnemies.Count);
+                            el3.Value = validEnemies[index];
+                            spoiler.Write("'" + el3.Value + "'. Previous parameter of: ");
+                            lastEnemyName = el3.Value;
+                        }
+                        else
+                        {
+                            spoiler.Write("'" + el3.Value + "' became: ");
+                            switch (lastEnemyName)
                             {
-                                case "1":
-                                    sw.Write("5 Ring capsule became a ");
+                                case "cBiter":
+                                    index = rnd.Next(cBiterParams.Count);
+                                    el3.Value = cBiterParams[index];
                                     break;
-                                case "2":
-                                    sw.Write("10 Ring capsule became a ");
+                                case "cCrawler":
+                                    index = rnd.Next(cCrawlerParams.Count);
+                                    el3.Value = cCrawlerParams[index];
                                     break;
-                                case "3":
-                                    sw.Write("20 Ring capsule became a ");
+                                case "cGazer":
+                                    index = rnd.Next(cGazerParams.Count);
+                                    el3.Value = cGazerParams[index];
                                     break;
-                                case "4":
-                                    sw.Write("Power Gauge Refill capsule became a ");
+                                case "cGolem":
+                                    index = rnd.Next(cGolemParams.Count);
+                                    el3.Value = cGolemParams[index];
                                     break;
-                                case "5":
-                                    sw.Write("Power Sneakers capsule became a ");
+                                case "cStalker":
+                                    index = rnd.Next(cStalkerParams.Count);
+                                    el3.Value = cStalkerParams[index];
                                     break;
-                                case "6":
-                                    sw.Write("Power Gauge Refill? capsule became a ");
+                                case "cTaker":
+                                    index = rnd.Next(cTakerParams.Count);
+                                    el3.Value = cTakerParams[index];
                                     break;
-                                case "7":
-                                    sw.Write("Invincibility capsule became a ");
+                                case "cTitan":
+                                    index = rnd.Next(cTitanParams.Count);
+                                    el3.Value = cTitanParams[index];
+                                    break;
+                                case "cTricker":
+                                    index = rnd.Next(cTrickerParams.Count);
+                                    el3.Value = cTrickerParams[index];
+                                    break;
+                                case "eArmor":
+                                    index = rnd.Next(eArmorParams.Count);
+                                    el3.Value = eArmorParams[index];
+                                    break;
+                                case "eBomber":
+                                    index = rnd.Next(eBomberParams.Count);
+                                    el3.Value = eBomberParams[index];
+                                    break;
+                                case "eBluster":
+                                    index = rnd.Next(eBlusterParams.Count);
+                                    el3.Value = eBlusterParams[index];
+                                    break;
+                                case "eBuster":
+                                    index = rnd.Next(eBusterParams.Count);
+                                    el3.Value = eBusterParams[index];
+                                    break;
+                                case "eCannon":
+                                    index = rnd.Next(eCannonParams.Count);
+                                    el3.Value = eCannonParams[index];
+                                    break;
+                                case "eCommander":
+                                    index = rnd.Next(eCommanderParams.Count);
+                                    el3.Value = eCommanderParams[index];
+                                    break;
+                                case "eFlyer":
+                                    index = rnd.Next(eFlyerParams.Count);
+                                    el3.Value = eFlyerParams[index];
+                                    break;
+                                case "eGuardian":
+                                    index = rnd.Next(eGuardianParams.Count);
+                                    el3.Value = eGuardianParams[index];
+                                    break;
+                                case "eGunner":
+                                    index = rnd.Next(eGunnerParams.Count);
+                                    el3.Value = eGunnerParams[index];
+                                    break;
+                                case "eKeeper":
+                                    index = rnd.Next(eKeeperParams.Count);
+                                    el3.Value = eKeeperParams[index];
+                                    break;
+                                case "eLiner":
+                                    index = rnd.Next(eLinerParams.Count);
+                                    el3.Value = eLinerParams[index];
+                                    break;
+                                case "eLancer":
+                                    index = rnd.Next(eLancerParams.Count);
+                                    el3.Value = eLancerParams[index];
+                                    break;
+                                case "eRounder":
+                                    index = rnd.Next(eRounderParams.Count);
+                                    el3.Value = eRounderParams[index];
+                                    break;
+                                case "eSearcher":
+                                    index = rnd.Next(eSearcherParams.Count);
+                                    el3.Value = eSearcherParams[index];
+                                    break;
+                                case "eStinger":
+                                    index = rnd.Next(eStingerParams.Count);
+                                    el3.Value = eStingerParams[index];
+                                    break;
+                                case "eSweeper":
+                                    index = rnd.Next(eSweeperParams.Count);
+                                    el3.Value = eSweeperParams[index];
+                                    break;
+                                case "eHunter":
+                                    index = rnd.Next(eHunterParams.Count);
+                                    el3.Value = eHunterParams[index];
+                                    break;
+                                case "eWalker":
+                                    index = rnd.Next(eWalkerParams.Count);
+                                    el3.Value = eWalkerParams[index];
+                                    break;
+                                case "eChaser":
+                                    index = rnd.Next(eChaserParams.Count);
+                                    el3.Value = eChaserParams[index];
+                                    break;
+                                case "eCerberus":
+                                    index = rnd.Next(eCerberusParams.Count);
+                                    el3.Value = eCerberusParams[index];
+                                    break;
+                                case "eGenesis":
+                                    index = rnd.Next(eGenesisParams.Count);
+                                    el3.Value = eGenesisParams[index];
+                                    break;
+                                case "eWyvern":
+                                    el3.Value = "eWyvern";
+                                    break;
+                                case "firstiblis":
+                                    el3.Value = "firstIblis";
+                                    break;
+                                case "secondiblis":
+                                    index = rnd.Next(secondiblisParams.Count);
+                                    el3.Value = secondiblisParams[index];
+                                    break;
+                                case "thirdiblis":
+                                    el3.Value = "thirdIblis";
+                                    break;
+                                case "firstmefiress":
+                                    index = rnd.Next(firstmefiressParams.Count);
+                                    el3.Value = firstmefiressParams[index];
+                                    break;
+                                case "solaris01":
+                                    el3.Value = "solaris01";
+                                    break;
+                                default:
                                     break;
                             }
-                            el3.Value = rnd.Next(1, 9).ToString(); //Randomise the Item Boxes to a value from 1 to 8 (C# why does the second value have to be 1 higher than what I want?). 0 is valid, but is an empty item box.
-                            switch (el3.Value)
-                            {
-                                case "1":
-                                    sw.Write("5 Ring capsule." + Environment.NewLine);
-                                    break;
-                                case "2":
-                                    sw.Write("10 Ring capsule." + Environment.NewLine);
-                                    break;
-                                case "3":
-                                    sw.Write("20 Ring capsule." + Environment.NewLine);
-                                    break;
-                                case "4":
-                                    sw.Write("Power Gauge Refill capsule." + Environment.NewLine);
-                                    break;
-                                case "5":
-                                    sw.Write("Power Sneakers capsule." + Environment.NewLine);
-                                    break;
-                                case "6":
-                                    sw.Write("Power Gauge Refill? capsule." + Environment.NewLine);
-                                    break;
-                                case "7":
-                                    sw.Write("Invincibility capsule." + Environment.NewLine);
-                                    break;
-                                case "8":
-                                    sw.Write("Shield capsule." + Environment.NewLine);
-                                    break;
-                            }
+                            lastEnemyName = "";
+                            spoiler.Write("'" + el3.Value + "'" + Environment.NewLine);
                         }
                     }
                 }
-                sw.Write(Environment.NewLine);
+            }
+            spoiler.Write(Environment.NewLine);
+        }
+
+        static public void CharacterRandomiser(XElement doc, Random rnd, StreamWriter spoiler, List<String> validCharacters)
+        {
+            int index = 0; //Int to use as a host for the random number generation
+            spoiler.WriteLine("Character Randomisation Outcomes:");
+
+            var elements = doc.Descendants().Where(e => (e.Value == "sonic_new") || (e.Value == "tails") || (e.Value == "knuckles") || (e.Value == "shadow") || (e.Value == "shadow_none") || (e.Value == "rouge") || (e.Value == "omega") || (e.Value == "silver") || (e.Value == "blaze") || (e.Value == "amy") || (e.Value == "princess") || (e.Value == "snow_board_wap") || (e.Value == "snow_board") || (e.Value == "sonic_fast") || (e.Value == "shadow_jeep") || (e.Value == "shadow_glider") || (e.Value == "shadow_hover") || (e.Value == "shadow_bike"));
+            foreach (var ele3 in elements)
+            {
+                index = rnd.Next(validCharacters.Count);
+                spoiler.Write(ele3.Value + " spawn point became a ");
+                ele3.Value = validCharacters[index];
+                spoiler.Write(ele3.Value + " spawn point." + Environment.NewLine);
             }
 
-            //Randomise player_start2 objects
-            if (randomCharacters)
+            spoiler.Write(Environment.NewLine);
+        }
+
+        static public void ItemRandomiser(XElement doc, Random rnd, StreamWriter spoiler, List<String> validItems)
+        {
+            int index = 0; //Int to use as a host for the random number generation
+            spoiler.WriteLine("Item Capsule Randomisation Outcomes:");
+
+            IEnumerable<XElement> itembox =
+                from el in doc.Elements("Object")
+                where (string)el.Attribute("type") == "itemboxg" || (string)el.Attribute("type") == "itemboxa"
+                select el;
+            foreach (XElement el in itembox)
             {
-                sw.WriteLine("Character Randomisation Outcomes");
-                if (!altCharacters)
+                IEnumerable<XElement> itembox2 =
+                    from el2 in el.Elements("Parameters")
+                    select el2;
+                foreach (XElement el2 in itembox2)
                 {
-                    var elements3 = doc.Descendants().Where(e => (e.Value == "sonic_new") || (e.Value == "tails") || (e.Value == "knuckles") || (e.Value == "shadow") || (e.Value == "rouge") || (e.Value == "omega") || (e.Value == "silver") || (e.Value == "blaze") || (e.Value == "amy") || (e.Value == "princess"));
-                    foreach (var ele3 in elements3)
+                    IEnumerable<XElement> itembox3 =
+                        from el3 in el2.Elements("Parameter")
+                        where (string)el3.Attribute("type") == "Int32"
+                        select el3;
+                    foreach (XElement el3 in itembox3)
                     {
-                        index = rnd.Next(characterNames.Count);
-                        sw.Write(ele3.Value + " spawn point became a ");
-                        ele3.Value = characterNames[index];
-                        sw.Write(ele3.Value + " spawn point." + Environment.NewLine);
+                        switch (el3.Value)
+                        {
+                            case "1":
+                                spoiler.Write("5 Ring capsule became ");
+                                break;
+                            case "2":
+                                spoiler.Write("10 Ring capsule became ");
+                                break;
+                            case "3":
+                                spoiler.Write("20 Ring capsule became ");
+                                break;
+                            case "4":
+                                spoiler.Write("1UP capsule became ");
+                                break;
+                            case "5":
+                                spoiler.Write("Power Sneakers capsule became ");
+                                break;
+                            case "6":
+                                spoiler.Write("Power Gauge Refill capsule became ");
+                                break;
+                            case "7":
+                                spoiler.Write("Invincibility capsule became ");
+                                break;
+                        }
+                        index = rnd.Next(validItems.Count);
+                        el3.Value = validItems[index];
+                        switch (el3.Value)
+                        {
+                            case "1":
+                                spoiler.Write("a 5 Ring capsule." + Environment.NewLine);
+                                break;
+                            case "2":
+                                spoiler.Write("a 10 Ring capsule." + Environment.NewLine);
+                                break;
+                            case "3":
+                                spoiler.Write("a 20 Ring capsule." + Environment.NewLine);
+                                break;
+                            case "4":
+                                spoiler.Write("a 1UP capsule." + Environment.NewLine);
+                                break;
+                            case "5":
+                                spoiler.Write("a Power Sneakers capsule." + Environment.NewLine);
+                                break;
+                            case "6":
+                                spoiler.Write("a Power Gauge Refill capsule." + Environment.NewLine);
+                                break;
+                            case "7":
+                                spoiler.Write("an Invincibility capsule." + Environment.NewLine);
+                                break;
+                            case "8":
+                                spoiler.Write("a Shield capsule." + Environment.NewLine);
+                                break;
+                        }
                     }
                 }
-                else
-                {
-                    var elements3 = doc.Descendants().Where(e => (e.Value == "sonic_new") || (e.Value == "tails") || (e.Value == "knuckles") || (e.Value == "shadow") || (e.Value == "rouge") || (e.Value == "omega") || (e.Value == "silver") || (e.Value == "blaze") || (e.Value == "amy") || (e.Value == "princess") || (e.Value == "snow_board_wap") || (e.Value == "snow_board") || (e.Value == "sonic_fast") || (e.Value == "shadow_jeep") || (e.Value == "shadow_glider") || (e.Value == "shadow_hover") || (e.Value == "shadow_bike"));
-                    foreach (var ele3 in elements3)
-                    {
-                        index = rnd.Next(characterNamesAlts.Count);
-                        sw.Write(ele3.Value + " spawn point became a ");
-                        ele3.Value = characterNamesAlts[index];
-                        sw.Write(ele3.Value + " spawn point." + Environment.NewLine);
-                    }
-                }
-                sw.Write(Environment.NewLine);
             }
+            spoiler.Write(Environment.NewLine);
+        }
 
-            //Randomise Hint Voice Lines
-            if (randomVoices)
+        static public void VoiceRandomiser(XElement doc, Random rnd, StreamWriter spoiler)
+        {
+            int index = 0; //Int to use as a host for the random number generation
+            spoiler.WriteLine("Voice Trigger Randomisation Outcomes:");
+
+            String rawLines = Properties.Resources.s06TextStrings;
+            string[] lines = rawLines.Split
+            (
+                new[] { "\r\n", "\r", "\n" },
+                StringSplitOptions.None
+            );
+            
+            //Locate the voice/voiceextra parts of the set data & home in on the string attributes.
+            IEnumerable<XElement> voice =
+                from el in doc.Elements("Object")
+                where (string)el.Attribute("type") == "common_hint_collision" || (string)el.Attribute("type") == "common_hint"
+                select el;
+            foreach (XElement el in voice)
             {
-                sw.WriteLine("Voice Trigger Randomisation Outcomes");
-                String rawLines = Properties.Resources.s06TextStrings;
-                string[] lines = rawLines.Split
-                (
-                    new[] { "\r\n", "\r", "\n" },
-                    StringSplitOptions.None
-                );
-
-                int arrayCount = 0;
-                foreach (string x in lines)
+                IEnumerable<XElement> voice2 =
+                    from el2 in el.Elements("Parameters")
+                    select el2;
+                foreach (XElement el2 in voice2)
                 {
-                    var elements4 = doc.Descendants().Where(e => (e.Value == lines[arrayCount]));
-                    foreach (var ele4 in elements4)
+                    IEnumerable<XElement> voice3 =
+                        from el3 in el2.Elements("Parameter")
+                        where (string)el3.Attribute("type") == "String"
+                        select el3;
+                    foreach (XElement el3 in voice3)
                     {
                         index = rnd.Next(lines.Length);
-                        sw.Write(ele4.Value + " voice trigger became a ");
-                        ele4.Value = lines[index];
-                        sw.Write(ele4.Value + " voice trigger." + Environment.NewLine);
+                        spoiler.Write(el3.Value + " voice trigger became a ");
+                        el3.Value = lines[index];
+                        spoiler.Write(el3.Value + " voice trigger." + Environment.NewLine);
                     }
-                    arrayCount++;
                 }
-                sw.Write(Environment.NewLine);
             }
+        }
 
-            //Save & cleanup
-
-            if (output != "")
-            {
-                doc.Save(output + "\\" + xmlName + "_edit.xml");
-            }
-            else
-            {
-                if (!sourceOutput)
-                {
-                    doc.Save(xmlName + "_edit.xml");
-                }
-                else
-                {
-                    doc.Save(filepath.Remove(filepath.Length - 4) + "_edit.xml");
-                }
-            }
-            
-            if (output != "")
-            {
-                File.Delete(output + "\\" + xmlName + ".set");
-            }
-            else
-            {
-                if (!sourceOutput)
-                {
-                    File.Delete(xmlName + ".set");
-                }
-                else
-                {
-                    File.Delete(filepath.Remove(filepath.Length - 4) + ".set");
-                }
-            }
-
+        static public void SetSave(bool randomiseFolder, int outputFolderType, XElement doc, string output, string xmlName, string filepath, bool keepXML, bool spoilerLog, string xml)
+        {
             var setData = new HedgeLib.Sets.S06SetData();
-            if (output != "")
+            switch (outputFolderType)
             {
-                setData.ImportXML(output + "\\" + xmlName + "_edit.xml");
-            }
-            else
-            {
-                if (!sourceOutput)
-                {
+                case 0: //Custom
+                    doc.Save(output + "\\" + xmlName + "_edit.xml");
+                    File.Delete(output + "\\" + xmlName + ".set");
+                    setData.ImportXML(output + "\\" + xmlName + "_edit.xml");
+                    setData.Save(output + "\\" + xmlName + ".set");
+                    if (!keepXML) { File.Delete(output + "\\" + xmlName + "_edit.xml"); }
+                    if (!spoilerLog) { File.Delete(output + "\\" + xmlName + "_log.txt"); }
+                    break;
+                case 1: //Source
+                    if (!randomiseFolder)
+                    {
+                        doc.Save(filepath.Remove(filepath.Length - 4) + "_edit.xml");
+                        File.Delete(filepath.Remove(filepath.Length - 4) + ".set");
+                        setData.ImportXML(filepath.Remove(filepath.Length - 4) + "_edit.xml");
+                        setData.Save(filepath.Remove(filepath.Length - 4) + ".set");
+                        if (!keepXML) { File.Delete(filepath.Remove(filepath.Length - 4) + "_edit.xml"); }
+                        if (!spoilerLog) { File.Delete(filepath.Remove(filepath.Length - 4) + "_log.txt"); }
+                    }
+                    if (randomiseFolder)
+                    {
+                        doc.Save(Path.GetDirectoryName(xml) + "\\" + xmlName + "_edit.xml");
+                        File.Delete(Path.GetDirectoryName(xml) + "\\" + xmlName + ".set");
+                        setData.ImportXML(Path.GetDirectoryName(xml) + "\\" + xmlName + "_edit.xml");
+                        setData.Save(Path.GetDirectoryName(xml) + "\\" + xmlName + ".set");
+                        if (!keepXML) { File.Delete(Path.GetDirectoryName(xml) + "\\" + xmlName + "_edit.xml"); }
+                        if (!spoilerLog) { File.Delete(filepath + "\\" + xmlName + "_log.txt"); }
+                    }
+                    break;
+                case 2: //Program
+                    doc.Save(xmlName + "_edit.xml");
+                    File.Delete(xmlName + ".set");
                     setData.ImportXML(xmlName + "_edit.xml");
-                }
-                else
-                {
-                    setData.ImportXML(filepath.Remove(filepath.Length - 4) + "_edit.xml");
-                }
-            }
-            //setData.ImportXML(xmlName + "_edit.xml");
-            if (output != "")
-            {
-                setData.Save(output + "\\" + xmlName + ".set");
-            }
-            else
-            {
-                if (!sourceOutput)
-                {
                     setData.Save(xmlName + ".set");
-                }
-                else
-                {
-                    setData.Save(filepath.Remove(filepath.Length - 4) + ".set");
-                }
-            }
-
-            if (!keepXML)
-            {
-                if (output != "")
-                {
-                    File.Delete(output + "\\" + xmlName + "_edit.xml");
-                }
-                else
-                {
-                    if (!sourceOutput)
-                    {
-                        File.Delete(xmlName + "_edit.xml");
-                    }
-                    else
-                    {
-                        File.Delete(filepath.Remove(filepath.Length - 4) + "_edit.xml");
-                    }
-                }
-            }
-
-            //Close the Spoiler Log File & delete if we don't need it.
-            sw.Close();
-            if (!spoilerLog)
-            {
-                if (output != "")
-                {
-                    File.Delete(output + "\\" + xmlName + "_log.txt");
-                }
-                else
-                {
-                    if (!sourceOutput)
-                    {
-                        File.Delete(xmlName + "_log.txt");
-                    }
-                    else
-                    {
-                        File.Delete(filepath.Remove(filepath.Length - 4) + "_log.txt");
-                    }
-                }
+                    if (!keepXML) { File.Delete(xmlName + "_edit.xml"); }
+                    if (!spoilerLog) { File.Delete(xmlName + "_log.txt"); }
+                    break;
             }
         }
     }

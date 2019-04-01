@@ -10,16 +10,15 @@ using System.Windows.Forms;
 
 namespace Sonic06Randomiser
 {
-    public partial class ExtractSetWindow : Form
+    public partial class ImportSetWindow : Form
     {
         #region Main Variables
-        bool extractFolder = false;
+        bool importFolder = false;
         string filepath = "";
         int outputFolderType = 0; //0 = Custom, 1 = Source, 2 = Program
         string output = "";
         #endregion
-
-        public ExtractSetWindow()
+        public ImportSetWindow()
         {
             InitializeComponent();
         }
@@ -30,13 +29,13 @@ namespace Sonic06Randomiser
             filepath = "";
             if (folderRandom.Checked)
             {
-                filepathLabel.Text = "Folder to Extract:";
-                extractFolder = true;
+                filepathLabel.Text = "Folder to Import:";
+                importFolder = true;
             }
             if (!folderRandom.Checked)
             {
-                filepathLabel.Text = "SET to Extract:";
-                extractFolder = false;
+                filepathLabel.Text = "XML to Import:";
+                importFolder = false;
             }
         }
 
@@ -77,21 +76,21 @@ namespace Sonic06Randomiser
             filepath = filepathBox.Text;
             if (filepathBox.Text == "")
             {
-                extractButton.Enabled = false;
+                importButton.Enabled = false;
             }
             else
             {
-                extractButton.Enabled = true;
+                importButton.Enabled = true;
             }
         }
 
         private void filepathButton_Click(object sender, EventArgs e)
         {
-            if (!extractFolder)
+            if (!importFolder)
             {
                 OpenFileDialog xmlBrowser = new OpenFileDialog();
-                xmlBrowser.Title = "Select SET";
-                xmlBrowser.Filter = "SONIC THE HEDGEHOG (2006) SET file (*.set)|*.set|All files (*.*)|*.*";
+                xmlBrowser.Title = "Select XML";
+                xmlBrowser.Filter = "eXtensible Markup Language file (*.xml)|*.xml|All files (*.*)|*.*";
                 xmlBrowser.FilterIndex = 1;
                 xmlBrowser.RestoreDirectory = true;
                 if (xmlBrowser.ShowDialog() == DialogResult.OK)
@@ -126,9 +125,9 @@ namespace Sonic06Randomiser
             }
         }
 
-        private void extractButton_Click(object sender, EventArgs e)
+        private void importButton_Click(object sender, EventArgs e)
         {
-            SetClass.Extract(extractFolder, outputFolderType, output, filepath);
+            SetClass.Import(importFolder, outputFolderType, output, filepath);
         }
     }
 }

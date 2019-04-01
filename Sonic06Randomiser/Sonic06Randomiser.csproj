@@ -52,26 +52,35 @@
     <Compile Include="ExtractSetWindow.Designer.cs">
       <DependentUpon>ExtractSetWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="ImportSetWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ImportSetWindow.Designer.cs">
+      <DependentUpon>ImportSetWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Randomisation.cs" />
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainWindow.Designer.cs">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Randomisation.cs" />
-    <Compile Include="SetExtract.cs" />
+    <Compile Include="SetClass.cs" />
     <EmbeddedResource Include="ExtractSetWindow.resx">
       <DependentUpon>ExtractSetWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainWindow.resx">
-      <DependentUpon>MainWindow.cs</DependentUpon>
+    <EmbeddedResource Include="ImportSetWindow.resx">
+      <DependentUpon>ImportSetWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainWindow.resx">
+      <DependentUpon>MainWindow.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -92,7 +101,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\s06TextStrings.txt" />
+    <Content Include="Resources\s06TextStrings.txt" />
+    <Content Include="Resources\s06EnemyBlacklist.txt" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\icon.png" />

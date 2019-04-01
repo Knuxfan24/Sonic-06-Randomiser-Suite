@@ -61,6 +61,43 @@ namespace Sonic06Randomiser.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 
+        ///eBuster(Fly)
+        ///eBusterFly_Normal
+        ///eBusterFly_Fix
+        ///eGunner(Fly)
+        ///eGunnerFly_Fix
+        ///eGunnerFly_Normal
+        ///eGunnerFly_Homing
+        ///eGunnerFly_Chase
+        ///eGunnerFly_Fix_Vulcan
+        ///eGunnerFly_Fix_Rocket
+        ///eCannon(fly)
+        ///eCannonFly_Fix
+        ///eCannonFly_Carrier
+        ///eCannonFly_Normal
+        ///eStinger(Fly)
+        ///eStingerFly_Fix
+        ///eStingerFly_Normal
+        ///eStingerFly_Fix_Missile
+        ///eStingerFly_Chase
+        ///eLancer(Fly)
+        ///eLancerFly_Normal
+        ///eLancerFly_Fix
+        ///pathenemy01
+        ///enemy_path01
+        ///pathenemy02
+        ///line_enemy00
+        ///line_enemy01
+        ///enemy_path02.
+        /// </summary>
+        internal static string s06EnemyBlacklist {
+            get {
+                return ResourceManager.GetString("s06EnemyBlacklist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to hint_all01_a00_tl
         ///hint_all01_a00_kn
         ///hint_all01_a00_sd
