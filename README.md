@@ -8,7 +8,9 @@ The build process for this is currently a tad clunky both due to me not knowing 
 2) Open the HedgeLib.sln file in Visual Studio and open HedgeLib/Sets/SetData.cs. Scroll down to Line 91 & replace 
 
 var template = (objectTemplates.ContainsKey(obj.ObjectType)) ?
+
 with:
+
 var template = (objectTemplates != null && objectTemplates.ContainsKey(obj.ObjectType)) ?
 
 Then compile the HedgeLib project to obtain a DLL in HedgeLib/bin/Debug.
