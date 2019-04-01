@@ -17,6 +17,9 @@ The build process for this is currently a tad clunky both due to me not knowing 
 
 # Notes
 Either due to my code or due to HedgeLib's unfinished S06SetData class, a lot of things don't work. Most notably, the lack of grouping support in HedgeLib breaks anything that relys on it (such as Cages or Doors that are opened by defeating or certain enemies).
+
 Things such as bosses can also wreck havoc on the game's already low stability, therefore, use caution when enabling them.
+
 Only certain characters can do certain actions, for example, only Sonic can do the water surfing in Wave Ocean and only Sonic holding Elise and Silver can use the Swing Vines in Tropical Jungle.
+
 Some stages will crash the game consistently when various elements are randomised, if these still happen once HedgeLib is fixed, then I will be diagnosing them to see if I can find where the fault lies.
