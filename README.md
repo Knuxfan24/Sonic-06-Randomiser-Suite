@@ -2,7 +2,7 @@
 A tool designed to randomise various elements of the Set Object Layout Data in SONIC THE HEDGEHOG (2006) on the Xbox 360 and Playstation 3.
 
 # Building
-1) Clone this repository into a folder of your choice using the Git CMD tool with this command: `git clone --recurse-submodules https://github.com/Knuxfan24/SONIC-THE-HEDGEHOG-2006-Randomiser -b submodule-test`
+1) Clone this repository into a folder of your choice using the Git CMD tool with this command: `git clone --recurse-submodules https://github.com/Knuxfan24/SONIC-THE-HEDGEHOG-2006-Randomiser`
 2) Open HedgeLib.sln in Visual Studio and build the HedgeLib project in it, this will create a DLL in `..\HedgeLib\HedgeLib\bin\Debug`.
 3) Open Sonic06Randomiser.sln in Visual Studio and run the program to build and run a binary, located in `..\Sonic06Randomiser\bin\Debug`
 
