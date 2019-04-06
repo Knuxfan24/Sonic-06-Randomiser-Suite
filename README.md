@@ -3,8 +3,7 @@ A tool designed to randomise various elements of the Set Object Layout Data in S
 
 # Building
 1) Clone this repository into a folder of your choice using the Git CMD tool with this command: `git clone --recurse-submodules https://github.com/Knuxfan24/SONIC-THE-HEDGEHOG-2006-Randomiser`
-2) Open HedgeLib.sln in Visual Studio and build the HedgeLib project in it, this will create a DLL in `..\HedgeLib\HedgeLib\bin\Debug`.
-3) Open Sonic06Randomiser.sln in Visual Studio and run the program to build and run a binary, located in `..\Sonic06Randomiser\bin\Debug`
+2) Open Sonic06Randomiser.sln in Visual Studio and build the HedgeLib project to create the HedgeLib DLL. Then run the program to build and run a binary, located in `..\Sonic06Randomiser\bin\Debug`
 
 # Usage
 1) In order to use the randomiser, you need to extract the scripts.arc file that contains all of the Sonic 06 set data files. I recommend using Hyper's [Sonic '06 Toolkit](https://gamebanana.com/tools/6576) application for this purpose.

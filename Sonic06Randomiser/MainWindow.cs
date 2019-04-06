@@ -95,6 +95,8 @@ namespace Sonic06Randomiser
         string output = "";
         Random rnd = new Random();
         string rndSeed = "";
+        bool messageBox = true;
+        bool bossWarningShown = false;
         #endregion
 
         public MainWindow()
@@ -103,79 +105,6 @@ namespace Sonic06Randomiser
             InitializeComponent();
             rndSeed = rnd.Next().ToString();
             seedBox.Text = rndSeed;
-        }
-
-        private void showVarsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Console.WriteLine("Enemy Variables:");
-            Console.WriteLine("\nIblis Monsters:");
-            Console.WriteLine("cBiter var = " + cBiter);
-            Console.WriteLine("cCrawler var = " + cCrawler);
-            Console.WriteLine("cGolem var = " + cGolem);
-            Console.WriteLine("cTaker var = " + cTaker);
-
-            Console.WriteLine("\nMephiles Monsters:");
-            Console.WriteLine("cGazer var = " + cGazer);
-            Console.WriteLine("cStalker var = " + cStalker);
-            Console.WriteLine("cTitan var = " + cTitan);
-            Console.WriteLine("cTricker var = " + cTricker);
-
-            Console.WriteLine("\nEggman Robots:");
-            Console.WriteLine("eArmor var = " + eArmor);
-            Console.WriteLine("eBomber var = " + eBomber);
-            Console.WriteLine("eBluster var = " + eBluster);
-            Console.WriteLine("eBuster var = " + eBuster);
-            Console.WriteLine("eCannon var = " + eCannon);
-            Console.WriteLine("eCommander var = " + eCommander);
-            Console.WriteLine("eFlyer var = " + eFlyer);
-            Console.WriteLine("eGuardian var = " + eGuardian);
-            Console.WriteLine("eGunner var = " + eGunner);
-            Console.WriteLine("eKeeper var = " + eKeeper);
-            Console.WriteLine("eLancer var = " + eLancer);
-            Console.WriteLine("eLiner var = " + eLiner);
-            Console.WriteLine("eRounder var = " + eRounder);
-            Console.WriteLine("eSearcher var = " + eSearcher);
-            Console.WriteLine("eStinger var = " + eStinger);
-            Console.WriteLine("eSweeper var = " + eSweeper);
-
-            Console.WriteLine("\n===\n\nCharacter Variables:\n");
-            Console.WriteLine("sonic var = " + sonic);
-            Console.WriteLine("tails var = " + tails);
-            Console.WriteLine("knuckles var = " + knuckles);
-            Console.WriteLine("sonicMachSpeed var = " + sonicMachSpeed);
-            Console.WriteLine("sonicElise var = " + sonicElise);
-            Console.WriteLine("sonicSnowboardWAP var = " + sonicSnowboardWAP);
-            Console.WriteLine("sonicSnowboardCSC var = " + sonicSnowboardCSC);
-            Console.WriteLine("shadow var = " + shadow);
-            Console.WriteLine("rouge var = " + rouge);
-            Console.WriteLine("omega var = " + omega);
-            Console.WriteLine("silver var = " + silver);
-            Console.WriteLine("blaze var = " + blaze);
-            Console.WriteLine("amy var = " + amy);
-
-            Console.WriteLine("\n===\n\nItem Capsule Variables:\n");
-            Console.WriteLine("emptyCapsule var = " + emptyCapsule);
-            Console.WriteLine("fiveRingCapsule var = " + fiveRingCapsule);
-            Console.WriteLine("tenRingCapsule var = " + tenRingCapsule);
-            Console.WriteLine("twentyRingCapsule var = " + twentyRingCapsule);
-            Console.WriteLine("extraLifeCapsule var = " + extraLifeCapsule);
-            Console.WriteLine("powerSneakersCapsule var = " + powerSneakersCapsule);
-            Console.WriteLine("powerGaugeRefillCapsule var = " + powerGaugeRefillCapsule);
-            Console.WriteLine("invincibilityCapsule var = " + invincibilityCapsule);
-            Console.WriteLine("shieldCapsule var = " + shieldCapsule);
-
-            Console.WriteLine("\n===\n\nMain Variables:\n");
-            Console.WriteLine("randomEnemies var = " + randomEnemies);
-            Console.WriteLine("randomCharacters var = " + randomCharacters);
-            Console.WriteLine("randomItems var = " + randomItems);
-            Console.WriteLine("randomVoices var = " + randomVoices);
-            Console.WriteLine("spoilerLog var = " + spoilerLog);
-            Console.WriteLine("keepXML var = " + keepXML);
-            Console.WriteLine("randomiseFolder var = " + randomiseFolder);
-            Console.WriteLine("outputFolderType var = " + outputFolderType);
-            Console.WriteLine("filepath var = " + filepath);
-            Console.WriteLine("output var = " + output);
-            Console.WriteLine("rndSeed var = " + rndSeed);
         }
 
         #region Enemy Checkboxes
@@ -566,6 +495,12 @@ namespace Sonic06Randomiser
         #region Bosses
         private void eggCerberusToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (!bossWarningShown)
+            {
+                MessageBox.Show("Bosses can cause more stability problems than usual, especially on real hardware, take caution in using them.");
+                bossWarningShown = true;
+                return;
+            }
             if (eggCerberusToolStripMenuItem.Checked)
             {
                 eCerberus = false;
@@ -580,6 +515,12 @@ namespace Sonic06Randomiser
 
         private void eggGenesisToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (!bossWarningShown)
+            {
+                MessageBox.Show("Bosses can cause more stability problems than usual, especially on real hardware, take caution in using them.");
+                bossWarningShown = true;
+                return;
+            }
             if (eggGenesisToolStripMenuItem.Checked)
             {
                 eGenesis = false;
@@ -594,6 +535,12 @@ namespace Sonic06Randomiser
 
         private void eggWyvernToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (!bossWarningShown)
+            {
+                MessageBox.Show("Bosses can cause more stability problems than usual, especially on real hardware, take caution in using them.");
+                bossWarningShown = true;
+                return;
+            }
             if (eggWyvernToolStripMenuItem.Checked)
             {
                 eWyvern = false;
@@ -608,6 +555,12 @@ namespace Sonic06Randomiser
 
         private void iblisPhase1ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (!bossWarningShown)
+            {
+                MessageBox.Show("Bosses can cause more stability problems than usual, especially on real hardware, take caution in using them.");
+                bossWarningShown = true;
+                return;
+            }
             if (iblisPhase1ToolStripMenuItem.Checked)
             {
                 iblisOne = false;
@@ -622,6 +575,12 @@ namespace Sonic06Randomiser
 
         private void iblisPhase2ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (!bossWarningShown)
+            {
+                MessageBox.Show("Bosses can cause more stability problems than usual, especially on real hardware, take caution in using them.");
+                bossWarningShown = true;
+                return;
+            }
             if (iblisPhase2ToolStripMenuItem.Checked)
             {
                 iblisTwo = false;
@@ -636,6 +595,12 @@ namespace Sonic06Randomiser
 
         private void iblisPhase3ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (!bossWarningShown)
+            {
+                MessageBox.Show("Bosses can cause more stability problems than usual, especially on real hardware, take caution in using them.");
+                bossWarningShown = true;
+                return;
+            }
             if (iblisPhase3ToolStripMenuItem.Checked)
             {
                 iblisThree = false;
@@ -650,6 +615,12 @@ namespace Sonic06Randomiser
 
         private void mephilesPhase1ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (!bossWarningShown)
+            {
+                MessageBox.Show("Bosses can cause more stability problems than usual, especially on real hardware, take caution in using them.");
+                bossWarningShown = true;
+                return;
+            }
             if (mephilesPhase1ToolStripMenuItem.Checked)
             {
                 mephiles = false;
@@ -664,6 +635,12 @@ namespace Sonic06Randomiser
 
         private void solarisPhase1ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (!bossWarningShown)
+            {
+                MessageBox.Show("Bosses can cause more stability problems than usual, especially on real hardware, take caution in using them.");
+                bossWarningShown = true;
+                return;
+            }
             if (solarisPhase1ToolStripMenuItem.Checked)
             {
                 solaris = false;
@@ -1226,6 +1203,7 @@ namespace Sonic06Randomiser
                     sw.WriteLine("spoilerLog: " + spoilerLog);
                     sw.WriteLine("keepXML: " + keepXML);
                     sw.WriteLine("outputFolderType: " + outputFolderType);
+                    sw.WriteLine("messageBox: " + messageBox);
 
                     sw.Close();
                 }
@@ -1543,6 +1521,10 @@ namespace Sonic06Randomiser
                                         break;
                                 }
                                 break;
+                            case "messageBox":
+                                messageBox = bool.Parse(varValue);
+                                messageBoxToolStripMenuItem.Checked = messageBox;
+                                break;
                                 #endregion
                         }
                     }
@@ -1641,6 +1623,21 @@ namespace Sonic06Randomiser
             #endregion
 
             Randomisation.SetupRandomiser(randomEnemies, validEnemies, randomCharacters, validCharacters, randomItems, validItems, randomVoices, spoilerLog, keepXML, randomiseFolder, outputFolderType, filepath, output, rndSeed);
+            if (messageBox) { MessageBox.Show("Randomisation of " + filepath + " complete."); }
+        }
+
+        private void messageBoxToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (messageBoxToolStripMenuItem.Checked)
+            {
+                messageBox = false;
+                messageBoxToolStripMenuItem.Checked = false;
+            }
+            else
+            {
+                messageBox = true;
+                messageBoxToolStripMenuItem.Checked = true;
+            }
         }
     }
 }
