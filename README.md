@@ -14,7 +14,7 @@ A tool designed to randomise various elements of the Set Object Layout Data in S
 # Notes
 Either due to my code or due to HedgeLib's unfinished S06SetData class, a lot of things don't work. Most notably, the lack of grouping support in HedgeLib breaks anything that relys on it (such as Cages or Doors that are opened by defeating or certain enemies).
 
-Things such as bosses can also wreck havoc on the game's already low stability, therefore, use caution when enabling them.
+Things such as bosses can also wreck havoc on the game's already low stability, therefore, use caution when enabling them. Avoid using them on real hardware, as they cause major glitches (as seen here: https://youtu.be/_g_AUWhp6Ls?t=12630).
 
 Only certain characters can do certain actions, for example, only Sonic can do the water surfing in Wave Ocean and only Sonic holding Elise and Silver can use the Swing Vines in Tropical Jungle.
 
