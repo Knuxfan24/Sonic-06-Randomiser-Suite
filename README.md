@@ -13,7 +13,7 @@ A tool designed to randomise various elements of the Set Object Layout Data in S
 
 # Usage (LUA Randomisation)
 1) The randomiser also includes a very basic LUA Randomiser in the Misc Tools tab to randomise a stage's music, lighting colours and light direction. The files to randomise are also found in scripts.arc, but are compiled into LUA Binary files. The Sonic '06 Toolkit can decompile these, allowing us to randomise them. Find the folder for the .LUB file you wish to randomise and choose the "Decompile all LUBs in this directory" option from the SDK tab of the Sonic '06 Toolkit.
-2) Select the decompile .LUB file that you wish to randomise in the LUA Randomiser tool, a stage's [x]_[character_name].lub file holds the music definition, while the stage's scene_*.lub file contains the lighting information. Configure the randomisation to your liking, then click randomise.
+2) Select the decompile .LUB file that you wish to randomise in the LUA Randomiser tool, a stage's [x][character_name].lub file holds the music definition, while the stage's scene*.lub file contains the lighting information. Configure the randomisation to your liking, then click randomise.
 3) Repack scripts.arc with the Sonic '06 Toolkit then load the edited stage in game.
 
 # Notes
