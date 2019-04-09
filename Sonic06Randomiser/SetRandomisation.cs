@@ -8,7 +8,7 @@ using System.Xml.Linq;
 
 namespace Sonic06Randomiser
 {
-    class Randomisation
+    class SetRandomisation
     {
         static public void SetupRandomiser(bool randomEnemies, List<string> validEnemies, bool randomCharacters, List<string> validCharacters, bool randomItems, List<string> validItems, bool randomVoices, bool spoilerLog, bool keepXML, bool randomiseFolder, int outputFolderType, string filepath, string output, string rndSeed)
         {
@@ -17,13 +17,20 @@ namespace Sonic06Randomiser
             string logSeed = rndSeed;
             if (outputFolderType == 0 && output == "") { outputFolderType = 1; } //Default to saving in the program directory if the user doesn't specify a path with Output Folder Type set to custom.
 
+
             if (!randomiseFolder)
             {
                 #region Load the XML if we're only randomising one
+                if (filepath.Contains(".set"))
+                {
+                    SetClass.Extract(randomiseFolder, outputFolderType, output, filepath);
+                    filepath = (filepath.Remove(filepath.Length - 4) + ".xml");
+                }
                 string file = filepath;
                 xmlName = filepath.Remove(0, Path.GetDirectoryName(filepath).Length);
                 xmlName = xmlName.Remove(xmlName.Length - 4);
                 xmlName = xmlName.Replace("\\", "");
+                
                 XElement doc = XElement.Load(file);
                 #endregion
 
@@ -91,16 +98,16 @@ namespace Sonic06Randomiser
             else
             {
                 #region Load the Folder of XMLs
+                SetClass.Extract(randomiseFolder, outputFolderType, output, filepath);
                 string[] xmls = Directory.GetFiles(filepath, "*.xml", SearchOption.AllDirectories);
                 Console.WriteLine("Found " + xmls.Length + " xml files");
                 foreach (string xml in xmls)
                 {
-                    //Load XML
+                    Console.WriteLine(xml);
                     xmlName = xml.Remove(0, Path.GetDirectoryName(xml).Length);
                     xmlName = xmlName.Remove(xmlName.Length - 4);
                     xmlName = xmlName.Replace("\\", "");
                     XElement doc = XElement.Load(xml);
-                    Console.WriteLine(xmlName);
                 #endregion
 
                     #region Set up the Random Number Generation
@@ -432,6 +439,9 @@ namespace Sonic06Randomiser
                     {
                         switch (el3.Value)
                         {
+                            case "0":
+                                spoiler.Write("Empty capsule became ");
+                                break;
                             case "1":
                                 spoiler.Write("5 Ring capsule became ");
                                 break;
@@ -453,11 +463,17 @@ namespace Sonic06Randomiser
                             case "7":
                                 spoiler.Write("Invincibility capsule became ");
                                 break;
+                            case "8":
+                                spoiler.Write("Shield capsule became ");
+                                break;
                         }
                         index = rnd.Next(validItems.Count);
                         el3.Value = validItems[index];
                         switch (el3.Value)
                         {
+                            case "0":
+                                spoiler.Write("an Empty capsule." + Environment.NewLine);
+                                break;
                             case "1":
                                 spoiler.Write("a 5 Ring capsule." + Environment.NewLine);
                                 break;

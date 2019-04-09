@@ -79,9 +79,16 @@
     <Compile Include="ImportSetWindow.Designer.cs">
       <DependentUpon>ImportSetWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="LUARandomisation.cs" />
+    <Compile Include="LUARandomiserWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LUARandomiserWindow.Designer.cs">
+      <DependentUpon>LUARandomiserWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Randomisation.cs" />
+    <Compile Include="SetRandomisation.cs" />
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -94,6 +101,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ImportSetWindow.resx">
       <DependentUpon>ImportSetWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LUARandomiserWindow.resx">
+      <DependentUpon>LUARandomiserWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
