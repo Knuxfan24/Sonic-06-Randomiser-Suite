@@ -111,384 +111,141 @@ namespace Sonic06Randomiser
         #region Iblis Monsters
         private void cBiterToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (cBiterToolStripMenuItem.Checked)
-            {
-                cBiter = false;
-                cBiterToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                cBiter = true;
-                cBiterToolStripMenuItem.Checked = true;
-            }
+            cBiter = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void cCrawlerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (cCrawlerToolStripMenuItem.Checked)
-            {
-                cCrawler = false;
-                cCrawlerToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                cCrawler = true;
-                cCrawlerToolStripMenuItem.Checked = true;
-            }
+            cCrawler = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void cGolemToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (cGolemToolStripMenuItem.Checked)
-            {
-                cGolem = false;
-                cGolemToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                cGolem = true;
-                cGolemToolStripMenuItem.Checked = true;
-            }
+            cGolem = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void cTakerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (cTakerToolStripMenuItem.Checked)
-            {
-                cTaker = false;
-                cTakerToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                cTaker = true;
-                cTakerToolStripMenuItem.Checked = true;
-            }
+            cTaker = ((ToolStripMenuItem)sender).Checked;
         }
         #endregion
 
         #region Mephiles Monsters
         private void cGazerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (cGazerToolStripMenuItem.Checked)
-            {
-                cGazer = false;
-                cGazerToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                cGazer = true;
-                cGazerToolStripMenuItem.Checked = true;
-            }
+            cGazer = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void cStalkerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (cStalkerToolStripMenuItem.Checked)
-            {
-                cStalker = false;
-                cStalkerToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                cStalker = true;
-                cStalkerToolStripMenuItem.Checked = true;
-            }
+            cStalker = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void cTitanToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (cTitanToolStripMenuItem.Checked)
-            {
-                cTitan = false;
-                cTitanToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                cTitan = true;
-                cTitanToolStripMenuItem.Checked = true;
-            }
+            cTitan = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void cTrickerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (cTrickerToolStripMenuItem.Checked)
-            {
-                cTricker = false;
-                cTrickerToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                cTricker = true;
-                cTrickerToolStripMenuItem.Checked = true;
-            }
+            cTricker = ((ToolStripMenuItem)sender).Checked;
         }
         #endregion
 
         #region Eggman Robots
         private void eArmorToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (eArmorToolStripMenuItem.Checked)
-            {
-                eArmor = false;
-                eArmorToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                eArmor = true;
-                eArmorToolStripMenuItem.Checked = true;
-            }
+            eArmor = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void eBomberToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (eBomberToolStripMenuItem.Checked)
-            {
-                eBomber = false;
-                eBomberToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                eBomber = true;
-                eBomberToolStripMenuItem.Checked = true;
-            }
+            eBomber = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void eBlusterToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (eBlusterToolStripMenuItem.Checked)
-            {
-                eBluster = false;
-                eBlusterToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                eBluster = true;
-                eBlusterToolStripMenuItem.Checked = true;
-            }
+            eBluster = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void eBusterToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (eBusterToolStripMenuItem.Checked)
-            {
-                eBuster = false;
-                eBusterToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                eBuster = true;
-                eBusterToolStripMenuItem.Checked = true;
-            }
+            eBuster = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void eCannonToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (eCannonToolStripMenuItem.Checked)
-            {
-                eCannon = false;
-                eCannonToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                eCannon = true;
-                eCannonToolStripMenuItem.Checked = true;
-            }
+            eCannon = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void eCommanderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (eCommanderToolStripMenuItem.Checked)
-            {
-                eCommander = false;
-                eCommanderToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                eCommander = true;
-                eCommanderToolStripMenuItem.Checked = true;
-            }
+            eCommander = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void eFlyerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (eFlyerToolStripMenuItem.Checked)
-            {
-                eFlyer = false;
-                eFlyerToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                eFlyer = true;
-                eFlyerToolStripMenuItem.Checked = true;
-            }
+            eFlyer = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void eGuardianToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (eGuardianToolStripMenuItem.Checked)
-            {
-                eGuardian = false;
-                eGuardianToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                eGuardian = true;
-                eGuardianToolStripMenuItem.Checked = true;
-            }
+            eGuardian = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void eGunnerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (eGunnerToolStripMenuItem.Checked)
-            {
-                eGunner = false;
-                eGunnerToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                eGunner = true;
-                eGunnerToolStripMenuItem.Checked = true;
-            }
+            eGunner = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void eKeeperToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (eKeeperToolStripMenuItem.Checked)
-            {
-                eKeeper = false;
-                eKeeperToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                eKeeper = true;
-                eKeeperToolStripMenuItem.Checked = true;
-            }
+            eKeeper = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void eLancerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (eLancerToolStripMenuItem.Checked)
-            {
-                eLancer = false;
-                eLancerToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                eLancer = true;
-                eLancerToolStripMenuItem.Checked = true;
-            }
+            eLancer = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void eLinerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (eLinerToolStripMenuItem.Checked)
-            {
-                eLiner = false;
-                eLinerToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                eLiner = true;
-                eLinerToolStripMenuItem.Checked = true;
-            }
+            eLiner = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void eRounderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (eRounderToolStripMenuItem.Checked)
-            {
-                eRounder = false;
-                eRounderToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                eRounder = true;
-                eRounderToolStripMenuItem.Checked = true;
-            }
+            eRounder = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void eSearcherToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (eSearcherToolStripMenuItem.Checked)
-            {
-                eSearcher = false;
-                eSearcherToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                eSearcher = true;
-                eSearcherToolStripMenuItem.Checked = true;
-            }
+            eSearcher = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void eStingerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (eStingerToolStripMenuItem.Checked)
-            {
-                eStinger = false;
-                eStingerToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                eStinger = true;
-                eStingerToolStripMenuItem.Checked = true;
-            }
+            eStinger = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void eSweeperToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (eSweeperToolStripMenuItem.Checked)
-            {
-                eSweeper = false;
-                eSweeperToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                eSweeper = true;
-                eSweeperToolStripMenuItem.Checked = true;
-            }
+            eSweeper = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void eggWalkerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (eggWalkerToolStripMenuItem.Checked)
-            {
-                eWalker = false;
-                eggWalkerToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                eWalker = true;
-                eggWalkerToolStripMenuItem.Checked = true;
-            }
+            eWalker = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void eggHunterToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (eggHunterToolStripMenuItem.Checked)
-            {
-                eHunter = false;
-                eggHunterToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                eHunter = true;
-                eggHunterToolStripMenuItem.Checked = true;
-            }
+            eHunter = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void eggChaserToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (eggChaserToolStripMenuItem.Checked)
-            {
-                eChaser = false;
-                eggChaserToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                eChaser = true;
-                eggChaserToolStripMenuItem.Checked = true;
-            }
+            eChaser = ((ToolStripMenuItem)sender).Checked;
         }
         #endregion
 
@@ -499,18 +256,8 @@ namespace Sonic06Randomiser
             {
                 MessageBox.Show("Bosses can cause more stability problems than usual, especially on real hardware, take caution in using them.");
                 bossWarningShown = true;
-                return;
             }
-            if (eggCerberusToolStripMenuItem.Checked)
-            {
-                eCerberus = false;
-                eggCerberusToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                eCerberus = true;
-                eggCerberusToolStripMenuItem.Checked = true;
-            }
+            eCerberus = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void eggGenesisToolStripMenuItem_Click(object sender, EventArgs e)
@@ -519,18 +266,8 @@ namespace Sonic06Randomiser
             {
                 MessageBox.Show("Bosses can cause more stability problems than usual, especially on real hardware, take caution in using them.");
                 bossWarningShown = true;
-                return;
             }
-            if (eggGenesisToolStripMenuItem.Checked)
-            {
-                eGenesis = false;
-                eggGenesisToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                eGenesis = true;
-                eggGenesisToolStripMenuItem.Checked = true;
-            }
+            eGenesis = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void eggWyvernToolStripMenuItem_Click(object sender, EventArgs e)
@@ -539,18 +276,8 @@ namespace Sonic06Randomiser
             {
                 MessageBox.Show("Bosses can cause more stability problems than usual, especially on real hardware, take caution in using them.");
                 bossWarningShown = true;
-                return;
             }
-            if (eggWyvernToolStripMenuItem.Checked)
-            {
-                eWyvern = false;
-                eggWyvernToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                eWyvern = true;
-                eggWyvernToolStripMenuItem.Checked = true;
-            }
+            eWyvern = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void iblisPhase1ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -559,18 +286,8 @@ namespace Sonic06Randomiser
             {
                 MessageBox.Show("Bosses can cause more stability problems than usual, especially on real hardware, take caution in using them.");
                 bossWarningShown = true;
-                return;
             }
-            if (iblisPhase1ToolStripMenuItem.Checked)
-            {
-                iblisOne = false;
-                iblisPhase1ToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                iblisOne = true;
-                iblisPhase1ToolStripMenuItem.Checked = true;
-            }
+            iblisOne = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void iblisPhase2ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -579,18 +296,8 @@ namespace Sonic06Randomiser
             {
                 MessageBox.Show("Bosses can cause more stability problems than usual, especially on real hardware, take caution in using them.");
                 bossWarningShown = true;
-                return;
             }
-            if (iblisPhase2ToolStripMenuItem.Checked)
-            {
-                iblisTwo = false;
-                iblisPhase2ToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                iblisTwo = true;
-                iblisPhase2ToolStripMenuItem.Checked = true;
-            }
+            iblisTwo = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void iblisPhase3ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -599,18 +306,8 @@ namespace Sonic06Randomiser
             {
                 MessageBox.Show("Bosses can cause more stability problems than usual, especially on real hardware, take caution in using them.");
                 bossWarningShown = true;
-                return;
             }
-            if (iblisPhase3ToolStripMenuItem.Checked)
-            {
-                iblisThree = false;
-                iblisPhase3ToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                iblisThree = true;
-                iblisPhase3ToolStripMenuItem.Checked = true;
-            }
+            iblisThree = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void mephilesPhase1ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -619,18 +316,8 @@ namespace Sonic06Randomiser
             {
                 MessageBox.Show("Bosses can cause more stability problems than usual, especially on real hardware, take caution in using them.");
                 bossWarningShown = true;
-                return;
             }
-            if (mephilesPhase1ToolStripMenuItem.Checked)
-            {
-                mephiles = false;
-                mephilesPhase1ToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                mephiles = true;
-                mephilesPhase1ToolStripMenuItem.Checked = true;
-            }
+            mephiles = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void solarisPhase1ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -639,18 +326,8 @@ namespace Sonic06Randomiser
             {
                 MessageBox.Show("Bosses can cause more stability problems than usual, especially on real hardware, take caution in using them.");
                 bossWarningShown = true;
-                return;
             }
-            if (solarisPhase1ToolStripMenuItem.Checked)
-            {
-                solaris = false;
-                solarisPhase1ToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                solaris = true;
-                solarisPhase1ToolStripMenuItem.Checked = true;
-            }
+            solaris = ((ToolStripMenuItem)sender).Checked;
         }
         #endregion
 
@@ -659,312 +336,114 @@ namespace Sonic06Randomiser
         #region Character Checkboxes
         private void sonicToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (sonicToolStripMenuItem.Checked)
-            {
-                sonic = false;
-                sonicToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                sonic = true;
-                sonicToolStripMenuItem.Checked = true;
-            }
+            sonic = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void tailsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (tailsToolStripMenuItem.Checked)
-            {
-                tails = false;
-                tailsToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                tails = true;
-                tailsToolStripMenuItem.Checked = true;
-            }
+            tails = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void knucklesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (knucklesToolStripMenuItem.Checked)
-            {
-                knuckles = false;
-                knucklesToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                knuckles = true;
-                knucklesToolStripMenuItem.Checked = true;
-            }
+            knuckles = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void sonicMachSpeedToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (sonicMachSpeedToolStripMenuItem.Checked)
-            {
-                sonicMachSpeed = false;
-                sonicMachSpeedToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                sonicMachSpeed = true;
-                sonicMachSpeedToolStripMenuItem.Checked = true;
-            }
+            sonicMachSpeed = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void sonicAndEliseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (sonicAndEliseToolStripMenuItem.Checked)
-            {
-                sonicElise = false;
-                sonicAndEliseToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                sonicElise = true;
-                sonicAndEliseToolStripMenuItem.Checked = true;
-            }
+            sonicElise = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void sonicSnowboardWAPMenuItem_Click(object sender, EventArgs e)
         {
-            if (sonicSnowboardWAPMenuItem.Checked)
-            {
-                sonicSnowboardWAP = false;
-                sonicSnowboardWAPMenuItem.Checked = false;
-            }
-            else
-            {
-                sonicSnowboardWAP = true;
-                sonicSnowboardWAPMenuItem.Checked = true;
-            }
+            sonicSnowboardWAP = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void sonicSnowboardCSCMenuItem_Click(object sender, EventArgs e)
         {
-            if (sonicSnowboardCSCMenuItem.Checked)
-            {
-                sonicSnowboardCSC = false;
-                sonicSnowboardCSCMenuItem.Checked = false;
-            }
-            else
-            {
-                sonicSnowboardCSC = true;
-                sonicSnowboardCSCMenuItem.Checked = true;
-            }
+            sonicSnowboardCSC = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void shadowToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (shadowToolStripMenuItem.Checked)
-            {
-                shadow = false;
-                shadowToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                shadow = true;
-                shadowToolStripMenuItem.Checked = true;
-            }
+            shadow = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void rougeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (rougeToolStripMenuItem.Checked)
-            {
-                rouge = false;
-                rougeToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                rouge = true;
-                rougeToolStripMenuItem.Checked = true;
-            }
+            rouge = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void omegaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (omegaToolStripMenuItem.Checked)
-            {
-                omega = false;
-                omegaToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                omega = true;
-                omegaToolStripMenuItem.Checked = true;
-            }
+            omega = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void silverToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (silverToolStripMenuItem.Checked)
-            {
-                silver = false;
-                silverToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                silver = true;
-                silverToolStripMenuItem.Checked = true;
-            }
+            silver = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void blazeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (blazeToolStripMenuItem.Checked)
-            {
-                blaze = false;
-                blazeToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                blaze = true;
-                blazeToolStripMenuItem.Checked = true;
-            }
+            blaze = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void amyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (amyToolStripMenuItem.Checked)
-            {
-                amy = false;
-                amyToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                amy = true;
-                amyToolStripMenuItem.Checked = true;
-            }
+            amy = ((ToolStripMenuItem)sender).Checked;
         }
         #endregion
 
         #region Item Capsule Checkboxes
         private void emptyCapsuleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (emptyCapsuleToolStripMenuItem.Checked)
-            {
-                emptyCapsule = false;
-                emptyCapsuleToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                emptyCapsule = true;
-                emptyCapsuleToolStripMenuItem.Checked = true;
-            }
+            emptyCapsule = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void fiveRingCapsuleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (fiveRingCapsuleToolStripMenuItem.Checked)
-            {
-                fiveRingCapsule = false;
-                fiveRingCapsuleToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                fiveRingCapsule = true;
-                fiveRingCapsuleToolStripMenuItem.Checked = true;
-            }
+            fiveRingCapsule = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void tenRingCapsuleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (tenRingCapsuleToolStripMenuItem.Checked)
-            {
-                tenRingCapsule = false;
-                tenRingCapsuleToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                tenRingCapsule = true;
-                tenRingCapsuleToolStripMenuItem.Checked = true;
-            }
+            tenRingCapsule = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void twentyRingCapsuleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (twentyRingCapsuleToolStripMenuItem.Checked)
-            {
-                twentyRingCapsule = false;
-                twentyRingCapsuleToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                twentyRingCapsule = true;
-                twentyRingCapsuleToolStripMenuItem.Checked = true;
-            }
+            twentyRingCapsule = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void extraLifeCapsuleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (extraLifeCapsuleToolStripMenuItem.Checked)
-            {
-                extraLifeCapsule = false;
-                extraLifeCapsuleToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                extraLifeCapsule = true;
-                extraLifeCapsuleToolStripMenuItem.Checked = true;
-            }
+            extraLifeCapsule = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void powerSneakersCapsuleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (powerSneakersCapsuleToolStripMenuItem.Checked)
-            {
-                powerSneakersCapsule = false;
-                powerSneakersCapsuleToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                powerSneakersCapsule = true;
-                powerSneakersCapsuleToolStripMenuItem.Checked = true;
-            }
+            powerSneakersCapsule = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void powerGaugeRefillCapsuleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (powerGaugeRefillCapsuleToolStripMenuItem.Checked)
-            {
-                powerGaugeRefillCapsule = false;
-                powerGaugeRefillCapsuleToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                powerGaugeRefillCapsule = true;
-                powerGaugeRefillCapsuleToolStripMenuItem.Checked = true;
-            }
+            powerGaugeRefillCapsule = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void invincibilityCapsuleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (invincibilityCapsuleToolStripMenuItem.Checked)
-            {
-                invincibilityCapsule = false;
-                invincibilityCapsuleToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                invincibilityCapsule = true;
-                invincibilityCapsuleToolStripMenuItem.Checked = true;
-            }
+            invincibilityCapsule = ((ToolStripMenuItem)sender).Checked;
         }
 
         private void shieldCapsuleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (shieldCapsuleToolStripMenuItem.Checked)
-            {
-                shieldCapsule = false;
-                shieldCapsuleToolStripMenuItem.Checked = false;
-            }
-            else
-            {
-                shieldCapsule = true;
-                shieldCapsuleToolStripMenuItem.Checked = true;
-            }
+            shieldCapsule = ((ToolStripMenuItem)sender).Checked;
         }
         #endregion
 
@@ -1074,7 +553,7 @@ namespace Sonic06Randomiser
             {
                 OpenFileDialog xmlBrowser = new OpenFileDialog();
                 xmlBrowser.Title = "Select XML";
-                xmlBrowser.Filter = "eXtensible Markup Language file (*.xml)|*.xml|All files (*.*)|*.*";
+                xmlBrowser.Filter = "Extracted XML or Original Set (*.xml, *.set)|*.xml;*.set|eXtensible Markup Language file (*.xml)|*.xml|SONIC THE HEDGEHOG (2006) SET file (*.set)|*.set|All files (*.*)|*.*";
                 xmlBrowser.FilterIndex = 1;
                 xmlBrowser.RestoreDirectory = true;
                 if (xmlBrowser.ShowDialog() == DialogResult.OK)
@@ -1212,6 +691,7 @@ namespace Sonic06Randomiser
 
         private void loadConfigToolStripMenuItem_Click(object sender, EventArgs e)
         {
+
             OpenFileDialog configLoad = new OpenFileDialog();
             configLoad.Title = "Load Config";
             configLoad.Filter = "Randomiser Config (*.s06)|*.s06";
@@ -1622,7 +1102,7 @@ namespace Sonic06Randomiser
             if (shieldCapsule) { validItems.Add("8"); }
             #endregion
 
-            Randomisation.SetupRandomiser(randomEnemies, validEnemies, randomCharacters, validCharacters, randomItems, validItems, randomVoices, spoilerLog, keepXML, randomiseFolder, outputFolderType, filepath, output, rndSeed);
+            SetRandomisation.SetupRandomiser(randomEnemies, validEnemies, randomCharacters, validCharacters, randomItems, validItems, randomVoices, spoilerLog, keepXML, randomiseFolder, outputFolderType, filepath, output, rndSeed);
             if (messageBox) { MessageBox.Show("Randomisation of " + filepath + " complete."); }
         }
 
@@ -1638,6 +1118,12 @@ namespace Sonic06Randomiser
                 messageBox = true;
                 messageBoxToolStripMenuItem.Checked = true;
             }
+        }
+
+        private void lUARandomiserToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            LUARandomiserWindow LUARandomiserWindow = new LUARandomiserWindow();
+            LUARandomiserWindow.ShowDialog();
         }
     }
 }
