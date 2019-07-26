@@ -80,6 +80,9 @@ The Character Attributes Randomiser can often make characters difficult to contr
 
 # Credits
 [Knuxfan24](https://github.com/Knuxfan24) - Randomisation Code and UI Design
+
 [Radfordhound](https://github.com/Radfordhound) - HedgeLib (used for SET Editing)
+
 Shadow LAG - Sonic '06 Toolkit (used for automatic LUA Decompilation)
+
 [Hyper](https://github.com/HyperPolygon64) - Showing how to change the model package for characters (blame them for the Model Randomiser in the Character Attributes Randomiser!)
