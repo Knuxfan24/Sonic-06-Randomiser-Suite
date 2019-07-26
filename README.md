@@ -2,7 +2,7 @@
 A small software package designed to randomise various elements in SONIC THE HEDGEHOG (2006) on the Xbox 360 and Playstation 3 consoles, ranging from random enemy types in levels to random speed values for the characters.
 
 # Building
-To manually build the Mod Manager, simply clone this repository to a location on your computer and open the `SONIC THE HEDGEHOG (2006) Randomiser Suite.sln` solution file in Visual Studio (VS2019 recommended, although other versions SHOULD work fine). Right-click on the project in the Solution Explorer and choose Rebuild Solution to build an executable in `..\SONIC THE HEDGEHOG (2006) Randomiser Suite\bin\Debug`.
+To manually build the Randomiser Suite, simply clone this repository to a location on your computer and open the `SONIC THE HEDGEHOG (2006) Randomiser Suite.sln` solution file in Visual Studio (VS2019 recommended, although other versions SHOULD work fine). Right-click on the project in the Solution Explorer and choose Rebuild Solution to build an executable in `..\SONIC THE HEDGEHOG (2006) Randomiser Suite\bin\Debug`.
 
 # Usage
 TO-DO
