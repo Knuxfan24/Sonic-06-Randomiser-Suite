@@ -21,18 +21,56 @@ Voice Triggers - This will change what hint dialog lines (including events such 
 The SET Randomiser also has an option to remove any Doors and Cages within the act, this is to workaround an issue caused by [HedgeLib's](https://github.com/Radfordhound/HedgeLib/) incomplete Sonic '06 SET Data implementation, causing the game to lose various bits of information that is needed to allow these objects to work properly. This workaround removes these objects, making more stages playable when randomised.
 
 # Usage (Light Randomiser)
+<p align="center">
+	<img src="https://github.com/Knuxfan24/SONIC-THE-HEDGEHOG-2006-Randomiser-Suite/blob/Rewrite/README%20Graphics/Light%20Randomiser.png" />
+</p>
+The Light Randomiser allows the user to modify various elements of a stage's lighting, alongside the stage's fog, by modifying various values in a stage's scene LUA file, found in the scripts/stage/ folder of scripts.arc. The Light Randomiser can (currently) randomise:
 
+Ambient, Main and Sub Lighting Colours - This will adjust the various colours that make up a stage's lighting.
+
+Light Direction - This will change the direction the light in the stage comes from, affecting the length and angle shadows are cast at.
+
+Fog Colour - This will change the colour of the stage's fog.
+
+Fog Density - This will change how thick a stage's fog is.
 
 # Usage (Music Randomiser)
-
+<p align="center">
+	<img src="https://github.com/Knuxfan24/SONIC-THE-HEDGEHOG-2006-Randomiser-Suite/blob/Rewrite/README%20Graphics/Music%20Randomiser.png" />
+</p>
+The Music Randomiser allows the user to change the music that is played on a stage by editing a value in a stage's area LUA, each character that plays through a stage will have one of these LUA files, with a letter to indicate the section and their name. These can be found in the scripts/stage/ folder of scripts.arc. The avaliable music choices can be configured using the check list on the bottom left of the Music Randomiser window.
 
 # Usage (Mission Randomiser)
-
+<p align="center">
+	<img src="https://github.com/Knuxfan24/SONIC-THE-HEDGEHOG-2006-Randomiser-Suite/blob/Rewrite/README%20Graphics/Mission%20Randomiser.png" />
+</p>
+The Mission Randomiser allows the user to modify a couple of values in a stage's mission file, found in the scripts/mission/ folder of scripts.arc, this allows the user to randomise the loading screen mission text (with almost any string across the whole game being eligable) and also allows the user to adjust a few score related values, namely the Time and Ring Bonuses given out upon completing a stage, and the score required for the different ranks the game awards you.
 
 # Usage (Character Attributes Randomiser Randomiser)
+<p align="center">
+	<img src="https://github.com/Knuxfan24/SONIC-THE-HEDGEHOG-2006-Randomiser-Suite/blob/Rewrite/README%20Graphics/Character%20Attributes%20Randomiser.png" />
+</p>
+The Character Attributes Randomiser allows the user to randomise various character parameters found in the LUA files within player.arc. The Character Attributes Randomiser can (currently) randomise:
 
+Movement Speed: This randomises how fast the different characters move when on the ground, either speeding them up dramatically or having a low chance to slow them down by a considerable margin.
 
+Jump Height: This will change the character's jump height, along with the amount of momentum they carry into a jump when not at a standstill.
+
+Grinding Speed: This will change how fast the character grinds on rails, being able to adjust both their minimum and maximum grinding speeds, as well as the rate at which they accellerate when on rails.
+
+Ability Parameters: This randomises the values used for certain character abilities, such as the speed of Tails' flight and the amount of Double Jumps Amy can do before needing to touch the ground.
+
+Model Randomiser: This randomises what model package a player will use, effectively swapping their ingame model with someone elses while retaining (most) of their own abilities.
+
+Gem Patch: This will edit Sonic's character LUA to fix the typo that prevents his Action Gauge from draining when using his gems.
 
 # Notes
 Things such as bosses can also wreck havoc on the game's already low stability, therefore, use caution when enabling them. Avoid using them on real hardware, as they cause major glitches (as seen here: https://youtu.be/_g_AUWhp6Ls?t=12630).
-Only certain characters can do certain actions, for example, only Sonic can do the water surfing in Wave Ocean and only Sonic holding Elise and Silver can use the Swing Vines in Tropical Jungle.
+
+Only certain characters can do certain actions, for example, only Sonic can do the water surfing in Wave Ocean and only Sonic holding Elise, Silver and Rouge can use the Swing Vines in Tropical Jungle.
+
+Aquatic Base and Radical Train seem to crash often when randomised.
+
+Randomising character models can cause a lot of characters to lose their abilities due to a lack of animations; the Model Randomiser can also not affect Silver and Omega as the game would always crash upon randomising their models, so their files will be skipped when using it.
+
+The Character Attributes Randomiser can often make characters difficult to control.
