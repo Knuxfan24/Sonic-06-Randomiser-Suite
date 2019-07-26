@@ -1,11 +1,11 @@
 # SONIC THE HEDGEHOG (2006) Randomiser Suite
-A small software package designed to randomise various elements in SONIC THE HEDGEHOG (2006) on the Xbox 360 and Playstation 3 consoles, ranging from random enemy types in levels to random speed values for the characters.
+A small software package designed to randomise various elements in SONIC THE HEDGEHOG (2006) on the Xbox 360 and PlayStation 3 consoles, ranging from random enemy types in levels to random speed values for the characters.
 
 # Building
 To manually build the Randomiser Suite, simply clone this repository to a location on your computer and open the `SONIC THE HEDGEHOG (2006) Randomiser Suite.sln` solution file in Visual Studio (VS2019 recommended, although other versions SHOULD work fine). Right-click on the project in the Solution Explorer and choose Rebuild Solution to build an executable in `..\SONIC THE HEDGEHOG (2006) Randomiser Suite\bin\Debug`.
 
 # Usage
-TO-DO
+The Randomiser Suite works on various files located in the scripts.arc and player.arc archives in the xenon/scripts (or ps3/scripts/ for the PlayStation 3 version) folder. To work with these archives, use the [Sonic '06 Toolkit](https://github.com/HyperPolygon64/Sonic-06-Toolkit/releases), this will allow you to open and modify these archives. Most of the file search boxes in the suite are filtered to only take certain files, so finding the ones you want to work on should be simple. Alternatively, use the Randomise Folder option in each Randomiser to randomise multiple files at once, starting from the specified directory and looking through any subfolders.
 
 # Details (SET Randomiser)
 <p align="center">
