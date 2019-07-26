@@ -7,6 +7,8 @@ To manually build the Randomiser Suite, simply clone this repository to a locati
 # Usage
 The Randomiser Suite works on various files located in the scripts.arc and player.arc archives in the xenon/scripts (or ps3/scripts/ for the PlayStation 3 version) folder. To work with these archives, use the [Sonic '06 Toolkit](https://github.com/HyperPolygon64/Sonic-06-Toolkit/releases), this will allow you to open and modify these archives. Most of the file search boxes in the suite are filtered to only take certain files, so finding the ones you want to work on should be simple. Alternatively, use the Randomise Folder option in each Randomiser to randomise multiple files at once, starting from the specified directory and looking through any subfolders.
 
+To remove any previously randomised files, paste the folder path containing the randomised files (this will also include subfolders) and click Clean Up, this will remove any files with a .s06back version and rename the .s06back version into the normal one.
+
 # Details (SET Randomiser)
 <p align="center">
 	<img src="https://github.com/Knuxfan24/SONIC-THE-HEDGEHOG-2006-Randomiser-Suite/blob/Rewrite/README%20Graphics/SET%20Randomiser.png" />
