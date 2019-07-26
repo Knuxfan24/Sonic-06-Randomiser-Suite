@@ -18,7 +18,7 @@ Item Capsules - This will change what the various Item Capsules within the stage
 
 Voice Triggers - This will change what hint dialog lines (including events such as character banter) should be displayed throughout the stage. Most voice files won't play due to a limitation of the game itself, but the text box will always display correctly.
 
-The SET Randomiser also has an option to remove any Doors and Cages within the act, this is to workaround an issue caused by [HedgeLib's] (https://github.com/Radfordhound/HedgeLib) incomplete Sonic '06 SET Data implementation, causing the game to lose various bits of information that is needed to allow these objects to work properly. This workaround removes these objects, making more stages playable when randomised.
+The SET Randomiser also has an option to remove any Doors and Cages within the act, this is to workaround an issue caused by [HedgeLib's](https://github.com/Radfordhound/HedgeLib/) incomplete Sonic '06 SET Data implementation, causing the game to lose various bits of information that is needed to allow these objects to work properly. This workaround removes these objects, making more stages playable when randomised.
 
 # Usage (Light Randomiser)
 
