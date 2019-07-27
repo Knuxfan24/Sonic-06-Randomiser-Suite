@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("SONIC THE HEDGEHOG (2006) Randomiser Suite")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("A small software package designed to randomise various elements in SONIC THE HEDGEHOG (2006) on the Xbox 360 and PlayStation 3 consoles.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("SONIC THE HEDGEHOG (2006) Randomiser Suite")]
-[assembly: AssemblyCopyright("Copyright ©  2019")]
+[assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
