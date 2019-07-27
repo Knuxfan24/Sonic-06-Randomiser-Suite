@@ -1,26 +1,90 @@
-# SONIC THE HEDGEHOG (2006) Randomiser
-A tool designed to randomise various elements of the Set Object Layout Data in SONIC THE HEDGEHOG (2006) on the Xbox 360 and Playstation 3, as well as a few stage lua elements.
+# SONIC THE HEDGEHOG (2006) Randomiser Suite
+A small software package designed to randomise various elements in SONIC THE HEDGEHOG (2006) on the Xbox 360 and PlayStation 3 consoles, ranging from random enemy types in levels to random speed values for the characters.
 
 # Building
-1) Clone this repository into a folder of your choice using the Git CMD tool with this command: `git clone --recurse-submodules https://github.com/Knuxfan24/SONIC-THE-HEDGEHOG-2006-Randomiser`
-2) Open Sonic06Randomiser.sln in Visual Studio and build the HedgeLib project to create the HedgeLib DLL. Then run the program to build and run a binary, located in `..\Sonic06Randomiser\bin\Debug`
+To manually build the Randomiser Suite, simply clone this repository to a location on your computer and open the `SONIC THE HEDGEHOG (2006) Randomiser Suite.sln` solution file in Visual Studio (VS2019 recommended, although other versions SHOULD work fine). Right-click on the project in the Solution Explorer and choose Rebuild Solution to build an executable in `..\SONIC THE HEDGEHOG (2006) Randomiser Suite\bin\Debug`.
 
-# Usage (Set Randomisation)
-1) In order to use the randomiser, you need to extract the scripts.arc file that contains all of the Sonic 06 set data files. I recommend using Hyper's [Sonic '06 Toolkit](https://github.com/HyperPolygon64/Sonic-06-Toolkit/releases) application for this purpose.
-2) Either extract a set file from scripts.arc or open the temp folder that the Sonic '06 Toolkit extracts to and work from there. Select the set file or folder you wish to randomise (baring in mind that the folder randomiser will include subfolders well), then configure the settings to what you want. While the randomiser can auto extract the set data to xml, the user can manually extract them too using the Set Extractor utility in the Misc Tools tab.
-3) Click on the Randomise button once you have selected your settings to randomise the selected file. If a set file was the chosen file, then it will first be extracted to an xml, it is recommended to use the xml as the source file for any future randomisations of the same set.
-4) Replace the original set data in scripts.arc using the Sonic '06 Toolkit (this will already be done if you're directly working with the temp folder that the toolkit extracts archives to) and then repack the arc. Once that is done, you can load the game up with the modified scripts.arc and test the stage to see if the randomisation worked.
+# Usage
+The Randomiser Suite works on various files located in the scripts.arc and player.arc archives in the xenon/scripts (or ps3/scripts/ for the PlayStation 3 version) folder. To work with these archives, use the [Sonic '06 Toolkit](https://github.com/HyperPolygon64/Sonic-06-Toolkit/releases), this will allow you to open and modify these archives. Most of the file search boxes in the suite are filtered to only take certain files, so finding the ones you want to work on should be simple. Alternatively, use the Randomise Folder option in each Randomiser to randomise multiple files at once, starting from the specified directory and looking through any subfolders.
 
-# Usage (LUA Randomisation)
-1) The randomiser also includes a very basic LUA Randomiser in the Misc Tools tab to randomise a stage's music, lighting colours and light direction. The files to randomise are also found in scripts.arc, but are compiled into LUA Binary files. The Sonic '06 Toolkit can decompile these, allowing us to randomise them. Find the folder for the .LUB file you wish to randomise and choose the "Decompile all LUBs in this directory" option from the SDK tab of the Sonic '06 Toolkit.
-2) Select the decompile .LUB file that you wish to randomise in the LUA Randomiser tool, a stage's [x][character_name].lub file holds the music definition, while the stage's scene*.lub file contains the lighting information. Configure the randomisation to your liking, then click randomise.
-3) Repack scripts.arc with the Sonic '06 Toolkit then load the edited stage in game.
+To remove any previously randomised files, paste the folder path containing the randomised files (this will also include subfolders) and click Clean Up, this will remove any files with a .s06back version and rename the .s06back version into the normal one.
+
+# Details (SET Randomiser)
+<p align="center">
+	<img src="https://github.com/Knuxfan24/SONIC-THE-HEDGEHOG-2006-Randomiser-Suite/blob/Rewrite/README%20Graphics/SET%20Randomiser.png" />
+</p>
+The SET Randomiser allows the user to modify various elements within the game's SET files, these files can be found scattered around scripts.arc and are responsible for the object layout of every stage. The SET Randomiser can (currently) randomise:
+
+Enemies - This will change what enemies appear in the stage and how they behave. The different enemy types can be toggled on or off in the Enemy Configuration menu, accessible from the top bar of the SET Randomiser window.
+
+Characters - This will change what playable characters appear in the stage. The different avaliable characters can be toggled on or off in the Character Configuration menu, accessible from the top bar of the SET Randomiser window.
+
+Item Capsules - This will change what the various Item Capsules within the stage contain. The different avaliable items that can appear in the capsules can be toggled on or off in the Character Configuration menu, accessible from the top bar of the SET Randomiser window.
+
+Voice Triggers - This will change what hint dialog lines (including events such as character banter) should be displayed throughout the stage. Most voice files won't play due to a limitation of the game itself, but the text box will always display correctly.
+
+The SET Randomiser also has an option to remove any Doors and Cages within the act, this is to workaround an issue caused by [HedgeLib's](https://github.com/Radfordhound/HedgeLib/) incomplete Sonic '06 SET Data implementation, causing the game to lose various bits of information that is needed to allow these objects to work properly. This workaround removes these objects, making more stages playable when randomised.
+
+# Details (Light Randomiser)
+<p align="center">
+	<img src="https://github.com/Knuxfan24/SONIC-THE-HEDGEHOG-2006-Randomiser-Suite/blob/Rewrite/README%20Graphics/Light%20Randomiser.png" />
+</p>
+The Light Randomiser allows the user to modify various elements of a stage's lighting, alongside the stage's fog, by modifying various values in a stage's scene LUA file, found in the scripts/stage/ folder of scripts.arc. The Light Randomiser can (currently) randomise:
+
+Ambient, Main and Sub Lighting Colours - This will adjust the various colours that make up a stage's lighting.
+
+Light Direction - This will change the direction the light in the stage comes from, affecting the length and angle shadows are cast at.
+
+Fog Colour - This will change the colour of the stage's fog.
+
+Fog Density - This will change how thick a stage's fog is.
+
+# Details (Music Randomiser)
+<p align="center">
+	<img src="https://github.com/Knuxfan24/SONIC-THE-HEDGEHOG-2006-Randomiser-Suite/blob/Rewrite/README%20Graphics/Music%20Randomiser.png" />
+</p>
+The Music Randomiser allows the user to change the music that is played on a stage by editing a value in a stage's area LUA, each character that plays through a stage will have one of these LUA files, with a letter to indicate the section and their name. These can be found in the scripts/stage/ folder of scripts.arc. The avaliable music choices can be configured using the check list on the bottom left of the Music Randomiser window.
+
+# Details (Mission Randomiser)
+<p align="center">
+	<img src="https://github.com/Knuxfan24/SONIC-THE-HEDGEHOG-2006-Randomiser-Suite/blob/Rewrite/README%20Graphics/Mission%20Randomiser.png" />
+</p>
+The Mission Randomiser allows the user to modify a couple of values in a stage's mission file, found in the scripts/mission/ folder of scripts.arc, this allows the user to randomise the loading screen mission text (with almost any string across the whole game being eligable) and also allows the user to adjust a few score related values, namely the Time and Ring Bonuses given out upon completing a stage, and the score required for the different ranks the game awards you.
+
+# Details (Character Attributes Randomiser Randomiser)
+<p align="center">
+	<img src="https://github.com/Knuxfan24/SONIC-THE-HEDGEHOG-2006-Randomiser-Suite/blob/Rewrite/README%20Graphics/Character%20Attributes%20Randomiser.png" />
+</p>
+The Character Attributes Randomiser allows the user to randomise various character parameters found in the LUA files within player.arc. The Character Attributes Randomiser can (currently) randomise:
+
+Movement Speed: This randomises how fast the different characters move when on the ground, either speeding them up dramatically or having a low chance to slow them down by a considerable margin.
+
+Jump Height: This will change the character's jump height, along with the amount of momentum they carry into a jump when not at a standstill.
+
+Grinding Speed: This will change how fast the character grinds on rails, being able to adjust both their minimum and maximum grinding speeds, as well as the rate at which they accellerate when on rails.
+
+Ability Parameters: This randomises the values used for certain character abilities, such as the speed of Tails' flight and the amount of Double Jumps Amy can do before needing to touch the ground.
+
+Model Randomiser: This randomises what model package a player will use, effectively swapping their ingame model with someone elses while retaining (most) of their own abilities. The different avaliable models can be configured using the Model Configuration menu, accessible from the top bar of the Character Attributes Randomiser window.
+
+Gem Patch: This will edit Sonic's character LUA to fix the typo that prevents his Action Gauge from draining when using his gems.
 
 # Notes
-Either due to my code or due to HedgeLib's unfinished S06SetData class, a lot of things don't work. Most notably, the lack of grouping support in HedgeLib breaks anything that relys on it (such as Cages or Doors that are opened by defeating or certain enemies).
-
 Things such as bosses can also wreck havoc on the game's already low stability, therefore, use caution when enabling them. Avoid using them on real hardware, as they cause major glitches (as seen here: https://youtu.be/_g_AUWhp6Ls?t=12630).
 
-Only certain characters can do certain actions, for example, only Sonic can do the water surfing in Wave Ocean and only Sonic holding Elise and Silver can use the Swing Vines in Tropical Jungle.
+Only certain characters can do certain actions, for example, only Sonic can do the water surfing in Wave Ocean and only Sonic holding Elise, Silver and Rouge can use the Swing Vines in Tropical Jungle.
 
-Some stages will crash the game consistently when various elements are randomised, if these still happen once HedgeLib is fixed, then I will be diagnosing them to see if I can find where the fault lies.
+Aquatic Base and Radical Train seem to crash often when randomised.
+
+Randomising character models can cause a lot of characters to lose their abilities due to a lack of animations; the Model Randomiser can also not affect Silver and Omega as the game would always crash upon randomising their models, so their files will be skipped when using it.
+
+The Character Attributes Randomiser can often make characters difficult to control.
+
+# Credits
+[Knuxfan24](https://github.com/Knuxfan24) - Randomisation Code and UI Design
+
+[Radfordhound](https://github.com/Radfordhound) - HedgeLib (used for SET Editing)
+
+Shadow LAG - Sonic '06 Toolkit (used for automatic LUA Decompilation)
+
+[Hyper](https://github.com/HyperPolygon64) - Showing how to change the model package for characters (blame them for the Model Randomiser in the Character Attributes Randomiser!)

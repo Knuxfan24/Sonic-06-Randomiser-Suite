@@ -1,6 +1,0 @@
-[submodule "Sonic06Randomiser/HedgeLib"]
-	path = Sonic06Randomiser/HedgeLib
-	url = https://github.com/Radfordhound/HedgeLib
-[submodule "HedgeLib"]
-	path = HedgeLib
-	url = https://github.com/Radfordhound/HedgeLib
