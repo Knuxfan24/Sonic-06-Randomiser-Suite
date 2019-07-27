@@ -11,7 +11,7 @@ To remove any previously randomised files, paste the folder path containing the 
 
 # Details (SET Randomiser)
 <p align="center">
-	<img src="https://github.com/Knuxfan24/SONIC-THE-HEDGEHOG-2006-Randomiser-Suite/blob/Rewrite/README%20Graphics/SET%20Randomiser.png" />
+	<img src="https://github.com/Knuxfan24/SONIC-THE-HEDGEHOG-2006-Randomiser-Suite/blob/master/README%20Graphics/SET%20Randomiser.png" />
 </p>
 The SET Randomiser allows the user to modify various elements within the game's SET files, these files can be found scattered around scripts.arc and are responsible for the object layout of every stage. The SET Randomiser can (currently) randomise:
 
@@ -27,7 +27,7 @@ The SET Randomiser also has an option to remove any Doors and Cages within the a
 
 # Details (Light Randomiser)
 <p align="center">
-	<img src="https://github.com/Knuxfan24/SONIC-THE-HEDGEHOG-2006-Randomiser-Suite/blob/Rewrite/README%20Graphics/Light%20Randomiser.png" />
+	<img src="https://github.com/Knuxfan24/SONIC-THE-HEDGEHOG-2006-Randomiser-Suite/blob/master/README%20Graphics/Light%20Randomiser.png" />
 </p>
 The Light Randomiser allows the user to modify various elements of a stage's lighting, alongside the stage's fog, by modifying various values in a stage's scene LUA file, found in the scripts/stage/ folder of scripts.arc. The Light Randomiser can (currently) randomise:
 
@@ -41,19 +41,19 @@ Fog Density - This will change how thick a stage's fog is.
 
 # Details (Music Randomiser)
 <p align="center">
-	<img src="https://github.com/Knuxfan24/SONIC-THE-HEDGEHOG-2006-Randomiser-Suite/blob/Rewrite/README%20Graphics/Music%20Randomiser.png" />
+	<img src="https://github.com/Knuxfan24/SONIC-THE-HEDGEHOG-2006-Randomiser-Suite/blob/master/README%20Graphics/Music%20Randomiser.png" />
 </p>
 The Music Randomiser allows the user to change the music that is played on a stage by editing a value in a stage's area LUA, each character that plays through a stage will have one of these LUA files, with a letter to indicate the section and their name. These can be found in the scripts/stage/ folder of scripts.arc. The avaliable music choices can be configured using the check list on the bottom left of the Music Randomiser window.
 
 # Details (Mission Randomiser)
 <p align="center">
-	<img src="https://github.com/Knuxfan24/SONIC-THE-HEDGEHOG-2006-Randomiser-Suite/blob/Rewrite/README%20Graphics/Mission%20Randomiser.png" />
+	<img src="https://github.com/Knuxfan24/SONIC-THE-HEDGEHOG-2006-Randomiser-Suite/blob/master/README%20Graphics/Mission%20Randomiser.png" />
 </p>
 The Mission Randomiser allows the user to modify a couple of values in a stage's mission file, found in the scripts/mission/ folder of scripts.arc, this allows the user to randomise the loading screen mission text (with almost any string across the whole game being eligable) and also allows the user to adjust a few score related values, namely the Time and Ring Bonuses given out upon completing a stage, and the score required for the different ranks the game awards you.
 
 # Details (Character Attributes Randomiser Randomiser)
 <p align="center">
-	<img src="https://github.com/Knuxfan24/SONIC-THE-HEDGEHOG-2006-Randomiser-Suite/blob/Rewrite/README%20Graphics/Character%20Attributes%20Randomiser.png" />
+	<img src="https://github.com/Knuxfan24/SONIC-THE-HEDGEHOG-2006-Randomiser-Suite/blob/master/README%20Graphics/Character%20Attributes%20Randomiser.png" />
 </p>
 The Character Attributes Randomiser allows the user to randomise various character parameters found in the LUA files within player.arc. The Character Attributes Randomiser can (currently) randomise:
 
