@@ -12,15 +12,13 @@ namespace SONIC_THE_HEDGEHOG__2006__Randomiser_Suite
 {
     public partial class ItemConfig : Form
     {
-        List<int> checkedItems;
-        public ItemConfig(List<int> validItems)
+        public ItemConfig()
         {
             InitializeComponent();
-            checkedItems = validItems;
 
-            for (int i = 0; i < validItems.Count; i++)
+            for (int i = 0; i < SetRandomisationForm.validItems.Count; i++)
             {
-                switch (validItems[i])
+                switch (SetRandomisationForm.validItems[i])
                 {
                     case 1: itemConfigList.SetItemChecked(0, true); break;
                     case 2: itemConfigList.SetItemChecked(1, true); break;
@@ -50,7 +48,7 @@ namespace SONIC_THE_HEDGEHOG__2006__Randomiser_Suite
                 MessageBox.Show("At least one selection must be checked", "SET Randomiser Item Configuration");
                 return;
             }
-            SetRandomisationForm.validCharacters.Clear();
+            SetRandomisationForm.validItems.Clear();
             foreach (int item in itemConfigList.CheckedIndices)
             {
                 switch (item)

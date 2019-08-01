@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ookii.Dialogs;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -41,23 +42,23 @@ namespace SONIC_THE_HEDGEHOG__2006__Randomiser_Suite
         {
             if (!randomiseFolder)
             {
-                OpenFileDialog setBrowser = new OpenFileDialog();
-                setBrowser.Title = "Select SET Data";
-                setBrowser.Filter = "SONIC THE HEDGEHOG (2006) Stage LUA (*.lub)|a_*.lub;b_*.lub;c_*.lub;d_*.lub;e_*.lub;f_*.lub;f1_*.lub;f2_*.lub;g_*.lub";
-                setBrowser.FilterIndex = 1;
-                setBrowser.RestoreDirectory = true;
-                if (setBrowser.ShowDialog() == DialogResult.OK)
+                OpenFileDialog luaBrowser = new OpenFileDialog();
+                luaBrowser.Title = "Select Stage LUA";
+                luaBrowser.Filter = "SONIC THE HEDGEHOG (2006) Stage LUA (*.lub)|a_*.lub;b_*.lub;c_*.lub;d_*.lub;e_*.lub;f_*.lub;f1_*.lub;f2_*.lub;g_*.lub";
+                luaBrowser.FilterIndex = 1;
+                luaBrowser.RestoreDirectory = true;
+                if (luaBrowser.ShowDialog() == DialogResult.OK)
                 {
-                    filepath = setBrowser.FileName;
+                    filepath = luaBrowser.FileName;
                     filepathBox.Text = filepath;
                 }
             }
             else
             {
-                FolderBrowserDialog setFolderBrowser = new FolderBrowserDialog();
-                if (setFolderBrowser.ShowDialog() == DialogResult.OK)
+                VistaFolderBrowserDialog luaFolderBrowser = new VistaFolderBrowserDialog();
+                if (luaFolderBrowser.ShowDialog() == DialogResult.OK)
                 {
-                    filepath = setFolderBrowser.SelectedPath;
+                    filepath = luaFolderBrowser.SelectedPath;
                     filepathBox.Text = filepath;
                 }
             }
@@ -195,7 +196,7 @@ namespace SONIC_THE_HEDGEHOG__2006__Randomiser_Suite
                     luaName = lua.Remove(0, Path.GetDirectoryName(lua).Length);
                     luaName = luaName.Remove(luaName.Length - 4);
                     luaName = luaName.Replace("\\", "");
-                    Console.WriteLine(luaName);
+                    Console.WriteLine("Working on: " + lua);
                     string[] readText = File.ReadAllLines(lua);
                     if (readText[0].Contains("LuaP"))
                     {

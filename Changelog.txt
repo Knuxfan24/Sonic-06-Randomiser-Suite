@@ -1,0 +1,10 @@
+Version 1.1:
+- Added the Collision Properties Randomiser.
+- Add the Physics Prop Randomisation option in the SET Randomiser.
+- Replaced the archaic Windows Folder Browser with the nicer Ookii one.
+- Fixed a copy and paste error where the Item Capsule Configuration in the SET Randomiser wiped the wrong list.
+- Cleaned up some incorrect variable names caused by copy and pasting.
+- Made people's names in the About Window link to their GitHub pages where possible.
+- Added a Licensing Window to the About Window.
+- Switched the License over to MIT (was previously a GPL one, which didn't seem to make sense for this).
+- Changed the build mode to a Console Application, so a Command Prompt will accompany the Suite and can display information.

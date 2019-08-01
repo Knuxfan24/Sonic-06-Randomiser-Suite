@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{2B1AFF0A-B6E8-4512-B755-8EDBD88809CA}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <RootNamespace>SONIC_THE_HEDGEHOG__2006__Randomiser_Suite</RootNamespace>
     <AssemblyName>SONIC THE HEDGEHOG %282006%29 Randomiser Suite</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
@@ -50,9 +50,15 @@
   <PropertyGroup>
     <ApplicationIcon>randomIcon.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="HedgeLib">
       <HintPath>Resources\HedgeLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Ookii.Dialogs">
+      <HintPath>Z:\Ookii.Dialogs.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -69,7 +75,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CharacterRandomisation.cs" />
+    <Compile Include="Forms\Licenses.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Licenses.Designer.cs">
+      <DependentUpon>Licenses.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Randomisation Classes\CharacterRandomisation.cs" />
+    <Compile Include="Randomisation Classes\CollisionRandomisation.cs" />
+    <Compile Include="Forms\CollisionPropertiesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CollisionPropertiesForm.Designer.cs">
+      <DependentUpon>CollisionPropertiesForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\About.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -118,7 +137,7 @@
     <Compile Include="Forms\MusicRandomisationForm.Designer.cs">
       <DependentUpon>MusicRandomisationForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="LightRandomisation.cs" />
+    <Compile Include="Randomisation Classes\LightRandomisation.cs" />
     <Compile Include="Forms\MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -131,17 +150,23 @@
     <Compile Include="Forms\SetRandomisationForm.Designer.cs">
       <DependentUpon>SetRandomisationForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="MissionRandomiser.cs" />
+    <Compile Include="Randomisation Classes\MissionRandomiser.cs" />
     <Compile Include="Forms\ModelConfig.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\ModelConfig.Designer.cs">
       <DependentUpon>ModelConfig.cs</DependentUpon>
     </Compile>
-    <Compile Include="MusicRandomisation.cs" />
+    <Compile Include="Randomisation Classes\MusicRandomisation.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SetRandomisation.cs" />
+    <Compile Include="Randomisation Classes\SetRandomisation.cs" />
+    <Compile Include="Forms\SurfaceConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SurfaceConfig.Designer.cs">
+      <DependentUpon>SurfaceConfig.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Forms\About.resx">
       <DependentUpon>About.cs</DependentUpon>
     </EmbeddedResource>
@@ -150,6 +175,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\CharacterRandomisationForm.resx">
       <DependentUpon>CharacterRandomisationForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\CollisionPropertiesForm.resx">
+      <DependentUpon>CollisionPropertiesForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\EnemyConfig.resx">
       <DependentUpon>EnemyConfig.cs</DependentUpon>
@@ -175,6 +203,9 @@
     <EmbeddedResource Include="Forms\SetRandomisationForm.resx">
       <DependentUpon>SetRandomisationForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Licenses.resx">
+      <DependentUpon>Licenses.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -185,6 +216,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Forms\SurfaceConfig.resx">
+      <DependentUpon>SurfaceConfig.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -206,10 +240,17 @@
     <None Include="Resources\seedIcon.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="External Software\s06col.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="External Software\s06collision.py">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="External Software\unlub.jar">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="randomIcon.ico" />
+    <None Include="Resources\s06PhysicsObjects.txt" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ookii.Dialogs;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -64,7 +65,7 @@ namespace SONIC_THE_HEDGEHOG__2006__Randomiser_Suite
 
         private void FilepathButton_Click(object sender, EventArgs e)
         {
-            FolderBrowserDialog FolderBrowser = new FolderBrowserDialog();
+            VistaFolderBrowserDialog FolderBrowser = new VistaFolderBrowserDialog();
             if (FolderBrowser.ShowDialog() == DialogResult.OK)
             {
                 filepath = FolderBrowser.SelectedPath;
@@ -90,6 +91,7 @@ namespace SONIC_THE_HEDGEHOG__2006__Randomiser_Suite
                     backupName = file.Remove(0, Path.GetDirectoryName(file).Length);
                     backupName = backupName.Remove(backupName.Length - 8);
                     backupName = backupName.Replace("\\", "");
+                    Console.WriteLine("Cleaning up: " + file);
                     if (File.Exists(file.Remove(file.Length - 8)))
                     {
                         File.Delete(file.Remove(file.Length - 8));
@@ -100,7 +102,7 @@ namespace SONIC_THE_HEDGEHOG__2006__Randomiser_Suite
             }
         }
 
-        private void Button2_Click(object sender, EventArgs e)
+        private void AboutButton_Click(object sender, EventArgs e)
         {
             About about = new About();
             about.ShowDialog();
@@ -112,6 +114,14 @@ namespace SONIC_THE_HEDGEHOG__2006__Randomiser_Suite
             missionRandomisation.FormClosed += new FormClosedEventHandler(otherForm_FormClosed);
             this.Hide();
             missionRandomisation.Show();
+        }
+
+        private void CollisionButton_Click(object sender, EventArgs e)
+        {
+            CollisionPropertiesForm collisionProperties = new CollisionPropertiesForm();
+            collisionProperties.FormClosed += new FormClosedEventHandler(otherForm_FormClosed);
+            this.Hide();
+            collisionProperties.Show();
         }
     }
 }

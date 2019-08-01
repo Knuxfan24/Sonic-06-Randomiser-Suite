@@ -23,6 +23,8 @@ Item Capsules - This will change what the various Item Capsules within the stage
 
 Voice Triggers - This will change what hint dialog lines (including events such as character banter) should be displayed throughout the stage. Most voice files won't play due to a limitation of the game itself, but the text box will always display correctly.
 
+Physics Props - This will randomise what the props scattered around the level will be, some of these obey physics, others just float there.
+
 The SET Randomiser also has an option to remove any Doors and Cages within the act, this is to workaround an issue caused by [HedgeLib's](https://github.com/Radfordhound/HedgeLib/) incomplete Sonic '06 SET Data implementation, causing the game to lose various bits of information that is needed to allow these objects to work properly. This workaround removes these objects, making more stages playable when randomised.
 
 # Details (Light Randomiser)
@@ -51,7 +53,7 @@ The Music Randomiser allows the user to change the music that is played on a sta
 </p>
 The Mission Randomiser allows the user to modify a couple of values in a stage's mission file, found in the scripts/mission/ folder of scripts.arc, this allows the user to randomise the loading screen mission text (with almost any string across the whole game being eligable) and also allows the user to adjust a few score related values, namely the Time and Ring Bonuses given out upon completing a stage, and the score required for the different ranks the game awards you.
 
-# Details (Character Attributes Randomiser Randomiser)
+# Details (Character Attributes Randomiser)
 <p align="center">
 	<img src="https://github.com/Knuxfan24/SONIC-THE-HEDGEHOG-2006-Randomiser-Suite/blob/master/README%20Graphics/Character%20Attributes%20Randomiser.png" />
 </p>
@@ -69,14 +71,20 @@ Model Randomiser: This randomises what model package a player will use, effectiv
 
 Gem Patch: This will edit Sonic's character LUA to fix the typo that prevents his Action Gauge from draining when using his gems.
 
+# Details (Collision Properties Randomiser)
+<p align="center">
+	<img src="https://github.com/Knuxfan24/SONIC-THE-HEDGEHOG-2006-Randomiser-Suite/blob/master/README%20Graphics/Collision%20Properties%20Randomiser.png" />
+</p>
+The Collision Properties Randomiser allows the user to mess with the Surface Types of the stage collision files, the different types of which can be configured in the Surface Type Configuration menu, accessible from the top bar of the Collision Properties Randomiser window. This can also allow the user to remove all walls, water and death planes from the stage, allowing them to run and stand on them as if they were solid ground.
+
 # Notes
-Things such as bosses can also wreck havoc on the game's already low stability, therefore, use caution when enabling them. Avoid using them on real hardware, as they cause major glitches (as seen here: https://youtu.be/_g_AUWhp6Ls?t=12630).
+Things such as bosses can also wreck havoc on the game's already low stability, therefore, use caution when enabling them. Avoid using them on real hardware, as they cause major glitches (as seen here: https://youtu.be/_g_AUWhp6Ls?t=12630).)
 
 Only certain characters can do certain actions, for example, only Sonic can do the water surfing in Wave Ocean and only Sonic holding Elise, Silver and Rouge can use the Swing Vines in Tropical Jungle.
 
 Aquatic Base and Radical Train seem to crash often when randomised.
 
-Randomising character models can cause a lot of characters to lose their abilities due to a lack of animations; the Model Randomiser can also not affect Silver and Omega as the game would always crash upon randomising their models, so their files will be skipped when using it.
+Randomising character models can cause a lot of characters to lose their abilities due to a lack of animations; the Model Randomiser can also not affect Silver and Omega as the game would always crash upon randomising their models, so their files will be skipped when using it. Changing Sonic's model and then trying to switch to one of his gems will cause the game to crash instantly.
 
 The Character Attributes Randomiser can often make characters difficult to control.
 
@@ -88,3 +96,5 @@ The Character Attributes Randomiser can often make characters difficult to contr
 Shadow LAG - Sonic '06 Toolkit (used for automatic LUA Decompilation)
 
 [Hyper](https://github.com/HyperPolygon64) - Showing how to change the model package for characters (blame them for the Model Randomiser in the Character Attributes Randomiser!)
+
+[Ookii](http://www.ookii.org/software/dialogs/) - The much nicer Folder Browser.

@@ -80,5 +80,12 @@ namespace SONIC_THE_HEDGEHOG__2006__Randomiser_Suite
                 File.Copy(filepath, Path.GetDirectoryName(filepath) + "\\" + luaName + ".lub.s06back");
             }
         }
+        static public void CollisionBackup(string filepath, string binName)
+        {
+            if (!File.Exists(Path.GetDirectoryName(filepath) + "\\" + binName + ".bin.s06back"))
+            {
+                File.Copy(filepath, Path.GetDirectoryName(filepath) + "\\" + binName + ".bin.s06back");
+            }
+        }
     }
 }

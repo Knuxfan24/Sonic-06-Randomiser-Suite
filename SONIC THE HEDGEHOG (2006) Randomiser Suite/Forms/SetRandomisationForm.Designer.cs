@@ -48,6 +48,7 @@
             this.randomiseButton = new System.Windows.Forms.Button();
             this.randomFolderCheckbox = new System.Windows.Forms.CheckBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.physicsCheckbox = new System.Windows.Forms.CheckBox();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -189,7 +190,7 @@
             this.doorCheckbox.AutoSize = true;
             this.doorCheckbox.Checked = true;
             this.doorCheckbox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.doorCheckbox.Location = new System.Drawing.Point(14, 174);
+            this.doorCheckbox.Location = new System.Drawing.Point(14, 197);
             this.doorCheckbox.Name = "doorCheckbox";
             this.doorCheckbox.Size = new System.Drawing.Size(151, 17);
             this.doorCheckbox.TabIndex = 16;
@@ -200,7 +201,7 @@
             // 
             // randomiseButton
             // 
-            this.randomiseButton.Location = new System.Drawing.Point(405, 170);
+            this.randomiseButton.Location = new System.Drawing.Point(405, 193);
             this.randomiseButton.Name = "randomiseButton";
             this.randomiseButton.Size = new System.Drawing.Size(75, 23);
             this.randomiseButton.TabIndex = 18;
@@ -221,11 +222,23 @@
             this.randomFolderCheckbox.UseVisualStyleBackColor = true;
             this.randomFolderCheckbox.CheckedChanged += new System.EventHandler(this.RandomFolderCheckbox_CheckedChanged);
             // 
+            // physicsCheckbox
+            // 
+            this.physicsCheckbox.AutoSize = true;
+            this.physicsCheckbox.Location = new System.Drawing.Point(14, 174);
+            this.physicsCheckbox.Name = "physicsCheckbox";
+            this.physicsCheckbox.Size = new System.Drawing.Size(148, 17);
+            this.physicsCheckbox.TabIndex = 43;
+            this.physicsCheckbox.Text = "Randomise Physics Props";
+            this.toolTip1.SetToolTip(this.physicsCheckbox, "Randomise what Physics Props spawn throughout the stage.");
+            this.physicsCheckbox.UseVisualStyleBackColor = true;
+            // 
             // SetRandomisationForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(492, 201);
+            this.ClientSize = new System.Drawing.Size(492, 228);
+            this.Controls.Add(this.physicsCheckbox);
             this.Controls.Add(this.randomFolderCheckbox);
             this.Controls.Add(this.randomiseButton);
             this.Controls.Add(this.doorCheckbox);
@@ -273,6 +286,7 @@
         private System.Windows.Forms.ToolStripMenuItem characterConfigurationToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem itemCapsuleConfigurationToolStripMenuItem;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.CheckBox physicsCheckbox;
     }
 }
 

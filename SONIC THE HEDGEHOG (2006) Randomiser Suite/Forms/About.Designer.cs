@@ -35,6 +35,12 @@
             this.label4 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.licenseButton = new System.Windows.Forms.Button();
+            this.knuxfanLinkLabel = new System.Windows.Forms.LinkLabel();
+            this.radLinkLabel = new System.Windows.Forms.LinkLabel();
+            this.hyperLinkLabel = new System.Windows.Forms.LinkLabel();
+            this.ookiiLinkLabel = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // label1
@@ -76,7 +82,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(15, 138);
+            this.button1.Location = new System.Drawing.Point(15, 159);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(336, 23);
             this.button1.TabIndex = 4;
@@ -93,11 +99,80 @@
             this.label5.TabIndex = 5;
             this.label5.Text = "Hyper - Showing how to change the model packages for characters";
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(12, 114);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(170, 13);
+            this.label6.TabIndex = 6;
+            this.label6.Text = "Ookii - Nicer Folder Browser Plugin";
+            // 
+            // licenseButton
+            // 
+            this.licenseButton.Location = new System.Drawing.Point(15, 188);
+            this.licenseButton.Name = "licenseButton";
+            this.licenseButton.Size = new System.Drawing.Size(336, 23);
+            this.licenseButton.TabIndex = 7;
+            this.licenseButton.Text = "Licenses";
+            this.licenseButton.UseVisualStyleBackColor = true;
+            this.licenseButton.Click += new System.EventHandler(this.LicenseButton_Click);
+            // 
+            // knuxfanLinkLabel
+            // 
+            this.knuxfanLinkLabel.AutoSize = true;
+            this.knuxfanLinkLabel.Location = new System.Drawing.Point(12, 30);
+            this.knuxfanLinkLabel.Name = "knuxfanLinkLabel";
+            this.knuxfanLinkLabel.Size = new System.Drawing.Size(58, 13);
+            this.knuxfanLinkLabel.TabIndex = 8;
+            this.knuxfanLinkLabel.TabStop = true;
+            this.knuxfanLinkLabel.Text = "Knuxfan24";
+            this.knuxfanLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.KnuxfanLinkLabel_LinkClicked);
+            // 
+            // radLinkLabel
+            // 
+            this.radLinkLabel.AutoSize = true;
+            this.radLinkLabel.Location = new System.Drawing.Point(12, 51);
+            this.radLinkLabel.Name = "radLinkLabel";
+            this.radLinkLabel.Size = new System.Drawing.Size(75, 13);
+            this.radLinkLabel.TabIndex = 9;
+            this.radLinkLabel.TabStop = true;
+            this.radLinkLabel.Text = "Radfordhound";
+            this.radLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.RadLinkLabel_LinkClicked);
+            // 
+            // hyperLinkLabel
+            // 
+            this.hyperLinkLabel.AutoSize = true;
+            this.hyperLinkLabel.Location = new System.Drawing.Point(12, 93);
+            this.hyperLinkLabel.Name = "hyperLinkLabel";
+            this.hyperLinkLabel.Size = new System.Drawing.Size(35, 13);
+            this.hyperLinkLabel.TabIndex = 10;
+            this.hyperLinkLabel.TabStop = true;
+            this.hyperLinkLabel.Text = "Hyper";
+            this.hyperLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.HyperLinkLabel_LinkClicked);
+            // 
+            // ookiiLinkLabel
+            // 
+            this.ookiiLinkLabel.AutoSize = true;
+            this.ookiiLinkLabel.Location = new System.Drawing.Point(12, 114);
+            this.ookiiLinkLabel.Name = "ookiiLinkLabel";
+            this.ookiiLinkLabel.Size = new System.Drawing.Size(31, 13);
+            this.ookiiLinkLabel.TabIndex = 11;
+            this.ookiiLinkLabel.TabStop = true;
+            this.ookiiLinkLabel.Text = "Ookii";
+            this.ookiiLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OokiiLinkLabel_LinkClicked);
+            // 
             // About
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(365, 173);
+            this.ClientSize = new System.Drawing.Size(365, 224);
+            this.Controls.Add(this.ookiiLinkLabel);
+            this.Controls.Add(this.hyperLinkLabel);
+            this.Controls.Add(this.radLinkLabel);
+            this.Controls.Add(this.knuxfanLinkLabel);
+            this.Controls.Add(this.licenseButton);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label4);
@@ -122,5 +197,11 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Button licenseButton;
+        private System.Windows.Forms.LinkLabel knuxfanLinkLabel;
+        private System.Windows.Forms.LinkLabel radLinkLabel;
+        private System.Windows.Forms.LinkLabel hyperLinkLabel;
+        private System.Windows.Forms.LinkLabel ookiiLinkLabel;
     }
 }

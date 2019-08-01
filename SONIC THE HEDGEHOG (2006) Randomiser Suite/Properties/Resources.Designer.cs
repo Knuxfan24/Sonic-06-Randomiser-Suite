@@ -61,7 +61,55 @@ namespace SONIC_THE_HEDGEHOG__2006__Randomiser_Suite.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to hint_all01_a00_tl
+        ///   Looks up a localized string similar to aqa_floor01
+        ///aqa_floor02
+        ///aqa_floor03
+        ///aqa_floor04
+        ///aqa_floor05
+        ///aqa_foothold
+        ///billboard
+        ///bldgwaste_a
+        ///bldgwaste_b
+        ///bldgwaste_c
+        ///BombBox
+        ///BombBox_Prime
+        ///BombBox_Vs
+        ///cmn_barrel_b_a
+        ///cmn_barrel_s_a
+        ///cmn_chair_a
+        ///cmn_drumA
+        ///cmn_drumB
+        ///cmn_tableA
+        ///container
+        ///container_d
+        ///csc_breakroad
+        ///csc_breakroad_no
+        ///csc_breakwall
+        ///csc_breakwall_d
+        ///csc_breakwall_esp
+        ///csc_breakwall02
+        ///csc_rock
+        ///csc_rock_d
+        ///csc_tank
+        ///csc_tank_base
+        ///csc_tank_d
+        ///csc_tank2
+        ///debrisA_h
+        ///debrisB
+        ///debrisB_br
+        ///debrisB_h
+        ///dtd_breakwall
+        ///dtd_obj_statue        /// [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string s06PhysicsObjects {
+            get {
+                return ResourceManager.GetString("s06PhysicsObjects", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to hint_all01_a00_sn
+        ///hint_all01_a00_tl
         ///hint_all01_a00_kn
         ///hint_all01_a00_sd
         ///hint_all01_a00_rg
@@ -86,8 +134,7 @@ namespace SONIC_THE_HEDGEHOG__2006__Randomiser_Suite.Properties {
         ///hint_all01_a02_sd
         ///hint_all01_a02_rg
         ///hint_all01_a02_om
-        ///hint_all01_a02_am
-        ///hint_all01_a02_bz        /// [rest of string was truncated]&quot;;.
+        ///hint_all01_a02_am        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string s06TextStrings {
             get {

@@ -12,15 +12,13 @@ namespace SONIC_THE_HEDGEHOG__2006__Randomiser_Suite
 {
     public partial class CharacterConfig : Form
     {
-        List<string> checkedCharacters;
-        public CharacterConfig(List<string> validCharacters)
+        public CharacterConfig()
         {
             InitializeComponent();
-            checkedCharacters = validCharacters;
 
-            for (int i = 0; i < validCharacters.Count; i++)
+            for (int i = 0; i < SetRandomisationForm.validCharacters.Count; i++)
             {
-                switch (validCharacters[i])
+                switch (SetRandomisationForm.validCharacters[i])
                 {
                     case "sonic_new": characterConfigList.SetItemChecked(0, true); break;
                     case "sonic_fast": characterConfigList.SetItemChecked(1, true); break;

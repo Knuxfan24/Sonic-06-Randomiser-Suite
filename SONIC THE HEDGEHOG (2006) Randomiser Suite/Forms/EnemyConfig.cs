@@ -12,14 +12,12 @@ namespace SONIC_THE_HEDGEHOG__2006__Randomiser_Suite
 {
     public partial class EnemyConfig : Form
     {
-        List<string> checkedEnemies;
-        public EnemyConfig(List<string> validEnemies)
+        public EnemyConfig()
         {
             InitializeComponent();
-            checkedEnemies = validEnemies;
-            for (int i = 0; i < checkedEnemies.Count; i++)
+            for (int i = 0; i < SetRandomisationForm.validEnemies.Count; i++)
             {
-                switch (checkedEnemies[i])
+                switch (SetRandomisationForm.validEnemies[i])
                 {
                     case "cBiter": enemyConfigList.SetItemChecked(0, true); break;
                     case "cGolem": enemyConfigList.SetItemChecked(1, true); break;

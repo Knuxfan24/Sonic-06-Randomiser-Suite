@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ookii.Dialogs;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -54,7 +55,7 @@ namespace SONIC_THE_HEDGEHOG__2006__Randomiser_Suite
             }
             else
             {
-                FolderBrowserDialog setFolderBrowser = new FolderBrowserDialog();
+                VistaFolderBrowserDialog setFolderBrowser = new VistaFolderBrowserDialog();
                 if (setFolderBrowser.ShowDialog() == DialogResult.OK)
                 {
                     filepath = setFolderBrowser.SelectedPath;
@@ -79,7 +80,7 @@ namespace SONIC_THE_HEDGEHOG__2006__Randomiser_Suite
             rng = new Random(rngSeed.GetHashCode());
             string setName;
 
-            if (!enemiesCheckbox.Checked && !itemsCheckbox.Checked && !charactersCheckbox.Checked && !voiceCheckbox.Checked && !doorCheckbox.Checked)
+            if (!enemiesCheckbox.Checked && !itemsCheckbox.Checked && !charactersCheckbox.Checked && !voiceCheckbox.Checked && !physicsCheckbox.Checked && !doorCheckbox.Checked)
             {
                 MessageBox.Show("No randomisation selected.");
                 return;
@@ -98,13 +99,14 @@ namespace SONIC_THE_HEDGEHOG__2006__Randomiser_Suite
                     setName = set.Remove(0, Path.GetDirectoryName(set).Length);
                     setName = setName.Remove(setName.Length - 4);
                     setName = setName.Replace("\\", "");
-                    Console.WriteLine(setName);
+                    Console.WriteLine("Working on: " + set);
                     Program.HedgeLibPatch(set, setName);
                     {
                         if (enemiesCheckbox.Checked) { SetRandomisation.EnemyRandomiser(set, rng); }
                         if (itemsCheckbox.Checked) { SetRandomisation.ItemCapsuleRandomiser(set, rng); }
                         if (charactersCheckbox.Checked) { SetRandomisation.CharacterRandomiser(set, rng); }
                         if (voiceCheckbox.Checked) { SetRandomisation.VoiceRandomiser(set, rng); }
+                        if (physicsCheckbox.Checked) { SetRandomisation.PhysicsPropsRandomiser(set, rng); }
                         if (doorCheckbox.Checked) { SetRandomisation.DoorHack(set); }
                     }
                 }
@@ -125,6 +127,7 @@ namespace SONIC_THE_HEDGEHOG__2006__Randomiser_Suite
                 if (itemsCheckbox.Checked) { SetRandomisation.ItemCapsuleRandomiser(filepath, rng); }
                 if (charactersCheckbox.Checked) { SetRandomisation.CharacterRandomiser(filepath, rng); }
                 if (voiceCheckbox.Checked) { SetRandomisation.VoiceRandomiser(filepath, rng); }
+                if (physicsCheckbox.Checked) { SetRandomisation.PhysicsPropsRandomiser(filepath, rng); }
                 if (doorCheckbox.Checked) { SetRandomisation.DoorHack(filepath); }
                 MessageBox.Show("Randomised " + filepath + ".", "SONIC THE HEDGEHOG (2006) SET Randomiser");
             }
@@ -147,19 +150,19 @@ namespace SONIC_THE_HEDGEHOG__2006__Randomiser_Suite
 
         private void EnemyConfigurationToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EnemyConfig enemyConfig = new EnemyConfig(validEnemies);
+            EnemyConfig enemyConfig = new EnemyConfig();
             enemyConfig.ShowDialog();
         }
 
         private void CharacterConfigurationToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CharacterConfig characterConfig = new CharacterConfig(validCharacters);
+            CharacterConfig characterConfig = new CharacterConfig();
             characterConfig.ShowDialog();
         }
 
         private void ItemCapsuleConfigurationToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ItemConfig itemConfig = new ItemConfig(validItems);
+            ItemConfig itemConfig = new ItemConfig();
             itemConfig.ShowDialog();
         }
     }
