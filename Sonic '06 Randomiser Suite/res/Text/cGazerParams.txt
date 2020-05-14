@@ -1,0 +1,5 @@
+cGazer_Alarm
+cGazer_Fix
+cGazer_Freeze
+cGazer_Normal
+cGazer_Wall_Fix

@@ -1,0 +1,6 @@
+eBomber_Allaround
+eBomber_Boss
+eBomber_Fix
+eBomber_Normal
+eBomber_Wall_Fix
+eBomber_Wall_Normal
