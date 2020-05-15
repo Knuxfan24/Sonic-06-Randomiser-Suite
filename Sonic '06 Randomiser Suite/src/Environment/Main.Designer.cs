@@ -43,7 +43,7 @@
             this.Label_Description_ModsDirectory = new System.Windows.Forms.Label();
             this.Button_RandomisationSeed = new System.Windows.Forms.Button();
             this.Button_Randomise = new System.Windows.Forms.Button();
-            this.Button_Settings = new System.Windows.Forms.Button();
+            this.Button_About = new System.Windows.Forms.Button();
             this.Label_VersionNumber = new System.Windows.Forms.Label();
             this.UnifyTabControl_Main = new Unify.TabControl.UnifyTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -329,21 +329,22 @@
             this.Button_Randomise.UseVisualStyleBackColor = false;
             this.Button_Randomise.Click += new System.EventHandler(this.Button_Randomise_Click);
             // 
-            // Button_Settings
+            // Button_About
             // 
-            this.Button_Settings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.Button_Settings.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.Button_Settings.BackgroundImage = global::Sonic_06_Randomiser_Suite.Properties.Resources.Settings;
-            this.Button_Settings.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.Button_Settings.FlatAppearance.BorderSize = 0;
-            this.Button_Settings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Button_Settings.Font = new System.Drawing.Font("Segoe UI Semibold", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Button_Settings.ForeColor = System.Drawing.SystemColors.Control;
-            this.Button_Settings.Location = new System.Drawing.Point(883, 561);
-            this.Button_Settings.Name = "Button_Settings";
-            this.Button_Settings.Size = new System.Drawing.Size(25, 25);
-            this.Button_Settings.TabIndex = 180;
-            this.Button_Settings.UseVisualStyleBackColor = false;
+            this.Button_About.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.Button_About.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.Button_About.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.Button_About.FlatAppearance.BorderSize = 0;
+            this.Button_About.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_About.Font = new System.Drawing.Font("Segoe UI Semibold", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Button_About.ForeColor = System.Drawing.SystemColors.Control;
+            this.Button_About.Image = global::Sonic_06_Randomiser_Suite.Properties.Resources.Information;
+            this.Button_About.Location = new System.Drawing.Point(883, 561);
+            this.Button_About.Name = "Button_About";
+            this.Button_About.Size = new System.Drawing.Size(25, 25);
+            this.Button_About.TabIndex = 180;
+            this.Button_About.UseVisualStyleBackColor = false;
+            this.Button_About.Click += new System.EventHandler(this.Button_About_Click);
             // 
             // Label_VersionNumber
             // 
@@ -486,7 +487,7 @@
             "Randomise Item Capsules",
             "Randomise Voice Triggers",
             "Randomise Physics Props",
-            "Ensure Story is Beatable"});
+            "Ensure Episodes are Beatable"});
             this.CheckedListBox_Placement_General.Location = new System.Drawing.Point(0, 0);
             this.CheckedListBox_Placement_General.Name = "CheckedListBox_Placement_General";
             this.CheckedListBox_Placement_General.Size = new System.Drawing.Size(897, 288);
@@ -1532,7 +1533,7 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
             this.ClientSize = new System.Drawing.Size(917, 595);
             this.Controls.Add(this.Label_VersionNumber);
-            this.Controls.Add(this.Button_Settings);
+            this.Controls.Add(this.Button_About);
             this.Controls.Add(this.Button_Randomise);
             this.Controls.Add(this.Button_RandomisationSeed);
             this.Controls.Add(this.TextBox_GameExecutable);
@@ -1633,7 +1634,7 @@
         private System.Windows.Forms.CheckedListBox CheckedListBox_Placement_General;
         private System.Windows.Forms.Button Button_Placement_Items_SelectAll;
         private System.Windows.Forms.Button Button_Placement_Items_DeselectAll;
-        private System.Windows.Forms.Button Button_Settings;
+        private System.Windows.Forms.Button Button_About;
         private Unify.TabControl.UnifyTabControl unifyTabControl1;
         private System.Windows.Forms.TabPage tabPage7;
         private System.Windows.Forms.Button Button_Scene_General_SelectAll;

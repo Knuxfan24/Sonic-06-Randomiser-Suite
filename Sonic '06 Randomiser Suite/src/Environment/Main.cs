@@ -1,11 +1,12 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using HedgeLib.Sets;
+using Unify.Messenger;
 using Unify.TabControl;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using Sonic_06_Randomiser_Suite.Serialisers;
-using System.Linq;
 
 namespace Sonic_06_Randomiser_Suite
 {
@@ -402,6 +403,15 @@ namespace Sonic_06_Randomiser_Suite
                     Archives.CreateModARC(randomArchive, archive, modDirectory);
                 }
             }
+        }
+
+        private void Button_About_Click(object sender, EventArgs e) {
+            UnifyMessenger.UnifyMessage.ShowDialog("Sonic '06 Randomiser Suite\n" +
+                                                   $"{Program.GlobalVersionNumber}\n\n" +
+                                                   "" +
+                                                   "Knuxfan24 - Lead programmer and reverse-engineer\n" +
+                                                   "HyperPolygon64 - UI stuff and slaved away at code",
+                                                   "About", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void Button_RandomisationSeed_Click(object sender, EventArgs e) => TextBox_RandomisationSeed.Text = rng.Next().ToString();

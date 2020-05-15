@@ -55,6 +55,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\Objects.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -186,13 +187,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="res\Images\Information.png" />
     <Content Include="third_party\arctool.exe" />
     <Content Include="third_party\unlub.jar" />
     <Content Include="res\Icons\Error.ico" />
     <Content Include="res\Icons\Logo.ico" />
     <Content Include="res\Images\Logo.png" />
     <Content Include="res\Images\Seed.png" />
-    <Content Include="res\Images\Settings.png" />
     <Content Include="res\Text\Parameters\cBiterParams.txt" />
     <Content Include="res\Text\Parameters\cCrawlerParams.txt" />
     <Content Include="res\Text\Parameters\cGazerParams.txt" />
