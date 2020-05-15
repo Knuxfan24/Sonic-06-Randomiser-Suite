@@ -41,6 +41,9 @@ namespace Sonic_06_Randomiser_Suite
             Enemies.Clear();
             Characters.Clear();
             Items.Clear();
+            Music.Clear();
+            Languages.Clear();
+            Areas.Clear();
 
             // Feed seed to Random Number Generator
             rng = new Random(TextBox_RandomisationSeed.Text.GetHashCode());
@@ -270,6 +273,7 @@ namespace Sonic_06_Randomiser_Suite
                                     case 2: Placement.RandomiseItems(set, rng); break;
                                     case 3: Placement.RandomiseVoices(set, rng); break;
                                     case 4: Placement.RandomisePhysicsProps(set, rng); break;
+                                    case 5: Beatable.DetermineStage(setData, set); break;
                                 }
                             }
 

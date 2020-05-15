@@ -61,6 +61,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="src\Randomisers\Audio.cs" />
+    <Compile Include="src\Randomisers\Beatable.cs" />
     <Compile Include="src\Randomisers\Scene.cs" />
     <Compile Include="src\Environment\Serialisers.cs" />
     <Compile Include="src\Environment\Archives.cs" />

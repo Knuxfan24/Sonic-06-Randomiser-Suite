@@ -485,7 +485,8 @@
             "Randomise Characters",
             "Randomise Item Capsules",
             "Randomise Voice Triggers",
-            "Randomise Physics Props"});
+            "Randomise Physics Props",
+            "Ensure Story is Beatable"});
             this.CheckedListBox_Placement_General.Location = new System.Drawing.Point(0, 0);
             this.CheckedListBox_Placement_General.Name = "CheckedListBox_Placement_General";
             this.CheckedListBox_Placement_General.Size = new System.Drawing.Size(897, 288);
