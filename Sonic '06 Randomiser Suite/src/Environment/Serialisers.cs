@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 using Unify.Messenger;
+using System.Diagnostics;
 using System.Windows.Forms;
 using System.Collections.Generic;
 
@@ -15,7 +17,7 @@ namespace Sonic_06_Randomiser_Suite.Serialisers
 
             if (Directory.Exists(newPath)) {
                 DialogResult overwrite = UnifyMessenger.UnifyMessage.ShowDialog($"The seed '{seed}' has already been generated. Do you want to overwrite it?",
-                                                                                "I/O Error", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+                                                                                "Mod Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 if (overwrite == DialogResult.No) return string.Empty;
             }
 
@@ -26,7 +28,7 @@ namespace Sonic_06_Randomiser_Suite.Serialisers
                     configInfo.WriteLine("[Details]");
                     configInfo.WriteLine($"Title=\"Sonic '06 Randomised\"");
                     configInfo.WriteLine($"Version=\"{seed}\"");
-                    configInfo.WriteLine($"Date=\"{DateTime.Now}\"");
+                    configInfo.WriteLine($"Date=\"{DateTime.Now:dd/MM/yyyy}\"");
                     configInfo.WriteLine($"Author=\"Sonic '06 Randomiser Suite\"");
                     configInfo.WriteLine($"Platform=\"{Literal.System(Properties.Settings.Default.Path_GameExecutable)}\"");
 
@@ -49,6 +51,32 @@ namespace Sonic_06_Randomiser_Suite.Serialisers
                 return Path.Combine(modDirectory, $"ps3\\{extensions}");
             } else
                 return string.Empty;
+        }
+    }
+
+    class Lua
+    {
+        public static void Decompile(string _file) {
+            string[] readText = File.ReadAllLines(_file); //Read the Lub into an array
+
+            if (readText[0].Contains("LuaP")) {
+                using (Process process = new Process()) {
+                    process.StartInfo.FileName = "java.exe";
+                    process.StartInfo.Arguments = $"-jar \"{Program.unlub}\" \"{_file}\"";
+                    process.StartInfo.UseShellExecute = false;
+                    process.StartInfo.RedirectStandardOutput = true;
+                    process.StartInfo.CreateNoWindow = true;
+
+                    StringBuilder outputBuilder = new StringBuilder();
+                    process.OutputDataReceived += (s, e) => { if (e.Data != null) outputBuilder.AppendLine(e.Data); };
+
+                    process.Start();
+                    process.BeginOutputReadLine();
+                    process.WaitForExit();
+
+                    File.WriteAllText(_file, outputBuilder.ToString());
+                }
+            }
         }
     }
 
@@ -153,8 +181,7 @@ namespace Sonic_06_Randomiser_Suite.Serialisers
         /// Collects the general file structure for '06 data.
         /// </summary>
         public static List<string> CollectGameData(string path) {
-            return Directory.GetFiles(path, "*.*", SearchOption.AllDirectories)
-                    .Where(s => Path.GetExtension(s) == ".arc").ToList();
+            return Directory.GetFiles(path, "*.arc", SearchOption.AllDirectories).ToList();
         }
 
         /// <summary>

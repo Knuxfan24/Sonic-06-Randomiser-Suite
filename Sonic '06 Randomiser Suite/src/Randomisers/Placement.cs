@@ -1,6 +1,5 @@
 ﻿using System;
 using HedgeLib.Sets;
-using System.Collections.Generic;
 using Sonic_06_Randomiser_Suite.Serialisers;
 
 namespace Sonic_06_Randomiser_Suite
@@ -199,6 +198,10 @@ namespace Sonic_06_Randomiser_Suite
                 {
                     case "objectphysics":
                         obj.Parameters[0].Data = propList[rng.Next(propList.Length)];
+                        break;
+                    case "objectphysics_item":
+                        obj.Parameters[2].Data = rng.Next(10, 101);
+                        obj.Parameters[3].Data = rng.Next(1, 4);
                         break;
                 }
             }

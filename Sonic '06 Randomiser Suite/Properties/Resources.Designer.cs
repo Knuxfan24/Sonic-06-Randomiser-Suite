@@ -548,6 +548,795 @@ namespace Sonic_06_Randomiser_Suite.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to msg_act_title01
+        ///msg_act_title02
+        ///msg_act_title03
+        ///msg_act_title04
+        ///msg_act_title05
+        ///msg_act_title06
+        ///msg_act_title07
+        ///msg_act_title08
+        ///msg_act_title09
+        ///msg_act_title10
+        ///msg_act_title11
+        ///msg_act_title12
+        ///msg_act_title13
+        ///msg_act_title14
+        ///msg_act_title15
+        ///msg_act_title16
+        ///msg_act_title17
+        ///msg_act_title18
+        ///msg_act_title19
+        ///msg_act_title20
+        ///msg_act_title21
+        ///msg_act_title22
+        ///msg_act_title23
+        ///msg_act_title24
+        ///msg_act_title25
+        ///msg_act_title26.
+        /// </summary>
+        internal static string msgActTitleEntries {
+            get {
+                return ResourceManager.GetString("msgActTitleEntries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to sonic_theme
+        ///shadow_theme
+        ///silver_theme
+        ///elise_theme
+        ///msg_sweetdream2006
+        ///stg_wvo_a
+        ///stg_wvo_b
+        ///stg_dtd_a
+        ///stg_dtd_b
+        ///stg_wap_a
+        ///stg_wap_b
+        ///stg_csc_a
+        ///stg_csc_b
+        ///stg_csc_c
+        ///stage_csc_e
+        ///stg_csc_f
+        ///stg_flc_a
+        ///stg_flc_b
+        ///stg_rct_a
+        ///stg_rct_b
+        ///stg_tpj_a
+        ///stg_tpj_b
+        ///stg_tpj_c
+        ///stg_kdv_a
+        ///stg_kdv_b
+        ///stg_kdv_c
+        ///stg_kdv_d
+        ///stg_aqa_a
+        ///stg_aqa_b
+        ///boss_iblis01
+        ///boss_iblis03
+        ///boss_mefiless01
+        ///boss_mefiless02
+        ///boss_character
+        ///boss_cerberus
+        ///boss_wyvern
+        ///boss_solaris1
+        ///stg_twn_a
+        ///stg_twn_b
+        ///stg_twn_c
+        ///stg_twn_shop
+        ///twn_mission_slow
+        ///twn_mission_comical
+        ///twn_miss [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string msgAudioroomEntries {
+            get {
+                return ResourceManager.GetString("msgAudioroomEntries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to msg_win_2
+        ///msg_wins
+        ///msg_1p
+        ///msg_2p
+        ///msg_3p
+        ///msg_4p
+        ///msg_ruleselect
+        ///msg_battlestyleselect
+        ///msg_areaselect
+        ///msg_rule
+        ///msg_getpoint
+        ///msg_rounds
+        ///msg_winpoint
+        ///msg_stageselect
+        ///msg_battle_twn_a
+        ///msg_battle_twn_b
+        ///msg_battle_twn_c
+        ///msg_battle_roundam
+        ///msg_b0050
+        ///msg_b0051
+        ///msg_b0052
+        ///msg_b0053
+        ///msg_b0054
+        ///msg_b0055
+        ///msg_b0056
+        ///msg_b0057
+        ///msg_b0058
+        ///msg_b0059
+        ///msg_b0060
+        ///msg_b0061
+        ///msg_b0062
+        ///msg_b0063
+        ///msg_b0064
+        ///msg_b0065
+        ///msg_b0066
+        ///msg_b0067
+        ///msg_b0068
+        ///msg_b0069
+        ///msg_b0070
+        ///msg_b0071
+        ///msg_b0072
+        ///msg_b0073
+        ///msg_b0074
+        ///msg_b0075
+        ///msg_b0076
+        ///msg_b0077
+        ///m [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string msgBattleEntries {
+            get {
+                return ResourceManager.GetString("msgBattleEntries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to msg_no1
+        ///msg_no2
+        ///msg_no3
+        ///msg_no4
+        ///msg_no5
+        ///msg_no6
+        ///msg_no7
+        ///msg_no8
+        ///msg_no9
+        ///msg_no10
+        ///msg_totalplaytime
+        ///msg_lastsavedate
+        ///msg_fileselect
+        ///msg_device_1
+        ///msg_device
+        ///msg_alart_deleat
+        ///msg_file_deleating
+        ///msg_gile_deleated
+        ///msg_newfile_create
+        ///msg_newfile_creating
+        ///msg_newfile_created
+        ///msg_newfile_create_error
+        ///msg_fileselect_c
+        ///msg_selectfile
+        ///msg_selectfile2.
+        /// </summary>
+        internal static string msgFileselectEntries {
+            get {
+                return ResourceManager.GetString("msgFileselectEntries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to msg_episodeclear
+        ///msg_collect_allmedal
+        ///msg_act_all_rank_s
+        ///msg_twn_all_rank_s
+        ///msg_lastgoaldmedal
+        ///msg_allepisodeclear
+        ///msg_sonic_c
+        ///msg_shadow_c
+        ///msg_silver_c
+        ///msg_tails_c
+        ///msg_knuckles_c
+        ///msg_rouge_c
+        ///msg_omega_c
+        ///msg_amy_c
+        ///msg_blaze_c
+        ///msg_last_c
+        ///msg_s_sonic_c
+        ///msg_s_shadow_c
+        ///msg_s_silver_c
+        ///msg_other_c.
+        /// </summary>
+        internal static string msgGoldResultsEntries {
+            get {
+                return ResourceManager.GetString("msgGoldResultsEntries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to hint_all01_a00_sn
+        ///hint_all01_a00_tl
+        ///hint_all01_a00_kn
+        ///hint_all01_a00_sd
+        ///hint_all01_a00_rg
+        ///hint_all01_a00_om
+        ///hint_all01_a00_am
+        ///hint_all01_a00_bz
+        ///hint_all01_a00_sv
+        ///hint_all01_a00_pr
+        ///hint_all01_a01_sn
+        ///hint_all01_a01_tl
+        ///hint_all01_a01_kn
+        ///hint_all01_a01_sd
+        ///hint_all01_a01_rg
+        ///hint_all01_a01_om
+        ///hint_all01_a01_am
+        ///hint_all01_a01_bz
+        ///hint_all01_a01_sv
+        ///hint_all01_a01_pr
+        ///hint_all01_a02_sn
+        ///hint_all01_a02_tl
+        ///hint_all01_a02_kn
+        ///hint_all01_a02_sd
+        ///hint_all01_a02_rg
+        ///hint_all01_a02_om
+        ///hint_all01_a02_am
+        ///hint_all01_a02_bz
+        ///hint_all [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string msgHintEntries {
+            get {
+                return ResourceManager.GetString("msgHintEntries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to hint_all02_a00_sn
+        ///hint_all02_a00_tl
+        ///hint_all02_a00_kn
+        ///hint_all02_a00_sd
+        ///hint_all02_a00_rg
+        ///hint_all02_a00_om
+        ///hint_all02_a00_am
+        ///hint_all02_a00_bz
+        ///hint_all02_a00_sv
+        ///hint_all03_a01_sn
+        ///hint_all03_a01_sd
+        ///hint_all03_a01_bz
+        ///hint_all03_h00_so
+        ///hint_all03_h01_so
+        ///hint_all03_h02_so
+        ///hint_all03_h03_so
+        ///hint_all03_h04_so
+        ///hint_all03_h05_so
+        ///hint_all03_h06_so
+        ///hint_all03_h07_so
+        ///hint_all03_h08_so
+        ///hint_all03_h09_so
+        ///hint_all03_h10_so
+        ///hint_all03_h11_so
+        ///hint_all03_h12_so
+        ///hint_all03_h13_so
+        ///hint_all03_h14_so
+        ///hint_all03_h15_so
+        ///hint_all [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string msgHintXenonEntries {
+            get {
+                return ResourceManager.GetString("msgHintXenonEntries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to msg_saveerror_1
+        ///msg_saveerror_2
+        ///msg_saveerror_3
+        ///msg_saveerror_4
+        ///msg_progress
+        ///msg_lastplayarea
+        ///msg_lastplayarea_2
+        ///msg_fileselect
+        ///msg_mainmenu
+        ///msg_singleplayer
+        ///msg_multiplayer
+        ///msg_network
+        ///msg_extras
+        ///msg_options
+        ///msg_episodeselect
+        ///msg_trialselect
+        ///msg_goldmedalresults
+        ///msg_actselect
+        ///msg_towntrial
+        ///msg_tag
+        ///msg_tagselect
+        ///msg_tagstory
+        ///msg_tagtrial
+        ///msg_tagtrialselect
+        ///msg_battle
+        ///msg_ruleselect
+        ///msg_select
+        ///msg_ranking
+        ///msg_download
+        ///msg_audioroom
+        ///msg_theaterroom
+        ///msg_xboxlive
+        ///msg_xboxlive2
+        ///msg_new
+        ///msg_characterselect
+        ///msg_si [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string msgMainmenuEntries {
+            get {
+                return ResourceManager.GetString("msgMainmenuEntries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to msg_multiplayer01
+        ///msg_multiplayer02.
+        /// </summary>
+        internal static string msgMultiplayerEntries {
+            get {
+                return ResourceManager.GetString("msgMultiplayerEntries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to msg_audio_c
+        ///msg_subtitile_c
+        ///msg_vibe_c
+        ///msg_incline_c
+        ///msg_audio
+        ///msg_subtitle
+        ///msg_on
+        ///msg_off
+        ///msg_vibe
+        ///msg_moniter
+        ///msg_britness
+        ///msg_ganma
+        ///msg_load
+        ///msg_fileselect
+        ///msg_moniter_c
+        ///msg_fileselect_c
+        ///msg_language_c
+        ///msg_voice_c
+        ///msg_steleo
+        ///msg_mono
+        ///msg_5.1ch
+        ///msg_language
+        ///msg_japanese
+        ///msg_english
+        ///msg_french
+        ///msg_germany
+        ///msg_spanish
+        ///msg_italy
+        ///msg_voice
+        ///msg_bgm
+        ///msg_se.
+        /// </summary>
+        internal static string msgOptionsEntries {
+            get {
+                return ResourceManager.GetString("msgOptionsEntries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to msg_shop_001
+        ///msg_shop_002
+        ///msg_shop_003
+        ///msg_shop_004
+        ///msg_shop_005
+        ///msg_shop_006
+        ///msg_shop_007
+        ///msg_shop_008
+        ///msg_shop_009
+        ///msg_shop_010
+        ///msg_shop_011
+        ///msg_shop_012
+        ///msg_shop_013
+        ///msg_shop_014
+        ///msg_shop_015
+        ///msg_shop_016
+        ///msg_shop_017
+        ///msg_shop_018
+        ///msg_shop_019
+        ///msg_shop_020
+        ///msg_shop_021
+        ///msg_shop_022
+        ///msg_shop_023
+        ///msg_shop_024
+        ///msg_shop_025
+        ///msg_shop_026
+        ///msg_shop_027
+        ///msg_shop_028
+        ///msg_shop_101
+        ///msg_shop_102
+        ///msg_shop_103
+        ///msg_shop_105
+        ///msg_shop_106
+        ///msg_shop_107
+        ///msg_shop_108
+        ///msg_shop_109
+        ///msg_shop_110
+        ///msg_shop_111
+        ///msg_shop_112
+        ///msg_s [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string msgShopEntries {
+            get {
+                return ResourceManager.GetString("msgShopEntries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to msg_pressstart_ps3
+        ///msg_select_save_device
+        ///msg_completed
+        ///msg_road_failed
+        ///msg_save_failed
+        ///msg_change_savedevice
+        ///msg_access
+        ///msg_saving
+        ///msg_save_success
+        ///msg_make_new_file
+        ///msg_quit_game
+        ///msg_controller
+        ///msg_controller_ps3
+        ///msg_saving_ps3
+        ///msg_save_success_ps3
+        ///msg_save01
+        ///msg_save02
+        ///msg_save03
+        ///msg_continue
+        ///msg_status
+        ///msg_restart
+        ///msg_quitback
+        ///msg_options
+        ///msg_system_twnpause01
+        ///msg_system_twnpause02
+        ///msg_system_missionpause01
+        ///msg_system_backtomenu
+        ///msg_system_backtotitle
+        ///msg_system_backtotown
+        ///msg_system_backtoselect
+        ///msg_sy [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string msgSystemEntries {
+            get {
+                return ResourceManager.GetString("msgSystemEntries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to msg_tag01
+        ///msg_tag02
+        ///msg_tag03
+        ///msg_tag04.
+        /// </summary>
+        internal static string msgTagEntries {
+            get {
+                return ResourceManager.GetString("msgTagEntries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ev0000
+        ///ev0031
+        ///ev0001
+        ///ev0002
+        ///ev0003
+        ///ev0004
+        ///ev0005
+        ///ev0006
+        ///ev0007
+        ///ev0008
+        ///ev0009
+        ///ev0010
+        ///ev0011
+        ///ev0012
+        ///ev0013
+        ///ev0014
+        ///ev0015
+        ///ev0016
+        ///ev0017
+        ///ev0018
+        ///ev0019
+        ///ev0020
+        ///ev0021
+        ///ev0022
+        ///ev0023
+        ///ev0024
+        ///ev0026
+        ///ev0027
+        ///ev0028
+        ///ev0029
+        ///ev0030
+        ///ev0100
+        ///ev0102
+        ///ev0103
+        ///ev0104
+        ///ev0105
+        ///ev0106
+        ///ev0107
+        ///ev0108
+        ///ev0109
+        ///ev0110
+        ///ev0111
+        ///ev0112
+        ///ev0113
+        ///ev0114
+        ///ev0115
+        ///ev0116
+        ///ev0117
+        ///ev0118
+        ///ev0119
+        ///ev0120
+        ///ev0121
+        ///ev0122
+        ///ev0123
+        ///ev0124
+        ///ev0125
+        ///ev0126
+        ///ev0127
+        ///ev0128
+        ///ev0129
+        ///ev0130
+        ///ev0200
+        ///ev0201
+        ///ev0202
+        ///ev0203
+        ///ev0204
+        ///ev0205
+        ///ev0206
+        ///ev0207
+        ///ev0208
+        ///ev0209
+        ///ev0210
+        ///ev0211
+        ///e [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string msgTheaterroomEntries {
+            get {
+                return ResourceManager.GetString("msgTheaterroomEntries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to msg_pressstart
+        ///msg_newgame
+        ///msg_continue.
+        /// </summary>
+        internal static string msgTitleEntires {
+            get {
+                return ResourceManager.GetString("msgTitleEntires", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to msg_m1101_101_01_2
+        ///msg_m1103_103_01_3
+        ///msg_m1104_104_01_3
+        ///msg_m1104_104_01_4
+        ///msg_m1104_104_01_5
+        ///msg_m1105_105_02_2
+        ///msg_m1105_105_01_3
+        ///msg_m1105_105_01_4
+        ///msg_m1105_105_01_5
+        ///msg_m1106_106_01_1
+        ///msg_m1106_106_01_2
+        ///msg_m1106_151_01_1
+        ///msg_m1106_106_01_3
+        ///msg_m1107_107_01_3
+        ///msg_m1107_107_01_4
+        ///msg_m1107_107_01_5
+        ///msg_m1107_107_01_6
+        ///msg_m1107_107_01_7
+        ///msg_m1107_info001_01_1
+        ///msg_m1107_info001_01_2
+        ///msg_m1107_info001_01_3
+        ///msg_m1107_info001_01_4
+        ///msg_m1107_info001_01_5
+        ///msg_m1108_108_01_3
+        ///msg_m1108_152_01_1
+        ///msg_m1108_108_01_ [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string msgTownMissionShadowEntries {
+            get {
+                return ResourceManager.GetString("msgTownMissionShadowEntries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to msg_m1232_001_01_1
+        ///msg_m1232_001_01_2
+        ///msg_m1232_select_01
+        ///msg_m1232_select_02
+        ///msg_m1201_201_01_3
+        ///msg_m1201_201_01_4
+        ///msg_m1201_201_01_5
+        ///msg_m1202_202_01_1
+        ///msg_m1202_202_01_2
+        ///msg_m1202_202_01_3
+        ///msg_m1202_202_01_4
+        ///msg_m1203_203_01_3
+        ///msg_m1203_203_01_4
+        ///msg_m1203_203_01_5
+        ///msg_m1204_204_01_3
+        ///msg_m1204_204_01_4
+        ///msg_m1204_204_01_5
+        ///msg_m1205_205_01_3
+        ///msg_m1205_205_01_4
+        ///msg_m1206_206_01_2
+        ///msg_m1207_207_01_3
+        ///msg_m1207_207_01_4
+        ///msg_m1207_207_01_5
+        ///msg_m1208_208_01_1
+        ///msg_m1208_208_01_2
+        ///msg_m1208_208_01_3
+        ///msg_m1210_210_01 [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string msgTownMissionSilverEntries {
+            get {
+                return ResourceManager.GetString("msgTownMissionSilverEntries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to msg_m1001_001_01_3
+        ///msg_m1001_001_01_4
+        ///msg_m1001_001_01_5
+        ///msg_m1003_003_01_2
+        ///msg_m1004_004_01_3
+        ///msg_m1004_004_01_4
+        ///msg_m1005_005_01_3
+        ///msg_m1005_005_01_4
+        ///msg_m1005_005_01_5
+        ///msg_m1005_051_01_1
+        ///msg_m1005_052_01_1
+        ///msg_m1005_053_01_1
+        ///msg_m1005_054_01_1
+        ///msg_m1005_055_01_1
+        ///msg_m1006_006_01_3
+        ///msg_m1006_056_01_1
+        ///msg_m1006_006_01_4
+        ///msg_m1007_007_01_3
+        ///msg_m1007_007_01_4
+        ///msg_m1007_007_01_5
+        ///msg_m1009_009_01_3
+        ///msg_m1009_009_01_4
+        ///msg_m1009_009_01_5
+        ///msg_m1010_010_01_3
+        ///msg_m1010_010_01_4
+        ///msg_m1010_010_01_5
+        ///msg_m1012_012_01_3 [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string msgTownMissionSonicEntries {
+            get {
+                return ResourceManager.GetString("msgTownMissionSonicEntries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to msg_m1100_000_01_1
+        ///msg_m1100_001_01_1
+        ///msg_m1100_002_01_1
+        ///msg_m1101_101_01_1
+        ///msg_m1103_103_01_1
+        ///msg_m1103_103_01_2
+        ///msg_m1104_104_01_1
+        ///msg_m1104_104_01_2
+        ///msg_m1105_105_01_1
+        ///msg_m1105_105_02_1
+        ///msg_m1105_105_01_2
+        ///msg_m1107_107_01_1
+        ///msg_m1107_107_01_2
+        ///msg_m1108_108_01_1
+        ///msg_m1108_108_01_2
+        ///msg_m1109_109_01_1
+        ///msg_m1109_109_01_2
+        ///msg_m1110_110_01_1
+        ///msg_m1110_110_02_1
+        ///msg_m1110_110_01_2
+        ///msg_m1111_111_01_1
+        ///msg_m1111_111_01_2
+        ///msg_m1112_112_01_1
+        ///msg_m1112_112_01_2
+        ///msg_m1113_113_01_1
+        ///msg_m1113_113_01_2
+        ///msg_m1114_114_01_1 [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string msgTwnShadowEntries {
+            get {
+                return ResourceManager.GetString("msgTwnShadowEntries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to msg_m1200_000_01_1
+        ///msg_m1200_001_01_1
+        ///msg_m1200_002_01_1
+        ///msg_m1201_201_01_1
+        ///msg_m1201_201_01_2
+        ///msg_m1203_203_01_1
+        ///msg_m1203_203_02_1
+        ///msg_m1203_203_01_2
+        ///msg_m1204_204_01_1
+        ///msg_m1204_204_02_1
+        ///msg_m1204_204_01_2
+        ///msg_m1205_205_01_1
+        ///msg_m1205_205_01_2
+        ///msg_m1205_205_01_5
+        ///msg_m1206_206_01_1
+        ///msg_m1207_207_01_1
+        ///msg_m1207_207_01_2
+        ///msg_m1210_210_01_1
+        ///msg_m1210_210_01_2
+        ///msg_m1211_211_01_1
+        ///msg_m1211_211_01_2
+        ///msg_m1212_212_01_1
+        ///msg_m1212_212_01_2
+        ///msg_m1213_213_01_1
+        ///msg_m1213_213_01_2
+        ///msg_m1214_214_01_1
+        ///msg_m1214_214_01_2 [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string msgTwnSilverEntries {
+            get {
+                return ResourceManager.GetString("msgTwnSilverEntries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to msg_m1000_000_01_1
+        ///msg_m1000_001_01_1
+        ///msg_m1000_002_01_1
+        ///msg_m1001_001_01_1
+        ///msg_m1001_001_01_2
+        ///msg_m1003_003_01_1
+        ///msg_m1004_004_01_1
+        ///msg_m1004_004_01_2
+        ///msg_m1005_005_01_1
+        ///msg_m1005_005_01_2
+        ///msg_m1006_006_01_1
+        ///msg_m1006_006_01_2
+        ///msg_m1007_007_01_1
+        ///msg_m1007_007_02_1
+        ///msg_m1007_007_01_2
+        ///msg_m1009_009_01_1
+        ///msg_m1009_009_01_2
+        ///msg_m1010_010_01_1
+        ///msg_m1010_010_01_2
+        ///msg_m1012_012_01_1
+        ///msg_m1012_012_01_2
+        ///msg_m1013_013_01_1
+        ///msg_m1013_013_02_1
+        ///msg_m1013_013_01_2
+        ///msg_m1013_013_02_2
+        ///msg_m1014_014_01_1
+        ///msg_m1015_015_01_1 [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string msgTwnSonicEntries {
+            get {
+                return ResourceManager.GetString("msgTwnSonicEntries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to   FileName = &quot;boss/thirdiblis_flc/flcA_envmap.dds&quot;
+        ///  FileName = &quot;object/twn/goldmdl/item_envmap.dds&quot;
+        ///  FileName = &quot;stage/aqa/a/aqa_envmap.dds&quot;
+        ///  FileName = &quot;stage/boss/charaboss2_rct/rct_envmap.dds&quot;
+        ///  FileName = &quot;stage/boss/dr1_wap/wap_envmap.dds&quot;
+        ///  FileName = &quot;stage/boss/secondmefiress_dtd/suna_cube.dds&quot;
+        ///  FileName = &quot;stage/boss/solaris_last/solaris_envmap.dds&quot;
+        ///  FileName = &quot;stage/csc/a/csc_envmap.dds&quot;
+        ///  FileName = &quot;stage/csc/b/csc_envmap.dds&quot;
+        ///  FileName = &quot;stage/dtd/a/suna_cube.dds&quot;
+        ///  FileName = [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string S06Cubemaps {
+            get {
+                return ResourceManager.GetString("S06Cubemaps", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to aqa_floor01
         ///aqa_floor02
         ///aqa_floor03
@@ -654,6 +1443,16 @@ namespace Sonic_06_Randomiser_Suite.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Settings {
+            get {
+                object obj = ResourceManager.GetObject("Settings", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to solaris01.
         /// </summary>
         internal static string solaris01Params {
@@ -672,11 +1471,81 @@ namespace Sonic_06_Randomiser_Suite.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to staff0000
+        ///staff0001
+        ///staff0002
+        ///staff0003
+        ///staff0004
+        ///staff0005
+        ///staff0006
+        ///staff0007
+        ///staff0008
+        ///staff0009
+        ///staff0010
+        ///staff0011
+        ///staff0012
+        ///staff0013
+        ///staff0100
+        ///staff0101
+        ///staff0102
+        ///staff0103
+        ///staff0104
+        ///staff0105
+        ///staff0106
+        ///staff0107
+        ///staff0108
+        ///staff0109
+        ///staff0110
+        ///staff0111
+        ///staff0112
+        ///staff0113
+        ///staff0114
+        ///staff0115
+        ///staff0116
+        ///staff0117
+        ///staff0118
+        ///staff0119
+        ///staff0200
+        ///staff0201
+        ///staff0202
+        ///staff0203
+        ///staff0204
+        ///staff0205
+        ///staff0206
+        ///staff0207
+        ///staff0208
+        ///staff0209
+        ///staff0210
+        ///staff0211
+        ///staff0212
+        ///staff0213
+        ///staff0214
+        ///staff0215
+        ///staff0216
+        ///st [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string staffEntries {
+            get {
+                return ResourceManager.GetString("staffEntries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to thirdIblis.
         /// </summary>
         internal static string thirdIblisParams {
             get {
                 return ResourceManager.GetString("thirdIblisParams", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] unlub {
+            get {
+                object obj = ResourceManager.GetObject("unlub", resourceCulture);
+                return ((byte[])(obj));
             }
         }
     }

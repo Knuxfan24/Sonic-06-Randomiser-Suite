@@ -69,11 +69,9 @@ havokthorn
 havokthorn_fix
 IronBox
 IronBox_Vs
-kdv_biggate
 kdv_breakbridge
 kdv_breakbridge_d
 kdv_breaktower
-kdv_linearch
 kdv_Pillar01
 kdv_Pillar01_br
 kdv_rock

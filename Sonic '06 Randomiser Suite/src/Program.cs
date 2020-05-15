@@ -10,7 +10,8 @@ namespace Sonic_06_Randomiser_Suite
         public static readonly string GlobalVersionNumber = "Version 1.0";
 
         public static string ApplicationData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                             Arctool         = $"{ApplicationData}\\Sonic_06_Randomiser_Suite\\Tools\\arctool.exe";
+                             Arctool         = $"{ApplicationData}\\Sonic_06_Randomiser_Suite\\Tools\\arctool.exe",
+                             unlub           = $"{ApplicationData}\\Sonic_06_Randomiser_Suite\\Tools\\unlub.jar";
 
         [STAThread]
 
@@ -26,6 +27,9 @@ namespace Sonic_06_Randomiser_Suite
 
             if (!File.Exists(Arctool))
                 File.WriteAllBytes(Arctool, Properties.Resources.arctool);
+
+            if (!File.Exists(unlub))
+                File.WriteAllBytes(unlub, Properties.Resources.unlub);
             #endregion
 
             Application.EnableVisualStyles();

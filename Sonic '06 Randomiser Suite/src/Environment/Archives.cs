@@ -1,6 +1,8 @@
 ﻿using System.IO;
 using ArcPackerLib;
 using System.Diagnostics;
+using Sonic_06_Randomiser_Suite.Serialisers;
+using System;
 
 namespace Sonic_06_Randomiser_Suite
 {
@@ -10,6 +12,7 @@ namespace Sonic_06_Randomiser_Suite
         /// Extracts an archive to a temporary location.
         /// </summary>
         public static string UnpackARC(string arc, string tempPath) {
+            Console.WriteLine(arc);
             Directory.CreateDirectory(tempPath); // Create temporary location
             File.Copy(arc, Path.Combine(tempPath, Path.GetFileName(arc))); // Copy archive to temporary location
 
@@ -32,6 +35,7 @@ namespace Sonic_06_Randomiser_Suite
         /// Repacks an archive from a temporary location.
         /// </summary>
         public static void RepackARC(string arc, string output) {
+            Console.WriteLine(arc);
             ArcPacker repack = new ArcPacker();
             repack.WriteArc(output, Path.Combine(arc, Path.GetFileNameWithoutExtension(output)));
 
@@ -44,6 +48,20 @@ namespace Sonic_06_Randomiser_Suite
                     Directory.Delete(arc);
                 }
             } catch { }
+        }
+
+        public static void CreateModARC(string srcArchive, string origArchive, string modDirectory) {
+            if (Directory.Exists(modDirectory)) {
+                // Absolute file path (xenon/ps3/win32 and beyond)
+                string filePath = origArchive.Remove(0, Path.GetDirectoryName(Properties.Settings.Default.Path_GameExecutable).Length).Substring(1);
+
+                // Creates the archive subdirectories
+                string createArchives = Path.Combine(modDirectory, filePath);
+                Directory.CreateDirectory(Path.GetDirectoryName(createArchives));
+
+                if (createArchives != string.Empty)
+                    RepackARC(srcArchive, createArchives);
+            }
         }
     }
 }

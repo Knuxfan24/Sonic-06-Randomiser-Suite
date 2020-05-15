@@ -368,6 +368,7 @@ namespace Unify.TabControl
                 Drawer.PixelOffsetMode = PixelOffsetMode.HighQuality;
                 Drawer.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
                 Drawer.Clear(this.headerColor);
+
                 try
                 {
                     SelectedTab.BackColor = this.backTabColor;

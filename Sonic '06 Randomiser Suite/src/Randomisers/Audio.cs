@@ -1,0 +1,22 @@
+﻿using System;
+
+namespace Sonic_06_Randomiser_Suite
+{
+    class Audio
+    {
+        public static void RandomiseMusic(string[] editedLub, Random rng) {
+            int lineNum = 0;
+
+            foreach (string line in editedLub)
+            {
+                if (line.Contains("Game.PlayBGM"))
+                {
+                    string[] tempLine = line.Split('"');
+                    tempLine[1] = Main.Music[rng.Next(Main.Music.Count)];
+                    editedLub[lineNum] = string.Join("\"", tempLine);
+                }
+                lineNum++;
+            }
+        }
+    }
+}
