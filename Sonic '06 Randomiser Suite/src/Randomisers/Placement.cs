@@ -7,6 +7,8 @@ namespace Sonic_06_Randomiser_Suite
     class Placement
     {
         public static void RandomiseEnemies(S06SetData set, Random rng) {
+            if (Main.Enemies.Count == 0) return;
+
             // Enemy Parameter Lists
             string[] cBiterParams      = Resources.ParseLineBreaks(Properties.Resources.cBiterParams);
             string[] cCrawlerParams    = Resources.ParseLineBreaks(Properties.Resources.cCrawlerParams);
@@ -150,6 +152,8 @@ namespace Sonic_06_Randomiser_Suite
         }
     
         public static void RandomiseCharacters(S06SetData set, Random rng) {
+            if (Main.Characters.Count == 0) return;
+
             foreach (SetObject obj in set.Objects)
             {
                 switch (obj.ObjectType)
@@ -161,6 +165,8 @@ namespace Sonic_06_Randomiser_Suite
         }
 
         public static void RandomiseItems(S06SetData set, Random rng) {
+            if (Main.Items.Count == 0) return;
+            
             foreach (SetObject obj in set.Objects)
             {
                 switch (obj.ObjectType)
@@ -176,6 +182,7 @@ namespace Sonic_06_Randomiser_Suite
 
         public static void RandomiseVoices(S06SetData set, Random rng) {
             string[] voiceLines = Resources.ParseLineBreaks(Properties.Resources.S06TextStrings);
+            if (voiceLines.Length == 0) return;
 
             foreach (SetObject obj in set.Objects)
             {
@@ -191,6 +198,7 @@ namespace Sonic_06_Randomiser_Suite
         
         public static void RandomisePhysicsProps(S06SetData set, Random rng) {
             string[] propList = Resources.ParseLineBreaks(Properties.Resources.S06PhysicsObjects);
+            if (propList.Length == 0) return;
 
             foreach (SetObject obj in set.Objects)
             {

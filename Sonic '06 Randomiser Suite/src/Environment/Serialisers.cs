@@ -11,7 +11,7 @@ namespace Sonic_06_Randomiser_Suite.Serialisers
 {
     class Mods
     {
-        public static string Create(string seed) {
+        public static string Create(string seed, bool beatable) {
             string safeTitle = Literal.UseSafeFormattedCharacters($"Sonic '06 Randomised ({seed})");
             string newPath = Path.Combine(Properties.Settings.Default.Path_ModsDirectory, safeTitle);
 
@@ -31,6 +31,8 @@ namespace Sonic_06_Randomiser_Suite.Serialisers
                     configInfo.WriteLine($"Date=\"{DateTime.Now:dd/MM/yyyy}\"");
                     configInfo.WriteLine($"Author=\"Sonic '06 Randomiser Suite\"");
                     configInfo.WriteLine($"Platform=\"{Literal.System(Properties.Settings.Default.Path_GameExecutable)}\"");
+
+                    if (beatable) configInfo.WriteLine($"[Patches]\nRequiredPatches=\"UnlockMidairMomentum.mlua\"");
 
                     configInfo.WriteLine("\n[Filesystem]");
                     configInfo.WriteLine($"Merge=\"False\"");

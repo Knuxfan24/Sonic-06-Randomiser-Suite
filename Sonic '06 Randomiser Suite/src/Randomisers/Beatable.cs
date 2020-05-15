@@ -43,7 +43,7 @@ namespace Sonic_06_Randomiser_Suite
             }
 
             // First Loop
-            SetObject jumppanel1 = Objects.jumppanel(new Vector3(2009.92f, 18.018f, -6491.59f), new Quaternion(0f, 0.91103f, 0f, 0.412344f), 45f, 4000f, 1f, 0u, objectID);
+            SetObject jumppanel1 = Objects.jumppanel(new Vector3(2009.92f, 18.018f, -6491.59f), new Quaternion(0f, 0.91103f, 0f, 0.412344f), 20f, 4000f, 1f, 0u, objectID);
             if (set.Objects[244].Parameters[1].Data.ToString() == "sonic_new") { jumppanel1.UnknownBytes[3] = 1; }
             set.Objects.Add(jumppanel1);
             objectID++;
@@ -91,6 +91,8 @@ namespace Sonic_06_Randomiser_Suite
             objectID++;
 
             // Before Whale Chase
+            set.Objects[189].Parameters[2].Data = set.Objects[330].Parameters[3].Data = 3000f;
+
             SetObject jumppanel5 = Objects.jumppanel(new Vector3(-32387.4f, 186.813f, -70859f), new Quaternion(0f, -0.840452f, 0f, 0.541886f), 26f, 2300f, 1.8f, 703u, objectID);
             if (set.Objects[244].Parameters[1].Data.ToString() == "sonic_new") { jumppanel5.UnknownBytes[3] = 1; }
             set.Objects.Add(jumppanel5);
@@ -101,20 +103,31 @@ namespace Sonic_06_Randomiser_Suite
             set.Objects.Add(jumppanel6);
             objectID++;
 
-            SetObject spring5 = Objects.spring(new Vector3(-37352.9f, 1080.27f, -71987.6f), new Quaternion(0f, -0.993854f, 0f, 0.110732f), 3000, 0.5f, 704u, 0, objectID, false);
+            SetObject spring5 = Objects.spring(new Vector3(-37328.1f, 1080.27f, -71853.9f), new Quaternion(0f, -0.993854f, 0f, 0.110732f), 3000, 0.5f, 704u, 0, objectID, false);
             if (set.Objects[244].Parameters[1].Data.ToString() == "sonic_new") { spring5.UnknownBytes[3] = 1; }
             set.Objects.Add(spring5);
             objectID++;
 
-            SetObject spring6 = Objects.spring(new Vector3(-37851.6f, 1220.91f, -74300.4f), new Quaternion(-0.0604923f, -0.750435f, -0.0693582f, 0.654509f), 3000, 0.5f, 705u, 0, objectID, false);
+            SetObject spring6 = Objects.spring(new Vector3(-37797f, 1220.91f, -74355.8f), new Quaternion(-0.0604923f, -0.750435f, -0.0693582f, 0.654509f), 3000, 0.5f, 705u, 0, objectID, false);
             if (set.Objects[244].Parameters[1].Data.ToString() == "sonic_new") { spring6.UnknownBytes[3] = 1; }
             set.Objects.Add(spring6);
             objectID++;
 
-            SetObject spring7 = Objects.spring(new Vector3(-41289.2f, 1208.37f, -74961.5f), new Quaternion(0.00417437f, 0.994243f, -0.0235483f, 0.104464f), 3000, 0.5f, 335u, 0, objectID, false);
+            SetObject spring7 = Objects.spring(new Vector3(-41528.2f, 1208.37f, -75238.9f), new Quaternion(0.00417437f, 0.994243f, -0.0235483f, 0.104464f), 3000, 0.5f, 335u, 0, objectID, false);
             if (set.Objects[244].Parameters[1].Data.ToString() == "sonic_new") { spring7.UnknownBytes[3] = 1; }
             set.Objects.Add(spring7);
             objectID++;
+
+            // Whale Chase
+            set.Objects[120].Parameters[0].Data = set.Objects[121].Parameters[0].Data = set.Objects[116].Parameters[0].Data =
+            set.Objects[117].Parameters[0].Data = set.Objects[119].Parameters[0].Data = set.Objects[122].Parameters[0].Data =
+            set.Objects[123].Parameters[0].Data = set.Objects[125].Parameters[0].Data = set.Objects[124].Parameters[0].Data =
+            set.Objects[134].Parameters[0].Data = set.Objects[135].Parameters[0].Data = set.Objects[133].Parameters[0].Data =
+            set.Objects[132].Parameters[0].Data = set.Objects[129].Parameters[0].Data = set.Objects[127].Parameters[0].Data =
+            set.Objects[126].Parameters[0].Data = set.Objects[131].Parameters[0].Data = set.Objects[130].Parameters[0].Data =
+            set.Objects[137].Parameters[0].Data = set.Objects[136].Parameters[0].Data = "wvo_bridgeA";
+
+            set.Objects[118].Parameters[0].Data = set.Objects[128].Parameters[0].Data = "wvo_bridgeB";
 
             // After Whale Chase
             SetObject jumppanel7 = Objects.jumppanel(new Vector3(-21400.8f, 539.166f, -10038.7f), new Quaternion(0f, -0.53315f, 0f, -0.846023f), 26f, 2300f, 1.8f, 707u, objectID);
@@ -127,12 +140,12 @@ namespace Sonic_06_Randomiser_Suite
             objectID++;
 
             SetObject jumppanel8 = Objects.jumppanel(new Vector3(-13907.4f, 450f, -98218.2f), new Quaternion(0f, 0.95076f, 0f, 0.309934f), 26f, 2300f, 1.8f, 29u, objectID);
-            if (set.Objects[243].Parameters[1].Data.ToString() == "tails") { jumppanel7.UnknownBytes[3] = 1; }
+            if (set.Objects[243].Parameters[1].Data.ToString() == "tails") { jumppanel8.UnknownBytes[3] = 1; }
             set.Objects.Add(jumppanel8);
             objectID++;
 
             SetObject spring8 = Objects.spring(new Vector3(-11962.7f, 459.769f, -105925f), new Quaternion(-0.0416072f, 0.902359f, 0.419544f, 0.0894892f), 1000, 2f, 710u, 0, objectID, false);
-            if (set.Objects[243].Parameters[1].Data.ToString() == "tails" || set.Objects[243].Parameters[1].Data.ToString() == "knuckles" || set.Objects[243].Parameters[1].Data.ToString() == "shadow" || set.Objects[243].Parameters[1].Data.ToString() == "rouge" || set.Objects[243].Parameters[1].Data.ToString() == "silver" || set.Objects[243].Parameters[1].Data.ToString() == "blaze") { spring8.UnknownBytes[3] = 1; }
+            if (set.Objects[243].Parameters[1].Data.ToString() == "tails" || set.Objects[243].Parameters[1].Data.ToString() == "knuckles" || set.Objects[243].Parameters[1].Data.ToString() == "shadow" || set.Objects[243].Parameters[1].Data.ToString() == "rouge" || set.Objects[243].Parameters[1].Data.ToString() == "silver" || set.Objects[243].Parameters[1].Data.ToString() == "blaze" || set.Objects[243].Parameters[1].Data.ToString() == "omega") { spring8.UnknownBytes[3] = 1; }
             set.Objects.Add(spring8);
             objectID++;
 
@@ -145,13 +158,18 @@ namespace Sonic_06_Randomiser_Suite
             set.Objects.Add(jumppanel8);
             objectID++;
 
-            if (set.Objects[244].Parameters[1].Data.ToString() == "sonic_new") { set.Objects[33].UnknownBytes[3] = 1; }
+            set.Objects[164].Parameters[0].Data = set.Objects[163].Parameters[0].Data = set.Objects[162].Parameters[0].Data =
+            set.Objects[161].Parameters[0].Data = set.Objects[160].Parameters[0].Data = set.Objects[165].Parameters[0].Data =
+            set.Objects[166].Parameters[0].Data = set.Objects[170].Parameters[0].Data = set.Objects[169].Parameters[0].Data =
+            set.Objects[167].Parameters[0].Data = set.Objects[168].Parameters[0].Data = "wvo_bridgeA";
 
-            SetObject spring9 = Objects.spring(new Vector3(-26496.6f, 942.65f, -118787f), new Quaternion(-0.000000042167f, 0.965926f, 0.258819f, -0.000000157369f), 1000, 2f, 711u, 0, objectID, false);
+            if (set.Objects[244].Parameters[1].Data.ToString() != "sonic_new") { set.Objects[33].UnknownBytes[3] = 1; }
+
+            SetObject spring9 = Objects.spring(new Vector3(-26496.6f, 942.65f, -118787f), new Quaternion(-0.000000042167f, 0.965926f, 0.258819f, -0.000000157369f), 3000, 2f, 713u, 0, objectID, false);
             set.Objects.Add(spring9);
             objectID++;
 
-            SetObject spring10 = Objects.spring(new Vector3(-26355.1f, 2046.61f, -121464f), new Quaternion(0f, -0.823214f, 0f, 0.567734f), 1000, 2f, 324u, 0, objectID, false);
+            SetObject spring10 = Objects.spring(new Vector3(-26355.1f, 2046.61f, -121464f), new Quaternion(0f, -0.823214f, 0f, 0.567734f), 3000, 0.5f, 324u, 0, objectID, false);
             set.Objects.Add(spring10);
             objectID++;
 

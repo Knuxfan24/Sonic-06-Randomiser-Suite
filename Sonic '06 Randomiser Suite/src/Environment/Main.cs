@@ -26,6 +26,19 @@ namespace Sonic_06_Randomiser_Suite
             Label_VersionNumber.Text = Program.GlobalVersionNumber;
             Properties.Settings.Default.SettingsSaving += Default_SettingsSaving;
             LoadSettings();
+
+            // Set sonic_new to true
+            CheckedListBox_Placement_Characters.SetItemChecked(0, true);
+
+            // Set default language to English
+            CheckedListBox_Text_Languages.SetItemChecked(0, true);
+
+            // Set default randomisation states
+            for (int i = 0; i < 32; i++) CheckedListBox_Placement_Enemies.SetItemChecked(i, true);
+            for (int i = 5; i < 13; i++) CheckedListBox_Placement_Characters.SetItemChecked(i, true);
+            for (int i = 0; i < CheckedListBox_Placement_Items.Items.Count; i++) CheckedListBox_Placement_Items.SetItemChecked(i, true);
+            for (int i = 0; i < CheckedListBox_Audio_Music.Items.Count; i++) CheckedListBox_Audio_Music.SetItemChecked(i, true);
+            for (int i = 0; i < CheckedListBox_Textures_Areas.Items.Count; i++) CheckedListBox_Textures_Areas.SetItemChecked(i, true);
         }
 
         private void Default_SettingsSaving(object sender, System.ComponentModel.CancelEventArgs e) => LoadSettings();
@@ -39,6 +52,7 @@ namespace Sonic_06_Randomiser_Suite
         private void UnifyTabControl_Selected(object sender, TabControlEventArgs e) => ((UnifyTabControl)sender).Refresh();
 
         private void Button_Randomise_Click(object sender, EventArgs e) {
+            // Clears all lists.
             Enemies.Clear();
             Characters.Clear();
             Items.Clear();
@@ -46,11 +60,11 @@ namespace Sonic_06_Randomiser_Suite
             Languages.Clear();
             Areas.Clear();
 
-            // Feed seed to Random Number Generator
+            // Feeds seed to Random Number Generator.
             rng = new Random(TextBox_RandomisationSeed.Text.GetHashCode());
 
-            // Create mod directory - if it's empty, return nothing.
-            string modDirectory = Mods.Create(TextBox_RandomisationSeed.Text);
+            // Create mod directory, also checking if it's beatable to enable a patch - if it's empty, return nothing.
+            string modDirectory = Mods.Create(TextBox_RandomisationSeed.Text, CheckedListBox_Placement_General.GetItemChecked(5));
             if (modDirectory == string.Empty) return;
 
             // Setup various elements of the Randomisation process
@@ -248,11 +262,17 @@ namespace Sonic_06_Randomiser_Suite
             }
 
             // Unpack ARCs in preperation for randomisation
-            foreach (string archive in Directory.GetFiles(Path.GetDirectoryName(Properties.Settings.Default.Path_GameExecutable), "*.arc", SearchOption.AllDirectories)) {
-                Console.WriteLine(archive);
+            foreach (string archive in Directory.GetFiles(Path.GetDirectoryName(Properties.Settings.Default.Path_GameExecutable), "*.arc", SearchOption.AllDirectories))
+            {
+                Console.WriteLine($"Looking at: {Path.GetFileName(archive).ToLower()}");
+
                 // Miscellaneous Game Data
                 if (Path.GetFileName(archive).ToLower() == "scripts.arc")
                 {
+                    if (CheckedListBox_Placement_General.CheckedIndices.Count == 0 &&
+                        CheckedListBox_Scene_General.CheckedIndices.Count == 0     &&
+                        CheckedListBox_Audio_General.CheckedIndices.Count == 0) continue;
+
                     // Unpack the archive
                     string randomArchive = Archives.UnpackARC(archive, Path.Combine(Path.GetTempPath(), Path.GetRandomFileName()));
 
@@ -260,7 +280,7 @@ namespace Sonic_06_Randomiser_Suite
                     if (CheckedListBox_Placement_General.CheckedIndices.Count != 0)
                     {
                         foreach (string setData in Directory.GetFiles(randomArchive, "*.set", SearchOption.AllDirectories))
-                        {
+                        {                            
                             Console.WriteLine(setData);
                             S06SetData set = new S06SetData();
                             set.Load(setData);
@@ -309,14 +329,16 @@ namespace Sonic_06_Randomiser_Suite
                         }
                     }
 
-                    // Audio Randomisation
+                    // Randomise Music
                     if (CheckedListBox_Audio_General.CheckedIndices.Count != 0)
                     {
                         foreach (string lubData in Directory.GetFiles(randomArchive, "*.lub", SearchOption.AllDirectories)
-                            .Where(x => Path.GetFileName(x).StartsWith("a_") || Path.GetFileName(x).StartsWith("b_") || Path.GetFileName(x).StartsWith("c_") ||
-                                        Path.GetFileName(x).StartsWith("d_") || Path.GetFileName(x).StartsWith("e_") || Path.GetFileName(x).StartsWith("f_") ||
-                                        Path.GetFileName(x).StartsWith("f1_") || Path.GetFileName(x).StartsWith("f2_") || Path.GetFileName(x).StartsWith("g_")))
+                                .Where(x => Path.GetFileName(x).StartsWith("a_")  || Path.GetFileName(x).StartsWith("b_")  || Path.GetFileName(x).StartsWith("c_") ||
+                                            Path.GetFileName(x).StartsWith("d_")  || Path.GetFileName(x).StartsWith("e_")  || Path.GetFileName(x).StartsWith("f_") ||
+                                            Path.GetFileName(x).StartsWith("f1_") || Path.GetFileName(x).StartsWith("f2_") || Path.GetFileName(x).StartsWith("g_")))
                         {
+                            if (Music.Count == 0) continue;
+
                             Console.WriteLine(lubData);
                             Lua.Decompile(lubData);
                             string[] editedLub = File.ReadAllLines(lubData);
@@ -333,7 +355,7 @@ namespace Sonic_06_Randomiser_Suite
                         }
                     }
 
-                    // Text Randomisation
+                    // Randomise Loading Text
                     if (CheckedListBox_Text_General.GetItemChecked(0))
                     {
                         foreach (string lubData in Directory.GetFiles(randomArchive, "mission*.lub", SearchOption.AllDirectories))
@@ -359,44 +381,44 @@ namespace Sonic_06_Randomiser_Suite
                 }
 
                 // Text Data
-                else if (Path.GetFileName(archive).ToLower() == "text.arc" ||
-                         Path.GetFileName(archive).ToLower() == "event.arc")
+                else if ((Path.GetFileName(archive).ToLower() == "text.arc"   || // If the archive is 'text.arc'...
+                          Path.GetFileName(archive).ToLower() == "event.arc") && // If the archive is 'event.arc'...
+                          CheckedListBox_Text_General.GetItemChecked(1))         // The user wants to randomise its strings...
                 {
+                    // Randomise All Strings
+                    foreach (int item in CheckedListBox_Text_Languages.CheckedIndices)
+                    {
+                        switch (item)
+                        {
+                            case 0: Languages.Add(".e"); break;
+                            case 1: Languages.Add(".f"); break;
+                            case 2: Languages.Add(".g"); break;
+                            case 3: Languages.Add(".i"); break;
+                            case 4: Languages.Add(".j"); break;
+                            case 5: Languages.Add(".s"); break;
+                        }
+                    }
+                    if (Languages.Count == 0) continue;
+
                     // Unpack the archive
                     string randomArchive = Archives.UnpackARC(archive, Path.Combine(Path.GetTempPath(), Path.GetRandomFileName()));
 
-                    // Text Randomisation
-                    if (CheckedListBox_Text_General.GetItemChecked(1))
-                    {
-                        foreach (int item in CheckedListBox_Text_Languages.CheckedIndices)
-                        {
-                            switch (item)
-                            {
-                                case 0: Languages.Add(".e"); break;
-                                case 1: Languages.Add(".f"); break;
-                                case 2: Languages.Add(".g"); break;
-                                case 3: Languages.Add(".i"); break;
-                                case 4: Languages.Add(".j"); break;
-                                case 5: Languages.Add(".s"); break;
-                            }
-                        }
-
-                        Strings.RandomiseMSTContents(randomArchive, Languages, rng);
-                    }
+                    // Process MSTs
+                    Strings.RandomiseMSTContents(randomArchive, Languages, rng);
 
                     // Repack the archive
                     Archives.CreateModARC(randomArchive, archive, modDirectory);
                 }
 
                 // Texture Randomisation
-                if ((Areas.Contains(Path.GetFileNameWithoutExtension(archive)) && CheckedListBox_Textures_General.GetItemChecked(0)) ||
-                    (Path.GetFileName(archive).ToLower() == "object.arc"       && CheckedListBox_Textures_General.GetItemChecked(1)) ||
-                    (Path.GetFileName(archive).ToLower() == "sprite.arc"       && CheckedListBox_Textures_General.GetItemChecked(2)))
+                if ((Areas.Contains(Path.GetFileNameWithoutExtension(archive)) && CheckedListBox_Textures_General.GetItemChecked(0)) || // If an area is selected and the user wants to randomise its textures...
+                    (Path.GetFileName(archive).ToLower() == "object.arc"       && CheckedListBox_Textures_General.GetItemChecked(1)) || // If the archive is 'object.arc' and the user wants to randomise its textures...
+                    (Path.GetFileName(archive).ToLower() == "sprite.arc"       && CheckedListBox_Textures_General.GetItemChecked(2)))   // If the archive is 'sprite.arc' and the user wants to randomise its textures...
                 {
                     // Unpack the archive
                     string randomArchive = Archives.UnpackARC(archive, Path.Combine(Path.GetTempPath(), Path.GetRandomFileName()));
 
-                    // Randomise the textures
+                    // Process textures
                     Textures.RandomiseTextures(randomArchive, rng);
 
                     // Repack the archive
@@ -410,7 +432,8 @@ namespace Sonic_06_Randomiser_Suite
                                                    $"{Program.GlobalVersionNumber}\n\n" +
                                                    "" +
                                                    "Knuxfan24 - Lead programmer and reverse-engineer\n" +
-                                                   "HyperPolygon64 - UI stuff and slaved away at code",
+                                                   "HyperPolygon64 - UI stuff and slaved away at code\n" +
+                                                   "darkhero1337 - Unlock Mid-air Momentum",
                                                    "About", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
