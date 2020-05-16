@@ -77,6 +77,7 @@ namespace Sonic_06_Randomiser_Suite
             Panel_Inactive.BringToFront();
 
             // Reveal controls and enable Randomising to tell us if it's still working
+            ListBox_Logs.Items.Clear();
             Randomising = Panel_Inactive.Visible = ProgressBar_Randomisation.Visible = true;
             BackgroundWorker bw = new BackgroundWorker() { WorkerReportsProgress = true };
 
@@ -177,24 +178,24 @@ namespace Sonic_06_Randomiser_Suite
                             // Saves the modified SET data
                             set.Save(setData, true);
                         }
-                    }
 
-                    // Iterate through all Lua scripts and remove parameters from enemies that may be problematic for the player
-                    foreach (string enemy in Directory.GetFiles(
-                                             Path.Combine(randomArchive, $"scripts\\{Literal.Core(Properties.Settings.Default.Path_GameExecutable)}\\scripts\\enemy\\"),
-                                             "*.lub", SearchOption.TopDirectoryOnly))
-                    {
-                        // Blacklisted parameters
-                        List<string> blacklistParams = new List<string>() { "callsetcamera", "firstmefiress_warp", "firstmefiress_randomwarp" };
+                        // Iterate through all Lua scripts and remove parameters from enemies that may be problematic for the player
+                        foreach (string enemy in Directory.GetFiles(
+                                                 Path.Combine(randomArchive, $"scripts\\{Literal.Core(Properties.Settings.Default.Path_GameExecutable)}\\scripts\\enemy\\"),
+                                                 "*.lub", SearchOption.TopDirectoryOnly))
+                        {
+                            // Blacklisted parameters
+                            List<string> blacklistParams = new List<string>() { "CallSetCamera", "FirstMefiress_Warp", "FirstMefiress_RandomWarp" };
 
-                        // Write to logs for user feedback
-                        Console.WriteLine($"Patching Enemy: {enemy}");
+                            // Write to logs for user feedback
+                            Console.WriteLine($"Patching Enemy: {enemy}");
 
-                        // Decompile Lua script
-                        Lua.Decompile(enemy);
+                            // Decompile Lua script
+                            Lua.Decompile(enemy);
 
-                        // Write Lua script back without blacklisted parameters
-                        File.WriteAllLines(enemy, File.ReadLines(enemy).Where(x => blacklistParams.Any(x.ToLower().Contains)).ToList());
+                            // Write Lua script back without blacklisted parameters
+                            File.WriteAllLines(enemy, File.ReadLines(enemy).Where(x => !blacklistParams.Any(x.Contains)).ToList());
+                        }
                     }
 
                     // Scene Randomisation
@@ -309,20 +310,23 @@ namespace Sonic_06_Randomiser_Suite
                     // If the Languages list enumerated nothing, continue to the next statement
                     if (Languages.Count == 0) continue;
 
-                    // Unpack the archive
-                    string randomArchive = Archives.UnpackARC(archive, Path.Combine(Path.GetTempPath(), Path.GetRandomFileName()));
-
                     // Modify based on user choice
                     foreach (int item in CheckedListBox_Text_General.CheckedIndices)
                     {
                         switch (item)
                         {
-                            case 1: Strings.RandomiseMSTContents(randomArchive, Languages, RNG); break;
+                            case 1:
+                                // Unpack the archive
+                                string randomArchive = Archives.UnpackARC(archive, Path.Combine(Path.GetTempPath(), Path.GetRandomFileName()));
+
+                                // Randomise all strings in the MSTs
+                                Strings.RandomiseMSTContents(randomArchive, Languages, RNG);
+
+                                // Repack the archive
+                                Archives.CreateModARC(randomArchive, archive, modDirectory);
+                                break;
                         }
                     }
-
-                    // Repack the archive
-                    Archives.CreateModARC(randomArchive, archive, modDirectory);
                 }
 
                 // Unpack object.arc
@@ -333,12 +337,6 @@ namespace Sonic_06_Randomiser_Suite
                     Path.GetFileName(archive).ToLower() == "object.arc"       ||
                     Path.GetFileName(archive).ToLower() == "sprite.arc")
                 {
-                    // Unpack the archive
-                    string randomArchive = Archives.UnpackARC(archive, Path.Combine(Path.GetTempPath(), Path.GetRandomFileName()));
-
-                    // Process textures
-                    Textures.RandomiseTextures(randomArchive, RNG);
-
                     // Modify based on user choice
                     foreach (int item in CheckedListBox_Textures_General.CheckedIndices)
                     {
@@ -347,12 +345,17 @@ namespace Sonic_06_Randomiser_Suite
                             case 0 when Areas.Contains(Path.GetFileNameWithoutExtension(archive)):
                             case 1 when Path.GetFileName(archive).ToLower() == "object.arc":
                             case 2 when Path.GetFileName(archive).ToLower() == "sprite.arc":
-                                Textures.RandomiseTextures(randomArchive, RNG); break;
+                                // Unpack the archive
+                                string randomArchive = Archives.UnpackARC(archive, Path.Combine(Path.GetTempPath(), Path.GetRandomFileName()));
+
+                                // Randomise all textures in the archive
+                                Textures.RandomiseTextures(randomArchive, RNG);
+
+                                // Repack the archive
+                                Archives.CreateModARC(randomArchive, archive, modDirectory);
+                                break;
                         }
                     }
-
-                    // Repack the archive
-                    Archives.CreateModARC(randomArchive, archive, modDirectory);
                 }
 
                 // Unpack sound.arc
