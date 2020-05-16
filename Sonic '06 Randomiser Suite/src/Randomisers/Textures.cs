@@ -7,6 +7,9 @@ namespace Sonic_06_Randomiser_Suite
 {
     class Textures
     {
+        /// <summary>
+        /// Randomises all textures in a directory
+        /// </summary>
         public static void RandomiseTextures(string folderPath, Random rng) {
             List<string> availableTextures = new List<string>();
             List<int> usedNumbers = new List<int>();
@@ -20,7 +23,7 @@ namespace Sonic_06_Randomiser_Suite
 
             // Copy textures
             foreach (string ddsData in availableTextures) {
-                Console.WriteLine($"Source texture: {ddsData}");
+                Console.WriteLine($"Randomising Texture: {ddsData}");
 
                 index = rng.Next(availableTextures.Count);
                 if (usedNumbers.Contains(index)) {
@@ -29,7 +32,6 @@ namespace Sonic_06_Randomiser_Suite
                 }
                 usedNumbers.Add(index);
 
-                Console.WriteLine($"Target texture: {availableTextures[index]}");
                 File.Move(Paths.ReplaceFilename(ddsData, $"temp-{Path.GetFileName(ddsData)}"), availableTextures[index]);
             }
         }

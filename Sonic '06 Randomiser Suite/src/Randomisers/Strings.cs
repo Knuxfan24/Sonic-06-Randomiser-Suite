@@ -8,6 +8,9 @@ namespace Sonic_06_Randomiser_Suite
 {
     class Strings
     {
+        /// <summary>
+        /// Randomises all loading screen text
+        /// </summary>
         public static void RandomiseLoadingText(string[] editedLub, Random rng) {
             string[] msgActTitle          = Resources.ParseLineBreaks(Properties.Resources.msgActTitleEntries);
             string[] msgAudioroom         = Resources.ParseLineBreaks(Properties.Resources.msgAudioroomEntries);
@@ -169,6 +172,9 @@ namespace Sonic_06_Randomiser_Suite
             }
         }
     
+        /// <summary>
+        /// Randomises all strings in an MST
+        /// </summary>
         public static void RandomiseMSTContents(string folderPath, List<string> languages, Random rng) {
             List<string> availableText = new List<string>(),
                          usedMSTs = new List<string>();
@@ -189,7 +195,7 @@ namespace Sonic_06_Randomiser_Suite
 
             // Remake MSTs
             foreach (string mstData in usedMSTs) {
-                Console.WriteLine(mstData);
+                Console.WriteLine($"Randomising Text: {mstData}");
                 MST mst = new MST();
                 mst.Load(mstData);
 

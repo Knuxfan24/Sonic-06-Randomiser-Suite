@@ -16,7 +16,7 @@ namespace Sonic_06_Randomiser_Suite
         [STAThread]
 
         /// <summary>
-        /// The main entry point for the application.
+        /// Main entry point
         /// </summary>
         static void Main() {
             CultureInfo.DefaultThreadCurrentCulture = CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("en-US");

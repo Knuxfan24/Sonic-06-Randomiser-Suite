@@ -4,6 +4,9 @@ namespace Sonic_06_Randomiser_Suite
 {
     class Audio
     {
+        /// <summary>
+        /// Randomises all music in Lua scripts
+        /// </summary>
         public static void RandomiseMusic(string[] editedLub, Random rng) {
             int lineNum = 0;
 

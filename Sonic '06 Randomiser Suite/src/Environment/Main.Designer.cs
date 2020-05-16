@@ -45,6 +45,9 @@
             this.Button_Randomise = new System.Windows.Forms.Button();
             this.Button_About = new System.Windows.Forms.Button();
             this.Label_VersionNumber = new System.Windows.Forms.Label();
+            this.ProgressBar_Randomisation = new System.Windows.Forms.ProgressBar();
+            this.Panel_Inactive = new System.Windows.Forms.Panel();
+            this.ListBox_Logs = new System.Windows.Forms.ListBox();
             this.UnifyTabControl_Main = new Unify.TabControl.UnifyTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.UnifyTabControl_Placement = new Unify.TabControl.UnifyTabControl();
@@ -111,6 +114,7 @@
             this.panel11 = new System.Windows.Forms.Panel();
             this.CheckedListBox_Textures_Areas = new System.Windows.Forms.CheckedListBox();
             this.Button_Textures_Areas_SelectAll = new System.Windows.Forms.Button();
+            this.Panel_Inactive.SuspendLayout();
             this.UnifyTabControl_Main.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.UnifyTabControl_Placement.SuspendLayout();
@@ -321,7 +325,7 @@
             this.Button_Randomise.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Button_Randomise.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Button_Randomise.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.Button_Randomise.Location = new System.Drawing.Point(9, 561);
+            this.Button_Randomise.Location = new System.Drawing.Point(9, 562);
             this.Button_Randomise.Name = "Button_Randomise";
             this.Button_Randomise.Size = new System.Drawing.Size(868, 25);
             this.Button_Randomise.TabIndex = 48;
@@ -339,7 +343,7 @@
             this.Button_About.Font = new System.Drawing.Font("Segoe UI Semibold", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Button_About.ForeColor = System.Drawing.SystemColors.Control;
             this.Button_About.Image = global::Sonic_06_Randomiser_Suite.Properties.Resources.Information;
-            this.Button_About.Location = new System.Drawing.Point(883, 561);
+            this.Button_About.Location = new System.Drawing.Point(883, 562);
             this.Button_About.Name = "Button_About";
             this.Button_About.Size = new System.Drawing.Size(25, 25);
             this.Button_About.TabIndex = 180;
@@ -357,6 +361,44 @@
             this.Label_VersionNumber.TabIndex = 56;
             this.Label_VersionNumber.Text = "Version ###";
             this.Label_VersionNumber.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // ProgressBar_Randomisation
+            // 
+            this.ProgressBar_Randomisation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ProgressBar_Randomisation.Location = new System.Drawing.Point(9, 562);
+            this.ProgressBar_Randomisation.Name = "ProgressBar_Randomisation";
+            this.ProgressBar_Randomisation.Size = new System.Drawing.Size(868, 25);
+            this.ProgressBar_Randomisation.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.ProgressBar_Randomisation.TabIndex = 181;
+            this.ProgressBar_Randomisation.Visible = false;
+            // 
+            // Panel_Inactive
+            // 
+            this.Panel_Inactive.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Panel_Inactive.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.Panel_Inactive.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Panel_Inactive.Controls.Add(this.ListBox_Logs);
+            this.Panel_Inactive.Location = new System.Drawing.Point(-1, -1);
+            this.Panel_Inactive.Name = "Panel_Inactive";
+            this.Panel_Inactive.Size = new System.Drawing.Size(919, 555);
+            this.Panel_Inactive.TabIndex = 182;
+            this.Panel_Inactive.Visible = false;
+            // 
+            // ListBox_Logs
+            // 
+            this.ListBox_Logs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.ListBox_Logs.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.ListBox_Logs.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ListBox_Logs.ForeColor = System.Drawing.SystemColors.Control;
+            this.ListBox_Logs.FormattingEnabled = true;
+            this.ListBox_Logs.ItemHeight = 15;
+            this.ListBox_Logs.Location = new System.Drawing.Point(0, 0);
+            this.ListBox_Logs.Name = "ListBox_Logs";
+            this.ListBox_Logs.Size = new System.Drawing.Size(917, 553);
+            this.ListBox_Logs.TabIndex = 0;
             // 
             // UnifyTabControl_Main
             // 
@@ -452,7 +494,7 @@
             this.Button_Placement_General_DeselectAll.FlatAppearance.BorderSize = 0;
             this.Button_Placement_General_DeselectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Button_Placement_General_DeselectAll.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.Button_Placement_General_DeselectAll.Location = new System.Drawing.Point(668, 305);
+            this.Button_Placement_General_DeselectAll.Location = new System.Drawing.Point(668, 306);
             this.Button_Placement_General_DeselectAll.Name = "Button_Placement_General_DeselectAll";
             this.Button_Placement_General_DeselectAll.Size = new System.Drawing.Size(233, 23);
             this.Button_Placement_General_DeselectAll.TabIndex = 48;
@@ -500,7 +542,7 @@
             this.Button_Placement_General_SelectAll.FlatAppearance.BorderSize = 0;
             this.Button_Placement_General_SelectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Button_Placement_General_SelectAll.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.Button_Placement_General_SelectAll.Location = new System.Drawing.Point(2, 305);
+            this.Button_Placement_General_SelectAll.Location = new System.Drawing.Point(2, 306);
             this.Button_Placement_General_SelectAll.Name = "Button_Placement_General_SelectAll";
             this.Button_Placement_General_SelectAll.Size = new System.Drawing.Size(233, 23);
             this.Button_Placement_General_SelectAll.TabIndex = 47;
@@ -528,7 +570,7 @@
             this.Button_Placement_Enemies_DeselectAll.FlatAppearance.BorderSize = 0;
             this.Button_Placement_Enemies_DeselectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Button_Placement_Enemies_DeselectAll.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.Button_Placement_Enemies_DeselectAll.Location = new System.Drawing.Point(668, 305);
+            this.Button_Placement_Enemies_DeselectAll.Location = new System.Drawing.Point(668, 306);
             this.Button_Placement_Enemies_DeselectAll.Name = "Button_Placement_Enemies_DeselectAll";
             this.Button_Placement_Enemies_DeselectAll.Size = new System.Drawing.Size(233, 23);
             this.Button_Placement_Enemies_DeselectAll.TabIndex = 48;
@@ -611,7 +653,7 @@
             this.Button_Placement_Enemies_SelectAll.FlatAppearance.BorderSize = 0;
             this.Button_Placement_Enemies_SelectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Button_Placement_Enemies_SelectAll.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.Button_Placement_Enemies_SelectAll.Location = new System.Drawing.Point(2, 305);
+            this.Button_Placement_Enemies_SelectAll.Location = new System.Drawing.Point(2, 306);
             this.Button_Placement_Enemies_SelectAll.Name = "Button_Placement_Enemies_SelectAll";
             this.Button_Placement_Enemies_SelectAll.Size = new System.Drawing.Size(233, 23);
             this.Button_Placement_Enemies_SelectAll.TabIndex = 47;
@@ -638,7 +680,7 @@
             this.Button_Placement_Characters_DeselectAll.FlatAppearance.BorderSize = 0;
             this.Button_Placement_Characters_DeselectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Button_Placement_Characters_DeselectAll.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.Button_Placement_Characters_DeselectAll.Location = new System.Drawing.Point(668, 305);
+            this.Button_Placement_Characters_DeselectAll.Location = new System.Drawing.Point(668, 306);
             this.Button_Placement_Characters_DeselectAll.Name = "Button_Placement_Characters_DeselectAll";
             this.Button_Placement_Characters_DeselectAll.Size = new System.Drawing.Size(233, 23);
             this.Button_Placement_Characters_DeselectAll.TabIndex = 48;
@@ -693,7 +735,7 @@
             this.Button_Placement_Characters_SelectAll.FlatAppearance.BorderSize = 0;
             this.Button_Placement_Characters_SelectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Button_Placement_Characters_SelectAll.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.Button_Placement_Characters_SelectAll.Location = new System.Drawing.Point(2, 305);
+            this.Button_Placement_Characters_SelectAll.Location = new System.Drawing.Point(2, 306);
             this.Button_Placement_Characters_SelectAll.Name = "Button_Placement_Characters_SelectAll";
             this.Button_Placement_Characters_SelectAll.Size = new System.Drawing.Size(233, 23);
             this.Button_Placement_Characters_SelectAll.TabIndex = 47;
@@ -720,7 +762,7 @@
             this.Button_Placement_Items_DeselectAll.FlatAppearance.BorderSize = 0;
             this.Button_Placement_Items_DeselectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Button_Placement_Items_DeselectAll.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.Button_Placement_Items_DeselectAll.Location = new System.Drawing.Point(668, 305);
+            this.Button_Placement_Items_DeselectAll.Location = new System.Drawing.Point(668, 306);
             this.Button_Placement_Items_DeselectAll.Name = "Button_Placement_Items_DeselectAll";
             this.Button_Placement_Items_DeselectAll.Size = new System.Drawing.Size(233, 23);
             this.Button_Placement_Items_DeselectAll.TabIndex = 48;
@@ -770,7 +812,7 @@
             this.Button_Placement_Items_SelectAll.FlatAppearance.BorderSize = 0;
             this.Button_Placement_Items_SelectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Button_Placement_Items_SelectAll.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.Button_Placement_Items_SelectAll.Location = new System.Drawing.Point(2, 305);
+            this.Button_Placement_Items_SelectAll.Location = new System.Drawing.Point(2, 306);
             this.Button_Placement_Items_SelectAll.Name = "Button_Placement_Items_SelectAll";
             this.Button_Placement_Items_SelectAll.Size = new System.Drawing.Size(233, 23);
             this.Button_Placement_Items_SelectAll.TabIndex = 47;
@@ -1532,6 +1574,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
             this.ClientSize = new System.Drawing.Size(917, 595);
+            this.Controls.Add(this.ProgressBar_Randomisation);
             this.Controls.Add(this.Label_VersionNumber);
             this.Controls.Add(this.Button_About);
             this.Controls.Add(this.Button_Randomise);
@@ -1549,6 +1592,7 @@
             this.Controls.Add(this.Label_RandomisationSeed);
             this.Controls.Add(this.Label_Description_RandomisationSeed);
             this.Controls.Add(this.UnifyTabControl_Main);
+            this.Controls.Add(this.Panel_Inactive);
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -1556,6 +1600,8 @@
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Sonic \'06 Randomiser Suite";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
+            this.Panel_Inactive.ResumeLayout(false);
             this.UnifyTabControl_Main.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.UnifyTabControl_Placement.ResumeLayout(false);
@@ -1678,6 +1724,9 @@
         private System.Windows.Forms.Panel panel11;
         private System.Windows.Forms.CheckedListBox CheckedListBox_Textures_Areas;
         private System.Windows.Forms.Button Button_Textures_Areas_SelectAll;
+        private System.Windows.Forms.ProgressBar ProgressBar_Randomisation;
+        private System.Windows.Forms.Panel Panel_Inactive;
+        private System.Windows.Forms.ListBox ListBox_Logs;
     }
 }
 

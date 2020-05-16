@@ -1,8 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using ArcPackerLib;
 using System.Diagnostics;
-using Sonic_06_Randomiser_Suite.Serialisers;
-using System;
 
 namespace Sonic_06_Randomiser_Suite
 {
@@ -12,7 +11,7 @@ namespace Sonic_06_Randomiser_Suite
         /// Extracts an archive to a temporary location.
         /// </summary>
         public static string UnpackARC(string arc, string tempPath) {
-            Console.WriteLine(arc);
+            Console.WriteLine($"Unpacking Archive: {arc}");
             Directory.CreateDirectory(tempPath); // Create temporary location
             File.Copy(arc, Path.Combine(tempPath, Path.GetFileName(arc))); // Copy archive to temporary location
 
@@ -35,7 +34,7 @@ namespace Sonic_06_Randomiser_Suite
         /// Repacks an archive from a temporary location.
         /// </summary>
         public static void RepackARC(string arc, string output) {
-            Console.WriteLine(arc);
+            Console.WriteLine($"Repacking Archive: {output}");
             ArcPacker repack = new ArcPacker();
             repack.WriteArc(output, Path.Combine(arc, Path.GetFileNameWithoutExtension(output)));
 
@@ -50,6 +49,9 @@ namespace Sonic_06_Randomiser_Suite
             } catch { }
         }
 
+        /// <summary>
+        /// Creates an archive for the randomiser
+        /// </summary>
         public static void CreateModARC(string srcArchive, string origArchive, string modDirectory) {
             if (Directory.Exists(modDirectory)) {
                 // Absolute file path (xenon/ps3/win32 and beyond)

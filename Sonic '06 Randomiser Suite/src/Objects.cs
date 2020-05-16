@@ -5,6 +5,9 @@ namespace Sonic_06_Randomiser_Suite
 {
     class Objects
     {
+        /// <summary>
+        /// Creates a jumppanel object with the specified parameters
+        /// </summary>
         public static SetObject jumppanel(Vector3 position, Quaternion rotation, float pitch, float velocity, float time, uint target, uint objectID) {
             SetObject jumppanel = new SetObject() {
                 ObjectType = "jumppanel",
@@ -25,6 +28,9 @@ namespace Sonic_06_Randomiser_Suite
             return jumppanel;
         }
 
+        /// <summary>
+        /// Creates a spring object with the specified parameters
+        /// </summary>
         public static SetObject spring(Vector3 position, Quaternion rotation, float velocity, float time, uint target, int globalflag, uint objectID, bool town) {
             SetObject spring = new SetObject() {
                 ObjectType = "spring",
@@ -48,6 +54,9 @@ namespace Sonic_06_Randomiser_Suite
             return spring;
         }
 
+        /// <summary>
+        /// Creates a pointsample object with the specified parameters
+        /// </summary>
         public static SetObject pointsample(Vector3 position, Quaternion rotation, int content, uint objectID) {
             SetObject pointsample = new SetObject() {
                 ObjectType = "pointsample",

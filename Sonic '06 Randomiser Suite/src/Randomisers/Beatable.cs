@@ -6,12 +6,15 @@ namespace Sonic_06_Randomiser_Suite
 {
     class Beatable
     {
+        /// <summary>
+        /// Determines if the stage needs modifying
+        /// </summary>
         public static void DetermineStage(string setPath, S06SetData set)
         {
             switch(Path.GetFileNameWithoutExtension(setPath))
             {
                 case "set_mission_0001_01": set_mission_0001_01(set); break; // Before Sonic's Wave Ocean
-                case "set_wvoA_sonic": set_wvoA_sonic(set); break; //Wave Ocean A (Sonic)
+                case "set_wvoA_sonic": set_wvoA_sonic(set);           break; // Wave Ocean A (Sonic)
             }
         }
 

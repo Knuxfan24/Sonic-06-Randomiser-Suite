@@ -1548,5 +1548,15 @@ namespace Sonic_06_Randomiser_Suite.Properties {
                 return ((byte[])(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] voice_all_e {
+            get {
+                object obj = ResourceManager.GetObject("voice_all_e", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

@@ -5,6 +5,7 @@ using HedgeLib.Sets;
 using Unify.Messenger;
 using Unify.TabControl;
 using System.Windows.Forms;
+using System.ComponentModel;
 using System.Collections.Generic;
 using Sonic_06_Randomiser_Suite.Serialisers;
 
@@ -12,47 +13,97 @@ namespace Sonic_06_Randomiser_Suite
 {
     public partial class Main : Form
     {
-        public static Random rng = new Random();
+        public static bool Randomising = false;
+        public static Random RNG = new Random();
         public static List<int> Items = new List<int>();
-        public static List<string> Enemies = new List<string>(),
+        public static List<string> Enemies    = new List<string>(),
                                    Characters = new List<string>(),
-                                   Music = new List<string>(),
-                                   Languages = new List<string>(),
-                                   Areas = new List<string>();
+                                   Music      = new List<string>(),
+                                   Languages  = new List<string>(),
+                                   Areas      = new List<string>();
 
+        /// <summary>
+        /// WinForms entry point
+        /// </summary>
         public Main() {
+            // Initialise form for the designer
             InitializeComponent();
 
+            // Show version number
+            Text = $"{Text} ({Program.GlobalVersionNumber})";
             Label_VersionNumber.Text = Program.GlobalVersionNumber;
+
+            // Set console output to ListBox_Logs
+            Console.SetOut(new ListBoxWriter(ListBox_Logs));
+            
+            // Subscribe to simplify saving and loading settings
             Properties.Settings.Default.SettingsSaving += Default_SettingsSaving;
             LoadSettings();
 
-            // Set sonic_new to true
-            CheckedListBox_Placement_Characters.SetItemChecked(0, true);
-
-            // Set default language to English
-            CheckedListBox_Text_Languages.SetItemChecked(0, true);
-
             // Set default randomisation states
             for (int i = 0; i < 32; i++) CheckedListBox_Placement_Enemies.SetItemChecked(i, true);
+            CheckedListBox_Placement_Characters.SetItemChecked(0, true);
             for (int i = 5; i < 13; i++) CheckedListBox_Placement_Characters.SetItemChecked(i, true);
             for (int i = 0; i < CheckedListBox_Placement_Items.Items.Count; i++) CheckedListBox_Placement_Items.SetItemChecked(i, true);
             for (int i = 0; i < CheckedListBox_Audio_Music.Items.Count; i++) CheckedListBox_Audio_Music.SetItemChecked(i, true);
+            CheckedListBox_Text_Languages.SetItemChecked(0, true);
             for (int i = 0; i < CheckedListBox_Textures_Areas.Items.Count; i++) CheckedListBox_Textures_Areas.SetItemChecked(i, true);
         }
 
+        /// <summary>
+        /// Loads the settings whenever the settings are saved
+        /// </summary>
         private void Default_SettingsSaving(object sender, System.ComponentModel.CancelEventArgs e) => LoadSettings();
 
+        /// <summary>
+        /// Applies loaded settings
+        /// </summary>
         private void LoadSettings() {
             TextBox_ModsDirectory.Text = Properties.Settings.Default.Path_ModsDirectory;
             TextBox_GameExecutable.Text = Properties.Settings.Default.Path_GameExecutable;
-            TextBox_RandomisationSeed.Text = rng.Next().ToString();
+            TextBox_RandomisationSeed.Text = RNG.Next().ToString();
         }
 
+        /// <summary>
+        /// Refreshes the software renderer for the custom TabControl
+        /// </summary>
         private void UnifyTabControl_Selected(object sender, TabControlEventArgs e) => ((UnifyTabControl)sender).Refresh();
 
+        /// <summary>
+        /// Runs the randomisation thread upon clicking
+        /// </summary>
         private void Button_Randomise_Click(object sender, EventArgs e) {
-            // Clears all lists.
+            // Reveals the panel (prevents it from overlapping everything in the designer)
+            Panel_Inactive.BringToFront();
+
+            // Reveal controls and enable Randomising to tell us if it's still working
+            Randomising = Panel_Inactive.Visible = ProgressBar_Randomisation.Visible = true;
+            BackgroundWorker bw = new BackgroundWorker() { WorkerReportsProgress = true };
+
+            // Subscribe to required events to keep the progress updated
+            bw.DoWork += new DoWorkEventHandler(StartRandomisation);
+            bw.ProgressChanged += (bwSender, bwEventArgs) => ProgressBar_Randomisation.Value = bwEventArgs.ProgressPercentage;
+
+            // Begin randomisation
+            bw.RunWorkerAsync();
+
+            // Restore controls when complete
+            bw.RunWorkerCompleted += (bwSender, bwEventArgs) => {
+                // Hide controls and disable Randomising since it's now done
+                Randomising = Panel_Inactive.Visible = ProgressBar_Randomisation.Visible = false;
+                UnifyMessenger.UnifyMessage.ShowDialog("Sonic '06 has been randomised... Have fun!", "Randomisation Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            };
+        }
+
+        /// <summary>
+        /// Randomises Sonic '06... duh.
+        /// </summary>
+        private void StartRandomisation(object sender, DoWorkEventArgs e) {
+            // Variables
+            string modDirectory = string.Empty; // Stored here to be initialised and checked later
+            List<string> getArchiveList = Paths.CollectGameData(Path.GetDirectoryName(Properties.Settings.Default.Path_GameExecutable)).ToList();
+
+            // Clear all lists
             Enemies.Clear();
             Characters.Clear();
             Items.Clear();
@@ -60,218 +111,38 @@ namespace Sonic_06_Randomiser_Suite
             Languages.Clear();
             Areas.Clear();
 
-            // Feeds seed to Random Number Generator.
-            rng = new Random(TextBox_RandomisationSeed.Text.GetHashCode());
+            // Creates a new seed from TextBox_RandomisationSeed
+            RNG = new Random(TextBox_RandomisationSeed.Text.GetHashCode());
 
-            // Create mod directory, also checking if it's beatable to enable a patch - if it's empty, return nothing.
-            string modDirectory = Mods.Create(TextBox_RandomisationSeed.Text, CheckedListBox_Placement_General.GetItemChecked(5));
-            if (modDirectory == string.Empty) return;
+            // Create mod directory, also checking if it's beatable to enable a patch - if it's empty, return nothing
+            if ((modDirectory = Mods.Create(TextBox_RandomisationSeed.Text, CheckedListBox_Placement_General.GetItemChecked(5))) == string.Empty) return;
 
-            // Setup various elements of the Randomisation process
-            // Create the Valid Enemy list from CheckedListBox_Placement_Enemies 
-            foreach (int item in CheckedListBox_Placement_Enemies.CheckedIndices)
+            // Define valid lists from CheckedListBox elements 
+            Enemies    = Resources.EnumerateEnemiesList(CheckedListBox_Placement_Enemies);
+            Characters = Resources.EnumerateCharactersList(CheckedListBox_Placement_Characters);
+            Items      = Resources.EnumerateItemsList(CheckedListBox_Placement_Items);
+            Music      = Resources.EnumerateMusicList(CheckedListBox_Audio_Music);
+            Languages  = Resources.EnumerateLanguagesList(CheckedListBox_Text_Languages);
+            Areas      = Resources.EnumerateAreasList(CheckedListBox_Textures_Areas);
+
+            // Sets up the progress bar values
+            int getProgress = getArchiveList.Count(),
+                arcNumber = 1;
+
+            // Iterate through all archives and modify based on user choice
+            foreach (string archive in getArchiveList)
             {
-                switch (item)
-                {
-                    // Enemies
-                    case 0:  Enemies.Add("cBiter");        break;
-                    case 1:  Enemies.Add("cGolem");        break;
-                    case 2:  Enemies.Add("cTaker");        break;
-                    case 3:  Enemies.Add("cCrawler");      break;
-                    case 4:  Enemies.Add("cGazer");        break;
-                    case 5:  Enemies.Add("cStalker");      break;
-                    case 6:  Enemies.Add("cTitan");        break;
-                    case 7:  Enemies.Add("cTricker");      break;
-                    case 8:  Enemies.Add("eArmor");        break;
-                    case 9:  Enemies.Add("eBluster");      break;
-                    case 10: Enemies.Add("eBuster");       break;
-                    case 11: Enemies.Add("eBuster(Fly)");  break;
-                    case 12: Enemies.Add("eBomber");       break;
-                    case 13: Enemies.Add("eCannon");       break;
-                    case 14: Enemies.Add("eCannon(Fly)");  break;
-                    case 15: Enemies.Add("eChaser");       break;
-                    case 16: Enemies.Add("eCommander");    break;
-                    case 17: Enemies.Add("eFlyer");        break;
-                    case 18: Enemies.Add("eGuardian");     break;
-                    case 19: Enemies.Add("eGunner");       break;
-                    case 20: Enemies.Add("eGunner(Fly)");  break;
-                    case 21: Enemies.Add("eHunter");       break;
-                    case 22: Enemies.Add("eKeeper");       break;
-                    case 23: Enemies.Add("eLancer");       break;
-                    case 24: Enemies.Add("eLancer(Fly)");  break;
-                    case 25: Enemies.Add("eLiner");        break;
-                    case 26: Enemies.Add("eRounder");      break;
-                    case 27: Enemies.Add("eSearcher");     break;
-                    case 28: Enemies.Add("eStinger");      break;
-                    case 29: Enemies.Add("eStinger(Fly)"); break;
-                    case 30: Enemies.Add("eSweeper");      break;
-                    case 31: Enemies.Add("eWalker");       break;
+                // Increment progress bar per archive
+                ((BackgroundWorker)sender).ReportProgress(100 / getProgress * arcNumber); arcNumber++;
 
-                    // Bosses
-                    case 32: Enemies.Add("eCerberus");     break;
-                    case 33: Enemies.Add("eGenesis");      break;
-                    case 34: Enemies.Add("eWyvern");       break;
-                    case 35: Enemies.Add("firstIblis");    break;
-                    case 36: Enemies.Add("secondIblis");   break;
-                    case 37: Enemies.Add("thirdIblis");    break;
-                    case 38: Enemies.Add("firstmefiress"); break;
-                    case 39: Enemies.Add("solaris01");     break;
-                    case 40: Enemies.Add("solaris02");     break;
-                }
-            }
-
-            // Create the Valid Character list from CheckedListBox_Placement_Characters
-            foreach (int item in CheckedListBox_Placement_Characters.CheckedIndices)
-            {
-                switch (item)
-                {
-                    case 0:  Characters.Add("sonic_new");      break;
-                    case 1:  Characters.Add("sonic_fast");     break;
-                    case 2:  Characters.Add("princess");       break;
-                    case 3:  Characters.Add("snow_board_wap"); break;
-                    case 4:  Characters.Add("snow_board");     break;
-                    case 5:  Characters.Add("shadow");         break;
-                    case 6:  Characters.Add("silver");         break;
-                    case 7:  Characters.Add("tails");          break;
-                    case 8:  Characters.Add("knuckles");       break;
-                    case 9:  Characters.Add("rouge");          break;
-                    case 10: Characters.Add("omega");          break;
-                    case 11: Characters.Add("blaze");          break;
-                    case 12: Characters.Add("amy");            break;
-                }
-            }
-
-            // Create the valid Items list from CheckedListBox_Placement_Items
-            foreach (int item in CheckedListBox_Placement_Items.CheckedIndices) Items.Add(item + 1);
-
-            // Create the Valid Music list from CheckedListBox_Audio_Music
-            foreach (int item in CheckedListBox_Audio_Music.CheckedIndices)
-            {
-                switch (item)
-                {
-                    // Stages
-                    case 0:  Music.Add("stg_wvo_a");           break;
-                    case 1:  Music.Add("stg_wvo_b");           break;
-                    case 2:  Music.Add("stg_dtd_a");           break;
-                    case 3:  Music.Add("stg_dtd_b");           break;
-                    case 4:  Music.Add("stg_wap_a");           break;
-                    case 5:  Music.Add("stg_wap_b");           break;
-                    case 6:  Music.Add("stg_csc_a");           break;
-                    case 7:  Music.Add("stg_csc_b");           break;
-                    case 8:  Music.Add("stage_csc_e");         break;
-                    case 9:  Music.Add("stg_csc_f");           break;
-                    case 10: Music.Add("stg_flc_a");           break;
-                    case 11: Music.Add("stg_flc_b");           break;
-                    case 12: Music.Add("stg_rct_a");           break;
-                    case 13: Music.Add("stg_rct_b");           break;
-                    case 14: Music.Add("stg_tpj_a");           break;
-                    case 15: Music.Add("stg_tpj_b");           break;
-                    case 16: Music.Add("stg_tpj_c");           break;
-                    case 17: Music.Add("stg_kdv_a");           break;
-                    case 18: Music.Add("stg_kdv_b");           break;
-                    case 19: Music.Add("stg_kdv_c");           break;
-                    case 20: Music.Add("stg_kdv_d");           break;
-                    case 21: Music.Add("stg_aqa_a");           break;
-                    case 22: Music.Add("stg_aqa_b");           break;
-                    case 23: Music.Add("stg_end_a");           break;
-                    case 24: Music.Add("stg_end_b");           break;
-                    case 25: Music.Add("stg_end_c");           break;
-                    case 26: Music.Add("stg_end_d");           break;
-                    case 27: Music.Add("stg_end_e");           break;
-                    case 28: Music.Add("stg_end_f");           break;
-                    case 29: Music.Add("stg_end_g");           break;
-
-                    // Bosses
-                    case 30: Music.Add("boss_iblis01");        break;
-                    case 31: Music.Add("boss_iblis03");        break;
-                    case 32: Music.Add("boss_mefiless01");     break;
-                    case 33: Music.Add("boss_mefiless02");     break;
-                    case 34: Music.Add("boss_character");      break;
-                    case 35: Music.Add("boss_cerberus");       break;
-                    case 36: Music.Add("boss_wyvern");         break;
-                    case 37: Music.Add("boss_solaris1");       break;
-                    case 38: Music.Add("boss_solaris2");       break;
-
-                    // Town
-                    case 39: Music.Add("stg_twn_a");           break;
-                    case 40: Music.Add("stg_twn_b");           break;
-                    case 41: Music.Add("stg_twn_c");           break;
-                    case 42: Music.Add("stg_twn_shop");        break;
-                    case 43: Music.Add("twn_mission_slow");    break;
-                    case 44: Music.Add("twn_mission_comical"); break;
-                    case 45: Music.Add("twn_mission_fast");    break;
-                    case 46: Music.Add("twn_accordion");       break;
-                    
-                    // Miscellaneous
-                    case 47: Music.Add("result");              break;
-                    case 48: Music.Add("mainmenu");            break;
-                    case 49: Music.Add("select");              break;
-                    case 50: Music.Add("extra");               break;
-                }
-            }
-
-            // Create the Valid Area list from CheckedListBox_Textures_Areas
-            foreach (int item in CheckedListBox_Textures_Areas.CheckedIndices)
-            {
-                switch (item)
-                {
-                    // Stages
-                    case 0:  Areas.Add("stage_wvo_a"); break;
-                    case 1:  Areas.Add("stage_wvo_b"); break;
-                    case 2:  Areas.Add("stage_dtd_a"); break;
-                    case 3:  Areas.Add("stage_dtd_b"); break;
-                    case 4:  Areas.Add("stage_wap_a"); break;
-                    case 5:  Areas.Add("stage_wap_b"); break;
-                    case 6:  Areas.Add("stage_csc_a"); break;
-                    case 7:  Areas.Add("stage_csc_b"); break;
-                    case 8:  Areas.Add("stage_csc_e"); break;
-                    case 9:  Areas.Add("stage_csc_f"); break;
-                    case 10: Areas.Add("stage_flc_a"); break;
-                    case 11: Areas.Add("stage_flc_b"); break;
-                    case 12: Areas.Add("stage_rct_a"); break;
-                    case 13: Areas.Add("stage_rct_b"); break;
-                    case 14: Areas.Add("stage_tpj_a"); break;
-                    case 15: Areas.Add("stage_tpj_b"); break;
-                    case 16: Areas.Add("stage_tpj_c"); break;
-                    case 17: Areas.Add("stage_kdv_a"); break;
-                    case 18: Areas.Add("stage_kdv_b"); break;
-                    case 19: Areas.Add("stage_kdv_c"); break;
-                    case 20: Areas.Add("stage_kdv_d"); break;
-                    case 21: Areas.Add("stage_aqa_a"); break;
-                    case 22: Areas.Add("stage_aqa_b"); break;
-
-                    // Bosses
-                    case 23: Areas.Add("stage_csc_iblis01"); break;
-                    case 24: Areas.Add("stage_boss_iblis02"); break;
-                    case 25: Areas.Add("stage_boss_iblis03"); break;
-                    case 26: Areas.Add("stage_boss_mefi01"); break;
-                    case 27: Areas.Add("stage_boss_mefi02"); break;
-                    case 28: Areas.Add("stage_boss_rct"); break;
-                    case 29: Areas.Add("stage_boss_dr1_dtd"); break;
-                    case 30: Areas.Add("stage_boss_dr1_wap"); break;
-                    case 31: Areas.Add("stage_boss_dr2"); break;
-                    case 32: Areas.Add("stage_boss_dr3"); break;
-                    case 33: Areas.Add("stage_boss_solaris"); break;
-
-                    // Town
-                    case 34: Areas.Add("stage_twn_a"); break;
-                    case 35: Areas.Add("stage_twn_b"); break;
-                    case 36: Areas.Add("stage_twn_c"); break;
-                    case 37: Areas.Add("stage_twn_d"); break;
-                }
-            }
-
-            // Unpack ARCs in preperation for randomisation
-            foreach (string archive in Directory.GetFiles(Path.GetDirectoryName(Properties.Settings.Default.Path_GameExecutable), "*.arc", SearchOption.AllDirectories))
-            {
-                Console.WriteLine($"Looking at: {Path.GetFileName(archive).ToLower()}");
-
-                // Miscellaneous Game Data
+                // Unpacked scripts.arc
+                // Randomises a lot of stuff...
                 if (Path.GetFileName(archive).ToLower() == "scripts.arc")
                 {
+                    // If all important CheckedListBox elements for this archive are empty, continue to the next archive
                     if (CheckedListBox_Placement_General.CheckedIndices.Count == 0 &&
-                        CheckedListBox_Scene_General.CheckedIndices.Count == 0     &&
-                        CheckedListBox_Audio_General.CheckedIndices.Count == 0) continue;
+                        CheckedListBox_Scene_General.CheckedIndices.Count     == 0 &&
+                        CheckedListBox_Audio_General.CheckedIndices.Count     == 0) continue;
 
                     // Unpack the archive
                     string randomArchive = Archives.UnpackARC(archive, Path.Combine(Path.GetTempPath(), Path.GetRandomFileName()));
@@ -279,52 +150,84 @@ namespace Sonic_06_Randomiser_Suite
                     // Placement Randomisation
                     if (CheckedListBox_Placement_General.CheckedIndices.Count != 0)
                     {
+                        // Iterate through all SET files
                         foreach (string setData in Directory.GetFiles(randomArchive, "*.set", SearchOption.AllDirectories))
-                        {                            
-                            Console.WriteLine(setData);
+                        {
+                            // Write to logs for user feedback
+                            Console.WriteLine($"Randomising Placement: {setData}");
+
+                            // Loads the SET data for modification
                             S06SetData set = new S06SetData();
                             set.Load(setData);
 
+                            // Modify based on user choice
                             foreach (int item in CheckedListBox_Placement_General.CheckedIndices)
                             {
                                 switch (item)
                                 {
-                                    case 0: Placement.RandomiseEnemies(set, rng); break;
-                                    case 1: Placement.RandomiseCharacters(set, rng); break;
-                                    case 2: Placement.RandomiseItems(set, rng); break;
-                                    case 3: Placement.RandomiseVoices(set, rng); break;
-                                    case 4: Placement.RandomisePhysicsProps(set, rng); break;
-                                    case 5: Beatable.DetermineStage(setData, set); break;
+                                    case 0: Placement.RandomiseEnemies(set, RNG);      break;
+                                    case 1: Placement.RandomiseCharacters(set, RNG);   break;
+                                    case 2: Placement.RandomiseItems(set, RNG);        break;
+                                    case 3: Placement.RandomiseVoices(set, RNG);       break;
+                                    case 4: Placement.RandomisePhysicsProps(set, RNG); break;
+                                    case 5: Beatable.DetermineStage(setData, set);     break;
                                 }
                             }
 
+                            // Saves the modified SET data
                             set.Save(setData, true);
                         }
+                    }
+
+                    // Iterate through all Lua scripts and remove parameters from enemies that may be problematic for the player
+                    foreach (string enemy in Directory.GetFiles(
+                                             Path.Combine(randomArchive, $"scripts\\{Literal.Core(Properties.Settings.Default.Path_GameExecutable)}\\scripts\\enemy\\"),
+                                             "*.lub", SearchOption.TopDirectoryOnly))
+                    {
+                        // Blacklisted parameters
+                        List<string> blacklistParams = new List<string>() { "callsetcamera", "firstmefiress_warp", "firstmefiress_randomwarp" };
+
+                        // Write to logs for user feedback
+                        Console.WriteLine($"Patching Enemy: {enemy}");
+
+                        // Decompile Lua script
+                        Lua.Decompile(enemy);
+
+                        // Write Lua script back without blacklisted parameters
+                        File.WriteAllLines(enemy, File.ReadLines(enemy).Where(x => blacklistParams.Any(x.ToLower().Contains)).ToList());
                     }
 
                     // Scene Randomisation
                     if (CheckedListBox_Scene_General.CheckedIndices.Count != 0)
                     {
+                        // Iterate through all Lua scripts for scene parameters
                         foreach (string lubData in Directory.GetFiles(randomArchive, "scene*.lub", SearchOption.AllDirectories))
                         {
-                            Console.WriteLine(lubData);
+                            // Write to logs for user feedback
+                            Console.WriteLine($"Randomising Scene: {lubData}");
+
+                            // Decompile Lua script
                             Lua.Decompile(lubData);
+
+                            // Loads the Lua script into memory
                             string[] editedLub = File.ReadAllLines(lubData);
 
+                            // Modify based on user choice
                             foreach (int item in CheckedListBox_Scene_General.CheckedIndices)
                             {
                                 switch (item)
                                 {
-                                    case 0: Scene.RandomiseLight(editedLub, "Ambient", rng); break;
-                                    case 1: Scene.RandomiseLight(editedLub, "Main", rng); break;
-                                    case 2: Scene.RandomiseLight(editedLub, "Sub", rng); break;
-                                    case 3: Scene.RandomiseLightDirection(editedLub, rng); break;
-                                    case 4: Scene.RandomiseFogColour(editedLub, rng); break;
-                                    case 5: Scene.RandomiseFogDensity(editedLub, rng); break;
-                                    case 6: Scene.RandomiseEnvironmentMaps(editedLub, rng); break;
+                                    case 0: Scene.RandomiseLight(editedLub, "Ambient", RNG); break;
+                                    case 1: Scene.RandomiseLight(editedLub, "Main", RNG);    break;
+                                    case 2: Scene.RandomiseLight(editedLub, "Sub", RNG);     break;
+                                    case 3: Scene.RandomiseLightDirection(editedLub, RNG);   break;
+                                    case 4: Scene.RandomiseFogColour(editedLub, RNG);        break;
+                                    case 5: Scene.RandomiseFogDensity(editedLub, RNG);       break;
+                                    case 6: Scene.RandomiseEnvironmentMaps(editedLub, RNG);  break;
                                 }
                             }
 
+                            // Writes the modified Lua script
                             File.WriteAllLines(lubData, editedLub);
                         }
                     }
@@ -332,46 +235,64 @@ namespace Sonic_06_Randomiser_Suite
                     // Randomise Music
                     if (CheckedListBox_Audio_General.CheckedIndices.Count != 0)
                     {
-                        foreach (string lubData in Directory.GetFiles(randomArchive, "*.lub", SearchOption.AllDirectories)
-                                .Where(x => Path.GetFileName(x).StartsWith("a_")  || Path.GetFileName(x).StartsWith("b_")  || Path.GetFileName(x).StartsWith("c_") ||
-                                            Path.GetFileName(x).StartsWith("d_")  || Path.GetFileName(x).StartsWith("e_")  || Path.GetFileName(x).StartsWith("f_") ||
-                                            Path.GetFileName(x).StartsWith("f1_") || Path.GetFileName(x).StartsWith("f2_") || Path.GetFileName(x).StartsWith("g_")))
-                        {
-                            if (Music.Count == 0) continue;
+                        // If the Music list enumerated nothing, continue to the next statement
+                        if (Music.Count == 0) continue;
 
-                            Console.WriteLine(lubData);
+                        // Whitelisted scripts
+                        List<string> whitelistScripts = new List<string>() { "a_", "b_", "c_", "d_", "e_", "f_", "f1_", "f2_", "g_" };
+
+                        // Iterate through all Lua scripts for stage construction
+                        foreach (string lubData in Directory.GetFiles(randomArchive, "*.lub", SearchOption.AllDirectories)
+                                                   .Where(x => whitelistScripts.Any(Path.GetFileName(x).StartsWith)))
+                        {
+                            // Write to logs for user feedback
+                            Console.WriteLine($"Randomising Audio: {lubData}");
+
+                            // Decompile Lua script
                             Lua.Decompile(lubData);
+
+                            // Loads the Lua script into memory
                             string[] editedLub = File.ReadAllLines(lubData);
 
+                            // Modify based on user choice
                             foreach (int item in CheckedListBox_Audio_General.CheckedIndices)
                             {
                                 switch (item)
                                 {
-                                    case 0: Audio.RandomiseMusic(editedLub, rng); break;
+                                    case 0: Audio.RandomiseMusic(editedLub, RNG); break;
                                 }
                             }
 
+                            // Writes the modified Lua script
                             File.WriteAllLines(lubData, editedLub);
                         }
                     }
 
                     // Randomise Loading Text
-                    if (CheckedListBox_Text_General.GetItemChecked(0))
+                    if (CheckedListBox_Text_General.CheckedIndices.Count != 0)
                     {
+                        // Iterate through all Lua scripts for missions
                         foreach (string lubData in Directory.GetFiles(randomArchive, "mission*.lub", SearchOption.AllDirectories))
                         {
-                            Console.WriteLine(lubData);
+                            // Write to logs for user feedback
+                            Console.WriteLine($"Randomising Text: {lubData}");
+
+                            // Decompile Lua script
                             Lua.Decompile(lubData);
+
+                            // Loads the Lua script into memory
                             string[] editedLub = File.ReadAllLines(lubData);
 
+                            // Modify based on user choice
                             foreach (int item in CheckedListBox_Text_General.CheckedIndices)
                             {
                                 switch (item)
                                 {
-                                    case 0: Strings.RandomiseLoadingText(editedLub, rng); break;
+                                    case 0: Strings.RandomiseLoadingText(editedLub, RNG); break;
                                 }
                             }
 
+                            // Writes the modified Lua script
                             File.WriteAllLines(lubData, editedLub);
                         }
                     }
@@ -380,46 +301,70 @@ namespace Sonic_06_Randomiser_Suite
                     Archives.CreateModARC(randomArchive, archive, modDirectory);
                 }
 
-                // Text Data
-                else if ((Path.GetFileName(archive).ToLower() == "text.arc"   || // If the archive is 'text.arc'...
-                          Path.GetFileName(archive).ToLower() == "event.arc") && // If the archive is 'event.arc'...
-                          CheckedListBox_Text_General.GetItemChecked(1))         // The user wants to randomise its strings...
+                // Unpack text.arc
+                // Unpack event.arc
+                // Randomises all text strings in the MSTs
+                else if (Path.GetFileName(archive).ToLower() == "text.arc" || Path.GetFileName(archive).ToLower() == "event.arc")
                 {
-                    // Randomise All Strings
-                    foreach (int item in CheckedListBox_Text_Languages.CheckedIndices)
-                    {
-                        switch (item)
-                        {
-                            case 0: Languages.Add(".e"); break;
-                            case 1: Languages.Add(".f"); break;
-                            case 2: Languages.Add(".g"); break;
-                            case 3: Languages.Add(".i"); break;
-                            case 4: Languages.Add(".j"); break;
-                            case 5: Languages.Add(".s"); break;
-                        }
-                    }
+                    // If the Languages list enumerated nothing, continue to the next statement
                     if (Languages.Count == 0) continue;
 
                     // Unpack the archive
                     string randomArchive = Archives.UnpackARC(archive, Path.Combine(Path.GetTempPath(), Path.GetRandomFileName()));
 
-                    // Process MSTs
-                    Strings.RandomiseMSTContents(randomArchive, Languages, rng);
+                    // Modify based on user choice
+                    foreach (int item in CheckedListBox_Text_General.CheckedIndices)
+                    {
+                        switch (item)
+                        {
+                            case 1: Strings.RandomiseMSTContents(randomArchive, Languages, RNG); break;
+                        }
+                    }
 
                     // Repack the archive
                     Archives.CreateModARC(randomArchive, archive, modDirectory);
                 }
 
-                // Texture Randomisation
-                if ((Areas.Contains(Path.GetFileNameWithoutExtension(archive)) && CheckedListBox_Textures_General.GetItemChecked(0)) || // If an area is selected and the user wants to randomise its textures...
-                    (Path.GetFileName(archive).ToLower() == "object.arc"       && CheckedListBox_Textures_General.GetItemChecked(1)) || // If the archive is 'object.arc' and the user wants to randomise its textures...
-                    (Path.GetFileName(archive).ToLower() == "sprite.arc"       && CheckedListBox_Textures_General.GetItemChecked(2)))   // If the archive is 'sprite.arc' and the user wants to randomise its textures...
+                // Unpack object.arc
+                // Unpack sprite.arc
+                // Unpack stage archives
+                // Randomises all textures in the archives
+                if (Areas.Contains(Path.GetFileNameWithoutExtension(archive)) ||
+                    Path.GetFileName(archive).ToLower() == "object.arc"       ||
+                    Path.GetFileName(archive).ToLower() == "sprite.arc")
                 {
                     // Unpack the archive
                     string randomArchive = Archives.UnpackARC(archive, Path.Combine(Path.GetTempPath(), Path.GetRandomFileName()));
 
                     // Process textures
-                    Textures.RandomiseTextures(randomArchive, rng);
+                    Textures.RandomiseTextures(randomArchive, RNG);
+
+                    // Modify based on user choice
+                    foreach (int item in CheckedListBox_Textures_General.CheckedIndices)
+                    {
+                        switch (item)
+                        {
+                            case 0 when Areas.Contains(Path.GetFileNameWithoutExtension(archive)):
+                            case 1 when Path.GetFileName(archive).ToLower() == "object.arc":
+                            case 2 when Path.GetFileName(archive).ToLower() == "sprite.arc":
+                                Textures.RandomiseTextures(randomArchive, RNG); break;
+                        }
+                    }
+
+                    // Repack the archive
+                    Archives.CreateModARC(randomArchive, archive, modDirectory);
+                }
+
+                // Unpack sound.arc
+                // Replaces the common scene bank with one that contains all voice lines
+                if (Path.GetFileName(archive).ToLower() == "sound.arc") {
+                    // Unpack the archive
+                    string randomArchive = Archives.UnpackARC(archive, Path.Combine(Path.GetTempPath(), Path.GetRandomFileName()));
+
+                    // Write custom SBK
+                    File.WriteAllBytes(
+                    Path.Combine(randomArchive, $"sound\\{Literal.Core(Properties.Settings.Default.Path_GameExecutable)}\\sound\\voice_all_e.sbk"),
+                    Properties.Resources.voice_all_e);
 
                     // Repack the archive
                     Archives.CreateModARC(randomArchive, archive, modDirectory);
@@ -427,33 +372,60 @@ namespace Sonic_06_Randomiser_Suite
             }
         }
 
+        /// <summary>
+        /// Displays the about window upon clicking
+        /// </summary>
         private void Button_About_Click(object sender, EventArgs e) {
             UnifyMessenger.UnifyMessage.ShowDialog("Sonic '06 Randomiser Suite\n" +
                                                    $"{Program.GlobalVersionNumber}\n\n" +
                                                    "" +
                                                    "Knuxfan24 - Lead programmer and reverse-engineer\n" +
-                                                   "HyperPolygon64 - UI stuff and slaved away at code\n" +
+                                                   "HyperPolygon64 - Designer and code optimisation\n" +
+                                                   "Radfordhound - HedgeLib\n" +
+                                                   "GerbilSoft - ArcPackerLib\n" +
+                                                   "Shadow LAG - Lua Decompiler\n" +
                                                    "darkhero1337 - Unlock Mid-air Momentum",
                                                    "About", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void Button_RandomisationSeed_Click(object sender, EventArgs e) => TextBox_RandomisationSeed.Text = rng.Next().ToString();
-
-        private void Button_SelectAll_Click(object sender, EventArgs e) {
-            if (sender == Button_Placement_General_SelectAll)         for (int i = 0; i < CheckedListBox_Placement_General.Items.Count; i++)    CheckedListBox_Placement_General.SetItemChecked(i, true);
-            else if (sender == Button_Placement_Enemies_SelectAll)    for (int i = 0; i < CheckedListBox_Placement_Enemies.Items.Count; i++)    CheckedListBox_Placement_Enemies.SetItemChecked(i, true);
-            else if (sender == Button_Placement_Characters_SelectAll) for (int i = 0; i < CheckedListBox_Placement_Characters.Items.Count; i++) CheckedListBox_Placement_Characters.SetItemChecked(i, true);
-            else if (sender == Button_Placement_Items_SelectAll)      for (int i = 0; i < CheckedListBox_Placement_Items.Items.Count; i++)      CheckedListBox_Placement_Items.SetItemChecked(i, true);
-            else if (sender == Button_Scene_General_SelectAll)        for (int i = 0; i < CheckedListBox_Scene_General.Items.Count; i++)        CheckedListBox_Scene_General.SetItemChecked(i, true);
-            else if (sender == Button_Audio_General_SelectAll)        for (int i = 0; i < CheckedListBox_Audio_General.Items.Count; i++)        CheckedListBox_Audio_General.SetItemChecked(i, true);
-            else if (sender == Button_Audio_Music_SelectAll)          for (int i = 0; i < CheckedListBox_Audio_Music.Items.Count; i++)          CheckedListBox_Audio_Music.SetItemChecked(i, true);
-            else if (sender == Button_Text_General_SelectAll)         for (int i = 0; i < CheckedListBox_Text_General.Items.Count; i++)         CheckedListBox_Text_General.SetItemChecked(i, true);
-            else if (sender == Button_Text_Languages_SelectAll)       for (int i = 0; i < CheckedListBox_Text_Languages.Items.Count; i++)       CheckedListBox_Text_Languages.SetItemChecked(i, true);
-            else if (sender == Button_Textures_General_SelectAll)     for (int i = 0; i < CheckedListBox_Textures_General.Items.Count; i++)     CheckedListBox_Textures_General.SetItemChecked(i, true);
-            else if (sender == Button_Textures_Areas_SelectAll)       for (int i = 0; i < CheckedListBox_Textures_Areas.Items.Count; i++)       CheckedListBox_Textures_Areas.SetItemChecked(i, true);
+        /// <summary>
+        /// Displays a warning if the randomiser is still processing
+        /// </summary>
+        private void Main_FormClosing(object sender, FormClosingEventArgs e) {
+            if (Randomising)
+                if (UnifyMessenger.UnifyMessage.ShowDialog("A randomisation task is running! Are you sure you want to quit?",
+                                                           "Quit?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+                    e.Cancel = true;
         }
 
+        /// <summary>
+        /// Randomises the seed upon clicking
+        /// </summary>
+        private void Button_RandomisationSeed_Click(object sender, EventArgs e) => TextBox_RandomisationSeed.Text = RNG.Next().ToString();
+
+        /// <summary>
+        /// Select all items in the CheckedListBox depending on sender
+        /// </summary>
+        private void Button_SelectAll_Click(object sender, EventArgs e) {
+            // This looks messy, we know...
+            if (sender == Button_Placement_General_SelectAll) for (int i = 0; i < CheckedListBox_Placement_General.Items.Count; i++) CheckedListBox_Placement_General.SetItemChecked(i, true);
+            else if (sender == Button_Placement_Enemies_SelectAll) for (int i = 0; i < CheckedListBox_Placement_Enemies.Items.Count; i++) CheckedListBox_Placement_Enemies.SetItemChecked(i, true);
+            else if (sender == Button_Placement_Characters_SelectAll) for (int i = 0; i < CheckedListBox_Placement_Characters.Items.Count; i++) CheckedListBox_Placement_Characters.SetItemChecked(i, true);
+            else if (sender == Button_Placement_Items_SelectAll) for (int i = 0; i < CheckedListBox_Placement_Items.Items.Count; i++) CheckedListBox_Placement_Items.SetItemChecked(i, true);
+            else if (sender == Button_Scene_General_SelectAll) for (int i = 0; i < CheckedListBox_Scene_General.Items.Count; i++) CheckedListBox_Scene_General.SetItemChecked(i, true);
+            else if (sender == Button_Audio_General_SelectAll) for (int i = 0; i < CheckedListBox_Audio_General.Items.Count; i++) CheckedListBox_Audio_General.SetItemChecked(i, true);
+            else if (sender == Button_Audio_Music_SelectAll) for (int i = 0; i < CheckedListBox_Audio_Music.Items.Count; i++) CheckedListBox_Audio_Music.SetItemChecked(i, true);
+            else if (sender == Button_Text_General_SelectAll) for (int i = 0; i < CheckedListBox_Text_General.Items.Count; i++) CheckedListBox_Text_General.SetItemChecked(i, true);
+            else if (sender == Button_Text_Languages_SelectAll) for (int i = 0; i < CheckedListBox_Text_Languages.Items.Count; i++) CheckedListBox_Text_Languages.SetItemChecked(i, true);
+            else if (sender == Button_Textures_General_SelectAll) for (int i = 0; i < CheckedListBox_Textures_General.Items.Count; i++) CheckedListBox_Textures_General.SetItemChecked(i, true);
+            else if (sender == Button_Textures_Areas_SelectAll) for (int i = 0; i < CheckedListBox_Textures_Areas.Items.Count; i++) CheckedListBox_Textures_Areas.SetItemChecked(i, true);
+        }
+
+        /// <summary>
+        /// Deselect all items in the CheckedListBox depending on sender
+        /// </summary>
         private void Button_DeselectAll_Click(object sender, EventArgs e) {
+            // This also looks messy, we also know...
             if (sender == Button_Placement_General_DeselectAll)         for (int i = 0; i < CheckedListBox_Placement_General.Items.Count; i++)    CheckedListBox_Placement_General.SetItemChecked(i, false);
             else if (sender == Button_Placement_Enemies_DeselectAll)    for (int i = 0; i < CheckedListBox_Placement_Enemies.Items.Count; i++)    CheckedListBox_Placement_Enemies.SetItemChecked(i, false);
             else if (sender == Button_Placement_Characters_DeselectAll) for (int i = 0; i < CheckedListBox_Placement_Characters.Items.Count; i++) CheckedListBox_Placement_Characters.SetItemChecked(i, false);
@@ -467,7 +439,11 @@ namespace Sonic_06_Randomiser_Suite
             else if (sender == Button_Textures_Areas_DeselectAll)       for (int i = 0; i < CheckedListBox_Textures_Areas.Items.Count; i++)       CheckedListBox_Textures_Areas.SetItemChecked(i, false);
         }
 
+        /// <summary>
+        /// Browse for content depending on sender
+        /// </summary>
         private void Button_Browse_Click(object sender, EventArgs e) {
+            // Sender is Button_ModsDirectory
             if (sender == Button_ModsDirectory) {
                 string browseMods = Dialogs.FolderBrowser("Please select your mods directory...");
 
@@ -475,6 +451,8 @@ namespace Sonic_06_Randomiser_Suite
                     Properties.Settings.Default.Path_ModsDirectory = TextBox_ModsDirectory.Text = browseMods;
                     Properties.Settings.Default.Save();
                 }
+
+            // Sender is Button_GameExecutable
             } else if (sender == Button_GameExecutable) {
                 string browseGame = Dialogs.FileBrowser("Please select an executable for Sonic '06...",
                                                         "Exectuables (*.xex; *.bin)|*.xex;*.bin|" +

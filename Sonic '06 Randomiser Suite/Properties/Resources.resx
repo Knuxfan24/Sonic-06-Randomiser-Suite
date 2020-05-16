@@ -337,4 +337,7 @@
   <data name="unlub" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\third_party\unlub.jar;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="voice_all_e" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\res\miscellaneous\voice_all_e.sbk;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

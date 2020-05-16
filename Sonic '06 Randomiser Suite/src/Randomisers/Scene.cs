@@ -5,6 +5,9 @@ namespace Sonic_06_Randomiser_Suite
 {
     class Scene
     {
+        /// <summary>
+        /// Randomises all scene parameters for the specified light type in scene parameters
+        /// </summary>
         public static void RandomiseLight(string[] editedLub, string lightType, Random rng) {
             int lineNum = 0;
 
@@ -36,6 +39,9 @@ namespace Sonic_06_Randomiser_Suite
             }
         }
 
+        /// <summary>
+        /// Randomises light direction in scene parameters
+        /// </summary>
         public static void RandomiseLightDirection(string[] editedLub, Random rng) {
             int lineNum = 0;
 
@@ -52,6 +58,9 @@ namespace Sonic_06_Randomiser_Suite
             }
         }
 
+        /// <summary>
+        /// Randomises fog colour in scene parameters
+        /// </summary>
         public static void RandomiseFogColour(string[] editedLub, Random rng) {
             int lineNum = 0;
 
@@ -68,6 +77,9 @@ namespace Sonic_06_Randomiser_Suite
             }
         }
 
+        /// <summary>
+        /// Randomises fog density in scene parameters
+        /// </summary>
         public static void RandomiseFogDensity(string[] editedLub, Random rng) {
             int lineNum = 0;
 
@@ -81,6 +93,9 @@ namespace Sonic_06_Randomiser_Suite
             }
         }
 
+        /// <summary>
+        /// Randomises environment maps in scene parameters
+        /// </summary>
         public static void RandomiseEnvironmentMaps(string[] editedLub, Random rng) {
             string[] Cubemaps = Resources.ParseLineBreaks(Properties.Resources.S06Cubemaps);
             int lineNum = 0;
