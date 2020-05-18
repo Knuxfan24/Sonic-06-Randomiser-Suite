@@ -105,15 +105,44 @@
             this.tabPage14 = new System.Windows.Forms.TabPage();
             this.unifyTabControl4 = new Unify.TabControl.UnifyTabControl();
             this.tabPage15 = new System.Windows.Forms.TabPage();
-            this.Button_Textures_General_DeselectAll = new System.Windows.Forms.Button();
+            this.Button_Visual_General_DeselectAll = new System.Windows.Forms.Button();
             this.panel10 = new System.Windows.Forms.Panel();
-            this.CheckedListBox_Textures_General = new System.Windows.Forms.CheckedListBox();
-            this.Button_Textures_General_SelectAll = new System.Windows.Forms.Button();
+            this.CheckedListBox_Visual_General = new System.Windows.Forms.CheckedListBox();
+            this.Button_Visual_General_SelectAll = new System.Windows.Forms.Button();
             this.tabPage16 = new System.Windows.Forms.TabPage();
-            this.Button_Textures_Areas_DeselectAll = new System.Windows.Forms.Button();
+            this.Button_Visual_Areas_DeselectAll = new System.Windows.Forms.Button();
             this.panel11 = new System.Windows.Forms.Panel();
-            this.CheckedListBox_Textures_Areas = new System.Windows.Forms.CheckedListBox();
-            this.Button_Textures_Areas_SelectAll = new System.Windows.Forms.Button();
+            this.CheckedListBox_Visual_Areas = new System.Windows.Forms.CheckedListBox();
+            this.Button_Visual_Areas_SelectAll = new System.Windows.Forms.Button();
+            this.tabPage17 = new System.Windows.Forms.TabPage();
+            this.unifyTabControl5 = new Unify.TabControl.UnifyTabControl();
+            this.tabPage18 = new System.Windows.Forms.TabPage();
+            this.Button_Collision_General_DeselectAll = new System.Windows.Forms.Button();
+            this.panel12 = new System.Windows.Forms.Panel();
+            this.CheckedListBox_Collision_General = new System.Windows.Forms.CheckedListBox();
+            this.Button_Collision_General_SelectAll = new System.Windows.Forms.Button();
+            this.tabPage19 = new System.Windows.Forms.TabPage();
+            this.Button_Collision_Respected_DeselectAll = new System.Windows.Forms.Button();
+            this.panel13 = new System.Windows.Forms.Panel();
+            this.CheckedListBox_Collision_Respected = new System.Windows.Forms.CheckedListBox();
+            this.Button_Collision_Respected_SelectAll = new System.Windows.Forms.Button();
+            this.tabPage20 = new System.Windows.Forms.TabPage();
+            this.Button_Collision_Surfaces_DeselectAll = new System.Windows.Forms.Button();
+            this.panel14 = new System.Windows.Forms.Panel();
+            this.CheckedListBox_Collision_Surfaces = new System.Windows.Forms.CheckedListBox();
+            this.Button_Collision_Surfaces_SelectAll = new System.Windows.Forms.Button();
+            this.tabPage21 = new System.Windows.Forms.TabPage();
+            this.unifyTabControl6 = new Unify.TabControl.UnifyTabControl();
+            this.tabPage22 = new System.Windows.Forms.TabPage();
+            this.Button_Package_General_DeselectAll = new System.Windows.Forms.Button();
+            this.panel15 = new System.Windows.Forms.Panel();
+            this.CheckedListBox_Package_General = new System.Windows.Forms.CheckedListBox();
+            this.Button_Package_General_SelectAll = new System.Windows.Forms.Button();
+            this.tabPage24 = new System.Windows.Forms.TabPage();
+            this.Button_Package_Characters_DeselectAll = new System.Windows.Forms.Button();
+            this.panel17 = new System.Windows.Forms.Panel();
+            this.CheckedListBox_Package_Characters = new System.Windows.Forms.CheckedListBox();
+            this.Button_Package_Characters_SelectAll = new System.Windows.Forms.Button();
             this.Panel_Inactive.SuspendLayout();
             this.UnifyTabControl_Main.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -148,6 +177,20 @@
             this.panel10.SuspendLayout();
             this.tabPage16.SuspendLayout();
             this.panel11.SuspendLayout();
+            this.tabPage17.SuspendLayout();
+            this.unifyTabControl5.SuspendLayout();
+            this.tabPage18.SuspendLayout();
+            this.panel12.SuspendLayout();
+            this.tabPage19.SuspendLayout();
+            this.panel13.SuspendLayout();
+            this.tabPage20.SuspendLayout();
+            this.panel14.SuspendLayout();
+            this.tabPage21.SuspendLayout();
+            this.unifyTabControl6.SuspendLayout();
+            this.tabPage22.SuspendLayout();
+            this.panel15.SuspendLayout();
+            this.tabPage24.SuspendLayout();
+            this.panel17.SuspendLayout();
             this.SuspendLayout();
             // 
             // TextBox_RandomisationSeed
@@ -417,6 +460,8 @@
             this.UnifyTabControl_Main.Controls.Add(this.tabPage8);
             this.UnifyTabControl_Main.Controls.Add(this.tabPage11);
             this.UnifyTabControl_Main.Controls.Add(this.tabPage14);
+            this.UnifyTabControl_Main.Controls.Add(this.tabPage17);
+            this.UnifyTabControl_Main.Controls.Add(this.tabPage21);
             this.UnifyTabControl_Main.HeaderColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
             this.UnifyTabControl_Main.HorizontalLineColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(24)))), ((int)(((byte)(123)))));
             this.UnifyTabControl_Main.ItemSize = new System.Drawing.Size(240, 16);
@@ -878,7 +923,7 @@
             this.Button_Scene_General_DeselectAll.FlatAppearance.BorderSize = 0;
             this.Button_Scene_General_DeselectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Button_Scene_General_DeselectAll.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.Button_Scene_General_DeselectAll.Location = new System.Drawing.Point(668, 305);
+            this.Button_Scene_General_DeselectAll.Location = new System.Drawing.Point(668, 306);
             this.Button_Scene_General_DeselectAll.Name = "Button_Scene_General_DeselectAll";
             this.Button_Scene_General_DeselectAll.Size = new System.Drawing.Size(233, 23);
             this.Button_Scene_General_DeselectAll.TabIndex = 48;
@@ -927,7 +972,7 @@
             this.Button_Scene_General_SelectAll.FlatAppearance.BorderSize = 0;
             this.Button_Scene_General_SelectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Button_Scene_General_SelectAll.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.Button_Scene_General_SelectAll.Location = new System.Drawing.Point(2, 305);
+            this.Button_Scene_General_SelectAll.Location = new System.Drawing.Point(2, 306);
             this.Button_Scene_General_SelectAll.Name = "Button_Scene_General_SelectAll";
             this.Button_Scene_General_SelectAll.Size = new System.Drawing.Size(233, 23);
             this.Button_Scene_General_SelectAll.TabIndex = 47;
@@ -993,7 +1038,7 @@
             this.Button_Audio_General_DeselectAll.FlatAppearance.BorderSize = 0;
             this.Button_Audio_General_DeselectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Button_Audio_General_DeselectAll.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.Button_Audio_General_DeselectAll.Location = new System.Drawing.Point(668, 305);
+            this.Button_Audio_General_DeselectAll.Location = new System.Drawing.Point(668, 306);
             this.Button_Audio_General_DeselectAll.Name = "Button_Audio_General_DeselectAll";
             this.Button_Audio_General_DeselectAll.Size = new System.Drawing.Size(233, 23);
             this.Button_Audio_General_DeselectAll.TabIndex = 48;
@@ -1035,7 +1080,7 @@
             this.Button_Audio_General_SelectAll.FlatAppearance.BorderSize = 0;
             this.Button_Audio_General_SelectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Button_Audio_General_SelectAll.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.Button_Audio_General_SelectAll.Location = new System.Drawing.Point(2, 305);
+            this.Button_Audio_General_SelectAll.Location = new System.Drawing.Point(2, 306);
             this.Button_Audio_General_SelectAll.Name = "Button_Audio_General_SelectAll";
             this.Button_Audio_General_SelectAll.Size = new System.Drawing.Size(233, 23);
             this.Button_Audio_General_SelectAll.TabIndex = 47;
@@ -1062,7 +1107,7 @@
             this.Button_Audio_Music_DeselectAll.FlatAppearance.BorderSize = 0;
             this.Button_Audio_Music_DeselectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Button_Audio_Music_DeselectAll.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.Button_Audio_Music_DeselectAll.Location = new System.Drawing.Point(668, 305);
+            this.Button_Audio_Music_DeselectAll.Location = new System.Drawing.Point(668, 306);
             this.Button_Audio_Music_DeselectAll.Name = "Button_Audio_Music_DeselectAll";
             this.Button_Audio_Music_DeselectAll.Size = new System.Drawing.Size(233, 23);
             this.Button_Audio_Music_DeselectAll.TabIndex = 49;
@@ -1155,7 +1200,7 @@
             this.Button_Audio_Music_SelectAll.FlatAppearance.BorderSize = 0;
             this.Button_Audio_Music_SelectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Button_Audio_Music_SelectAll.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.Button_Audio_Music_SelectAll.Location = new System.Drawing.Point(2, 305);
+            this.Button_Audio_Music_SelectAll.Location = new System.Drawing.Point(2, 306);
             this.Button_Audio_Music_SelectAll.Name = "Button_Audio_Music_SelectAll";
             this.Button_Audio_Music_SelectAll.Size = new System.Drawing.Size(233, 23);
             this.Button_Audio_Music_SelectAll.TabIndex = 48;
@@ -1221,7 +1266,7 @@
             this.Button_Text_General_DeselectAll.FlatAppearance.BorderSize = 0;
             this.Button_Text_General_DeselectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Button_Text_General_DeselectAll.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.Button_Text_General_DeselectAll.Location = new System.Drawing.Point(668, 305);
+            this.Button_Text_General_DeselectAll.Location = new System.Drawing.Point(668, 306);
             this.Button_Text_General_DeselectAll.Name = "Button_Text_General_DeselectAll";
             this.Button_Text_General_DeselectAll.Size = new System.Drawing.Size(233, 23);
             this.Button_Text_General_DeselectAll.TabIndex = 48;
@@ -1265,7 +1310,7 @@
             this.Button_Text_General_SelectAll.FlatAppearance.BorderSize = 0;
             this.Button_Text_General_SelectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Button_Text_General_SelectAll.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.Button_Text_General_SelectAll.Location = new System.Drawing.Point(2, 305);
+            this.Button_Text_General_SelectAll.Location = new System.Drawing.Point(2, 306);
             this.Button_Text_General_SelectAll.Name = "Button_Text_General_SelectAll";
             this.Button_Text_General_SelectAll.Size = new System.Drawing.Size(233, 23);
             this.Button_Text_General_SelectAll.TabIndex = 47;
@@ -1292,7 +1337,7 @@
             this.Button_Text_Languages_DeselectAll.FlatAppearance.BorderSize = 0;
             this.Button_Text_Languages_DeselectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Button_Text_Languages_DeselectAll.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.Button_Text_Languages_DeselectAll.Location = new System.Drawing.Point(668, 305);
+            this.Button_Text_Languages_DeselectAll.Location = new System.Drawing.Point(668, 306);
             this.Button_Text_Languages_DeselectAll.Name = "Button_Text_Languages_DeselectAll";
             this.Button_Text_Languages_DeselectAll.Size = new System.Drawing.Size(233, 23);
             this.Button_Text_Languages_DeselectAll.TabIndex = 57;
@@ -1340,7 +1385,7 @@
             this.Button_Text_Languages_SelectAll.FlatAppearance.BorderSize = 0;
             this.Button_Text_Languages_SelectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Button_Text_Languages_SelectAll.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.Button_Text_Languages_SelectAll.Location = new System.Drawing.Point(2, 305);
+            this.Button_Text_Languages_SelectAll.Location = new System.Drawing.Point(2, 306);
             this.Button_Text_Languages_SelectAll.Name = "Button_Text_Languages_SelectAll";
             this.Button_Text_Languages_SelectAll.Size = new System.Drawing.Size(233, 23);
             this.Button_Text_Languages_SelectAll.TabIndex = 56;
@@ -1356,7 +1401,7 @@
             this.tabPage14.Name = "tabPage14";
             this.tabPage14.Size = new System.Drawing.Size(911, 353);
             this.tabPage14.TabIndex = 4;
-            this.tabPage14.Text = "Texture Randomisation";
+            this.tabPage14.Text = "Visual Randomisation";
             // 
             // unifyTabControl4
             // 
@@ -1389,9 +1434,9 @@
             // tabPage15
             // 
             this.tabPage15.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
-            this.tabPage15.Controls.Add(this.Button_Textures_General_DeselectAll);
+            this.tabPage15.Controls.Add(this.Button_Visual_General_DeselectAll);
             this.tabPage15.Controls.Add(this.panel10);
-            this.tabPage15.Controls.Add(this.Button_Textures_General_SelectAll);
+            this.tabPage15.Controls.Add(this.Button_Visual_General_SelectAll);
             this.tabPage15.Location = new System.Drawing.Point(4, 20);
             this.tabPage15.Name = "tabPage15";
             this.tabPage15.Padding = new System.Windows.Forms.Padding(3);
@@ -1399,20 +1444,20 @@
             this.tabPage15.TabIndex = 0;
             this.tabPage15.Text = "General";
             // 
-            // Button_Textures_General_DeselectAll
+            // Button_Visual_General_DeselectAll
             // 
-            this.Button_Textures_General_DeselectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.Button_Textures_General_DeselectAll.BackColor = System.Drawing.Color.Tomato;
-            this.Button_Textures_General_DeselectAll.FlatAppearance.BorderSize = 0;
-            this.Button_Textures_General_DeselectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Button_Textures_General_DeselectAll.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.Button_Textures_General_DeselectAll.Location = new System.Drawing.Point(668, 305);
-            this.Button_Textures_General_DeselectAll.Name = "Button_Textures_General_DeselectAll";
-            this.Button_Textures_General_DeselectAll.Size = new System.Drawing.Size(233, 23);
-            this.Button_Textures_General_DeselectAll.TabIndex = 48;
-            this.Button_Textures_General_DeselectAll.Text = "Deselect All";
-            this.Button_Textures_General_DeselectAll.UseVisualStyleBackColor = false;
-            this.Button_Textures_General_DeselectAll.Click += new System.EventHandler(this.Button_DeselectAll_Click);
+            this.Button_Visual_General_DeselectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.Button_Visual_General_DeselectAll.BackColor = System.Drawing.Color.Tomato;
+            this.Button_Visual_General_DeselectAll.FlatAppearance.BorderSize = 0;
+            this.Button_Visual_General_DeselectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_Visual_General_DeselectAll.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.Button_Visual_General_DeselectAll.Location = new System.Drawing.Point(668, 306);
+            this.Button_Visual_General_DeselectAll.Name = "Button_Visual_General_DeselectAll";
+            this.Button_Visual_General_DeselectAll.Size = new System.Drawing.Size(233, 23);
+            this.Button_Visual_General_DeselectAll.TabIndex = 48;
+            this.Button_Visual_General_DeselectAll.Text = "Deselect All";
+            this.Button_Visual_General_DeselectAll.UseVisualStyleBackColor = false;
+            this.Button_Visual_General_DeselectAll.Click += new System.EventHandler(this.Button_DeselectAll_Click);
             // 
             // panel10
             // 
@@ -1421,70 +1466,70 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.panel10.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel10.Controls.Add(this.CheckedListBox_Textures_General);
+            this.panel10.Controls.Add(this.CheckedListBox_Visual_General);
             this.panel10.Location = new System.Drawing.Point(2, 8);
             this.panel10.Name = "panel10";
             this.panel10.Size = new System.Drawing.Size(899, 290);
             this.panel10.TabIndex = 55;
             // 
-            // CheckedListBox_Textures_General
+            // CheckedListBox_Visual_General
             // 
-            this.CheckedListBox_Textures_General.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.CheckedListBox_Textures_General.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.CheckedListBox_Textures_General.CheckOnClick = true;
-            this.CheckedListBox_Textures_General.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.CheckedListBox_Textures_General.ForeColor = System.Drawing.SystemColors.Control;
-            this.CheckedListBox_Textures_General.FormattingEnabled = true;
-            this.CheckedListBox_Textures_General.Items.AddRange(new object[] {
+            this.CheckedListBox_Visual_General.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.CheckedListBox_Visual_General.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.CheckedListBox_Visual_General.CheckOnClick = true;
+            this.CheckedListBox_Visual_General.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.CheckedListBox_Visual_General.ForeColor = System.Drawing.SystemColors.Control;
+            this.CheckedListBox_Visual_General.FormattingEnabled = true;
+            this.CheckedListBox_Visual_General.Items.AddRange(new object[] {
             "Randomise Area Textures",
             "Randomise Object Textures",
             "Randomise Sprite Textures"});
-            this.CheckedListBox_Textures_General.Location = new System.Drawing.Point(0, 0);
-            this.CheckedListBox_Textures_General.Name = "CheckedListBox_Textures_General";
-            this.CheckedListBox_Textures_General.Size = new System.Drawing.Size(897, 288);
-            this.CheckedListBox_Textures_General.TabIndex = 0;
+            this.CheckedListBox_Visual_General.Location = new System.Drawing.Point(0, 0);
+            this.CheckedListBox_Visual_General.Name = "CheckedListBox_Visual_General";
+            this.CheckedListBox_Visual_General.Size = new System.Drawing.Size(897, 288);
+            this.CheckedListBox_Visual_General.TabIndex = 0;
             // 
-            // Button_Textures_General_SelectAll
+            // Button_Visual_General_SelectAll
             // 
-            this.Button_Textures_General_SelectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Button_Textures_General_SelectAll.BackColor = System.Drawing.Color.SkyBlue;
-            this.Button_Textures_General_SelectAll.FlatAppearance.BorderSize = 0;
-            this.Button_Textures_General_SelectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Button_Textures_General_SelectAll.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.Button_Textures_General_SelectAll.Location = new System.Drawing.Point(2, 305);
-            this.Button_Textures_General_SelectAll.Name = "Button_Textures_General_SelectAll";
-            this.Button_Textures_General_SelectAll.Size = new System.Drawing.Size(233, 23);
-            this.Button_Textures_General_SelectAll.TabIndex = 47;
-            this.Button_Textures_General_SelectAll.Text = "Select All";
-            this.Button_Textures_General_SelectAll.UseVisualStyleBackColor = false;
-            this.Button_Textures_General_SelectAll.Click += new System.EventHandler(this.Button_SelectAll_Click);
+            this.Button_Visual_General_SelectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Button_Visual_General_SelectAll.BackColor = System.Drawing.Color.SkyBlue;
+            this.Button_Visual_General_SelectAll.FlatAppearance.BorderSize = 0;
+            this.Button_Visual_General_SelectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_Visual_General_SelectAll.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.Button_Visual_General_SelectAll.Location = new System.Drawing.Point(2, 306);
+            this.Button_Visual_General_SelectAll.Name = "Button_Visual_General_SelectAll";
+            this.Button_Visual_General_SelectAll.Size = new System.Drawing.Size(233, 23);
+            this.Button_Visual_General_SelectAll.TabIndex = 47;
+            this.Button_Visual_General_SelectAll.Text = "Select All";
+            this.Button_Visual_General_SelectAll.UseVisualStyleBackColor = false;
+            this.Button_Visual_General_SelectAll.Click += new System.EventHandler(this.Button_SelectAll_Click);
             // 
             // tabPage16
             // 
             this.tabPage16.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
-            this.tabPage16.Controls.Add(this.Button_Textures_Areas_DeselectAll);
+            this.tabPage16.Controls.Add(this.Button_Visual_Areas_DeselectAll);
             this.tabPage16.Controls.Add(this.panel11);
-            this.tabPage16.Controls.Add(this.Button_Textures_Areas_SelectAll);
+            this.tabPage16.Controls.Add(this.Button_Visual_Areas_SelectAll);
             this.tabPage16.Location = new System.Drawing.Point(4, 20);
             this.tabPage16.Name = "tabPage16";
             this.tabPage16.Size = new System.Drawing.Size(903, 329);
             this.tabPage16.TabIndex = 1;
             this.tabPage16.Text = "Areas";
             // 
-            // Button_Textures_Areas_DeselectAll
+            // Button_Visual_Areas_DeselectAll
             // 
-            this.Button_Textures_Areas_DeselectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.Button_Textures_Areas_DeselectAll.BackColor = System.Drawing.Color.Tomato;
-            this.Button_Textures_Areas_DeselectAll.FlatAppearance.BorderSize = 0;
-            this.Button_Textures_Areas_DeselectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Button_Textures_Areas_DeselectAll.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.Button_Textures_Areas_DeselectAll.Location = new System.Drawing.Point(668, 305);
-            this.Button_Textures_Areas_DeselectAll.Name = "Button_Textures_Areas_DeselectAll";
-            this.Button_Textures_Areas_DeselectAll.Size = new System.Drawing.Size(233, 23);
-            this.Button_Textures_Areas_DeselectAll.TabIndex = 57;
-            this.Button_Textures_Areas_DeselectAll.Text = "Deselect All";
-            this.Button_Textures_Areas_DeselectAll.UseVisualStyleBackColor = false;
-            this.Button_Textures_Areas_DeselectAll.Click += new System.EventHandler(this.Button_DeselectAll_Click);
+            this.Button_Visual_Areas_DeselectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.Button_Visual_Areas_DeselectAll.BackColor = System.Drawing.Color.Tomato;
+            this.Button_Visual_Areas_DeselectAll.FlatAppearance.BorderSize = 0;
+            this.Button_Visual_Areas_DeselectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_Visual_Areas_DeselectAll.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.Button_Visual_Areas_DeselectAll.Location = new System.Drawing.Point(668, 306);
+            this.Button_Visual_Areas_DeselectAll.Name = "Button_Visual_Areas_DeselectAll";
+            this.Button_Visual_Areas_DeselectAll.Size = new System.Drawing.Size(233, 23);
+            this.Button_Visual_Areas_DeselectAll.TabIndex = 57;
+            this.Button_Visual_Areas_DeselectAll.Text = "Deselect All";
+            this.Button_Visual_Areas_DeselectAll.UseVisualStyleBackColor = false;
+            this.Button_Visual_Areas_DeselectAll.Click += new System.EventHandler(this.Button_DeselectAll_Click);
             // 
             // panel11
             // 
@@ -1493,21 +1538,21 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel11.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.panel11.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel11.Controls.Add(this.CheckedListBox_Textures_Areas);
+            this.panel11.Controls.Add(this.CheckedListBox_Visual_Areas);
             this.panel11.Location = new System.Drawing.Point(2, 8);
             this.panel11.Name = "panel11";
             this.panel11.Size = new System.Drawing.Size(899, 290);
             this.panel11.TabIndex = 58;
             // 
-            // CheckedListBox_Textures_Areas
+            // CheckedListBox_Visual_Areas
             // 
-            this.CheckedListBox_Textures_Areas.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.CheckedListBox_Textures_Areas.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.CheckedListBox_Textures_Areas.CheckOnClick = true;
-            this.CheckedListBox_Textures_Areas.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.CheckedListBox_Textures_Areas.ForeColor = System.Drawing.SystemColors.Control;
-            this.CheckedListBox_Textures_Areas.FormattingEnabled = true;
-            this.CheckedListBox_Textures_Areas.Items.AddRange(new object[] {
+            this.CheckedListBox_Visual_Areas.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.CheckedListBox_Visual_Areas.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.CheckedListBox_Visual_Areas.CheckOnClick = true;
+            this.CheckedListBox_Visual_Areas.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.CheckedListBox_Visual_Areas.ForeColor = System.Drawing.SystemColors.Control;
+            this.CheckedListBox_Visual_Areas.FormattingEnabled = true;
+            this.CheckedListBox_Visual_Areas.Items.AddRange(new object[] {
             "Wave Ocean - Section A",
             "Wave Ocean - Section B",
             "Dusty Desert - Section A",
@@ -1548,25 +1593,477 @@
             "Soleanna New City",
             "Soleanna Forest",
             "Soleanna Circuit"});
-            this.CheckedListBox_Textures_Areas.Location = new System.Drawing.Point(0, 0);
-            this.CheckedListBox_Textures_Areas.Name = "CheckedListBox_Textures_Areas";
-            this.CheckedListBox_Textures_Areas.Size = new System.Drawing.Size(897, 288);
-            this.CheckedListBox_Textures_Areas.TabIndex = 0;
+            this.CheckedListBox_Visual_Areas.Location = new System.Drawing.Point(0, 0);
+            this.CheckedListBox_Visual_Areas.Name = "CheckedListBox_Visual_Areas";
+            this.CheckedListBox_Visual_Areas.Size = new System.Drawing.Size(897, 288);
+            this.CheckedListBox_Visual_Areas.TabIndex = 0;
             // 
-            // Button_Textures_Areas_SelectAll
+            // Button_Visual_Areas_SelectAll
             // 
-            this.Button_Textures_Areas_SelectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Button_Textures_Areas_SelectAll.BackColor = System.Drawing.Color.SkyBlue;
-            this.Button_Textures_Areas_SelectAll.FlatAppearance.BorderSize = 0;
-            this.Button_Textures_Areas_SelectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Button_Textures_Areas_SelectAll.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.Button_Textures_Areas_SelectAll.Location = new System.Drawing.Point(2, 305);
-            this.Button_Textures_Areas_SelectAll.Name = "Button_Textures_Areas_SelectAll";
-            this.Button_Textures_Areas_SelectAll.Size = new System.Drawing.Size(233, 23);
-            this.Button_Textures_Areas_SelectAll.TabIndex = 56;
-            this.Button_Textures_Areas_SelectAll.Text = "Select All";
-            this.Button_Textures_Areas_SelectAll.UseVisualStyleBackColor = false;
-            this.Button_Textures_Areas_SelectAll.Click += new System.EventHandler(this.Button_SelectAll_Click);
+            this.Button_Visual_Areas_SelectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Button_Visual_Areas_SelectAll.BackColor = System.Drawing.Color.SkyBlue;
+            this.Button_Visual_Areas_SelectAll.FlatAppearance.BorderSize = 0;
+            this.Button_Visual_Areas_SelectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_Visual_Areas_SelectAll.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.Button_Visual_Areas_SelectAll.Location = new System.Drawing.Point(2, 306);
+            this.Button_Visual_Areas_SelectAll.Name = "Button_Visual_Areas_SelectAll";
+            this.Button_Visual_Areas_SelectAll.Size = new System.Drawing.Size(233, 23);
+            this.Button_Visual_Areas_SelectAll.TabIndex = 56;
+            this.Button_Visual_Areas_SelectAll.Text = "Select All";
+            this.Button_Visual_Areas_SelectAll.UseVisualStyleBackColor = false;
+            this.Button_Visual_Areas_SelectAll.Click += new System.EventHandler(this.Button_SelectAll_Click);
+            // 
+            // tabPage17
+            // 
+            this.tabPage17.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
+            this.tabPage17.Controls.Add(this.unifyTabControl5);
+            this.tabPage17.Location = new System.Drawing.Point(4, 20);
+            this.tabPage17.Name = "tabPage17";
+            this.tabPage17.Size = new System.Drawing.Size(911, 353);
+            this.tabPage17.TabIndex = 5;
+            this.tabPage17.Text = "Collision Randomisation";
+            // 
+            // unifyTabControl5
+            // 
+            this.unifyTabControl5.ActiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(24)))), ((int)(((byte)(123)))));
+            this.unifyTabControl5.AllowDragging = false;
+            this.unifyTabControl5.AllowDrop = true;
+            this.unifyTabControl5.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.unifyTabControl5.BackTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
+            this.unifyTabControl5.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
+            this.unifyTabControl5.ClosingButtonColor = System.Drawing.Color.WhiteSmoke;
+            this.unifyTabControl5.ClosingMessage = null;
+            this.unifyTabControl5.Controls.Add(this.tabPage18);
+            this.unifyTabControl5.Controls.Add(this.tabPage19);
+            this.unifyTabControl5.Controls.Add(this.tabPage20);
+            this.unifyTabControl5.HeaderColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
+            this.unifyTabControl5.HorizontalLineColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(24)))), ((int)(((byte)(123)))));
+            this.unifyTabControl5.ItemSize = new System.Drawing.Size(240, 16);
+            this.unifyTabControl5.Location = new System.Drawing.Point(0, 3);
+            this.unifyTabControl5.Name = "unifyTabControl5";
+            this.unifyTabControl5.NoTabDisplay = false;
+            this.unifyTabControl5.SelectedIndex = 0;
+            this.unifyTabControl5.SelectedTextColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.unifyTabControl5.ShowClosingButton = false;
+            this.unifyTabControl5.ShowClosingMessage = false;
+            this.unifyTabControl5.Size = new System.Drawing.Size(911, 353);
+            this.unifyTabControl5.TabIndex = 6;
+            this.unifyTabControl5.TextColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            // 
+            // tabPage18
+            // 
+            this.tabPage18.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
+            this.tabPage18.Controls.Add(this.Button_Collision_General_DeselectAll);
+            this.tabPage18.Controls.Add(this.panel12);
+            this.tabPage18.Controls.Add(this.Button_Collision_General_SelectAll);
+            this.tabPage18.Location = new System.Drawing.Point(4, 20);
+            this.tabPage18.Name = "tabPage18";
+            this.tabPage18.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage18.Size = new System.Drawing.Size(903, 329);
+            this.tabPage18.TabIndex = 0;
+            this.tabPage18.Text = "General";
+            // 
+            // Button_Collision_General_DeselectAll
+            // 
+            this.Button_Collision_General_DeselectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.Button_Collision_General_DeselectAll.BackColor = System.Drawing.Color.Tomato;
+            this.Button_Collision_General_DeselectAll.FlatAppearance.BorderSize = 0;
+            this.Button_Collision_General_DeselectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_Collision_General_DeselectAll.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.Button_Collision_General_DeselectAll.Location = new System.Drawing.Point(668, 306);
+            this.Button_Collision_General_DeselectAll.Name = "Button_Collision_General_DeselectAll";
+            this.Button_Collision_General_DeselectAll.Size = new System.Drawing.Size(233, 23);
+            this.Button_Collision_General_DeselectAll.TabIndex = 48;
+            this.Button_Collision_General_DeselectAll.Text = "Deselect All";
+            this.Button_Collision_General_DeselectAll.UseVisualStyleBackColor = false;
+            this.Button_Collision_General_DeselectAll.Click += new System.EventHandler(this.Button_DeselectAll_Click);
+            // 
+            // panel12
+            // 
+            this.panel12.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel12.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.panel12.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel12.Controls.Add(this.CheckedListBox_Collision_General);
+            this.panel12.Location = new System.Drawing.Point(2, 8);
+            this.panel12.Name = "panel12";
+            this.panel12.Size = new System.Drawing.Size(899, 290);
+            this.panel12.TabIndex = 55;
+            // 
+            // CheckedListBox_Collision_General
+            // 
+            this.CheckedListBox_Collision_General.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.CheckedListBox_Collision_General.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.CheckedListBox_Collision_General.CheckOnClick = true;
+            this.CheckedListBox_Collision_General.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.CheckedListBox_Collision_General.ForeColor = System.Drawing.SystemColors.Control;
+            this.CheckedListBox_Collision_General.FormattingEnabled = true;
+            this.CheckedListBox_Collision_General.Items.AddRange(new object[] {
+            "Randomise Collision"});
+            this.CheckedListBox_Collision_General.Location = new System.Drawing.Point(0, 0);
+            this.CheckedListBox_Collision_General.Name = "CheckedListBox_Collision_General";
+            this.CheckedListBox_Collision_General.Size = new System.Drawing.Size(897, 288);
+            this.CheckedListBox_Collision_General.TabIndex = 0;
+            // 
+            // Button_Collision_General_SelectAll
+            // 
+            this.Button_Collision_General_SelectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Button_Collision_General_SelectAll.BackColor = System.Drawing.Color.SkyBlue;
+            this.Button_Collision_General_SelectAll.FlatAppearance.BorderSize = 0;
+            this.Button_Collision_General_SelectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_Collision_General_SelectAll.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.Button_Collision_General_SelectAll.Location = new System.Drawing.Point(2, 306);
+            this.Button_Collision_General_SelectAll.Name = "Button_Collision_General_SelectAll";
+            this.Button_Collision_General_SelectAll.Size = new System.Drawing.Size(233, 23);
+            this.Button_Collision_General_SelectAll.TabIndex = 47;
+            this.Button_Collision_General_SelectAll.Text = "Select All";
+            this.Button_Collision_General_SelectAll.UseVisualStyleBackColor = false;
+            this.Button_Collision_General_SelectAll.Click += new System.EventHandler(this.Button_SelectAll_Click);
+            // 
+            // tabPage19
+            // 
+            this.tabPage19.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
+            this.tabPage19.Controls.Add(this.Button_Collision_Respected_DeselectAll);
+            this.tabPage19.Controls.Add(this.panel13);
+            this.tabPage19.Controls.Add(this.Button_Collision_Respected_SelectAll);
+            this.tabPage19.Location = new System.Drawing.Point(4, 20);
+            this.tabPage19.Name = "tabPage19";
+            this.tabPage19.Size = new System.Drawing.Size(903, 329);
+            this.tabPage19.TabIndex = 1;
+            this.tabPage19.Text = "Respected";
+            // 
+            // Button_Collision_Respected_DeselectAll
+            // 
+            this.Button_Collision_Respected_DeselectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.Button_Collision_Respected_DeselectAll.BackColor = System.Drawing.Color.Tomato;
+            this.Button_Collision_Respected_DeselectAll.FlatAppearance.BorderSize = 0;
+            this.Button_Collision_Respected_DeselectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_Collision_Respected_DeselectAll.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.Button_Collision_Respected_DeselectAll.Location = new System.Drawing.Point(668, 306);
+            this.Button_Collision_Respected_DeselectAll.Name = "Button_Collision_Respected_DeselectAll";
+            this.Button_Collision_Respected_DeselectAll.Size = new System.Drawing.Size(233, 23);
+            this.Button_Collision_Respected_DeselectAll.TabIndex = 57;
+            this.Button_Collision_Respected_DeselectAll.Text = "Deselect All";
+            this.Button_Collision_Respected_DeselectAll.UseVisualStyleBackColor = false;
+            this.Button_Collision_Respected_DeselectAll.Click += new System.EventHandler(this.Button_DeselectAll_Click);
+            // 
+            // panel13
+            // 
+            this.panel13.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel13.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.panel13.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel13.Controls.Add(this.CheckedListBox_Collision_Respected);
+            this.panel13.Location = new System.Drawing.Point(2, 8);
+            this.panel13.Name = "panel13";
+            this.panel13.Size = new System.Drawing.Size(899, 290);
+            this.panel13.TabIndex = 58;
+            // 
+            // CheckedListBox_Collision_Respected
+            // 
+            this.CheckedListBox_Collision_Respected.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.CheckedListBox_Collision_Respected.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.CheckedListBox_Collision_Respected.CheckOnClick = true;
+            this.CheckedListBox_Collision_Respected.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.CheckedListBox_Collision_Respected.ForeColor = System.Drawing.SystemColors.Control;
+            this.CheckedListBox_Collision_Respected.FormattingEnabled = true;
+            this.CheckedListBox_Collision_Respected.Items.AddRange(new object[] {
+            "Respect Walls",
+            "Respect Water",
+            "Respect Death"});
+            this.CheckedListBox_Collision_Respected.Location = new System.Drawing.Point(0, 0);
+            this.CheckedListBox_Collision_Respected.Name = "CheckedListBox_Collision_Respected";
+            this.CheckedListBox_Collision_Respected.Size = new System.Drawing.Size(897, 288);
+            this.CheckedListBox_Collision_Respected.TabIndex = 0;
+            // 
+            // Button_Collision_Respected_SelectAll
+            // 
+            this.Button_Collision_Respected_SelectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Button_Collision_Respected_SelectAll.BackColor = System.Drawing.Color.SkyBlue;
+            this.Button_Collision_Respected_SelectAll.FlatAppearance.BorderSize = 0;
+            this.Button_Collision_Respected_SelectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_Collision_Respected_SelectAll.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.Button_Collision_Respected_SelectAll.Location = new System.Drawing.Point(2, 306);
+            this.Button_Collision_Respected_SelectAll.Name = "Button_Collision_Respected_SelectAll";
+            this.Button_Collision_Respected_SelectAll.Size = new System.Drawing.Size(233, 23);
+            this.Button_Collision_Respected_SelectAll.TabIndex = 56;
+            this.Button_Collision_Respected_SelectAll.Text = "Select All";
+            this.Button_Collision_Respected_SelectAll.UseVisualStyleBackColor = false;
+            this.Button_Collision_Respected_SelectAll.Click += new System.EventHandler(this.Button_SelectAll_Click);
+            // 
+            // tabPage20
+            // 
+            this.tabPage20.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
+            this.tabPage20.Controls.Add(this.Button_Collision_Surfaces_DeselectAll);
+            this.tabPage20.Controls.Add(this.panel14);
+            this.tabPage20.Controls.Add(this.Button_Collision_Surfaces_SelectAll);
+            this.tabPage20.Location = new System.Drawing.Point(4, 20);
+            this.tabPage20.Name = "tabPage20";
+            this.tabPage20.Size = new System.Drawing.Size(903, 329);
+            this.tabPage20.TabIndex = 2;
+            this.tabPage20.Text = "Surfaces";
+            // 
+            // Button_Collision_Surfaces_DeselectAll
+            // 
+            this.Button_Collision_Surfaces_DeselectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.Button_Collision_Surfaces_DeselectAll.BackColor = System.Drawing.Color.Tomato;
+            this.Button_Collision_Surfaces_DeselectAll.FlatAppearance.BorderSize = 0;
+            this.Button_Collision_Surfaces_DeselectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_Collision_Surfaces_DeselectAll.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.Button_Collision_Surfaces_DeselectAll.Location = new System.Drawing.Point(668, 306);
+            this.Button_Collision_Surfaces_DeselectAll.Name = "Button_Collision_Surfaces_DeselectAll";
+            this.Button_Collision_Surfaces_DeselectAll.Size = new System.Drawing.Size(233, 23);
+            this.Button_Collision_Surfaces_DeselectAll.TabIndex = 57;
+            this.Button_Collision_Surfaces_DeselectAll.Text = "Deselect All";
+            this.Button_Collision_Surfaces_DeselectAll.UseVisualStyleBackColor = false;
+            this.Button_Collision_Surfaces_DeselectAll.Click += new System.EventHandler(this.Button_DeselectAll_Click);
+            // 
+            // panel14
+            // 
+            this.panel14.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel14.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.panel14.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel14.Controls.Add(this.CheckedListBox_Collision_Surfaces);
+            this.panel14.Location = new System.Drawing.Point(2, 8);
+            this.panel14.Name = "panel14";
+            this.panel14.Size = new System.Drawing.Size(899, 290);
+            this.panel14.TabIndex = 58;
+            // 
+            // CheckedListBox_Collision_Surfaces
+            // 
+            this.CheckedListBox_Collision_Surfaces.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.CheckedListBox_Collision_Surfaces.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.CheckedListBox_Collision_Surfaces.CheckOnClick = true;
+            this.CheckedListBox_Collision_Surfaces.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.CheckedListBox_Collision_Surfaces.ForeColor = System.Drawing.SystemColors.Control;
+            this.CheckedListBox_Collision_Surfaces.FormattingEnabled = true;
+            this.CheckedListBox_Collision_Surfaces.Items.AddRange(new object[] {
+            "Concrete",
+            "Water",
+            "Wood",
+            "Metal",
+            "Grass",
+            "Sand",
+            "Snow",
+            "Dirt",
+            "Glass",
+            "Metal (Echo)"});
+            this.CheckedListBox_Collision_Surfaces.Location = new System.Drawing.Point(0, 0);
+            this.CheckedListBox_Collision_Surfaces.Name = "CheckedListBox_Collision_Surfaces";
+            this.CheckedListBox_Collision_Surfaces.Size = new System.Drawing.Size(897, 288);
+            this.CheckedListBox_Collision_Surfaces.TabIndex = 0;
+            // 
+            // Button_Collision_Surfaces_SelectAll
+            // 
+            this.Button_Collision_Surfaces_SelectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Button_Collision_Surfaces_SelectAll.BackColor = System.Drawing.Color.SkyBlue;
+            this.Button_Collision_Surfaces_SelectAll.FlatAppearance.BorderSize = 0;
+            this.Button_Collision_Surfaces_SelectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_Collision_Surfaces_SelectAll.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.Button_Collision_Surfaces_SelectAll.Location = new System.Drawing.Point(2, 306);
+            this.Button_Collision_Surfaces_SelectAll.Name = "Button_Collision_Surfaces_SelectAll";
+            this.Button_Collision_Surfaces_SelectAll.Size = new System.Drawing.Size(233, 23);
+            this.Button_Collision_Surfaces_SelectAll.TabIndex = 56;
+            this.Button_Collision_Surfaces_SelectAll.Text = "Select All";
+            this.Button_Collision_Surfaces_SelectAll.UseVisualStyleBackColor = false;
+            this.Button_Collision_Surfaces_SelectAll.Click += new System.EventHandler(this.Button_SelectAll_Click);
+            // 
+            // tabPage21
+            // 
+            this.tabPage21.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
+            this.tabPage21.Controls.Add(this.unifyTabControl6);
+            this.tabPage21.Location = new System.Drawing.Point(4, 20);
+            this.tabPage21.Name = "tabPage21";
+            this.tabPage21.Size = new System.Drawing.Size(911, 353);
+            this.tabPage21.TabIndex = 6;
+            this.tabPage21.Text = "Package Randomisation";
+            // 
+            // unifyTabControl6
+            // 
+            this.unifyTabControl6.ActiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(24)))), ((int)(((byte)(123)))));
+            this.unifyTabControl6.AllowDragging = false;
+            this.unifyTabControl6.AllowDrop = true;
+            this.unifyTabControl6.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.unifyTabControl6.BackTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
+            this.unifyTabControl6.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
+            this.unifyTabControl6.ClosingButtonColor = System.Drawing.Color.WhiteSmoke;
+            this.unifyTabControl6.ClosingMessage = null;
+            this.unifyTabControl6.Controls.Add(this.tabPage22);
+            this.unifyTabControl6.Controls.Add(this.tabPage24);
+            this.unifyTabControl6.HeaderColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
+            this.unifyTabControl6.HorizontalLineColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(24)))), ((int)(((byte)(123)))));
+            this.unifyTabControl6.ItemSize = new System.Drawing.Size(240, 16);
+            this.unifyTabControl6.Location = new System.Drawing.Point(0, 3);
+            this.unifyTabControl6.Name = "unifyTabControl6";
+            this.unifyTabControl6.NoTabDisplay = false;
+            this.unifyTabControl6.SelectedIndex = 0;
+            this.unifyTabControl6.SelectedTextColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.unifyTabControl6.ShowClosingButton = false;
+            this.unifyTabControl6.ShowClosingMessage = false;
+            this.unifyTabControl6.Size = new System.Drawing.Size(911, 353);
+            this.unifyTabControl6.TabIndex = 7;
+            this.unifyTabControl6.TextColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            // 
+            // tabPage22
+            // 
+            this.tabPage22.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
+            this.tabPage22.Controls.Add(this.Button_Package_General_DeselectAll);
+            this.tabPage22.Controls.Add(this.panel15);
+            this.tabPage22.Controls.Add(this.Button_Package_General_SelectAll);
+            this.tabPage22.Location = new System.Drawing.Point(4, 20);
+            this.tabPage22.Name = "tabPage22";
+            this.tabPage22.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage22.Size = new System.Drawing.Size(903, 329);
+            this.tabPage22.TabIndex = 0;
+            this.tabPage22.Text = "General";
+            // 
+            // Button_Package_General_DeselectAll
+            // 
+            this.Button_Package_General_DeselectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.Button_Package_General_DeselectAll.BackColor = System.Drawing.Color.Tomato;
+            this.Button_Package_General_DeselectAll.FlatAppearance.BorderSize = 0;
+            this.Button_Package_General_DeselectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_Package_General_DeselectAll.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.Button_Package_General_DeselectAll.Location = new System.Drawing.Point(668, 306);
+            this.Button_Package_General_DeselectAll.Name = "Button_Package_General_DeselectAll";
+            this.Button_Package_General_DeselectAll.Size = new System.Drawing.Size(233, 23);
+            this.Button_Package_General_DeselectAll.TabIndex = 48;
+            this.Button_Package_General_DeselectAll.Text = "Deselect All";
+            this.Button_Package_General_DeselectAll.UseVisualStyleBackColor = false;
+            this.Button_Package_General_DeselectAll.Click += new System.EventHandler(this.Button_DeselectAll_Click);
+            // 
+            // panel15
+            // 
+            this.panel15.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel15.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.panel15.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel15.Controls.Add(this.CheckedListBox_Package_General);
+            this.panel15.Location = new System.Drawing.Point(2, 8);
+            this.panel15.Name = "panel15";
+            this.panel15.Size = new System.Drawing.Size(899, 290);
+            this.panel15.TabIndex = 55;
+            // 
+            // CheckedListBox_Package_General
+            // 
+            this.CheckedListBox_Package_General.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.CheckedListBox_Package_General.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.CheckedListBox_Package_General.CheckOnClick = true;
+            this.CheckedListBox_Package_General.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.CheckedListBox_Package_General.ForeColor = System.Drawing.SystemColors.Control;
+            this.CheckedListBox_Package_General.FormattingEnabled = true;
+            this.CheckedListBox_Package_General.Items.AddRange(new object[] {
+            "Randomise Character Animations"});
+            this.CheckedListBox_Package_General.Location = new System.Drawing.Point(0, 0);
+            this.CheckedListBox_Package_General.Name = "CheckedListBox_Package_General";
+            this.CheckedListBox_Package_General.Size = new System.Drawing.Size(897, 288);
+            this.CheckedListBox_Package_General.TabIndex = 0;
+            // 
+            // Button_Package_General_SelectAll
+            // 
+            this.Button_Package_General_SelectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Button_Package_General_SelectAll.BackColor = System.Drawing.Color.SkyBlue;
+            this.Button_Package_General_SelectAll.FlatAppearance.BorderSize = 0;
+            this.Button_Package_General_SelectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_Package_General_SelectAll.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.Button_Package_General_SelectAll.Location = new System.Drawing.Point(2, 306);
+            this.Button_Package_General_SelectAll.Name = "Button_Package_General_SelectAll";
+            this.Button_Package_General_SelectAll.Size = new System.Drawing.Size(233, 23);
+            this.Button_Package_General_SelectAll.TabIndex = 47;
+            this.Button_Package_General_SelectAll.Text = "Select All";
+            this.Button_Package_General_SelectAll.UseVisualStyleBackColor = false;
+            this.Button_Package_General_SelectAll.Click += new System.EventHandler(this.Button_SelectAll_Click);
+            // 
+            // tabPage24
+            // 
+            this.tabPage24.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
+            this.tabPage24.Controls.Add(this.Button_Package_Characters_DeselectAll);
+            this.tabPage24.Controls.Add(this.panel17);
+            this.tabPage24.Controls.Add(this.Button_Package_Characters_SelectAll);
+            this.tabPage24.Location = new System.Drawing.Point(4, 20);
+            this.tabPage24.Name = "tabPage24";
+            this.tabPage24.Size = new System.Drawing.Size(903, 329);
+            this.tabPage24.TabIndex = 2;
+            this.tabPage24.Text = "Characters";
+            // 
+            // Button_Package_Characters_DeselectAll
+            // 
+            this.Button_Package_Characters_DeselectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.Button_Package_Characters_DeselectAll.BackColor = System.Drawing.Color.Tomato;
+            this.Button_Package_Characters_DeselectAll.FlatAppearance.BorderSize = 0;
+            this.Button_Package_Characters_DeselectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_Package_Characters_DeselectAll.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.Button_Package_Characters_DeselectAll.Location = new System.Drawing.Point(668, 306);
+            this.Button_Package_Characters_DeselectAll.Name = "Button_Package_Characters_DeselectAll";
+            this.Button_Package_Characters_DeselectAll.Size = new System.Drawing.Size(233, 23);
+            this.Button_Package_Characters_DeselectAll.TabIndex = 57;
+            this.Button_Package_Characters_DeselectAll.Text = "Deselect All";
+            this.Button_Package_Characters_DeselectAll.UseVisualStyleBackColor = false;
+            this.Button_Package_Characters_DeselectAll.Click += new System.EventHandler(this.Button_DeselectAll_Click);
+            // 
+            // panel17
+            // 
+            this.panel17.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel17.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.panel17.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel17.Controls.Add(this.CheckedListBox_Package_Characters);
+            this.panel17.Location = new System.Drawing.Point(2, 8);
+            this.panel17.Name = "panel17";
+            this.panel17.Size = new System.Drawing.Size(899, 290);
+            this.panel17.TabIndex = 58;
+            // 
+            // CheckedListBox_Package_Characters
+            // 
+            this.CheckedListBox_Package_Characters.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.CheckedListBox_Package_Characters.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.CheckedListBox_Package_Characters.CheckOnClick = true;
+            this.CheckedListBox_Package_Characters.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.CheckedListBox_Package_Characters.ForeColor = System.Drawing.SystemColors.Control;
+            this.CheckedListBox_Package_Characters.FormattingEnabled = true;
+            this.CheckedListBox_Package_Characters.Items.AddRange(new object[] {
+            "Sonic the Hedgehog",
+            "Sonic the Hedgehog (Mach Speed)",
+            "Sonic the Hedgehog (Elise)",
+            "Sonic the Hedgehog (White Acropolis Snowboard)",
+            "Sonic the Hedgehog (Crisis City Snowboard)",
+            "Shadow the Hedgehog",
+            "Silver the Hedgehog",
+            "Miles \"Tails\" Prower",
+            "Knuckles the Echidna",
+            "Rouge the Bat",
+            "E-123 Omega",
+            "Blaze the Cat",
+            "Amy Rose"});
+            this.CheckedListBox_Package_Characters.Location = new System.Drawing.Point(0, 0);
+            this.CheckedListBox_Package_Characters.Name = "CheckedListBox_Package_Characters";
+            this.CheckedListBox_Package_Characters.Size = new System.Drawing.Size(897, 288);
+            this.CheckedListBox_Package_Characters.TabIndex = 0;
+            // 
+            // Button_Package_Characters_SelectAll
+            // 
+            this.Button_Package_Characters_SelectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Button_Package_Characters_SelectAll.BackColor = System.Drawing.Color.SkyBlue;
+            this.Button_Package_Characters_SelectAll.FlatAppearance.BorderSize = 0;
+            this.Button_Package_Characters_SelectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_Package_Characters_SelectAll.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.Button_Package_Characters_SelectAll.Location = new System.Drawing.Point(2, 306);
+            this.Button_Package_Characters_SelectAll.Name = "Button_Package_Characters_SelectAll";
+            this.Button_Package_Characters_SelectAll.Size = new System.Drawing.Size(233, 23);
+            this.Button_Package_Characters_SelectAll.TabIndex = 56;
+            this.Button_Package_Characters_SelectAll.Text = "Select All";
+            this.Button_Package_Characters_SelectAll.UseVisualStyleBackColor = false;
+            this.Button_Package_Characters_SelectAll.Click += new System.EventHandler(this.Button_SelectAll_Click);
             // 
             // Main
             // 
@@ -1635,6 +2132,20 @@
             this.panel10.ResumeLayout(false);
             this.tabPage16.ResumeLayout(false);
             this.panel11.ResumeLayout(false);
+            this.tabPage17.ResumeLayout(false);
+            this.unifyTabControl5.ResumeLayout(false);
+            this.tabPage18.ResumeLayout(false);
+            this.panel12.ResumeLayout(false);
+            this.tabPage19.ResumeLayout(false);
+            this.panel13.ResumeLayout(false);
+            this.tabPage20.ResumeLayout(false);
+            this.panel14.ResumeLayout(false);
+            this.tabPage21.ResumeLayout(false);
+            this.unifyTabControl6.ResumeLayout(false);
+            this.tabPage22.ResumeLayout(false);
+            this.panel15.ResumeLayout(false);
+            this.tabPage24.ResumeLayout(false);
+            this.panel17.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1715,18 +2226,47 @@
         private System.Windows.Forms.TabPage tabPage14;
         private Unify.TabControl.UnifyTabControl unifyTabControl4;
         private System.Windows.Forms.TabPage tabPage15;
-        private System.Windows.Forms.Button Button_Textures_General_DeselectAll;
+        private System.Windows.Forms.Button Button_Visual_General_DeselectAll;
         private System.Windows.Forms.Panel panel10;
-        private System.Windows.Forms.CheckedListBox CheckedListBox_Textures_General;
-        private System.Windows.Forms.Button Button_Textures_General_SelectAll;
+        private System.Windows.Forms.CheckedListBox CheckedListBox_Visual_General;
+        private System.Windows.Forms.Button Button_Visual_General_SelectAll;
         private System.Windows.Forms.TabPage tabPage16;
-        private System.Windows.Forms.Button Button_Textures_Areas_DeselectAll;
+        private System.Windows.Forms.Button Button_Visual_Areas_DeselectAll;
         private System.Windows.Forms.Panel panel11;
-        private System.Windows.Forms.CheckedListBox CheckedListBox_Textures_Areas;
-        private System.Windows.Forms.Button Button_Textures_Areas_SelectAll;
+        private System.Windows.Forms.CheckedListBox CheckedListBox_Visual_Areas;
+        private System.Windows.Forms.Button Button_Visual_Areas_SelectAll;
         private System.Windows.Forms.ProgressBar ProgressBar_Randomisation;
         private System.Windows.Forms.Panel Panel_Inactive;
         private System.Windows.Forms.ListBox ListBox_Logs;
+        private System.Windows.Forms.TabPage tabPage17;
+        private Unify.TabControl.UnifyTabControl unifyTabControl5;
+        private System.Windows.Forms.TabPage tabPage18;
+        private System.Windows.Forms.Button Button_Collision_General_DeselectAll;
+        private System.Windows.Forms.Panel panel12;
+        private System.Windows.Forms.CheckedListBox CheckedListBox_Collision_General;
+        private System.Windows.Forms.Button Button_Collision_General_SelectAll;
+        private System.Windows.Forms.TabPage tabPage19;
+        private System.Windows.Forms.Button Button_Collision_Respected_DeselectAll;
+        private System.Windows.Forms.Panel panel13;
+        private System.Windows.Forms.CheckedListBox CheckedListBox_Collision_Respected;
+        private System.Windows.Forms.Button Button_Collision_Respected_SelectAll;
+        private System.Windows.Forms.TabPage tabPage20;
+        private System.Windows.Forms.Button Button_Collision_Surfaces_DeselectAll;
+        private System.Windows.Forms.Panel panel14;
+        private System.Windows.Forms.CheckedListBox CheckedListBox_Collision_Surfaces;
+        private System.Windows.Forms.Button Button_Collision_Surfaces_SelectAll;
+        private System.Windows.Forms.TabPage tabPage21;
+        private Unify.TabControl.UnifyTabControl unifyTabControl6;
+        private System.Windows.Forms.TabPage tabPage22;
+        private System.Windows.Forms.Button Button_Package_General_DeselectAll;
+        private System.Windows.Forms.Panel panel15;
+        private System.Windows.Forms.CheckedListBox CheckedListBox_Package_General;
+        private System.Windows.Forms.Button Button_Package_General_SelectAll;
+        private System.Windows.Forms.TabPage tabPage24;
+        private System.Windows.Forms.Button Button_Package_Characters_DeselectAll;
+        private System.Windows.Forms.Panel panel17;
+        private System.Windows.Forms.CheckedListBox CheckedListBox_Package_Characters;
+        private System.Windows.Forms.Button Button_Package_Characters_SelectAll;
     }
 }
 

@@ -55,6 +55,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\Randomisers\Package.cs" />
+    <Compile Include="src\Randomisers\Lua.cs" />
+    <Compile Include="src\Randomisers\Collision.cs" />
     <Compile Include="src\Environment\Console.cs" />
     <Compile Include="src\Objects.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -191,6 +194,9 @@
   <ItemGroup>
     <Content Include="res\Images\Information.png" />
     <Content Include="third_party\arctool.exe" />
+    <None Include="third_party\CollisionExporter.exe" />
+    <None Include="third_party\CollisionImporter.exe" />
+    <Content Include="third_party\pkgtool.exe" />
     <Content Include="third_party\unlub.jar" />
     <Content Include="res\Icons\Error.ico" />
     <Content Include="res\Icons\Logo.ico" />

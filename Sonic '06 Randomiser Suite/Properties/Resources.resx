@@ -133,6 +133,12 @@
   <data name="cGolemParams" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\res\text\parameters\cgolemparams.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="CollisionExporter" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\third_party\CollisionExporter.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="CollisionImporter" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\third_party\CollisionImporter.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="cStalkerParams" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\res\text\parameters\cstalkerparams.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
@@ -306,6 +312,9 @@
   </data>
   <data name="msgTwnSonicEntries" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\res\text\strings\msgtwnsonicentries.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="pkgtool" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\third_party\pkgtool.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="S06Cubemaps" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\res\text\general\s06cubemaps.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Text;
 using Unify.Messenger;
-using System.Diagnostics;
 using System.Windows.Forms;
 using System.Collections.Generic;
 
@@ -59,35 +57,6 @@ namespace Sonic_06_Randomiser_Suite.Serialisers
                 return Path.Combine(modDirectory, $"ps3\\{extensions}");
             } else
                 return string.Empty;
-        }
-    }
-
-    class Lua
-    {
-        /// <summary>
-        /// Decompiles a Lua script
-        /// </summary>
-        public static void Decompile(string _file) {
-            string[] readText = File.ReadAllLines(_file); //Read the Lub into an array
-
-            if (readText[0].Contains("LuaP")) {
-                using (Process process = new Process()) {
-                    process.StartInfo.FileName = "java.exe";
-                    process.StartInfo.Arguments = $"-jar \"{Program.unlub}\" \"{_file}\"";
-                    process.StartInfo.UseShellExecute = false;
-                    process.StartInfo.RedirectStandardOutput = true;
-                    process.StartInfo.CreateNoWindow = true;
-
-                    StringBuilder outputBuilder = new StringBuilder();
-                    process.OutputDataReceived += (s, e) => { if (e.Data != null) outputBuilder.AppendLine(e.Data); };
-
-                    process.Start();
-                    process.BeginOutputReadLine();
-                    process.WaitForExit();
-
-                    File.WriteAllText(_file, outputBuilder.ToString());
-                }
-            }
         }
     }
 
@@ -421,6 +390,33 @@ namespace Sonic_06_Randomiser_Suite.Serialisers
             }
 
             return Languages;
+        }
+
+        /// <summary>
+        /// Enumerates the valid collision surface tags selected by the user
+        /// </summary>
+        public static List<string> EnumerateCollisionList(CheckedListBox items)
+        {
+            List<string> Collision = new List<string>();
+
+            foreach (int item in items.CheckedIndices)
+            {
+                switch (item)
+                {
+                    case 0: Collision.Add("0"); break;
+                    case 1: Collision.Add("1"); break;
+                    case 2: Collision.Add("2"); break;
+                    case 3: Collision.Add("3"); break;
+                    case 4: Collision.Add("5"); break;
+                    case 5: Collision.Add("6"); break;
+                    case 6: Collision.Add("8"); break;
+                    case 7: Collision.Add("9"); break;
+                    case 8: Collision.Add("A"); break;
+                    case 9: Collision.Add("E"); break;
+                }
+            }
+
+            return Collision;
         }
     }
 

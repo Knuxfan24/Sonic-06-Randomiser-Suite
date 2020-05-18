@@ -20,7 +20,8 @@ namespace Sonic_06_Randomiser_Suite
                                    Characters = new List<string>(),
                                    Music      = new List<string>(),
                                    Languages  = new List<string>(),
-                                   Areas      = new List<string>();
+                                   Areas      = new List<string>(),
+                                   Surfaces   = new List<string>();
 
         /// <summary>
         /// WinForms entry point
@@ -47,7 +48,10 @@ namespace Sonic_06_Randomiser_Suite
             for (int i = 0; i < CheckedListBox_Placement_Items.Items.Count; i++) CheckedListBox_Placement_Items.SetItemChecked(i, true);
             for (int i = 0; i < CheckedListBox_Audio_Music.Items.Count; i++) CheckedListBox_Audio_Music.SetItemChecked(i, true);
             CheckedListBox_Text_Languages.SetItemChecked(0, true);
-            for (int i = 0; i < CheckedListBox_Textures_Areas.Items.Count; i++) CheckedListBox_Textures_Areas.SetItemChecked(i, true);
+            for (int i = 0; i < CheckedListBox_Visual_Areas.Items.Count; i++) CheckedListBox_Visual_Areas.SetItemChecked(i, true);
+            for (int i = 0; i < CheckedListBox_Collision_Respected.Items.Count; i++) CheckedListBox_Collision_Respected.SetItemChecked(i, true);
+            for (int i = 0; i < CheckedListBox_Collision_Surfaces.Items.Count; i++) CheckedListBox_Collision_Surfaces.SetItemChecked(i, true);
+            for (int i = 0; i < CheckedListBox_Package_Characters.Items.Count; i++) CheckedListBox_Package_Characters.SetItemChecked(i, true);
         }
 
         /// <summary>
@@ -124,7 +128,8 @@ namespace Sonic_06_Randomiser_Suite
             Items      = Resources.EnumerateItemsList(CheckedListBox_Placement_Items);
             Music      = Resources.EnumerateMusicList(CheckedListBox_Audio_Music);
             Languages  = Resources.EnumerateLanguagesList(CheckedListBox_Text_Languages);
-            Areas      = Resources.EnumerateAreasList(CheckedListBox_Textures_Areas);
+            Areas      = Resources.EnumerateAreasList(CheckedListBox_Visual_Areas);
+            Surfaces  = Resources.EnumerateCollisionList(CheckedListBox_Collision_Surfaces);
 
             // Sets up the progress bar values
             int getProgress = getArchiveList.Count(),
@@ -329,16 +334,82 @@ namespace Sonic_06_Randomiser_Suite
                     }
                 }
 
+                else if (Path.GetFileName(archive).ToLower() == "stage.arc") {
+                    // Modify based on user choice
+                    foreach (int item in CheckedListBox_Collision_General.CheckedIndices)
+                    {
+                        switch (item)
+                        {
+                            case 0:
+                                // Unpack the archive
+                                string randomArchive = Archives.UnpackARC(archive, Path.Combine(Path.GetTempPath(), Path.GetRandomFileName()));
+
+                                // Iterate through all Lua scripts for scene parameters
+                                foreach (string binData in Directory.GetFiles(randomArchive, "collision.bin", SearchOption.AllDirectories))
+                                {
+                                    // Shortened variable to get checked items easier
+                                    CheckedListBox @checked = CheckedListBox_Collision_Respected;
+
+                                    // Write to logs for user feedback
+                                    Console.WriteLine($"Randomising Collision: {binData}");
+
+                                    // Decode collision binary
+                                    Collision.Decode(binData, out string convertedColi);
+
+                                    // Rotate collision axis
+                                    Collision.RotationSwap(convertedColi);
+
+                                    // Change collision mesh names in the OBJ
+                                    Collision.PropertyRandomiser(convertedColi, RNG, @checked.GetItemChecked(0), @checked.GetItemChecked(1), @checked.GetItemChecked(2));
+
+                                    // Encode collision binary
+                                    Collision.Encode(convertedColi);
+                                }
+
+                                // Repack the archive
+                                Archives.CreateModARC(randomArchive, archive, modDirectory);
+                                break;
+                        }
+                    }
+                }
+
+                else if (Path.GetFileName(archive).ToLower() == "player.arc") {
+                    // Modify based on user choice
+                    foreach (int item in CheckedListBox_Package_General.CheckedIndices)
+                    {
+                        switch (item)
+                        {
+                            case 0:
+                                // Unpack the archive
+                                string randomArchive = Archives.UnpackARC(archive, Path.Combine(Path.GetTempPath(), Path.GetRandomFileName()));
+
+                                // Iterate through all Lua scripts for scene parameters
+                                foreach (string pkgData in Directory.GetFiles(randomArchive, "*.pkg", SearchOption.AllDirectories))
+                                {
+                                    // Write to logs for user feedback
+                                    Console.WriteLine($"Randomising Package: {pkgData}");
+
+                                    // Randomise animations in PKG
+                                    Package.PackageAnimationRandomiser(Paths.GetPathWithoutExtension(pkgData), RNG);
+                                }
+
+                                // Repack the archive
+                                Archives.CreateModARC(randomArchive, archive, modDirectory);
+                                break;
+                        }
+                    }
+                }
+
                 // Unpack object.arc
                 // Unpack sprite.arc
                 // Unpack stage archives
                 // Randomises all textures in the archives
-                if (Areas.Contains(Path.GetFileNameWithoutExtension(archive)) ||
-                    Path.GetFileName(archive).ToLower() == "object.arc"       ||
+                else if (Areas.Contains(Path.GetFileNameWithoutExtension(archive)) ||
+                    Path.GetFileName(archive).ToLower() == "object.arc"            ||
                     Path.GetFileName(archive).ToLower() == "sprite.arc")
                 {
                     // Modify based on user choice
-                    foreach (int item in CheckedListBox_Textures_General.CheckedIndices)
+                    foreach (int item in CheckedListBox_Visual_General.CheckedIndices)
                     {
                         switch (item)
                         {
@@ -360,14 +431,14 @@ namespace Sonic_06_Randomiser_Suite
 
                 // Unpack sound.arc
                 // Replaces the common scene bank with one that contains all voice lines
-                if (Path.GetFileName(archive).ToLower() == "sound.arc") {
+                else if (Path.GetFileName(archive).ToLower() == "sound.arc") {
                     // Unpack the archive
                     string randomArchive = Archives.UnpackARC(archive, Path.Combine(Path.GetTempPath(), Path.GetRandomFileName()));
+                    string voiceSBK = Path.Combine(randomArchive, $"sound\\{Literal.Core(Properties.Settings.Default.Path_GameExecutable)}\\sound\\voice_all_e.sbk");
 
                     // Write custom SBK
-                    File.WriteAllBytes(
-                    Path.Combine(randomArchive, $"sound\\{Literal.Core(Properties.Settings.Default.Path_GameExecutable)}\\sound\\voice_all_e.sbk"),
-                    Properties.Resources.voice_all_e);
+                    Console.WriteLine($"Patching Scene Bank: {voiceSBK}");
+                    File.WriteAllBytes(voiceSBK, Properties.Resources.voice_all_e);
 
                     // Repack the archive
                     Archives.CreateModARC(randomArchive, archive, modDirectory);
@@ -383,7 +454,7 @@ namespace Sonic_06_Randomiser_Suite
                                                    $"{Program.GlobalVersionNumber}\n\n" +
                                                    "" +
                                                    "Knuxfan24 - Lead programmer and reverse-engineer\n" +
-                                                   "HyperPolygon64 - Designer and code optimisation\n" +
+                                                   "HyperPolygon64 - Designer, code optimisation and reverse-engineer\n" +
                                                    "Radfordhound - HedgeLib\n" +
                                                    "GerbilSoft - ArcPackerLib\n" +
                                                    "Shadow LAG - Lua Decompiler\n" +
@@ -411,17 +482,22 @@ namespace Sonic_06_Randomiser_Suite
         /// </summary>
         private void Button_SelectAll_Click(object sender, EventArgs e) {
             // This looks messy, we know...
-            if (sender == Button_Placement_General_SelectAll) for (int i = 0; i < CheckedListBox_Placement_General.Items.Count; i++) CheckedListBox_Placement_General.SetItemChecked(i, true);
-            else if (sender == Button_Placement_Enemies_SelectAll) for (int i = 0; i < CheckedListBox_Placement_Enemies.Items.Count; i++) CheckedListBox_Placement_Enemies.SetItemChecked(i, true);
+            if (sender == Button_Placement_General_SelectAll)         for (int i = 0; i < CheckedListBox_Placement_General.Items.Count; i++)    CheckedListBox_Placement_General.SetItemChecked(i, true);
+            else if (sender == Button_Placement_Enemies_SelectAll)    for (int i = 0; i < CheckedListBox_Placement_Enemies.Items.Count; i++)    CheckedListBox_Placement_Enemies.SetItemChecked(i, true);
             else if (sender == Button_Placement_Characters_SelectAll) for (int i = 0; i < CheckedListBox_Placement_Characters.Items.Count; i++) CheckedListBox_Placement_Characters.SetItemChecked(i, true);
-            else if (sender == Button_Placement_Items_SelectAll) for (int i = 0; i < CheckedListBox_Placement_Items.Items.Count; i++) CheckedListBox_Placement_Items.SetItemChecked(i, true);
-            else if (sender == Button_Scene_General_SelectAll) for (int i = 0; i < CheckedListBox_Scene_General.Items.Count; i++) CheckedListBox_Scene_General.SetItemChecked(i, true);
-            else if (sender == Button_Audio_General_SelectAll) for (int i = 0; i < CheckedListBox_Audio_General.Items.Count; i++) CheckedListBox_Audio_General.SetItemChecked(i, true);
-            else if (sender == Button_Audio_Music_SelectAll) for (int i = 0; i < CheckedListBox_Audio_Music.Items.Count; i++) CheckedListBox_Audio_Music.SetItemChecked(i, true);
-            else if (sender == Button_Text_General_SelectAll) for (int i = 0; i < CheckedListBox_Text_General.Items.Count; i++) CheckedListBox_Text_General.SetItemChecked(i, true);
-            else if (sender == Button_Text_Languages_SelectAll) for (int i = 0; i < CheckedListBox_Text_Languages.Items.Count; i++) CheckedListBox_Text_Languages.SetItemChecked(i, true);
-            else if (sender == Button_Textures_General_SelectAll) for (int i = 0; i < CheckedListBox_Textures_General.Items.Count; i++) CheckedListBox_Textures_General.SetItemChecked(i, true);
-            else if (sender == Button_Textures_Areas_SelectAll) for (int i = 0; i < CheckedListBox_Textures_Areas.Items.Count; i++) CheckedListBox_Textures_Areas.SetItemChecked(i, true);
+            else if (sender == Button_Placement_Items_SelectAll)      for (int i = 0; i < CheckedListBox_Placement_Items.Items.Count; i++)      CheckedListBox_Placement_Items.SetItemChecked(i, true);
+            else if (sender == Button_Scene_General_SelectAll)        for (int i = 0; i < CheckedListBox_Scene_General.Items.Count; i++)        CheckedListBox_Scene_General.SetItemChecked(i, true);
+            else if (sender == Button_Audio_General_SelectAll)        for (int i = 0; i < CheckedListBox_Audio_General.Items.Count; i++)        CheckedListBox_Audio_General.SetItemChecked(i, true);
+            else if (sender == Button_Audio_Music_SelectAll)          for (int i = 0; i < CheckedListBox_Audio_Music.Items.Count; i++)          CheckedListBox_Audio_Music.SetItemChecked(i, true);
+            else if (sender == Button_Text_General_SelectAll)         for (int i = 0; i < CheckedListBox_Text_General.Items.Count; i++)         CheckedListBox_Text_General.SetItemChecked(i, true);
+            else if (sender == Button_Text_Languages_SelectAll)       for (int i = 0; i < CheckedListBox_Text_Languages.Items.Count; i++)       CheckedListBox_Text_Languages.SetItemChecked(i, true);
+            else if (sender == Button_Visual_General_SelectAll)       for (int i = 0; i < CheckedListBox_Visual_General.Items.Count; i++)       CheckedListBox_Visual_General.SetItemChecked(i, true);
+            else if (sender == Button_Visual_Areas_SelectAll)         for (int i = 0; i < CheckedListBox_Visual_Areas.Items.Count; i++)         CheckedListBox_Visual_Areas.SetItemChecked(i, true);
+            else if (sender == Button_Collision_General_SelectAll)    for (int i = 0; i < CheckedListBox_Collision_General.Items.Count; i++)    CheckedListBox_Collision_General.SetItemChecked(i, true);
+            else if (sender == Button_Collision_Respected_SelectAll)  for (int i = 0; i < CheckedListBox_Collision_Respected.Items.Count; i++)  CheckedListBox_Collision_Respected.SetItemChecked(i, true);
+            else if (sender == Button_Collision_Surfaces_SelectAll)   for (int i = 0; i < CheckedListBox_Collision_Surfaces.Items.Count; i++)   CheckedListBox_Collision_Surfaces.SetItemChecked(i, true);
+            else if (sender == Button_Package_General_SelectAll)      for (int i = 0; i < CheckedListBox_Package_General.Items.Count; i++)      CheckedListBox_Package_General.SetItemChecked(i, true);
+            else if (sender == Button_Package_Characters_SelectAll)   for (int i = 0; i < CheckedListBox_Package_Characters.Items.Count; i++)   CheckedListBox_Package_Characters.SetItemChecked(i, true);
         }
 
         /// <summary>
@@ -438,8 +514,13 @@ namespace Sonic_06_Randomiser_Suite
             else if (sender == Button_Audio_Music_DeselectAll)          for (int i = 0; i < CheckedListBox_Audio_Music.Items.Count; i++)          CheckedListBox_Audio_Music.SetItemChecked(i, false);
             else if (sender == Button_Text_General_DeselectAll)         for (int i = 0; i < CheckedListBox_Text_General.Items.Count; i++)         CheckedListBox_Text_General.SetItemChecked(i, false);
             else if (sender == Button_Text_Languages_DeselectAll)       for (int i = 0; i < CheckedListBox_Text_Languages.Items.Count; i++)       CheckedListBox_Text_Languages.SetItemChecked(i, false);
-            else if (sender == Button_Textures_General_DeselectAll)     for (int i = 0; i < CheckedListBox_Textures_General.Items.Count; i++)     CheckedListBox_Textures_General.SetItemChecked(i, false);
-            else if (sender == Button_Textures_Areas_DeselectAll)       for (int i = 0; i < CheckedListBox_Textures_Areas.Items.Count; i++)       CheckedListBox_Textures_Areas.SetItemChecked(i, false);
+            else if (sender == Button_Visual_General_DeselectAll)       for (int i = 0; i < CheckedListBox_Visual_General.Items.Count; i++)       CheckedListBox_Visual_General.SetItemChecked(i, false);
+            else if (sender == Button_Visual_Areas_DeselectAll)         for (int i = 0; i < CheckedListBox_Visual_Areas.Items.Count; i++)         CheckedListBox_Visual_Areas.SetItemChecked(i, false);
+            else if (sender == Button_Collision_General_DeselectAll)    for (int i = 0; i < CheckedListBox_Collision_General.Items.Count; i++)    CheckedListBox_Collision_General.SetItemChecked(i, false);
+            else if (sender == Button_Collision_Respected_DeselectAll)  for (int i = 0; i < CheckedListBox_Collision_Respected.Items.Count; i++)  CheckedListBox_Collision_Respected.SetItemChecked(i, false);
+            else if (sender == Button_Collision_Surfaces_DeselectAll)   for (int i = 0; i < CheckedListBox_Collision_Surfaces.Items.Count; i++)   CheckedListBox_Collision_Surfaces.SetItemChecked(i, false);
+            else if (sender == Button_Package_General_DeselectAll)      for (int i = 0; i < CheckedListBox_Package_General.Items.Count; i++)      CheckedListBox_Package_General.SetItemChecked(i, false);
+            else if (sender == Button_Package_Characters_DeselectAll)   for (int i = 0; i < CheckedListBox_Package_Characters.Items.Count; i++)   CheckedListBox_Package_Characters.SetItemChecked(i, false);
         }
 
         /// <summary>

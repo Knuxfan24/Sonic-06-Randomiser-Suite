@@ -123,6 +123,26 @@ namespace Sonic_06_Randomiser_Suite.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] CollisionExporter {
+            get {
+                object obj = ResourceManager.GetObject("CollisionExporter", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] CollisionImporter {
+            get {
+                object obj = ResourceManager.GetObject("CollisionImporter", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to cStalker_Fix
         ///cStalker_Freeze
         ///cStalker_Normal
@@ -1324,6 +1344,16 @@ namespace Sonic_06_Randomiser_Suite.Properties {
         internal static string msgTwnSonicEntries {
             get {
                 return ResourceManager.GetString("msgTwnSonicEntries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] pkgtool {
+            get {
+                object obj = ResourceManager.GetObject("pkgtool", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         
