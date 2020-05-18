@@ -454,8 +454,8 @@ namespace Sonic_06_Randomiser_Suite
                                                    $"{Program.GlobalVersionNumber}\n\n" +
                                                    "" +
                                                    "Knuxfan24 - Lead programmer and reverse-engineer\n" +
-                                                   "HyperPolygon64 - Designer, code optimisation and reverse-engineer\n" +
-                                                   "Radfordhound - HedgeLib\n" +
+                                                   "HyperPolygon64 - Designer, optimisation and reverse-engineer\n" +
+                                                   "Radfordhound - HedgeLib and pkgtool\n" +
                                                    "GerbilSoft - ArcPackerLib\n" +
                                                    "Shadow LAG - Lua Decompiler\n" +
                                                    "darkhero1337 - Unlock Mid-air Momentum",
