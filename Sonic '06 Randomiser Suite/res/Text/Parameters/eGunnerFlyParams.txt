@@ -1,0 +1,7 @@
+eGunnerFly_Chase
+eGunnerFly_Fix
+eGunnerFly_Fix_Rocket
+eGunnerFly_Fix_Vulcan
+eGunnerFly_Homing
+eGunnerFly_Normal
+eGunnerFly_Trans

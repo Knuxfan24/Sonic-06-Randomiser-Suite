@@ -1,0 +1,6 @@
+eGunner_Chase
+eGunner_Fix
+eGunner_Fix_Rocket
+eGunner_Fix_Vulcan
+eGunner_Normal
+eGunner_Trans

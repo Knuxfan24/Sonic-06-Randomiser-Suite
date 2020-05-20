@@ -1,0 +1,5 @@
+cStalker_Fix
+cStalker_Freeze
+cStalker_Normal
+cStalker_Wall_Fix
+cStalker_Wall_Normal
