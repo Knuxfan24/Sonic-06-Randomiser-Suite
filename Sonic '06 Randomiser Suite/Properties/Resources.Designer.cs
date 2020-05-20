@@ -1348,16 +1348,6 @@ namespace Sonic_06_Randomiser_Suite.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] pkgtool {
-            get {
-                object obj = ResourceManager.GetObject("pkgtool", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to   FileName = &quot;boss/thirdiblis_flc/flcA_envmap.dds&quot;
         ///  FileName = &quot;object/twn/goldmdl/item_envmap.dds&quot;
         ///  FileName = &quot;stage/aqa/a/aqa_envmap.dds&quot;

@@ -196,7 +196,6 @@
     <Content Include="third_party\arctool.exe" />
     <None Include="third_party\CollisionExporter.exe" />
     <None Include="third_party\CollisionImporter.exe" />
-    <Content Include="third_party\pkgtool.exe" />
     <Content Include="third_party\unlub.jar" />
     <Content Include="res\Icons\Error.ico" />
     <Content Include="res\Icons\Logo.ico" />

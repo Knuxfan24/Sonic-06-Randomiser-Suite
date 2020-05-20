@@ -1483,7 +1483,11 @@
             this.CheckedListBox_Visual_General.Items.AddRange(new object[] {
             "Randomise Area Textures",
             "Randomise Object Textures",
-            "Randomise Sprite Textures"});
+            "Randomise Sprite Textures",
+            "Randomise Character Textures",
+            "Randomise Event Textures",
+            "Randomise Particle Textures",
+            "Randomise Enemy Textures"});
             this.CheckedListBox_Visual_General.Location = new System.Drawing.Point(0, 0);
             this.CheckedListBox_Visual_General.Name = "CheckedListBox_Visual_General";
             this.CheckedListBox_Visual_General.Size = new System.Drawing.Size(897, 288);

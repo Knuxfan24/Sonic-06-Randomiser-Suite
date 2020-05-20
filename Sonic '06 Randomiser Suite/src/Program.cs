@@ -13,7 +13,6 @@ namespace Sonic_06_Randomiser_Suite
                              Arctool           = $"{ApplicationData}\\Sonic_06_Randomiser_Suite\\Tools\\arctool.exe",
                              CollisionImporter = $"{ApplicationData}\\Sonic_06_Randomiser_Suite\\Tools\\CollisionImporter.exe",
                              CollisionExporter = $"{ApplicationData}\\Sonic_06_Randomiser_Suite\\Tools\\CollisionExporter.exe",
-                             pkgtool           = $"{ApplicationData}\\Sonic_06_Randomiser_Suite\\Tools\\pkgtool.exe",
                              unlub             = $"{ApplicationData}\\Sonic_06_Randomiser_Suite\\Tools\\unlub.jar";
 
         [STAThread]
@@ -36,9 +35,6 @@ namespace Sonic_06_Randomiser_Suite
 
             if (!File.Exists(CollisionExporter))
                 File.WriteAllBytes(CollisionExporter, Properties.Resources.CollisionExporter);
-
-            if (!File.Exists(pkgtool))
-                File.WriteAllBytes(pkgtool, Properties.Resources.pkgtool);
 
             if (!File.Exists(unlub))
                 File.WriteAllBytes(unlub, Properties.Resources.unlub);

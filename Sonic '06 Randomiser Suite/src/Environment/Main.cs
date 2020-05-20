@@ -390,7 +390,7 @@ namespace Sonic_06_Randomiser_Suite
                                     Console.WriteLine($"Randomising Package: {pkgData}");
 
                                     // Randomise animations in PKG
-                                    Package.PackageAnimationRandomiser(Paths.GetPathWithoutExtension(pkgData), RNG);
+                                    Package.PackageAnimationRandomiser(pkgData, RNG);
                                 }
 
                                 // Repack the archive
@@ -404,9 +404,11 @@ namespace Sonic_06_Randomiser_Suite
                 // Unpack sprite.arc
                 // Unpack stage archives
                 // Randomises all textures in the archives
-                else if (Areas.Contains(Path.GetFileNameWithoutExtension(archive)) ||
-                    Path.GetFileName(archive).ToLower() == "object.arc"            ||
-                    Path.GetFileName(archive).ToLower() == "sprite.arc")
+                else if (Path.GetFileName(archive).ToLower() == "object.arc"       ||
+                         Path.GetFileName(archive).ToLower() == "sprite.arc"       ||
+                         Path.GetFileName(archive).ToLower().StartsWith("player_") ||
+                         Path.GetFileName(archive).ToLower().StartsWith("stage_")  ||
+                         Path.GetFileNameWithoutExtension(archive).ToLower().EndsWith("data"))
                 {
                     // Modify based on user choice
                     foreach (int item in CheckedListBox_Visual_General.CheckedIndices)
@@ -416,6 +418,10 @@ namespace Sonic_06_Randomiser_Suite
                             case 0 when Areas.Contains(Path.GetFileNameWithoutExtension(archive)):
                             case 1 when Path.GetFileName(archive).ToLower() == "object.arc":
                             case 2 when Path.GetFileName(archive).ToLower() == "sprite.arc":
+                            case 3 when Path.GetFileName(archive).ToLower().StartsWith("player_"):
+                            case 4 when Path.GetFileName(archive).ToLower().StartsWith("stage_e") || Path.GetFileName(archive).ToLower() == "event_data.arc":
+                            case 5 when Path.GetFileName(archive).ToLower() == "particle_data.arc":
+                            case 6 when Path.GetFileName(archive).ToLower() == "enemy_data.arc":
                                 // Unpack the archive
                                 string randomArchive = Archives.UnpackARC(archive, Path.Combine(Path.GetTempPath(), Path.GetRandomFileName()));
 
@@ -455,7 +461,7 @@ namespace Sonic_06_Randomiser_Suite
                                                    "" +
                                                    "Knuxfan24 - Lead programmer and reverse-engineer\n" +
                                                    "HyperPolygon64 - Designer, optimisation and reverse-engineer\n" +
-                                                   "Radfordhound - HedgeLib and pkgtool\n" +
+                                                   "Radfordhound - HedgeLib# and format specifications\n" +
                                                    "GerbilSoft - ArcPackerLib\n" +
                                                    "Shadow LAG - Lua Decompiler\n" +
                                                    "darkhero1337 - Unlock Mid-air Momentum",
