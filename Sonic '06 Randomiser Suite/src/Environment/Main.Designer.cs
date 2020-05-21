@@ -197,13 +197,14 @@
             // 
             this.TextBox_RandomisationSeed.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.TextBox_RandomisationSeed.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.TextBox_RandomisationSeed.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.TextBox_RandomisationSeed.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.TextBox_RandomisationSeed.ForeColor = System.Drawing.SystemColors.Control;
             this.TextBox_RandomisationSeed.Location = new System.Drawing.Point(15, 140);
             this.TextBox_RandomisationSeed.Name = "TextBox_RandomisationSeed";
             this.TextBox_RandomisationSeed.Size = new System.Drawing.Size(856, 23);
             this.TextBox_RandomisationSeed.TabIndex = 167;
+            this.TextBox_RandomisationSeed.TextChanged += new System.EventHandler(this.TextBox_TextChanged);
             // 
             // Label_RandomisationSeed
             // 
@@ -232,13 +233,14 @@
             // 
             this.TextBox_GameExecutable.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.TextBox_GameExecutable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.TextBox_GameExecutable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.TextBox_GameExecutable.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.TextBox_GameExecutable.ForeColor = System.Drawing.SystemColors.Control;
             this.TextBox_GameExecutable.Location = new System.Drawing.Point(15, 88);
             this.TextBox_GameExecutable.Name = "TextBox_GameExecutable";
             this.TextBox_GameExecutable.Size = new System.Drawing.Size(856, 23);
             this.TextBox_GameExecutable.TabIndex = 174;
+            this.TextBox_GameExecutable.TextChanged += new System.EventHandler(this.TextBox_TextChanged);
             // 
             // Label_GameExecutable
             // 
@@ -299,13 +301,14 @@
             // 
             this.TextBox_ModsDirectory.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.TextBox_ModsDirectory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.TextBox_ModsDirectory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.TextBox_ModsDirectory.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.TextBox_ModsDirectory.ForeColor = System.Drawing.SystemColors.Control;
             this.TextBox_ModsDirectory.Location = new System.Drawing.Point(15, 36);
             this.TextBox_ModsDirectory.Name = "TextBox_ModsDirectory";
             this.TextBox_ModsDirectory.Size = new System.Drawing.Size(856, 23);
             this.TextBox_ModsDirectory.TabIndex = 171;
+            this.TextBox_ModsDirectory.TextChanged += new System.EventHandler(this.TextBox_TextChanged);
             // 
             // Label_ModsDirectory
             // 
@@ -364,6 +367,7 @@
             this.Button_Randomise.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Button_Randomise.BackColor = System.Drawing.Color.LightGreen;
+            this.Button_Randomise.Enabled = false;
             this.Button_Randomise.FlatAppearance.BorderSize = 0;
             this.Button_Randomise.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Button_Randomise.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));

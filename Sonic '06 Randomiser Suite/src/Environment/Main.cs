@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.ComponentModel;
 using System.Collections.Generic;
 using Sonic_06_Randomiser_Suite.Serialisers;
+using System.Drawing;
 
 namespace Sonic_06_Randomiser_Suite
 {
@@ -466,6 +467,35 @@ namespace Sonic_06_Randomiser_Suite
                                                    "Shadow LAG - Lua Decompiler\n" +
                                                    "darkhero1337 - Unlock Mid-air Momentum",
                                                    "About", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        /// <summary>
+        /// Check if the text box controls have been modified
+        /// </summary>
+        private void TextBox_TextChanged(object sender, EventArgs e) {
+            if (!Paths.CheckPathLegitimacy(TextBox_ModsDirectory.Text)) 
+                TextBox_ModsDirectory.BackColor = Color.FromArgb(70, 45, 48);
+            else
+                TextBox_ModsDirectory.BackColor = Color.FromArgb(45, 45, 48);
+
+            if (!Paths.CheckFileLegitimacy(TextBox_GameExecutable.Text))
+                TextBox_GameExecutable.BackColor = Color.FromArgb(70, 45, 48);
+            else
+                TextBox_GameExecutable.BackColor = Color.FromArgb(45, 45, 48);
+
+            if (TextBox_RandomisationSeed.Text == string.Empty)
+                TextBox_RandomisationSeed.BackColor = Color.FromArgb(70, 45, 48);
+            else
+                TextBox_RandomisationSeed.BackColor = Color.FromArgb(45, 45, 48);
+
+            if (!Paths.CheckPathLegitimacy(TextBox_ModsDirectory.Text)  ||
+                !Paths.CheckFileLegitimacy(TextBox_GameExecutable.Text) ||
+                TextBox_RandomisationSeed.Text == string.Empty)
+            {
+                Button_Randomise.Enabled = false;
+            }
+            else
+                Button_Randomise.Enabled = true;
         }
 
         /// <summary>
