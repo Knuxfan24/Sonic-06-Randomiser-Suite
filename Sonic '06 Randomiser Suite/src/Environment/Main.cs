@@ -2,13 +2,13 @@
 using System.IO;
 using System.Linq;
 using HedgeLib.Sets;
+using System.Drawing;
 using Unify.Messenger;
 using Unify.TabControl;
 using System.Windows.Forms;
 using System.ComponentModel;
 using System.Collections.Generic;
 using Sonic_06_Randomiser_Suite.Serialisers;
-using System.Drawing;
 
 namespace Sonic_06_Randomiser_Suite
 {
