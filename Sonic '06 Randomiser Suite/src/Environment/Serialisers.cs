@@ -13,7 +13,9 @@ namespace Sonic_06_Randomiser_Suite.Serialisers
         /// Creates a mod folder and INI for Sonic '06 Mod Manager
         /// </summary>
         public static string Create(string seed, bool beatable) {
-            string safeTitle = Literal.UseSafeFormattedCharacters($"Sonic '06 Randomised ({seed})");
+            // Create folder name that's safe for character limitations
+            string safeTitle = Literal.UseSafeFormattedCharacters($"Sonic '06 Randomised ({Paths.Truncate(seed, 150)})");
+
             string newPath = Path.Combine(Properties.Settings.Default.Path_ModsDirectory, safeTitle);
 
             if (Directory.Exists(newPath)) {
@@ -422,6 +424,14 @@ namespace Sonic_06_Randomiser_Suite.Serialisers
 
     class Paths
     {
+        /// <summary>
+        /// Truncates a string to make it safe for paths
+        /// </summary>
+        public static string Truncate(string value, int maxLength) {
+            if (string.IsNullOrEmpty(value)) return value;
+            return value.Length <= maxLength ? value : $"{value.Substring(0, maxLength)}...";
+        }
+
         /// <summary>
         /// Returns the first directory of a path.
         /// </summary>
