@@ -29,7 +29,8 @@ namespace Sonic_06_Randomiser_Suite
                 {
                     foreach (var entry in pkg.Types[i].Files)
                     {
-                        availableReferences.Add(entry.FilePath);
+                        if (!forbiddenAnimations.Any(entry.FilePath.Contains))
+                            availableReferences.Add(entry.FilePath);
                     }
                 }
             }
@@ -41,16 +42,19 @@ namespace Sonic_06_Randomiser_Suite
                 {
                     for (int f = 0; f < pkg.Types[i].Files.Count; f++)
                     {
-                        index = rng.Next(availableReferences.Count);
-                        if (usedNumbers.Contains(index))
-                        {
-                            do { index = rng.Next(availableReferences.Count); }
-                            while (usedNumbers.Contains(index));
-                        }
-                        usedNumbers.Add(index);
-
                         if (!forbiddenAnimations.Any(pkg.Types[i].Files[f].FilePath.Contains))
+                        {
+                            index = rng.Next(availableReferences.Count);
+
+                            if (usedNumbers.Contains(index))
+                            {
+                                do { index = rng.Next(availableReferences.Count); }
+                                while (usedNumbers.Contains(index));
+                            }
+                            usedNumbers.Add(index);
+
                             pkg.Types[i].Files[f].FilePath = availableReferences[index];
+                        }
                     }
                 }
             }
