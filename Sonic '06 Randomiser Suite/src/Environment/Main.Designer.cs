@@ -619,8 +619,7 @@
             "Randomise Characters",
             "Randomise Item Capsules",
             "Randomise Voice Triggers",
-            "Randomise Physics Props",
-            "Ensure Episodes are Beatable"});
+            "Randomise Physics Props"});
             this.CheckedListBox_Placement_General.Location = new System.Drawing.Point(0, 0);
             this.CheckedListBox_Placement_General.Name = "CheckedListBox_Placement_General";
             this.CheckedListBox_Placement_General.Size = new System.Drawing.Size(897, 288);
@@ -1700,7 +1699,7 @@
             // 
             // Button_Visual_Custom_RemoveTexture
             // 
-            this.Button_Visual_Custom_RemoveTexture.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.Button_Visual_Custom_RemoveTexture.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Button_Visual_Custom_RemoveTexture.BackColor = System.Drawing.Color.Tomato;
             this.Button_Visual_Custom_RemoveTexture.FlatAppearance.BorderSize = 0;
             this.Button_Visual_Custom_RemoveTexture.FlatStyle = System.Windows.Forms.FlatStyle.Flat;

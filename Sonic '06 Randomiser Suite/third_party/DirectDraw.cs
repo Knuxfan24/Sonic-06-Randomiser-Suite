@@ -2,6 +2,27 @@
 using System.IO;
 using System.Drawing;
 
+/*
+ * Kons 2013-04-19 Version .3 (Modified)
+ * 
+ * Changelog:
+ * .3
+ * - Added support for V8U8 (thanks to AmaroK86)
+ * .2
+ * - Fixed a bug computing width/height of mipmaps (thanks to AmaroK86)
+ * .1
+ * - Base implementation
+ * 
+ * Supported features:
+ * - DXT1
+ * - DXT3 (implemented by HyperPolygon64)
+ * - DXT5 (implemented by AmaroK86)
+ * - LinearImage (untested)
+ * 
+ * http://code.google.com/p/kprojects/
+ * Send me any change/improvement at kons.snok<at>gmail.com
+ */
+
 namespace DirectDraw
 {
 	public class DDSImage

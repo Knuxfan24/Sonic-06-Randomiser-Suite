@@ -505,12 +505,25 @@ namespace Sonic_06_Randomiser_Suite
             UnifyMessenger.UnifyMessage.ShowDialog("Sonic '06 Randomiser Suite\n" +
                                                    $"{Program.GlobalVersionNumber}\n\n" +
                                                    "" +
-                                                   "Knuxfan24 - Lead programmer and reverse-engineer\n" +
-                                                   "HyperPolygon64 - Designer, optimisation and reverse-engineer\n" +
-                                                   "Radfordhound - HedgeLib# and format specifications\n" +
-                                                   "GerbilSoft - ArcPackerLib\n" +
-                                                   "Shadow LAG - Lua Decompiler\n" +
-                                                   "darkhero1337 - Unlock Mid-air Momentum",
+                                                   "Designers:\n" +
+                                                   "Knux - Original design\n" +
+                                                   "Hyper - Redesign and custom controls\n\n" +
+                                                   "" +
+                                                   "API Developers:\n" +
+                                                   "Knux - Package, Randomisation and Strings\n" +
+                                                   "Hyper - Archives, Lua, Package and Randomisation\n" +
+                                                   "GerbilSoft - Archives and Strings\n" +
+                                                   "Radfordhound - Package\n" +
+                                                   "Shadow LAG - Lua\n\n" +
+                                                   "" +
+                                                   "Randomiser Developers:\n" +
+                                                   "Knux - Audio, Collision, Package, Placement, Scene and Strings\n" +
+                                                   "Hyper - Collision, Package, Lua and Textures\n\n" +
+                                                   "" +
+                                                   "Miscellaneous Developers:\n" +
+                                                   "darkhero1337 - Unlock Mid-air Momentum\n" +
+                                                   "Kons - DirectDraw Surface Decoder\n" +
+                                                   "David Polomis - Targa Decoder",
                                                    "About", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
