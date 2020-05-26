@@ -1,8 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text;
-using System.Linq;
 using System.Diagnostics;
-using System;
 
 namespace Sonic_06_Randomiser_Suite
 {

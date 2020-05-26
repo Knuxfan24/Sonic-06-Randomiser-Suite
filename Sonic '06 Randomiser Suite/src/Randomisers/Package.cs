@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Linq;
 using HedgeLib.Misc;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Sonic_06_Randomiser_Suite
 {
