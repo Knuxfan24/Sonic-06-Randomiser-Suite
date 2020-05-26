@@ -2,7 +2,6 @@
 using System.Linq;
 using HedgeLib.Misc;
 using System.Collections.Generic;
-using Sonic_06_Randomiser_Suite.Serialisers;
 
 namespace Sonic_06_Randomiser_Suite
 {
