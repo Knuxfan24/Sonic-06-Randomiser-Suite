@@ -45,7 +45,6 @@
             this.Button_RandomisationSeed = new System.Windows.Forms.Button();
             this.Button_Randomise = new System.Windows.Forms.Button();
             this.Button_About = new System.Windows.Forms.Button();
-            this.Label_VersionNumber = new System.Windows.Forms.Label();
             this.ProgressBar_Randomisation = new System.Windows.Forms.ProgressBar();
             this.Panel_Inactive = new System.Windows.Forms.Panel();
             this.ListBox_Logs = new System.Windows.Forms.ListBox();
@@ -107,6 +106,7 @@
             this.tabPage14 = new System.Windows.Forms.TabPage();
             this.unifyTabControl4 = new Unify.TabControl.UnifyTabControl();
             this.tabPage15 = new System.Windows.Forms.TabPage();
+            this.Button_Visual_General_Forbidden = new System.Windows.Forms.Button();
             this.Button_Visual_General_DeselectAll = new System.Windows.Forms.Button();
             this.panel10 = new System.Windows.Forms.Panel();
             this.CheckedListBox_Visual_General = new System.Windows.Forms.CheckedListBox();
@@ -142,6 +142,7 @@
             this.tabPage21 = new System.Windows.Forms.TabPage();
             this.unifyTabControl6 = new Unify.TabControl.UnifyTabControl();
             this.tabPage22 = new System.Windows.Forms.TabPage();
+            this.Button_Package_General_Forbidden = new System.Windows.Forms.Button();
             this.Button_Package_General_DeselectAll = new System.Windows.Forms.Button();
             this.panel15 = new System.Windows.Forms.Panel();
             this.CheckedListBox_Package_General = new System.Windows.Forms.CheckedListBox();
@@ -431,18 +432,6 @@
             this.Button_About.TabIndex = 180;
             this.Button_About.UseVisualStyleBackColor = false;
             this.Button_About.Click += new System.EventHandler(this.Button_About_Click);
-            // 
-            // Label_VersionNumber
-            // 
-            this.Label_VersionNumber.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Label_VersionNumber.ForeColor = System.Drawing.SystemColors.Control;
-            this.Label_VersionNumber.Location = new System.Drawing.Point(248, 528);
-            this.Label_VersionNumber.Name = "Label_VersionNumber";
-            this.Label_VersionNumber.Size = new System.Drawing.Size(421, 24);
-            this.Label_VersionNumber.TabIndex = 56;
-            this.Label_VersionNumber.Text = "Version ###";
-            this.Label_VersionNumber.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // ProgressBar_Randomisation
             // 
@@ -1484,6 +1473,7 @@
             // tabPage15
             // 
             this.tabPage15.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
+            this.tabPage15.Controls.Add(this.Button_Visual_General_Forbidden);
             this.tabPage15.Controls.Add(this.Button_Visual_General_DeselectAll);
             this.tabPage15.Controls.Add(this.panel10);
             this.tabPage15.Controls.Add(this.Button_Visual_General_SelectAll);
@@ -1493,6 +1483,22 @@
             this.tabPage15.Size = new System.Drawing.Size(903, 329);
             this.tabPage15.TabIndex = 0;
             this.tabPage15.Text = "General";
+            // 
+            // Button_Visual_General_Forbidden
+            // 
+            this.Button_Visual_General_Forbidden.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Button_Visual_General_Forbidden.BackColor = System.Drawing.Color.DarkGray;
+            this.Button_Visual_General_Forbidden.FlatAppearance.BorderSize = 0;
+            this.Button_Visual_General_Forbidden.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_Visual_General_Forbidden.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.Button_Visual_General_Forbidden.Location = new System.Drawing.Point(242, 306);
+            this.Button_Visual_General_Forbidden.Name = "Button_Visual_General_Forbidden";
+            this.Button_Visual_General_Forbidden.Size = new System.Drawing.Size(418, 23);
+            this.Button_Visual_General_Forbidden.TabIndex = 56;
+            this.Button_Visual_General_Forbidden.Text = "Forbidden Textures";
+            this.Button_Visual_General_Forbidden.UseVisualStyleBackColor = false;
+            this.Button_Visual_General_Forbidden.Click += new System.EventHandler(this.Button_Forbidden_Click);
             // 
             // Button_Visual_General_DeselectAll
             // 
@@ -1539,7 +1545,7 @@
             "Randomise Particle Textures",
             "Randomise Enemy Textures",
             "Randomise Only Using Custom Textures",
-            "Allow Forbidden Texture Tags"});
+            "Allow Forbidden Textures"});
             this.CheckedListBox_Visual_General.Location = new System.Drawing.Point(0, 0);
             this.CheckedListBox_Visual_General.Name = "CheckedListBox_Visual_General";
             this.CheckedListBox_Visual_General.Size = new System.Drawing.Size(897, 288);
@@ -2059,6 +2065,7 @@
             // tabPage22
             // 
             this.tabPage22.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
+            this.tabPage22.Controls.Add(this.Button_Package_General_Forbidden);
             this.tabPage22.Controls.Add(this.Button_Package_General_DeselectAll);
             this.tabPage22.Controls.Add(this.panel15);
             this.tabPage22.Controls.Add(this.Button_Package_General_SelectAll);
@@ -2068,6 +2075,22 @@
             this.tabPage22.Size = new System.Drawing.Size(903, 329);
             this.tabPage22.TabIndex = 0;
             this.tabPage22.Text = "General";
+            // 
+            // Button_Package_General_Forbidden
+            // 
+            this.Button_Package_General_Forbidden.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Button_Package_General_Forbidden.BackColor = System.Drawing.Color.DarkGray;
+            this.Button_Package_General_Forbidden.FlatAppearance.BorderSize = 0;
+            this.Button_Package_General_Forbidden.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_Package_General_Forbidden.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.Button_Package_General_Forbidden.Location = new System.Drawing.Point(242, 306);
+            this.Button_Package_General_Forbidden.Name = "Button_Package_General_Forbidden";
+            this.Button_Package_General_Forbidden.Size = new System.Drawing.Size(418, 23);
+            this.Button_Package_General_Forbidden.TabIndex = 57;
+            this.Button_Package_General_Forbidden.Text = "Forbidden Animations";
+            this.Button_Package_General_Forbidden.UseVisualStyleBackColor = false;
+            this.Button_Package_General_Forbidden.Click += new System.EventHandler(this.Button_Forbidden_Click);
             // 
             // Button_Package_General_DeselectAll
             // 
@@ -2483,7 +2506,6 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
             this.ClientSize = new System.Drawing.Size(917, 595);
             this.Controls.Add(this.ProgressBar_Randomisation);
-            this.Controls.Add(this.Label_VersionNumber);
             this.Controls.Add(this.Button_About);
             this.Controls.Add(this.Button_Randomise);
             this.Controls.Add(this.Button_RandomisationSeed);
@@ -2638,7 +2660,6 @@
         private System.Windows.Forms.Panel panel8;
         private System.Windows.Forms.CheckedListBox CheckedListBox_Text_General;
         private System.Windows.Forms.Button Button_Text_General_SelectAll;
-        private System.Windows.Forms.Label Label_VersionNumber;
         private System.Windows.Forms.TabPage tabPage13;
         private System.Windows.Forms.Button Button_Text_Languages_DeselectAll;
         private System.Windows.Forms.Panel panel9;
@@ -2712,6 +2733,8 @@
         private System.Windows.Forms.Button Button_Visual_Custom_AddTexture;
         private System.Windows.Forms.ImageList ImageList_DirectDrawBuffer;
         private System.Windows.Forms.Button Button_Visual_Custom_ClearTextures;
+        private System.Windows.Forms.Button Button_Visual_General_Forbidden;
+        private System.Windows.Forms.Button Button_Package_General_Forbidden;
     }
 }
 

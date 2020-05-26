@@ -8,5 +8,11 @@
     <Setting Name="Path_GameExecutable" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="Forbidden_Textures" Type="System.String" Scope="User">
+      <Value Profile="(Default)">_sdw_,_lm_,envmap</Value>
+    </Setting>
+    <Setting Name="Forbidden_Animations" Type="System.String" Scope="User">
+      <Value Profile="(Default)">silver_style_Root.xnm,face</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -235,6 +235,12 @@
   <data name="firstmefiressParams" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\res\text\parameters\firstmefiressparams.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="Forbidden_Animations_Default" xml:space="preserve">
+    <value>silver_style_Root.xnm,face</value>
+  </data>
+  <data name="Forbidden_Textures_Default" xml:space="preserve">
+    <value>_sdw_,_lm_,envmap</value>
+  </data>
   <data name="Information" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\res\images\information.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>

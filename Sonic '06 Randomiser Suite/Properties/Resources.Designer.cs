@@ -528,6 +528,24 @@ namespace Sonic_06_Randomiser_Suite.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to silver_style_Root.xnm,face.
+        /// </summary>
+        internal static string Forbidden_Animations_Default {
+            get {
+                return ResourceManager.GetString("Forbidden_Animations_Default", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _sdw_,_lm_,envmap.
+        /// </summary>
+        internal static string Forbidden_Textures_Default {
+            get {
+                return ResourceManager.GetString("Forbidden_Textures_Default", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap Information {

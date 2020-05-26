@@ -39,7 +39,6 @@ namespace Sonic_06_Randomiser_Suite
 
             // Show version number
             Text = $"{Text} ({Program.GlobalVersionNumber})";
-            Label_VersionNumber.Text = Program.GlobalVersionNumber;
 
             // Set console output to ListBox_Logs
             Console.SetOut(new ListBoxWriter(ListBox_Logs));
@@ -61,6 +60,7 @@ namespace Sonic_06_Randomiser_Suite
             for (int i = 0; i < CheckedListBox_Package_Characters.Items.Count; i++) CheckedListBox_Package_Characters.SetItemChecked(i, true);
             for (int i = 0; i < CheckedListBox_Lua_Parameters.Items.Count; i++) CheckedListBox_Lua_Parameters.SetItemChecked(i, true);
             for (int i = 0; i < CheckedListBox_Lua_Characters.Items.Count; i++) CheckedListBox_Lua_Characters.SetItemChecked(i, true);
+            TextBox_RandomisationSeed.Text = RNG.Next().ToString();
         }
 
         /// <summary>
@@ -74,7 +74,6 @@ namespace Sonic_06_Randomiser_Suite
         private void LoadSettings() {
             TextBox_ModsDirectory.Text = Properties.Settings.Default.Path_ModsDirectory;
             TextBox_GameExecutable.Text = Properties.Settings.Default.Path_GameExecutable;
-            TextBox_RandomisationSeed.Text = RNG.Next().ToString();
         }
 
         /// <summary>
@@ -110,9 +109,15 @@ namespace Sonic_06_Randomiser_Suite
         }
 
         /// <summary>
+        /// Opens the Forbidden prompt to change what strings to exclude.
+        /// </summary>
+        private void Button_Forbidden_Click(object sender, EventArgs e) => new Forbidden(sender).ShowDialog();
+
+        /// <summary>
         /// Randomises Sonic '06... duh.
         /// </summary>
-        private void StartRandomisation(object sender, DoWorkEventArgs e) {
+        private void StartRandomisation(object sender, DoWorkEventArgs e)
+        {
             // Variables
             string modDirectory = string.Empty; // Stored here to be initialised and checked later
             List<string> getArchiveList = Paths.CollectGameData(Path.GetDirectoryName(Properties.Settings.Default.Path_GameExecutable)).ToList();
@@ -129,7 +134,8 @@ namespace Sonic_06_Randomiser_Suite
             RNG = new Random(TextBox_RandomisationSeed.Text.GetHashCode());
 
             // Create mod directory, also checking if it's beatable to enable a patch - if it's empty, return nothing
-            if ((modDirectory = Mods.Create(TextBox_RandomisationSeed.Text, CheckedListBox_Placement_General.GetItemChecked(5))) == string.Empty) return;
+            if ((modDirectory = Mods.Create(TextBox_RandomisationSeed.Text, false
+                /* Removed for 1.0 - CheckedListBox_Placement_General.GetItemChecked(5) */)) == string.Empty) return;
 
             // Define valid lists from CheckedListBox elements 
             Placement_Enemies    = Resources.EnumerateEnemiesList(CheckedListBox_Placement_Enemies);

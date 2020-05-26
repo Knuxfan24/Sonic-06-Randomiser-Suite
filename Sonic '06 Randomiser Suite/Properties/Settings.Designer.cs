@@ -46,5 +46,29 @@ namespace Sonic_06_Randomiser_Suite.Properties {
                 this["Path_GameExecutable"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("_sdw_,_lm_,envmap")]
+        public string Forbidden_Textures {
+            get {
+                return ((string)(this["Forbidden_Textures"]));
+            }
+            set {
+                this["Forbidden_Textures"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("silver_style_Root.xnm,face")]
+        public string Forbidden_Animations {
+            get {
+                return ((string)(this["Forbidden_Animations"]));
+            }
+            set {
+                this["Forbidden_Animations"] = value;
+            }
+        }
     }
 }
