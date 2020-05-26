@@ -133,12 +133,6 @@
   <data name="cGolemParams" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\res\text\parameters\cgolemparams.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="CollisionExporter" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\third_party\CollisionExporter.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="CollisionImporter" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\third_party\CollisionImporter.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="cStalkerParams" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\res\text\parameters\cstalkerparams.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
@@ -244,6 +238,9 @@
   <data name="Information" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\res\images\information.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="License" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\res\text\miscellaneous\license.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
   <data name="Logo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\res\icons\logo.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -316,8 +313,14 @@
   <data name="S06Cubemaps" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\res\text\general\s06cubemaps.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="S06PackageNames" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\res\text\general\s06packagenames.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="S06PhysicsObjects" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\res\text\general\s06physicsobjects.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="S06PlayerLuaNames" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\res\text\general\s06playerluanames.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="S06TextStrings" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\res\text\general\s06textstrings.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>

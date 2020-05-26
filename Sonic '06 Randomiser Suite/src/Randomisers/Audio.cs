@@ -15,7 +15,7 @@ namespace Sonic_06_Randomiser_Suite
                 if (line.Contains("Game.PlayBGM"))
                 {
                     string[] tempLine = line.Split('"');
-                    tempLine[1] = Main.Music[rng.Next(Main.Music.Count)];
+                    tempLine[1] = Main.Lua_Music[rng.Next(Main.Lua_Music.Count)];
                     editedLub[lineNum] = string.Join("\"", tempLine);
                 }
                 lineNum++;

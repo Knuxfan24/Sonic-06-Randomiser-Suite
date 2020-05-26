@@ -1,25 +1,33 @@
 ﻿using System;
 using HedgeLib.Misc;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Sonic_06_Randomiser_Suite
 {
     class Package
     {
-        public static void PackageAnimationRandomiser(string package, Random rng)
+        public static void PackageAnimationRandomiser(string package, bool allowForbidden, Random rng)
         {
+            List<string> forbiddenAnimations = new List<string>() {
+                "silver_style_Root.xnm", "face"
+            };
+
             List<string> availableReferences = new List<string>();
             List<int> usedNumbers = new List<int>();
             int index;
+
             S06Package pkg = new S06Package();
             pkg.Load(package);
 
+            if (allowForbidden) forbiddenAnimations.Clear();
+
             // Load all the motion filepaths into avaliable references
-            for(int i = 0; i < pkg.Types.Count; i++)
+            for (int i = 0; i < pkg.Types.Count; i++)
             {
                 if (pkg.Types[i].TypeName == "motion")
                 {
-                    foreach(var entry in pkg.Types[i].Files)
+                    foreach (var entry in pkg.Types[i].Files)
                     {
                         availableReferences.Add(entry.FilePath);
                     }
@@ -40,7 +48,9 @@ namespace Sonic_06_Randomiser_Suite
                             while (usedNumbers.Contains(index));
                         }
                         usedNumbers.Add(index);
-                        pkg.Types[i].Files[f].FilePath = availableReferences[index];
+
+                        if (!forbiddenAnimations.Any(pkg.Types[i].Files[f].FilePath.Contains))
+                            pkg.Types[i].Files[f].FilePath = availableReferences[index];
                     }
                 }
             }

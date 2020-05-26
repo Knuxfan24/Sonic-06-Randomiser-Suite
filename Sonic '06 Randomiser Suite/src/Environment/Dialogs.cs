@@ -1,4 +1,5 @@
-﻿using Ookii.Dialogs;
+﻿using System;
+using Ookii.Dialogs;
 using System.Windows.Forms;
 
 namespace Sonic_06_Randomiser_Suite
@@ -20,13 +21,14 @@ namespace Sonic_06_Randomiser_Suite
         /// <summary>
         /// Creates a file browser from WINAPI
         /// </summary>
-        public static string FileBrowser(string text, string filter) {
+        public static string[] FileBrowser(string text, string filter, bool multiselect) {
             OpenFileDialog browse = new OpenFileDialog() {
                 Title = text,
                 Filter = filter
             };
+            browse.Multiselect = multiselect;
 
-            return browse.ShowDialog() == DialogResult.OK ? browse.FileName : string.Empty;
+            return browse.ShowDialog() == DialogResult.OK ? browse.FileNames : new string[] {};
         }
     }
 }

@@ -10,7 +10,7 @@ namespace Sonic_06_Randomiser_Suite
         /// Randomises all enemies in SET data
         /// </summary>
         public static void RandomiseEnemies(S06SetData set, Random rng) {
-            if (Main.Enemies.Count == 0) return;
+            if (Main.Placement_Enemies.Count == 0) return;
 
             // Enemy Parameter Lists
             string[] cBiterParams      = Resources.ParseLineBreaks(Properties.Resources.cBiterParams);
@@ -63,7 +63,7 @@ namespace Sonic_06_Randomiser_Suite
                 {
                     case "enemy":
                     case "enemyextra":
-                        obj.Parameters[0].Data = Main.Enemies[rng.Next(Main.Enemies.Count)]; // Select an enemy type from the list
+                        obj.Parameters[0].Data = Main.Placement_Enemies[rng.Next(Main.Placement_Enemies.Count)]; // Select an enemy type from the list
 
                         // Enemy Palette
                         switch(obj.Parameters[0].Data.ToString())
@@ -158,13 +158,13 @@ namespace Sonic_06_Randomiser_Suite
         /// Randomises all characters in SET data
         /// </summary>
         public static void RandomiseCharacters(S06SetData set, Random rng) {
-            if (Main.Characters.Count == 0) return;
+            if (Main.Placement_Characters.Count == 0) return;
 
             foreach (SetObject obj in set.Objects)
             {
                 switch (obj.ObjectType)
                 {
-                    case "player_start2": obj.Parameters[1].Data = Main.Characters[rng.Next(Main.Characters.Count)]; break;
+                    case "player_start2": obj.Parameters[1].Data = Main.Placement_Characters[rng.Next(Main.Placement_Characters.Count)]; break;
                     case "player_npc":    obj.Parameters[0].Data = rng.Next(1, 15);                                  break;
                 }
             }
@@ -174,7 +174,7 @@ namespace Sonic_06_Randomiser_Suite
         /// Randomises all items in SET data
         /// </summary>
         public static void RandomiseItems(S06SetData set, Random rng) {
-            if (Main.Items.Count == 0) return;
+            if (Main.Placement_Items.Count == 0) return;
             
             foreach (SetObject obj in set.Objects)
             {
@@ -183,7 +183,7 @@ namespace Sonic_06_Randomiser_Suite
                     case "itemboxa":
                     case "itemboxg":
                     case "itembox_next":
-                        obj.Parameters[0].Data = Main.Items[rng.Next(Main.Items.Count)];
+                        obj.Parameters[0].Data = Main.Placement_Items[rng.Next(Main.Placement_Items.Count)];
                         break;
                 }
             }

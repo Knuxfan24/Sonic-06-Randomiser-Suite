@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Targa;
+using System;
 using System.IO;
+using DirectDraw;
 using System.Linq;
 using HedgeLib.Sets;
 using System.Drawing;
@@ -16,13 +18,17 @@ namespace Sonic_06_Randomiser_Suite
     {
         public static bool Randomising = false;
         public static Random RNG = new Random();
-        public static List<int> Items = new List<int>();
-        public static List<string> Enemies    = new List<string>(),
-                                   Characters = new List<string>(),
-                                   Music      = new List<string>(),
-                                   Languages  = new List<string>(),
-                                   Areas      = new List<string>(),
-                                   Surfaces   = new List<string>();
+        public static List<int> Placement_Items = new List<int>();
+        public static List<string> Visual_Custom_Textures = new List<string>(),
+                                   Placement_Enemies      = new List<string>(),
+                                   Placement_Characters   = new List<string>(),
+                                   Lua_Music              = new List<string>(),
+                                   Text_Languages         = new List<string>(),
+                                   Visual_Areas           = new List<string>(),
+                                   Collision_Surfaces     = new List<string>(),
+                                   Lua_Parameters         = new List<string>(),
+                                   Package_Characters     = new List<string>(),
+                                   Lua_Characters         = new List<string>();
 
         /// <summary>
         /// WinForms entry point
@@ -53,6 +59,8 @@ namespace Sonic_06_Randomiser_Suite
             for (int i = 0; i < CheckedListBox_Collision_Respected.Items.Count; i++) CheckedListBox_Collision_Respected.SetItemChecked(i, true);
             for (int i = 0; i < CheckedListBox_Collision_Surfaces.Items.Count; i++) CheckedListBox_Collision_Surfaces.SetItemChecked(i, true);
             for (int i = 0; i < CheckedListBox_Package_Characters.Items.Count; i++) CheckedListBox_Package_Characters.SetItemChecked(i, true);
+            for (int i = 0; i < CheckedListBox_Lua_Parameters.Items.Count; i++) CheckedListBox_Lua_Parameters.SetItemChecked(i, true);
+            for (int i = 0; i < CheckedListBox_Lua_Characters.Items.Count; i++) CheckedListBox_Lua_Characters.SetItemChecked(i, true);
         }
 
         /// <summary>
@@ -110,12 +118,12 @@ namespace Sonic_06_Randomiser_Suite
             List<string> getArchiveList = Paths.CollectGameData(Path.GetDirectoryName(Properties.Settings.Default.Path_GameExecutable)).ToList();
 
             // Clear all lists
-            Enemies.Clear();
-            Characters.Clear();
-            Items.Clear();
-            Music.Clear();
-            Languages.Clear();
-            Areas.Clear();
+            Placement_Enemies.Clear();
+            Placement_Characters.Clear();
+            Placement_Items.Clear();
+            Lua_Music.Clear();
+            Text_Languages.Clear();
+            Visual_Areas.Clear();
 
             // Creates a new seed from TextBox_RandomisationSeed
             RNG = new Random(TextBox_RandomisationSeed.Text.GetHashCode());
@@ -124,13 +132,16 @@ namespace Sonic_06_Randomiser_Suite
             if ((modDirectory = Mods.Create(TextBox_RandomisationSeed.Text, CheckedListBox_Placement_General.GetItemChecked(5))) == string.Empty) return;
 
             // Define valid lists from CheckedListBox elements 
-            Enemies    = Resources.EnumerateEnemiesList(CheckedListBox_Placement_Enemies);
-            Characters = Resources.EnumerateCharactersList(CheckedListBox_Placement_Characters);
-            Items      = Resources.EnumerateItemsList(CheckedListBox_Placement_Items);
-            Music      = Resources.EnumerateMusicList(CheckedListBox_Audio_Music);
-            Languages  = Resources.EnumerateLanguagesList(CheckedListBox_Text_Languages);
-            Areas      = Resources.EnumerateAreasList(CheckedListBox_Visual_Areas);
-            Surfaces  = Resources.EnumerateCollisionList(CheckedListBox_Collision_Surfaces);
+            Placement_Enemies    = Resources.EnumerateEnemiesList(CheckedListBox_Placement_Enemies);
+            Placement_Characters = Resources.EnumerateCharactersList_Placement(CheckedListBox_Placement_Characters);
+            Placement_Items      = Resources.EnumerateItemsList(CheckedListBox_Placement_Items);
+            Lua_Music            = Resources.EnumerateMusicList(CheckedListBox_Audio_Music);
+            Text_Languages       = Resources.EnumerateLanguagesList(CheckedListBox_Text_Languages);
+            Visual_Areas         = Resources.EnumerateAreasList(CheckedListBox_Visual_Areas);
+            Collision_Surfaces   = Resources.EnumerateCollisionList(CheckedListBox_Collision_Surfaces);
+            Lua_Parameters       = Resources.EnumerateParameterList(CheckedListBox_Lua_Parameters);
+            Package_Characters   = Resources.EnumerateExtendedCharactersList(CheckedListBox_Package_Characters, Properties.Resources.S06PackageNames);
+            Lua_Characters       = Resources.EnumerateExtendedCharactersList(CheckedListBox_Lua_Characters, Properties.Resources.S06PlayerLuaNames);
 
             // Sets up the progress bar values
             int getProgress = getArchiveList.Count(),
@@ -243,7 +254,7 @@ namespace Sonic_06_Randomiser_Suite
                     if (CheckedListBox_Audio_General.CheckedIndices.Count != 0)
                     {
                         // If the Music list enumerated nothing, continue to the next statement
-                        if (Music.Count == 0) continue;
+                        if (Lua_Music.Count == 0) continue;
 
                         // Whitelisted scripts
                         List<string> whitelistScripts = new List<string>() { "a_", "b_", "c_", "d_", "e_", "f_", "f1_", "f2_", "g_" };
@@ -314,7 +325,7 @@ namespace Sonic_06_Randomiser_Suite
                 else if (Path.GetFileName(archive).ToLower() == "text.arc" || Path.GetFileName(archive).ToLower() == "event.arc")
                 {
                     // If the Languages list enumerated nothing, continue to the next statement
-                    if (Languages.Count == 0) continue;
+                    if (Text_Languages.Count == 0) continue;
 
                     // Modify based on user choice
                     foreach (int item in CheckedListBox_Text_General.CheckedIndices)
@@ -326,7 +337,7 @@ namespace Sonic_06_Randomiser_Suite
                                 string randomArchive = Archives.UnpackARC(archive, Path.Combine(Path.GetTempPath(), Path.GetRandomFileName()));
 
                                 // Randomise all strings in the MSTs
-                                Strings.RandomiseMSTContents(randomArchive, Languages, RNG);
+                                Strings.RandomiseMSTContents(randomArchive, Text_Languages, RNG);
 
                                 // Repack the archive
                                 Archives.CreateModARC(randomArchive, archive, modDirectory);
@@ -335,7 +346,8 @@ namespace Sonic_06_Randomiser_Suite
                     }
                 }
 
-                else if (Path.GetFileName(archive).ToLower() == "stage.arc") {
+                else if (Path.GetFileName(archive).ToLower() == "stage.arc")
+                {
                     // Modify based on user choice
                     foreach (int item in CheckedListBox_Collision_General.CheckedIndices)
                     {
@@ -354,17 +366,8 @@ namespace Sonic_06_Randomiser_Suite
                                     // Write to logs for user feedback
                                     Console.WriteLine($"Randomising Collision: {binData}");
 
-                                    // Decode collision binary
-                                    Collision.Decode(binData, out string convertedColi);
-
-                                    // Rotate collision axis
-                                    Collision.RotationSwap(convertedColi);
-
                                     // Change collision mesh names in the OBJ
-                                    Collision.PropertyRandomiser(convertedColi, RNG, @checked.GetItemChecked(0), @checked.GetItemChecked(1), @checked.GetItemChecked(2));
-
-                                    // Encode collision binary
-                                    Collision.Encode(convertedColi);
+                                    Collision.PropertyRandomiser(binData, RNG, @checked.GetItemChecked(0), @checked.GetItemChecked(1), @checked.GetItemChecked(2));
                                 }
 
                                 // Repack the archive
@@ -374,31 +377,72 @@ namespace Sonic_06_Randomiser_Suite
                     }
                 }
 
-                else if (Path.GetFileName(archive).ToLower() == "player.arc") {
+                else if (Path.GetFileName(archive).ToLower() == "player.arc")
+                {
+                    // Unpack the archive
+                    string randomArchive = Archives.UnpackARC(archive, Path.Combine(Path.GetTempPath(), Path.GetRandomFileName()));
+
                     // Modify based on user choice
                     foreach (int item in CheckedListBox_Package_General.CheckedIndices)
                     {
                         switch (item)
                         {
                             case 0:
-                                // Unpack the archive
-                                string randomArchive = Archives.UnpackARC(archive, Path.Combine(Path.GetTempPath(), Path.GetRandomFileName()));
-
                                 // Iterate through all Lua scripts for scene parameters
                                 foreach (string pkgData in Directory.GetFiles(randomArchive, "*.pkg", SearchOption.AllDirectories))
                                 {
-                                    // Write to logs for user feedback
-                                    Console.WriteLine($"Randomising Package: {pkgData}");
+                                    if (Package_Characters.Any(Path.GetFileName(pkgData).Contains))
+                                    {
+                                        // Write to logs for user feedback
+                                        Console.WriteLine($"Randomising Package: {pkgData}");
 
-                                    // Randomise animations in PKG
-                                    Package.PackageAnimationRandomiser(pkgData, RNG);
+                                        // Randomise animations in PKG
+                                        Package.PackageAnimationRandomiser(pkgData, CheckedListBox_Package_General.GetItemChecked(1), RNG);
+                                    }
                                 }
-
-                                // Repack the archive
-                                Archives.CreateModARC(randomArchive, archive, modDirectory);
                                 break;
                         }
                     }
+
+                    foreach (int item in CheckedListBox_Lua_General.CheckedIndices)
+                    {
+                        switch (item)
+                        {
+                            case 0:
+                                // Iterate through all Lua scripts for scene parameters
+                                foreach (string lubData in Directory.GetFiles(randomArchive, "*.lub", SearchOption.AllDirectories))
+                                {
+                                    if (Lua_Characters.Any(Path.GetFileName(lubData).Contains))
+                                    {
+                                        // Write to logs for user feedback
+                                        Console.WriteLine($"Randomising Player: {lubData}");
+
+                                        // Decompile Lua script
+                                        Lua.Decompile(lubData);
+
+                                        // Randomise parameters in Lua
+                                        foreach (string parameter in Lua_Parameters)
+                                        {
+                                            switch (parameter)
+                                            {
+                                                // Global
+                                                case "c_walk_speed_max": Lua.ParameterRandomiser(lubData, parameter, 1.5f, 55f, RNG);  break;
+                                                case "c_run_speed_max":  Lua.ParameterRandomiser(lubData, parameter, 7.5f, 80f, RNG); break;
+                                                case "l_jump_hight":     Lua.ParameterRandomiser(lubData, parameter, 1f, 6f, RNG);  break;
+
+                                                // Sonic the Hedgehog
+                                                case "c_custom_action_machspeed_acc": Lua.ParameterRandomiser(lubData, parameter, 1000f, 5000f, RNG); break;
+                                                case "c_custom_action_slow_bias":     Lua.ParameterRandomiser(lubData, parameter, -3f, 10f, RNG);     break;
+                                            }
+                                        }
+                                    }
+                                }
+                                break;
+                        }
+                    }
+
+                    // Repack the archive
+                    Archives.CreateModARC(randomArchive, archive, modDirectory);
                 }
 
                 // Unpack object.arc
@@ -416,7 +460,7 @@ namespace Sonic_06_Randomiser_Suite
                     {
                         switch (item)
                         {
-                            case 0 when Areas.Contains(Path.GetFileNameWithoutExtension(archive)):
+                            case 0 when Visual_Areas.Contains(Path.GetFileNameWithoutExtension(archive)):
                             case 1 when Path.GetFileName(archive).ToLower() == "object.arc":
                             case 2 when Path.GetFileName(archive).ToLower() == "sprite.arc":
                             case 3 when Path.GetFileName(archive).ToLower().StartsWith("player_"):
@@ -427,7 +471,8 @@ namespace Sonic_06_Randomiser_Suite
                                 string randomArchive = Archives.UnpackARC(archive, Path.Combine(Path.GetTempPath(), Path.GetRandomFileName()));
 
                                 // Randomise all textures in the archive
-                                Textures.RandomiseTextures(randomArchive, RNG);
+                                Textures.RandomiseTextures(randomArchive, CheckedListBox_Visual_General.GetItemChecked(7),
+                                                           CheckedListBox_Visual_General.GetItemChecked(8), RNG);
 
                                 // Repack the archive
                                 Archives.CreateModARC(randomArchive, archive, modDirectory);
@@ -534,6 +579,9 @@ namespace Sonic_06_Randomiser_Suite
             else if (sender == Button_Collision_Surfaces_SelectAll)   for (int i = 0; i < CheckedListBox_Collision_Surfaces.Items.Count; i++)   CheckedListBox_Collision_Surfaces.SetItemChecked(i, true);
             else if (sender == Button_Package_General_SelectAll)      for (int i = 0; i < CheckedListBox_Package_General.Items.Count; i++)      CheckedListBox_Package_General.SetItemChecked(i, true);
             else if (sender == Button_Package_Characters_SelectAll)   for (int i = 0; i < CheckedListBox_Package_Characters.Items.Count; i++)   CheckedListBox_Package_Characters.SetItemChecked(i, true);
+            else if (sender == Button_Lua_General_SelectAll)          for (int i = 0; i < CheckedListBox_Lua_General.Items.Count; i++)          CheckedListBox_Lua_General.SetItemChecked(i, true);
+            else if (sender == Button_Lua_Parameters_SelectAll)       for (int i = 0; i < CheckedListBox_Lua_Parameters.Items.Count; i++)       CheckedListBox_Lua_Parameters.SetItemChecked(i, true);
+            else if (sender == Button_Lua_Characters_SelectAll)       for (int i = 0; i < CheckedListBox_Lua_Characters.Items.Count; i++)       CheckedListBox_Lua_Characters.SetItemChecked(i, true);
         }
 
         /// <summary>
@@ -557,6 +605,9 @@ namespace Sonic_06_Randomiser_Suite
             else if (sender == Button_Collision_Surfaces_DeselectAll)   for (int i = 0; i < CheckedListBox_Collision_Surfaces.Items.Count; i++)   CheckedListBox_Collision_Surfaces.SetItemChecked(i, false);
             else if (sender == Button_Package_General_DeselectAll)      for (int i = 0; i < CheckedListBox_Package_General.Items.Count; i++)      CheckedListBox_Package_General.SetItemChecked(i, false);
             else if (sender == Button_Package_Characters_DeselectAll)   for (int i = 0; i < CheckedListBox_Package_Characters.Items.Count; i++)   CheckedListBox_Package_Characters.SetItemChecked(i, false);
+            else if (sender == Button_Lua_General_DeselectAll)          for (int i = 0; i < CheckedListBox_Lua_General.Items.Count; i++)          CheckedListBox_Lua_General.SetItemChecked(i, false);
+            else if (sender == Button_Lua_Parameters_DeselectAll)       for (int i = 0; i < CheckedListBox_Lua_Parameters.Items.Count; i++)       CheckedListBox_Lua_Parameters.SetItemChecked(i, false);
+            else if (sender == Button_Lua_Characters_DeselectAll)       for (int i = 0; i < CheckedListBox_Lua_Characters.Items.Count; i++)       CheckedListBox_Lua_Characters.SetItemChecked(i, false);
         }
 
         /// <summary>
@@ -574,16 +625,91 @@ namespace Sonic_06_Randomiser_Suite
 
             // Sender is Button_GameExecutable
             } else if (sender == Button_GameExecutable) {
-                string browseGame = Dialogs.FileBrowser("Please select an executable for Sonic '06...",
-                                                        "Exectuables (*.xex; *.bin)|*.xex;*.bin|" +
-                                                        "Xbox Executable (*.xex)|*.xex|" +
-                                                        "PlayStation Executable (*.bin)|*.bin");
+                string[] browseGame = Dialogs.FileBrowser("Please select an executable for Sonic '06...",
+                                                          "Exectuables (*.xex; *.bin)|*.xex;*.bin|" +
+                                                          "Xbox Executable (*.xex)|*.xex|" +
+                                                          "PlayStation Executable (*.bin)|*.bin", false);
 
-                if (browseGame != string.Empty) {
-                    Properties.Settings.Default.Path_GameExecutable = TextBox_GameExecutable.Text = browseGame;
+                if (browseGame[0] != string.Empty) {
+                    Properties.Settings.Default.Path_GameExecutable = TextBox_GameExecutable.Text = browseGame[0];
                     Properties.Settings.Default.Save();
                 }
             }
+        }
+
+        /// <summary>
+        /// Modify textures list depending on sender
+        /// </summary>
+        private void Button_Visual_Custom_Click(object sender, EventArgs e)
+        {
+            // Sender is Button_Visual_Custom_AddTexture
+            if (sender == Button_Visual_Custom_AddTexture) {
+                string[] browseTexture = Dialogs.FileBrowser("Please select your textures...",
+                                                             "Images (*.dds; *.png; *.jpg; *.jpeg; *.jpe; *.jfif; *.exif; *.tga; *.bmp)|*.dds;*.png;*.jpg;*.jpeg;*.jpe;*.jfif;*.exif;*.tga;*.bmp|" +
+                                                             "DirectDraw Surface (*.dds)|*.dds|" +
+                                                             "PNG (*.png)|*.png|" +
+                                                             "JPEG (*.jpg; *.jpeg; *.jpe; *.jfif; *.exif)|*.jpg;*.jpeg;*.jpe;*.jfif;*.exif|" +
+                                                             "TGA (*.tga)|*.tga|" +
+                                                             "BMP (*.bmp; *.dib; *.rle)|*.bmp;*.dib;*.rle", true);
+
+                if (browseTexture.Length != 0) {
+                    // Clear list to populate with image buffer
+                    ListView_CustomTextures.Items.Clear();
+
+                    foreach (string texture in browseTexture) {
+                        if (!Visual_Custom_Textures.Contains(texture)) Visual_Custom_Textures.Add(texture);
+                        else
+                            UnifyMessenger.UnifyMessage.ShowDialog($"'{Path.GetFileName(texture)}' already exists in the randomisation list...",
+                                                                   "Duplicate texture entry", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+
+                    // Add all textures to ListView
+                    for (int i = 0; i < Visual_Custom_Textures.Count; i++)
+                    {
+                        try {
+                            // DDS
+                            if (Path.GetExtension(Visual_Custom_Textures[i]) == ".dds") {
+                                // Add DDS to the image buffer by key
+                                ImageList_DirectDrawBuffer.Images.Add($"thumbnail{i}", new DDSImage(File.ReadAllBytes(Visual_Custom_Textures[i])).images[0]);
+
+                            // TGA
+                            } else if (Path.GetExtension(Visual_Custom_Textures[i]) == ".tga") {
+                                // TGA decoded successfully
+                                ImageList_DirectDrawBuffer.Images.Add($"thumbnail{i}", new TargaImage(Visual_Custom_Textures[i]).Image);
+
+                            // Other Image Formats
+                            } else {
+                                // Add image to the image buffer by key
+                                ImageList_DirectDrawBuffer.Images.Add($"thumbnail{i}", Image.FromFile(Visual_Custom_Textures[i]));
+                            }
+                        } catch {
+                            // Image decoded unsuccessfully - what the hell happened here?
+                            ImageList_DirectDrawBuffer.Images.Add($"thumbnail{i}", Properties.Resources.Error);
+                        }
+
+                        // Add new list item
+                        ListView_CustomTextures.Items.Add(new ListViewItem(Path.GetFileName(Visual_Custom_Textures[i]), $"thumbnail{i}"));
+                    }
+                }
+
+            // Sender is Button_Visual_Custom_RemoveTexture
+            } else if (sender == Button_Visual_Custom_RemoveTexture) {
+                // Remove item by index
+                foreach (int @index in ListView_CustomTextures.SelectedIndices) {
+                    Visual_Custom_Textures.RemoveAt(@index);
+                    ListView_CustomTextures.Items.RemoveAt(@index);
+                    ImageList_DirectDrawBuffer.Images.RemoveAt(@index);
+                }
+
+            // Sender is Button_Visual_Custom_ClearTextures
+            } else if (sender == Button_Visual_Custom_ClearTextures) {
+                Visual_Custom_Textures.Clear();
+                ListView_CustomTextures.Items.Clear();
+                ImageList_DirectDrawBuffer.Images.Clear();
+            }
+
+            // Refresh the software renderer
+            ListView_CustomTextures.Refresh();
         }
     }
 }

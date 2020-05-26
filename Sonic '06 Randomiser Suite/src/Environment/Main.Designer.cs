@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.TextBox_RandomisationSeed = new System.Windows.Forms.TextBox();
             this.Label_RandomisationSeed = new System.Windows.Forms.Label();
@@ -48,6 +49,7 @@
             this.ProgressBar_Randomisation = new System.Windows.Forms.ProgressBar();
             this.Panel_Inactive = new System.Windows.Forms.Panel();
             this.ListBox_Logs = new System.Windows.Forms.ListBox();
+            this.ImageList_DirectDrawBuffer = new System.Windows.Forms.ImageList(this.components);
             this.UnifyTabControl_Main = new Unify.TabControl.UnifyTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.UnifyTabControl_Placement = new Unify.TabControl.UnifyTabControl();
@@ -114,6 +116,12 @@
             this.panel11 = new System.Windows.Forms.Panel();
             this.CheckedListBox_Visual_Areas = new System.Windows.Forms.CheckedListBox();
             this.Button_Visual_Areas_SelectAll = new System.Windows.Forms.Button();
+            this.tabPage28 = new System.Windows.Forms.TabPage();
+            this.Button_Visual_Custom_ClearTextures = new System.Windows.Forms.Button();
+            this.Button_Visual_Custom_RemoveTexture = new System.Windows.Forms.Button();
+            this.panel20 = new System.Windows.Forms.Panel();
+            this.ListView_CustomTextures = new System.Windows.Forms.ListView();
+            this.Button_Visual_Custom_AddTexture = new System.Windows.Forms.Button();
             this.tabPage17 = new System.Windows.Forms.TabPage();
             this.unifyTabControl5 = new Unify.TabControl.UnifyTabControl();
             this.tabPage18 = new System.Windows.Forms.TabPage();
@@ -143,6 +151,23 @@
             this.panel17 = new System.Windows.Forms.Panel();
             this.CheckedListBox_Package_Characters = new System.Windows.Forms.CheckedListBox();
             this.Button_Package_Characters_SelectAll = new System.Windows.Forms.Button();
+            this.tabPage23 = new System.Windows.Forms.TabPage();
+            this.unifyTabControl7 = new Unify.TabControl.UnifyTabControl();
+            this.tabPage25 = new System.Windows.Forms.TabPage();
+            this.Button_Lua_General_DeselectAll = new System.Windows.Forms.Button();
+            this.panel16 = new System.Windows.Forms.Panel();
+            this.CheckedListBox_Lua_General = new System.Windows.Forms.CheckedListBox();
+            this.Button_Lua_General_SelectAll = new System.Windows.Forms.Button();
+            this.tabPage27 = new System.Windows.Forms.TabPage();
+            this.Button_Lua_Parameters_DeselectAll = new System.Windows.Forms.Button();
+            this.panel19 = new System.Windows.Forms.Panel();
+            this.CheckedListBox_Lua_Parameters = new System.Windows.Forms.CheckedListBox();
+            this.Button_Lua_Parameters_SelectAll = new System.Windows.Forms.Button();
+            this.tabPage26 = new System.Windows.Forms.TabPage();
+            this.Button_Lua_Characters_DeselectAll = new System.Windows.Forms.Button();
+            this.panel18 = new System.Windows.Forms.Panel();
+            this.CheckedListBox_Lua_Characters = new System.Windows.Forms.CheckedListBox();
+            this.Button_Lua_Characters_SelectAll = new System.Windows.Forms.Button();
             this.Panel_Inactive.SuspendLayout();
             this.UnifyTabControl_Main.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -177,6 +202,8 @@
             this.panel10.SuspendLayout();
             this.tabPage16.SuspendLayout();
             this.panel11.SuspendLayout();
+            this.tabPage28.SuspendLayout();
+            this.panel20.SuspendLayout();
             this.tabPage17.SuspendLayout();
             this.unifyTabControl5.SuspendLayout();
             this.tabPage18.SuspendLayout();
@@ -191,6 +218,14 @@
             this.panel15.SuspendLayout();
             this.tabPage24.SuspendLayout();
             this.panel17.SuspendLayout();
+            this.tabPage23.SuspendLayout();
+            this.unifyTabControl7.SuspendLayout();
+            this.tabPage25.SuspendLayout();
+            this.panel16.SuspendLayout();
+            this.tabPage27.SuspendLayout();
+            this.panel19.SuspendLayout();
+            this.tabPage26.SuspendLayout();
+            this.panel18.SuspendLayout();
             this.SuspendLayout();
             // 
             // TextBox_RandomisationSeed
@@ -447,6 +482,12 @@
             this.ListBox_Logs.Size = new System.Drawing.Size(917, 553);
             this.ListBox_Logs.TabIndex = 0;
             // 
+            // ImageList_DirectDrawBuffer
+            // 
+            this.ImageList_DirectDrawBuffer.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
+            this.ImageList_DirectDrawBuffer.ImageSize = new System.Drawing.Size(128, 128);
+            this.ImageList_DirectDrawBuffer.TransparentColor = System.Drawing.Color.Transparent;
+            // 
             // UnifyTabControl_Main
             // 
             this.UnifyTabControl_Main.ActiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(24)))), ((int)(((byte)(123)))));
@@ -466,6 +507,7 @@
             this.UnifyTabControl_Main.Controls.Add(this.tabPage14);
             this.UnifyTabControl_Main.Controls.Add(this.tabPage17);
             this.UnifyTabControl_Main.Controls.Add(this.tabPage21);
+            this.UnifyTabControl_Main.Controls.Add(this.tabPage23);
             this.UnifyTabControl_Main.HeaderColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
             this.UnifyTabControl_Main.HorizontalLineColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(24)))), ((int)(((byte)(123)))));
             this.UnifyTabControl_Main.ItemSize = new System.Drawing.Size(240, 16);
@@ -906,6 +948,7 @@
             this.unifyTabControl1.Size = new System.Drawing.Size(911, 353);
             this.unifyTabControl1.TabIndex = 2;
             this.unifyTabControl1.TextColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.unifyTabControl1.Selected += new System.Windows.Forms.TabControlEventHandler(this.UnifyTabControl_Selected);
             // 
             // tabPage7
             // 
@@ -1021,6 +1064,7 @@
             this.unifyTabControl2.Size = new System.Drawing.Size(911, 353);
             this.unifyTabControl2.TabIndex = 3;
             this.unifyTabControl2.TextColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.unifyTabControl2.Selected += new System.Windows.Forms.TabControlEventHandler(this.UnifyTabControl_Selected);
             // 
             // tabPage9
             // 
@@ -1249,6 +1293,7 @@
             this.unifyTabControl3.Size = new System.Drawing.Size(911, 353);
             this.unifyTabControl3.TabIndex = 4;
             this.unifyTabControl3.TextColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.unifyTabControl3.Selected += new System.Windows.Forms.TabControlEventHandler(this.UnifyTabControl_Selected);
             // 
             // tabPage12
             // 
@@ -1421,6 +1466,7 @@
             this.unifyTabControl4.ClosingMessage = null;
             this.unifyTabControl4.Controls.Add(this.tabPage15);
             this.unifyTabControl4.Controls.Add(this.tabPage16);
+            this.unifyTabControl4.Controls.Add(this.tabPage28);
             this.unifyTabControl4.HeaderColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
             this.unifyTabControl4.HorizontalLineColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(24)))), ((int)(((byte)(123)))));
             this.unifyTabControl4.ItemSize = new System.Drawing.Size(240, 16);
@@ -1434,6 +1480,7 @@
             this.unifyTabControl4.Size = new System.Drawing.Size(911, 353);
             this.unifyTabControl4.TabIndex = 5;
             this.unifyTabControl4.TextColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.unifyTabControl4.Selected += new System.Windows.Forms.TabControlEventHandler(this.UnifyTabControl_Selected);
             // 
             // tabPage15
             // 
@@ -1491,7 +1538,9 @@
             "Randomise Character Textures",
             "Randomise Event Textures",
             "Randomise Particle Textures",
-            "Randomise Enemy Textures"});
+            "Randomise Enemy Textures",
+            "Randomise Only Using Custom Textures",
+            "Allow Forbidden Texture Tags"});
             this.CheckedListBox_Visual_General.Location = new System.Drawing.Point(0, 0);
             this.CheckedListBox_Visual_General.Name = "CheckedListBox_Visual_General";
             this.CheckedListBox_Visual_General.Size = new System.Drawing.Size(897, 288);
@@ -1621,6 +1670,92 @@
             this.Button_Visual_Areas_SelectAll.UseVisualStyleBackColor = false;
             this.Button_Visual_Areas_SelectAll.Click += new System.EventHandler(this.Button_SelectAll_Click);
             // 
+            // tabPage28
+            // 
+            this.tabPage28.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
+            this.tabPage28.Controls.Add(this.Button_Visual_Custom_ClearTextures);
+            this.tabPage28.Controls.Add(this.Button_Visual_Custom_RemoveTexture);
+            this.tabPage28.Controls.Add(this.panel20);
+            this.tabPage28.Controls.Add(this.Button_Visual_Custom_AddTexture);
+            this.tabPage28.Location = new System.Drawing.Point(4, 20);
+            this.tabPage28.Name = "tabPage28";
+            this.tabPage28.Size = new System.Drawing.Size(903, 329);
+            this.tabPage28.TabIndex = 2;
+            this.tabPage28.Text = "Custom";
+            // 
+            // Button_Visual_Custom_ClearTextures
+            // 
+            this.Button_Visual_Custom_ClearTextures.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.Button_Visual_Custom_ClearTextures.BackColor = System.Drawing.Color.Tomato;
+            this.Button_Visual_Custom_ClearTextures.FlatAppearance.BorderSize = 0;
+            this.Button_Visual_Custom_ClearTextures.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_Visual_Custom_ClearTextures.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.Button_Visual_Custom_ClearTextures.Location = new System.Drawing.Point(668, 306);
+            this.Button_Visual_Custom_ClearTextures.Name = "Button_Visual_Custom_ClearTextures";
+            this.Button_Visual_Custom_ClearTextures.Size = new System.Drawing.Size(233, 23);
+            this.Button_Visual_Custom_ClearTextures.TabIndex = 62;
+            this.Button_Visual_Custom_ClearTextures.Text = "Clear Textures";
+            this.Button_Visual_Custom_ClearTextures.UseVisualStyleBackColor = false;
+            this.Button_Visual_Custom_ClearTextures.Click += new System.EventHandler(this.Button_Visual_Custom_Click);
+            // 
+            // Button_Visual_Custom_RemoveTexture
+            // 
+            this.Button_Visual_Custom_RemoveTexture.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.Button_Visual_Custom_RemoveTexture.BackColor = System.Drawing.Color.Tomato;
+            this.Button_Visual_Custom_RemoveTexture.FlatAppearance.BorderSize = 0;
+            this.Button_Visual_Custom_RemoveTexture.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_Visual_Custom_RemoveTexture.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.Button_Visual_Custom_RemoveTexture.Location = new System.Drawing.Point(123, 306);
+            this.Button_Visual_Custom_RemoveTexture.Name = "Button_Visual_Custom_RemoveTexture";
+            this.Button_Visual_Custom_RemoveTexture.Size = new System.Drawing.Size(112, 23);
+            this.Button_Visual_Custom_RemoveTexture.TabIndex = 60;
+            this.Button_Visual_Custom_RemoveTexture.Text = "Remove Texture";
+            this.Button_Visual_Custom_RemoveTexture.UseVisualStyleBackColor = false;
+            this.Button_Visual_Custom_RemoveTexture.Click += new System.EventHandler(this.Button_Visual_Custom_Click);
+            // 
+            // panel20
+            // 
+            this.panel20.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel20.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.panel20.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel20.Controls.Add(this.ListView_CustomTextures);
+            this.panel20.Location = new System.Drawing.Point(2, 8);
+            this.panel20.Name = "panel20";
+            this.panel20.Size = new System.Drawing.Size(899, 290);
+            this.panel20.TabIndex = 61;
+            // 
+            // ListView_CustomTextures
+            // 
+            this.ListView_CustomTextures.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.ListView_CustomTextures.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.ListView_CustomTextures.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ListView_CustomTextures.ForeColor = System.Drawing.SystemColors.Control;
+            this.ListView_CustomTextures.HideSelection = false;
+            this.ListView_CustomTextures.LargeImageList = this.ImageList_DirectDrawBuffer;
+            this.ListView_CustomTextures.Location = new System.Drawing.Point(0, 0);
+            this.ListView_CustomTextures.Name = "ListView_CustomTextures";
+            this.ListView_CustomTextures.Size = new System.Drawing.Size(897, 288);
+            this.ListView_CustomTextures.TabIndex = 0;
+            this.ListView_CustomTextures.TileSize = new System.Drawing.Size(128, 128);
+            this.ListView_CustomTextures.UseCompatibleStateImageBehavior = false;
+            // 
+            // Button_Visual_Custom_AddTexture
+            // 
+            this.Button_Visual_Custom_AddTexture.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Button_Visual_Custom_AddTexture.BackColor = System.Drawing.Color.SkyBlue;
+            this.Button_Visual_Custom_AddTexture.FlatAppearance.BorderSize = 0;
+            this.Button_Visual_Custom_AddTexture.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_Visual_Custom_AddTexture.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.Button_Visual_Custom_AddTexture.Location = new System.Drawing.Point(2, 306);
+            this.Button_Visual_Custom_AddTexture.Name = "Button_Visual_Custom_AddTexture";
+            this.Button_Visual_Custom_AddTexture.Size = new System.Drawing.Size(114, 23);
+            this.Button_Visual_Custom_AddTexture.TabIndex = 59;
+            this.Button_Visual_Custom_AddTexture.Text = "Add Texture";
+            this.Button_Visual_Custom_AddTexture.UseVisualStyleBackColor = false;
+            this.Button_Visual_Custom_AddTexture.Click += new System.EventHandler(this.Button_Visual_Custom_Click);
+            // 
             // tabPage17
             // 
             this.tabPage17.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
@@ -1659,6 +1794,7 @@
             this.unifyTabControl5.Size = new System.Drawing.Size(911, 353);
             this.unifyTabControl5.TabIndex = 6;
             this.unifyTabControl5.TextColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.unifyTabControl5.Selected += new System.Windows.Forms.TabControlEventHandler(this.UnifyTabControl_Selected);
             // 
             // tabPage18
             // 
@@ -1919,6 +2055,7 @@
             this.unifyTabControl6.Size = new System.Drawing.Size(911, 353);
             this.unifyTabControl6.TabIndex = 7;
             this.unifyTabControl6.TextColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.unifyTabControl6.Selected += new System.Windows.Forms.TabControlEventHandler(this.UnifyTabControl_Selected);
             // 
             // tabPage22
             // 
@@ -1970,7 +2107,8 @@
             this.CheckedListBox_Package_General.ForeColor = System.Drawing.SystemColors.Control;
             this.CheckedListBox_Package_General.FormattingEnabled = true;
             this.CheckedListBox_Package_General.Items.AddRange(new object[] {
-            "Randomise Character Animations"});
+            "Randomise Character Animations",
+            "Allow Forbidden Animations"});
             this.CheckedListBox_Package_General.Location = new System.Drawing.Point(0, 0);
             this.CheckedListBox_Package_General.Name = "CheckedListBox_Package_General";
             this.CheckedListBox_Package_General.Size = new System.Drawing.Size(897, 288);
@@ -2043,8 +2181,7 @@
             "Sonic the Hedgehog",
             "Sonic the Hedgehog (Mach Speed)",
             "Sonic the Hedgehog (Elise)",
-            "Sonic the Hedgehog (White Acropolis Snowboard)",
-            "Sonic the Hedgehog (Crisis City Snowboard)",
+            "Sonic the Hedgehog (Snowboard)",
             "Shadow the Hedgehog",
             "Silver the Hedgehog",
             "Miles \"Tails\" Prower",
@@ -2072,6 +2209,273 @@
             this.Button_Package_Characters_SelectAll.Text = "Select All";
             this.Button_Package_Characters_SelectAll.UseVisualStyleBackColor = false;
             this.Button_Package_Characters_SelectAll.Click += new System.EventHandler(this.Button_SelectAll_Click);
+            // 
+            // tabPage23
+            // 
+            this.tabPage23.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
+            this.tabPage23.Controls.Add(this.unifyTabControl7);
+            this.tabPage23.Location = new System.Drawing.Point(4, 20);
+            this.tabPage23.Name = "tabPage23";
+            this.tabPage23.Size = new System.Drawing.Size(911, 353);
+            this.tabPage23.TabIndex = 7;
+            this.tabPage23.Text = "Lua Randomisation";
+            // 
+            // unifyTabControl7
+            // 
+            this.unifyTabControl7.ActiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(24)))), ((int)(((byte)(123)))));
+            this.unifyTabControl7.AllowDragging = false;
+            this.unifyTabControl7.AllowDrop = true;
+            this.unifyTabControl7.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.unifyTabControl7.BackTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
+            this.unifyTabControl7.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
+            this.unifyTabControl7.ClosingButtonColor = System.Drawing.Color.WhiteSmoke;
+            this.unifyTabControl7.ClosingMessage = null;
+            this.unifyTabControl7.Controls.Add(this.tabPage25);
+            this.unifyTabControl7.Controls.Add(this.tabPage27);
+            this.unifyTabControl7.Controls.Add(this.tabPage26);
+            this.unifyTabControl7.HeaderColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
+            this.unifyTabControl7.HorizontalLineColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(24)))), ((int)(((byte)(123)))));
+            this.unifyTabControl7.ItemSize = new System.Drawing.Size(240, 16);
+            this.unifyTabControl7.Location = new System.Drawing.Point(0, 3);
+            this.unifyTabControl7.Name = "unifyTabControl7";
+            this.unifyTabControl7.NoTabDisplay = false;
+            this.unifyTabControl7.SelectedIndex = 0;
+            this.unifyTabControl7.SelectedTextColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.unifyTabControl7.ShowClosingButton = false;
+            this.unifyTabControl7.ShowClosingMessage = false;
+            this.unifyTabControl7.Size = new System.Drawing.Size(911, 353);
+            this.unifyTabControl7.TabIndex = 8;
+            this.unifyTabControl7.TextColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.unifyTabControl7.Selected += new System.Windows.Forms.TabControlEventHandler(this.UnifyTabControl_Selected);
+            // 
+            // tabPage25
+            // 
+            this.tabPage25.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
+            this.tabPage25.Controls.Add(this.Button_Lua_General_DeselectAll);
+            this.tabPage25.Controls.Add(this.panel16);
+            this.tabPage25.Controls.Add(this.Button_Lua_General_SelectAll);
+            this.tabPage25.Location = new System.Drawing.Point(4, 20);
+            this.tabPage25.Name = "tabPage25";
+            this.tabPage25.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage25.Size = new System.Drawing.Size(903, 329);
+            this.tabPage25.TabIndex = 0;
+            this.tabPage25.Text = "General";
+            // 
+            // Button_Lua_General_DeselectAll
+            // 
+            this.Button_Lua_General_DeselectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.Button_Lua_General_DeselectAll.BackColor = System.Drawing.Color.Tomato;
+            this.Button_Lua_General_DeselectAll.FlatAppearance.BorderSize = 0;
+            this.Button_Lua_General_DeselectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_Lua_General_DeselectAll.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.Button_Lua_General_DeselectAll.Location = new System.Drawing.Point(668, 306);
+            this.Button_Lua_General_DeselectAll.Name = "Button_Lua_General_DeselectAll";
+            this.Button_Lua_General_DeselectAll.Size = new System.Drawing.Size(233, 23);
+            this.Button_Lua_General_DeselectAll.TabIndex = 48;
+            this.Button_Lua_General_DeselectAll.Text = "Deselect All";
+            this.Button_Lua_General_DeselectAll.UseVisualStyleBackColor = false;
+            this.Button_Lua_General_DeselectAll.Click += new System.EventHandler(this.Button_DeselectAll_Click);
+            // 
+            // panel16
+            // 
+            this.panel16.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel16.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.panel16.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel16.Controls.Add(this.CheckedListBox_Lua_General);
+            this.panel16.Location = new System.Drawing.Point(2, 8);
+            this.panel16.Name = "panel16";
+            this.panel16.Size = new System.Drawing.Size(899, 290);
+            this.panel16.TabIndex = 55;
+            // 
+            // CheckedListBox_Lua_General
+            // 
+            this.CheckedListBox_Lua_General.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.CheckedListBox_Lua_General.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.CheckedListBox_Lua_General.CheckOnClick = true;
+            this.CheckedListBox_Lua_General.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.CheckedListBox_Lua_General.ForeColor = System.Drawing.SystemColors.Control;
+            this.CheckedListBox_Lua_General.FormattingEnabled = true;
+            this.CheckedListBox_Lua_General.Items.AddRange(new object[] {
+            "Randomise Character Parameters"});
+            this.CheckedListBox_Lua_General.Location = new System.Drawing.Point(0, 0);
+            this.CheckedListBox_Lua_General.Name = "CheckedListBox_Lua_General";
+            this.CheckedListBox_Lua_General.Size = new System.Drawing.Size(897, 288);
+            this.CheckedListBox_Lua_General.TabIndex = 0;
+            // 
+            // Button_Lua_General_SelectAll
+            // 
+            this.Button_Lua_General_SelectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Button_Lua_General_SelectAll.BackColor = System.Drawing.Color.SkyBlue;
+            this.Button_Lua_General_SelectAll.FlatAppearance.BorderSize = 0;
+            this.Button_Lua_General_SelectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_Lua_General_SelectAll.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.Button_Lua_General_SelectAll.Location = new System.Drawing.Point(2, 306);
+            this.Button_Lua_General_SelectAll.Name = "Button_Lua_General_SelectAll";
+            this.Button_Lua_General_SelectAll.Size = new System.Drawing.Size(233, 23);
+            this.Button_Lua_General_SelectAll.TabIndex = 47;
+            this.Button_Lua_General_SelectAll.Text = "Select All";
+            this.Button_Lua_General_SelectAll.UseVisualStyleBackColor = false;
+            this.Button_Lua_General_SelectAll.Click += new System.EventHandler(this.Button_SelectAll_Click);
+            // 
+            // tabPage27
+            // 
+            this.tabPage27.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
+            this.tabPage27.Controls.Add(this.Button_Lua_Parameters_DeselectAll);
+            this.tabPage27.Controls.Add(this.panel19);
+            this.tabPage27.Controls.Add(this.Button_Lua_Parameters_SelectAll);
+            this.tabPage27.Location = new System.Drawing.Point(4, 20);
+            this.tabPage27.Name = "tabPage27";
+            this.tabPage27.Size = new System.Drawing.Size(903, 329);
+            this.tabPage27.TabIndex = 3;
+            this.tabPage27.Text = "Parameters";
+            // 
+            // Button_Lua_Parameters_DeselectAll
+            // 
+            this.Button_Lua_Parameters_DeselectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.Button_Lua_Parameters_DeselectAll.BackColor = System.Drawing.Color.Tomato;
+            this.Button_Lua_Parameters_DeselectAll.FlatAppearance.BorderSize = 0;
+            this.Button_Lua_Parameters_DeselectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_Lua_Parameters_DeselectAll.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.Button_Lua_Parameters_DeselectAll.Location = new System.Drawing.Point(668, 306);
+            this.Button_Lua_Parameters_DeselectAll.Name = "Button_Lua_Parameters_DeselectAll";
+            this.Button_Lua_Parameters_DeselectAll.Size = new System.Drawing.Size(233, 23);
+            this.Button_Lua_Parameters_DeselectAll.TabIndex = 60;
+            this.Button_Lua_Parameters_DeselectAll.Text = "Deselect All";
+            this.Button_Lua_Parameters_DeselectAll.UseVisualStyleBackColor = false;
+            this.Button_Lua_Parameters_DeselectAll.Click += new System.EventHandler(this.Button_DeselectAll_Click);
+            // 
+            // panel19
+            // 
+            this.panel19.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel19.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.panel19.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel19.Controls.Add(this.CheckedListBox_Lua_Parameters);
+            this.panel19.Location = new System.Drawing.Point(2, 8);
+            this.panel19.Name = "panel19";
+            this.panel19.Size = new System.Drawing.Size(899, 290);
+            this.panel19.TabIndex = 61;
+            // 
+            // CheckedListBox_Lua_Parameters
+            // 
+            this.CheckedListBox_Lua_Parameters.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.CheckedListBox_Lua_Parameters.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.CheckedListBox_Lua_Parameters.CheckOnClick = true;
+            this.CheckedListBox_Lua_Parameters.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.CheckedListBox_Lua_Parameters.ForeColor = System.Drawing.SystemColors.Control;
+            this.CheckedListBox_Lua_Parameters.FormattingEnabled = true;
+            this.CheckedListBox_Lua_Parameters.Items.AddRange(new object[] {
+            "Walk Speed",
+            "Run Speed",
+            "Jump Height",
+            "Blue Gem Speed",
+            "Red Gem Bias"});
+            this.CheckedListBox_Lua_Parameters.Location = new System.Drawing.Point(0, 0);
+            this.CheckedListBox_Lua_Parameters.Name = "CheckedListBox_Lua_Parameters";
+            this.CheckedListBox_Lua_Parameters.Size = new System.Drawing.Size(897, 288);
+            this.CheckedListBox_Lua_Parameters.TabIndex = 0;
+            // 
+            // Button_Lua_Parameters_SelectAll
+            // 
+            this.Button_Lua_Parameters_SelectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Button_Lua_Parameters_SelectAll.BackColor = System.Drawing.Color.SkyBlue;
+            this.Button_Lua_Parameters_SelectAll.FlatAppearance.BorderSize = 0;
+            this.Button_Lua_Parameters_SelectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_Lua_Parameters_SelectAll.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.Button_Lua_Parameters_SelectAll.Location = new System.Drawing.Point(2, 306);
+            this.Button_Lua_Parameters_SelectAll.Name = "Button_Lua_Parameters_SelectAll";
+            this.Button_Lua_Parameters_SelectAll.Size = new System.Drawing.Size(233, 23);
+            this.Button_Lua_Parameters_SelectAll.TabIndex = 59;
+            this.Button_Lua_Parameters_SelectAll.Text = "Select All";
+            this.Button_Lua_Parameters_SelectAll.UseVisualStyleBackColor = false;
+            this.Button_Lua_Parameters_SelectAll.Click += new System.EventHandler(this.Button_SelectAll_Click);
+            // 
+            // tabPage26
+            // 
+            this.tabPage26.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
+            this.tabPage26.Controls.Add(this.Button_Lua_Characters_DeselectAll);
+            this.tabPage26.Controls.Add(this.panel18);
+            this.tabPage26.Controls.Add(this.Button_Lua_Characters_SelectAll);
+            this.tabPage26.Location = new System.Drawing.Point(4, 20);
+            this.tabPage26.Name = "tabPage26";
+            this.tabPage26.Size = new System.Drawing.Size(903, 329);
+            this.tabPage26.TabIndex = 2;
+            this.tabPage26.Text = "Characters";
+            // 
+            // Button_Lua_Characters_DeselectAll
+            // 
+            this.Button_Lua_Characters_DeselectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.Button_Lua_Characters_DeselectAll.BackColor = System.Drawing.Color.Tomato;
+            this.Button_Lua_Characters_DeselectAll.FlatAppearance.BorderSize = 0;
+            this.Button_Lua_Characters_DeselectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_Lua_Characters_DeselectAll.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.Button_Lua_Characters_DeselectAll.Location = new System.Drawing.Point(668, 306);
+            this.Button_Lua_Characters_DeselectAll.Name = "Button_Lua_Characters_DeselectAll";
+            this.Button_Lua_Characters_DeselectAll.Size = new System.Drawing.Size(233, 23);
+            this.Button_Lua_Characters_DeselectAll.TabIndex = 57;
+            this.Button_Lua_Characters_DeselectAll.Text = "Deselect All";
+            this.Button_Lua_Characters_DeselectAll.UseVisualStyleBackColor = false;
+            this.Button_Lua_Characters_DeselectAll.Click += new System.EventHandler(this.Button_DeselectAll_Click);
+            // 
+            // panel18
+            // 
+            this.panel18.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel18.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.panel18.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel18.Controls.Add(this.CheckedListBox_Lua_Characters);
+            this.panel18.Location = new System.Drawing.Point(2, 8);
+            this.panel18.Name = "panel18";
+            this.panel18.Size = new System.Drawing.Size(899, 290);
+            this.panel18.TabIndex = 58;
+            // 
+            // CheckedListBox_Lua_Characters
+            // 
+            this.CheckedListBox_Lua_Characters.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.CheckedListBox_Lua_Characters.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.CheckedListBox_Lua_Characters.CheckOnClick = true;
+            this.CheckedListBox_Lua_Characters.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.CheckedListBox_Lua_Characters.ForeColor = System.Drawing.SystemColors.Control;
+            this.CheckedListBox_Lua_Characters.FormattingEnabled = true;
+            this.CheckedListBox_Lua_Characters.Items.AddRange(new object[] {
+            "Sonic the Hedgehog",
+            "Sonic the Hedgehog (Mach Speed)",
+            "Sonic the Hedgehog (Elise)",
+            "Sonic the Hedgehog (White Acropolis Snowboard)",
+            "Sonic the Hedgehog (Crisis City Snowboard)",
+            "Shadow the Hedgehog",
+            "Silver the Hedgehog",
+            "Miles \"Tails\" Prower",
+            "Knuckles the Echidna",
+            "Rouge the Bat",
+            "E-123 Omega",
+            "Blaze the Cat",
+            "Amy Rose"});
+            this.CheckedListBox_Lua_Characters.Location = new System.Drawing.Point(0, 0);
+            this.CheckedListBox_Lua_Characters.Name = "CheckedListBox_Lua_Characters";
+            this.CheckedListBox_Lua_Characters.Size = new System.Drawing.Size(897, 288);
+            this.CheckedListBox_Lua_Characters.TabIndex = 0;
+            // 
+            // Button_Lua_Characters_SelectAll
+            // 
+            this.Button_Lua_Characters_SelectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Button_Lua_Characters_SelectAll.BackColor = System.Drawing.Color.SkyBlue;
+            this.Button_Lua_Characters_SelectAll.FlatAppearance.BorderSize = 0;
+            this.Button_Lua_Characters_SelectAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_Lua_Characters_SelectAll.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.Button_Lua_Characters_SelectAll.Location = new System.Drawing.Point(2, 306);
+            this.Button_Lua_Characters_SelectAll.Name = "Button_Lua_Characters_SelectAll";
+            this.Button_Lua_Characters_SelectAll.Size = new System.Drawing.Size(233, 23);
+            this.Button_Lua_Characters_SelectAll.TabIndex = 56;
+            this.Button_Lua_Characters_SelectAll.Text = "Select All";
+            this.Button_Lua_Characters_SelectAll.UseVisualStyleBackColor = false;
+            this.Button_Lua_Characters_SelectAll.Click += new System.EventHandler(this.Button_SelectAll_Click);
             // 
             // Main
             // 
@@ -2140,6 +2544,8 @@
             this.panel10.ResumeLayout(false);
             this.tabPage16.ResumeLayout(false);
             this.panel11.ResumeLayout(false);
+            this.tabPage28.ResumeLayout(false);
+            this.panel20.ResumeLayout(false);
             this.tabPage17.ResumeLayout(false);
             this.unifyTabControl5.ResumeLayout(false);
             this.tabPage18.ResumeLayout(false);
@@ -2154,6 +2560,14 @@
             this.panel15.ResumeLayout(false);
             this.tabPage24.ResumeLayout(false);
             this.panel17.ResumeLayout(false);
+            this.tabPage23.ResumeLayout(false);
+            this.unifyTabControl7.ResumeLayout(false);
+            this.tabPage25.ResumeLayout(false);
+            this.panel16.ResumeLayout(false);
+            this.tabPage27.ResumeLayout(false);
+            this.panel19.ResumeLayout(false);
+            this.tabPage26.ResumeLayout(false);
+            this.panel18.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2275,6 +2689,30 @@
         private System.Windows.Forms.Panel panel17;
         private System.Windows.Forms.CheckedListBox CheckedListBox_Package_Characters;
         private System.Windows.Forms.Button Button_Package_Characters_SelectAll;
+        private System.Windows.Forms.TabPage tabPage23;
+        private Unify.TabControl.UnifyTabControl unifyTabControl7;
+        private System.Windows.Forms.TabPage tabPage25;
+        private System.Windows.Forms.Button Button_Lua_General_DeselectAll;
+        private System.Windows.Forms.Panel panel16;
+        private System.Windows.Forms.CheckedListBox CheckedListBox_Lua_General;
+        private System.Windows.Forms.Button Button_Lua_General_SelectAll;
+        private System.Windows.Forms.TabPage tabPage26;
+        private System.Windows.Forms.Button Button_Lua_Characters_DeselectAll;
+        private System.Windows.Forms.Panel panel18;
+        private System.Windows.Forms.CheckedListBox CheckedListBox_Lua_Characters;
+        private System.Windows.Forms.Button Button_Lua_Characters_SelectAll;
+        private System.Windows.Forms.TabPage tabPage27;
+        private System.Windows.Forms.Button Button_Lua_Parameters_DeselectAll;
+        private System.Windows.Forms.Panel panel19;
+        private System.Windows.Forms.CheckedListBox CheckedListBox_Lua_Parameters;
+        private System.Windows.Forms.Button Button_Lua_Parameters_SelectAll;
+        private System.Windows.Forms.TabPage tabPage28;
+        private System.Windows.Forms.Button Button_Visual_Custom_RemoveTexture;
+        private System.Windows.Forms.Panel panel20;
+        private System.Windows.Forms.ListView ListView_CustomTextures;
+        private System.Windows.Forms.Button Button_Visual_Custom_AddTexture;
+        private System.Windows.Forms.ImageList ImageList_DirectDrawBuffer;
+        private System.Windows.Forms.Button Button_Visual_Custom_ClearTextures;
     }
 }
 

@@ -17,9 +17,9 @@ namespace Sonic_06_Randomiser_Suite
 
             // Extracts the archive in the temporary location
             ProcessStartInfo unpack = new ProcessStartInfo() {
-                FileName = Program.Arctool,
+                FileName = Program.arctool,
                 Arguments = $"-d \"{Path.Combine(tempPath, Path.GetFileName(arc))}\"",
-                WorkingDirectory = Path.GetDirectoryName(Program.Arctool),
+                WorkingDirectory = Path.GetDirectoryName(Program.arctool),
                 WindowStyle = ProcessWindowStyle.Hidden
             };
 

@@ -123,26 +123,6 @@ namespace Sonic_06_Randomiser_Suite.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] CollisionExporter {
-            get {
-                object obj = ResourceManager.GetObject("CollisionExporter", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] CollisionImporter {
-            get {
-                object obj = ResourceManager.GetObject("CollisionImporter", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to cStalker_Fix
         ///cStalker_Freeze
         ///cStalker_Normal
@@ -558,6 +538,25 @@ namespace Sonic_06_Randomiser_Suite.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sonic &apos;06 Randomiser Suite (MIT License)
+        ///
+        ///Copyright (c) 2020 Knuxfan24
+        ///Copyright (c) 2020 HyperPolygon64
+        ///Copyright (c) 2020 David Korth &lt;gerbilsoft@gerbilsoft.com&gt;
+        ///Copyright (c) 2020 Radfordhound
+        ///
+        ///Permission is hereby granted, free of charge, to any person obtaining a copy
+        ///of this software and associated documentation files (the &quot;Software&quot;), to deal
+        ///in the Software without restriction, including without limitation the rights
+        ///to use, copy, modify, merge, publish, distribute, sublicense, and/or sell [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string License {
+            get {
+                return ResourceManager.GetString("License", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon Logo {
@@ -653,9 +652,7 @@ namespace Sonic_06_Randomiser_Suite.Properties {
         ///stg_twn_b
         ///stg_twn_c
         ///stg_twn_shop
-        ///twn_mission_slow
-        ///twn_mission_comical
-        ///twn_miss [rest of string was truncated]&quot;;.
+        ///twn_ [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string msgAudioroomEntries {
             get {
@@ -705,12 +702,7 @@ namespace Sonic_06_Randomiser_Suite.Properties {
         ///msg_b0070
         ///msg_b0071
         ///msg_b0072
-        ///msg_b0073
-        ///msg_b0074
-        ///msg_b0075
-        ///msg_b0076
-        ///msg_b0077
-        ///m [rest of string was truncated]&quot;;.
+        ///msg_b0073        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string msgBattleEntries {
             get {
@@ -806,9 +798,7 @@ namespace Sonic_06_Randomiser_Suite.Properties {
         ///hint_all01_a02_sd
         ///hint_all01_a02_rg
         ///hint_all01_a02_om
-        ///hint_all01_a02_am
-        ///hint_all01_a02_bz
-        ///hint_all [rest of string was truncated]&quot;;.
+        ///hint_all01_a02_am        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string msgHintEntries {
             get {
@@ -843,9 +833,7 @@ namespace Sonic_06_Randomiser_Suite.Properties {
         ///hint_all03_h11_so
         ///hint_all03_h12_so
         ///hint_all03_h13_so
-        ///hint_all03_h14_so
-        ///hint_all03_h15_so
-        ///hint_all [rest of string was truncated]&quot;;.
+        ///hint_all03_h14_so        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string msgHintXenonEntries {
             get {
@@ -887,9 +875,7 @@ namespace Sonic_06_Randomiser_Suite.Properties {
         ///msg_theaterroom
         ///msg_xboxlive
         ///msg_xboxlive2
-        ///msg_new
-        ///msg_characterselect
-        ///msg_si [rest of string was truncated]&quot;;.
+        ///m [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string msgMainmenuEntries {
             get {
@@ -983,10 +969,7 @@ namespace Sonic_06_Randomiser_Suite.Properties {
         ///msg_shop_107
         ///msg_shop_108
         ///msg_shop_109
-        ///msg_shop_110
-        ///msg_shop_111
-        ///msg_shop_112
-        ///msg_s [rest of string was truncated]&quot;;.
+        ///msg_shop [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string msgShopEntries {
             get {
@@ -1024,8 +1007,7 @@ namespace Sonic_06_Randomiser_Suite.Properties {
         ///msg_system_backtomenu
         ///msg_system_backtotitle
         ///msg_system_backtotown
-        ///msg_system_backtoselect
-        ///msg_sy [rest of string was truncated]&quot;;.
+        ///m [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string msgSystemEntries {
             get {
@@ -1110,16 +1092,7 @@ namespace Sonic_06_Randomiser_Suite.Properties {
         ///ev0200
         ///ev0201
         ///ev0202
-        ///ev0203
-        ///ev0204
-        ///ev0205
-        ///ev0206
-        ///ev0207
-        ///ev0208
-        ///ev0209
-        ///ev0210
-        ///ev0211
-        ///e [rest of string was truncated]&quot;;.
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string msgTheaterroomEntries {
             get {
@@ -1163,8 +1136,7 @@ namespace Sonic_06_Randomiser_Suite.Properties {
         ///msg_m1107_info001_01_4
         ///msg_m1107_info001_01_5
         ///msg_m1108_108_01_3
-        ///msg_m1108_152_01_1
-        ///msg_m1108_108_01_ [rest of string was truncated]&quot;;.
+        ///msg_m1108_15 [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string msgTownMissionShadowEntries {
             get {
@@ -1198,8 +1170,7 @@ namespace Sonic_06_Randomiser_Suite.Properties {
         ///msg_m1207_207_01_5
         ///msg_m1208_208_01_1
         ///msg_m1208_208_01_2
-        ///msg_m1208_208_01_3
-        ///msg_m1210_210_01 [rest of string was truncated]&quot;;.
+        ///msg_m1208_ [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string msgTownMissionSilverEntries {
             get {
@@ -1233,8 +1204,7 @@ namespace Sonic_06_Randomiser_Suite.Properties {
         ///msg_m1009_009_01_5
         ///msg_m1010_010_01_3
         ///msg_m1010_010_01_4
-        ///msg_m1010_010_01_5
-        ///msg_m1012_012_01_3 [rest of string was truncated]&quot;;.
+        ///msg_m1010_01 [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string msgTownMissionSonicEntries {
             get {
@@ -1268,8 +1238,7 @@ namespace Sonic_06_Randomiser_Suite.Properties {
         ///msg_m1112_112_01_1
         ///msg_m1112_112_01_2
         ///msg_m1113_113_01_1
-        ///msg_m1113_113_01_2
-        ///msg_m1114_114_01_1 [rest of string was truncated]&quot;;.
+        ///msg_m1113_11 [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string msgTwnShadowEntries {
             get {
@@ -1303,8 +1272,7 @@ namespace Sonic_06_Randomiser_Suite.Properties {
         ///msg_m1212_212_01_2
         ///msg_m1213_213_01_1
         ///msg_m1213_213_01_2
-        ///msg_m1214_214_01_1
-        ///msg_m1214_214_01_2 [rest of string was truncated]&quot;;.
+        ///msg_m1214_21 [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string msgTwnSilverEntries {
             get {
@@ -1338,8 +1306,7 @@ namespace Sonic_06_Randomiser_Suite.Properties {
         ///msg_m1013_013_02_1
         ///msg_m1013_013_01_2
         ///msg_m1013_013_02_2
-        ///msg_m1014_014_01_1
-        ///msg_m1015_015_01_1 [rest of string was truncated]&quot;;.
+        ///msg_m1014_01 [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string msgTwnSonicEntries {
             get {
@@ -1363,6 +1330,47 @@ namespace Sonic_06_Randomiser_Suite.Properties {
         internal static string S06Cubemaps {
             get {
                 return ResourceManager.GetString("S06Cubemaps", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to amy.pkg
+        ///blaze.pkg
+        ///boss_shadow.pkg
+        ///boss_silver.pkg
+        ///boss_sonic.pkg
+        ///common.pkg
+        ///knuckles.pkg
+        ///npc_elise_hair.pkg
+        ///npc_elise_princess.pkg
+        ///npc_tails.pkg
+        ///omega.pkg
+        ///princess.pkg
+        ///princess_hair.pkg
+        ///princess_princess.pkg
+        ///rouge.pkg
+        ///select_amy.pkg
+        ///select_blaze.pkg
+        ///select_knuckles.pkg
+        ///select_omega.pkg
+        ///select_rouge.pkg
+        ///select_shadow.pkg
+        ///select_silver.pkg
+        ///select_sonic.pkg
+        ///select_tails.pkg
+        ///shadow.pkg
+        ///shadow_bike.pkg
+        ///shadow_damaged_and_wind.pkg
+        ///shadow_glider.pkg
+        ///shadow_hover.pkg
+        ///shadow_jeep.pkg
+        ///shadow_none.pkg
+        ///silver.pkg
+        ///snow_ [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string S06PackageNames {
+            get {
+                return ResourceManager.GetString("S06PackageNames", resourceCulture);
             }
         }
         
@@ -1405,13 +1413,50 @@ namespace Sonic_06_Randomiser_Suite.Properties {
         ///debrisB_br
         ///debrisB_h
         ///dtd_breakwall
-        ///dtd_obj_statue
-        ///dtd_obj_statue_fix
-        ///dtd_obj_statue_mefi [rest of string was truncated]&quot;;.
+        ///dtd_obj_statue        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string S06PhysicsObjects {
             get {
                 return ResourceManager.GetString("S06PhysicsObjects", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to amigo.lub
+        ///amy.animation.lub
+        ///amy.lub
+        ///animation_common.lub
+        ///blaze.animation.lub
+        ///blaze.lub
+        ///boss_shadow.animation.lub
+        ///boss_shadow.lub
+        ///boss_silver.animation.lub
+        ///boss_silver.lub
+        ///boss_sonic.animation.lub
+        ///boss_sonic.lub
+        ///collision_standard.lub
+        ///common.lub
+        ///knuckles.animation.lub
+        ///knuckles.lub
+        ///npc_amy.lub
+        ///npc_blaze.lub
+        ///npc_elise.lub
+        ///npc_knuckles.lub
+        ///npc_omega.lub
+        ///npc_princess.lub
+        ///npc_rouge.lub
+        ///npc_shadow.lub
+        ///npc_silver.lub
+        ///npc_sonic.lub
+        ///npc_supershadow.lub
+        ///npc_supersilver.lub
+        ///npc_supersonic.lub
+        ///npc_tails.lub
+        ///omega.animat [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string S06PlayerLuaNames {
+            get {
+                return ResourceManager.GetString("S06PlayerLuaNames", resourceCulture);
             }
         }
         
@@ -1442,9 +1487,7 @@ namespace Sonic_06_Randomiser_Suite.Properties {
         ///hint_all01_a02_sd
         ///hint_all01_a02_rg
         ///hint_all01_a02_om
-        ///hint_all01_a02_am
-        ///hint_all01_a02_bz
-        ///hint_all [rest of string was truncated]&quot;;.
+        ///hint_all01_a02_am        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string S06TextStrings {
             get {
@@ -1537,12 +1580,7 @@ namespace Sonic_06_Randomiser_Suite.Properties {
         ///staff0209
         ///staff0210
         ///staff0211
-        ///staff0212
-        ///staff0213
-        ///staff0214
-        ///staff0215
-        ///staff0216
-        ///st [rest of string was truncated]&quot;;.
+        ///staff0 [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string staffEntries {
             get {

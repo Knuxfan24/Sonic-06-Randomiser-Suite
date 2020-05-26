@@ -44,6 +44,8 @@ namespace Sonic_06_Randomiser_Suite.Serialisers
                     configInfo.Close();
                 }
 
+            File.WriteAllText(Path.Combine(newPath, "license.txt"), Properties.Resources.License);
+
             return newPath;
         }
 
@@ -197,7 +199,7 @@ namespace Sonic_06_Randomiser_Suite.Serialisers
         /// <summary>
         /// Enumerates the valid characters selected by the user
         /// </summary>
-        public static List<string> EnumerateCharactersList(CheckedListBox items)
+        public static List<string> EnumerateCharactersList_Placement(CheckedListBox items)
         {
             List<string> Characters = new List<string>();
 
@@ -218,6 +220,129 @@ namespace Sonic_06_Randomiser_Suite.Serialisers
                     case 10: Characters.Add("omega");          break;
                     case 11: Characters.Add("blaze");          break;
                     case 12: Characters.Add("amy");            break;
+                }
+            }
+
+            return Characters;
+        }
+
+        /// <summary>
+        /// Enumerates the valid characters selected by the user
+        /// </summary>
+        public static List<string> EnumerateExtendedCharactersList(CheckedListBox items, string resource)
+        {
+            List<string> Characters = new List<string>();
+
+            foreach (int item in items.CheckedIndices)
+            {
+                if (items.Name == "CheckedListBox_Package_Characters")
+                {
+                    switch (item)
+                    {
+                        case 0:
+                            foreach (string file in ParseLineBreaks(resource))
+                                if (file.Contains("sonic") && !file.Contains("sonic_fast")) Characters.Add(file);
+                            break;
+                        case 1:
+                            foreach (string file in ParseLineBreaks(resource))
+                                if (file.Contains("sonic_fast")) Characters.Add(file);
+                            break;
+                        case 2:
+                            foreach (string file in ParseLineBreaks(resource))
+                                if (file.Contains("princess") || file.Contains("elise")) Characters.Add(file);
+                            break;
+                        case 3:
+                            Characters.Add("snow_board.pkg");
+                            break;
+                        case 4:
+                            foreach (string file in ParseLineBreaks(resource))
+                                if (file.Contains("shadow")) Characters.Add(file);
+                            break;
+                        case 5:
+                            foreach (string file in ParseLineBreaks(resource))
+                                if (file.Contains("silver")) Characters.Add(file);
+                            break;
+                        case 6:
+                            foreach (string file in ParseLineBreaks(resource))
+                                if (file.Contains("tails")) Characters.Add(file);
+                            break;
+                        case 7:
+                            foreach (string file in ParseLineBreaks(resource))
+                                if (file.Contains("knuckles")) Characters.Add(file);
+                            break;
+                        case 8:
+                            foreach (string file in ParseLineBreaks(resource))
+                                if (file.Contains("rouge")) Characters.Add(file);
+                            break;
+                        case 9:
+                            foreach (string file in ParseLineBreaks(resource))
+                                if (file.Contains("omega")) Characters.Add(file);
+                            break;
+                        case 10:
+                            foreach (string file in ParseLineBreaks(resource))
+                                if (file.Contains("blaze")) Characters.Add(file);
+                            break;
+                        case 11:
+                            foreach (string file in ParseLineBreaks(resource))
+                                if (file.Contains("amy")) Characters.Add(file);
+                            break;
+                    }
+                }
+                else if (items.Name == "CheckedListBox_Lua_Characters")
+                {
+                    switch (item)
+                    {
+                        case 0:
+                            foreach (string file in ParseLineBreaks(resource))
+                                if (file.Contains("sonic") && !file.Contains("sonic_fast")) Characters.Add(file);
+                            break;
+                        case 1:
+                            foreach (string file in ParseLineBreaks(resource))
+                                if (file.Contains("sonic_fast")) Characters.Add(file);
+                            break;
+                        case 2:
+                            foreach (string file in ParseLineBreaks(resource))
+                                if (file.Contains("princess") || file.Contains("elise")) Characters.Add(file);
+                            break;
+                        case 3:
+                            Characters.Add("snow_board_wap.lub");
+                            break;
+                        case 4:
+                            Characters.Add("snow_board.lub");
+                            break;
+                        case 5:
+                            foreach (string file in ParseLineBreaks(resource))
+                                if (file.Contains("shadow")) Characters.Add(file);
+                            break;
+                        case 6:
+                            foreach (string file in ParseLineBreaks(resource))
+                                if (file.Contains("silver")) Characters.Add(file);
+                            break;
+                        case 7:
+                            foreach (string file in ParseLineBreaks(resource))
+                                if (file.Contains("tails")) Characters.Add(file);
+                            break;
+                        case 8:
+                            foreach (string file in ParseLineBreaks(resource))
+                                if (file.Contains("knuckles")) Characters.Add(file);
+                            break;
+                        case 9:
+                            foreach (string file in ParseLineBreaks(resource))
+                                if (file.Contains("rouge")) Characters.Add(file);
+                            break;
+                        case 10:
+                            foreach (string file in ParseLineBreaks(resource))
+                                if (file.Contains("omega")) Characters.Add(file);
+                            break;
+                        case 11:
+                            foreach (string file in ParseLineBreaks(resource))
+                                if (file.Contains("blaze")) Characters.Add(file);
+                            break;
+                        case 12:
+                            foreach (string file in ParseLineBreaks(resource))
+                                if (file.Contains("amy")) Characters.Add(file);
+                            break;
+                    }
                 }
             }
 
@@ -419,6 +544,28 @@ namespace Sonic_06_Randomiser_Suite.Serialisers
             }
 
             return Collision;
+        }
+
+        /// <summary>
+        /// Enumerates the valid Lua parameters selected by the user
+        /// </summary>
+        public static List<string> EnumerateParameterList(CheckedListBox items)
+        {
+            List<string> Parameters = new List<string>();
+
+            foreach (int item in items.CheckedIndices)
+            {
+                switch (item)
+                {
+                    case 0: Parameters.Add("c_walk_speed_max"); break;
+                    case 1: Parameters.Add("c_run_speed_max"); break;
+                    case 2: Parameters.Add("l_jump_hight"); break;
+                    case 3: Parameters.Add("c_custom_action_machspeed_acc"); break;
+                    case 4: Parameters.Add("c_custom_action_slow_bias"); break;
+                }
+            }
+
+            return Parameters;
         }
     }
 
