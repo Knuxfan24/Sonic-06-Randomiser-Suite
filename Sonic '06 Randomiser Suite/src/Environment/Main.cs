@@ -359,6 +359,8 @@ namespace Sonic_06_Randomiser_Suite
                         switch (item)
                         {
                             case 0:
+                                Console.WriteLine("Collision Randomiser not currently supported due to Marathon erorrs.");
+                                break;
                                 // Unpack the archive
                                 string randomArchive = Archives.UnpackARC(archive, Path.Combine(Path.GetTempPath(), Path.GetRandomFileName()));
 

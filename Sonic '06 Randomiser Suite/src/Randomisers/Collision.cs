@@ -6,6 +6,7 @@ namespace Sonic_06_Randomiser_Suite
 {
     class Collision_Randomiser
     {
+        //Needs to be rewritten, doesn't work following the Marathon switch over.
         public static void PropertyRandomiser(string filePath, Random rng, bool respectWalls, bool respectWater, bool respectDeath)
         {
             Collision collision = new Collision();
