@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
-using HedgeLib.Misc;
 using System.Collections.Generic;
+using Marathon.IO.Formats.Miscellaneous;
 
 namespace Sonic_06_Randomiser_Suite
 {
@@ -14,7 +14,7 @@ namespace Sonic_06_Randomiser_Suite
             List<int> usedNumbers = new List<int>();
             int index;
 
-            S06Package pkg = new S06Package();
+            AssetPackage pkg = new AssetPackage();
             pkg.Load(package);
 
             // Load all the motion filepaths into avaliable references

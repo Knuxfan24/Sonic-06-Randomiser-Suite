@@ -3,13 +3,13 @@ using System;
 using System.IO;
 using DirectDraw;
 using System.Linq;
-using HedgeLib.Sets;
 using System.Drawing;
 using Unify.Messenger;
 using Unify.TabControl;
 using System.Windows.Forms;
 using System.ComponentModel;
 using System.Collections.Generic;
+using Marathon.IO.Formats.Placement;
 using Sonic_06_Randomiser_Suite.Serialisers;
 
 namespace Sonic_06_Randomiser_Suite
@@ -181,7 +181,7 @@ namespace Sonic_06_Randomiser_Suite
                             Console.WriteLine($"Randomising Placement: {setData}");
 
                             // Loads the SET data for modification
-                            S06SetData set = new S06SetData();
+                            ObjectPlacement set = new ObjectPlacement();
                             set.Load(setData);
 
                             // Modify based on user choice
@@ -194,7 +194,6 @@ namespace Sonic_06_Randomiser_Suite
                                     case 2: Placement.RandomiseItems(set, RNG);        break;
                                     case 3: Placement.RandomiseVoices(set, RNG);       break;
                                     case 4: Placement.RandomisePhysicsProps(set, RNG); break;
-                                    case 5: Beatable.DetermineStage(setData, set);     break;
                                 }
                             }
 
@@ -373,7 +372,7 @@ namespace Sonic_06_Randomiser_Suite
                                     Console.WriteLine($"Randomising Collision: {binData}");
 
                                     // Change collision mesh names in the OBJ
-                                    Collision.PropertyRandomiser(binData, RNG, @checked.GetItemChecked(0), @checked.GetItemChecked(1), @checked.GetItemChecked(2));
+                                    Collision_Randomiser.PropertyRandomiser(binData, RNG, @checked.GetItemChecked(0), @checked.GetItemChecked(1), @checked.GetItemChecked(2));
                                 }
 
                                 // Repack the archive

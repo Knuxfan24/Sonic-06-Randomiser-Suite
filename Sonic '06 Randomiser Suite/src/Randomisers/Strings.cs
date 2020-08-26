@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using HedgeLib.Text;
+using Marathon.IO.Formats.Text;
 using System.Collections.Generic;
 using Sonic_06_Randomiser_Suite.Serialisers;
 
@@ -185,10 +185,10 @@ namespace Sonic_06_Randomiser_Suite
                 // Extract strings
                 foreach (string mstData in Directory.GetFiles(folderPath, $"*{lang}.mst", SearchOption.AllDirectories)) {
                     usedMSTs.Add(mstData);
-                    MST mst = new MST();
+                    Text mst = new Text();
                     mst.Load(mstData);
                 
-                    foreach (MSTEntries getString in mst.entries)
+                    foreach (Text.Entry getString in mst.Entries)
                         availableText.Add(getString.Text);
                 }
             }
@@ -196,10 +196,10 @@ namespace Sonic_06_Randomiser_Suite
             // Remake MSTs
             foreach (string mstData in usedMSTs) {
                 Console.WriteLine($"Randomising Text: {mstData}");
-                MST mst = new MST();
+                Text mst = new Text();
                 mst.Load(mstData);
 
-                foreach (MSTEntries getString in mst.entries) {
+                foreach (Text.Entry getString in mst.Entries) {
                     index = rng.Next(availableText.Count);
                     if (usedNumbers.Contains(index)) {
                         do { index = rng.Next(availableText.Count); }
