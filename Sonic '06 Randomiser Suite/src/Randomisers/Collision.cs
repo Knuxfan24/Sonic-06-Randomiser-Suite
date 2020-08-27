@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Text;
-using HedgeLib.Terrain;
+using Marathon.IO.Formats.Meshes;
 
 namespace Sonic_06_Randomiser_Suite
 {
-    class Collision
+    class Collision_Randomiser
     {
+        //Could really do with being rewritten, as this is very messy.
+        //A way to make it do it by tag rather than by face would be a nice option.
         public static void PropertyRandomiser(string filePath, Random rng, bool respectWalls, bool respectWater, bool respectDeath)
         {
-            S06Collision collision = new S06Collision();
+            Collision collision = new Collision();
             collision.Load(filePath);
 
             for (int i = 0; i < collision.Faces.Count; i++)

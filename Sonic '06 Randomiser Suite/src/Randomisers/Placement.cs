@@ -1,5 +1,5 @@
 ﻿using System;
-using HedgeLib.Sets;
+using Marathon.IO.Formats.Placement;
 using Sonic_06_Randomiser_Suite.Serialisers;
 
 namespace Sonic_06_Randomiser_Suite
@@ -9,7 +9,7 @@ namespace Sonic_06_Randomiser_Suite
         /// <summary>
         /// Randomises all enemies in SET data
         /// </summary>
-        public static void RandomiseEnemies(S06SetData set, Random rng) {
+        public static void RandomiseEnemies(ObjectPlacement set, Random rng) {
             if (Main.Placement_Enemies.Count == 0) return;
 
             // Enemy Parameter Lists
@@ -57,9 +57,9 @@ namespace Sonic_06_Randomiser_Suite
             string[] solaris01Params     = Resources.ParseLineBreaks(Properties.Resources.solaris01Params);
             string[] solaris02Params     = Resources.ParseLineBreaks(Properties.Resources.solaris02Params);
 
-            foreach (SetObject obj in set.Objects)
+            foreach (ObjectPlacement.SetObject obj in set.Objects)
             {
-                switch (obj.ObjectType)
+                switch (obj.Type)
                 {
                     case "enemy":
                     case "enemyextra":
@@ -157,12 +157,12 @@ namespace Sonic_06_Randomiser_Suite
         /// <summary>
         /// Randomises all characters in SET data
         /// </summary>
-        public static void RandomiseCharacters(S06SetData set, Random rng) {
+        public static void RandomiseCharacters(ObjectPlacement set, Random rng) {
             if (Main.Placement_Characters.Count == 0) return;
 
-            foreach (SetObject obj in set.Objects)
+            foreach (ObjectPlacement.SetObject obj in set.Objects)
             {
-                switch (obj.ObjectType)
+                switch (obj.Type)
                 {
                     case "player_start2": obj.Parameters[1].Data = Main.Placement_Characters[rng.Next(Main.Placement_Characters.Count)]; break;
                     case "player_npc":    obj.Parameters[0].Data = rng.Next(1, 15);                                  break;
@@ -173,12 +173,12 @@ namespace Sonic_06_Randomiser_Suite
         /// <summary>
         /// Randomises all items in SET data
         /// </summary>
-        public static void RandomiseItems(S06SetData set, Random rng) {
+        public static void RandomiseItems(ObjectPlacement set, Random rng) {
             if (Main.Placement_Items.Count == 0) return;
             
-            foreach (SetObject obj in set.Objects)
+            foreach (ObjectPlacement.SetObject obj in set.Objects)
             {
-                switch (obj.ObjectType)
+                switch (obj.Type)
                 {
                     case "itemboxa":
                     case "itemboxg":
@@ -192,13 +192,13 @@ namespace Sonic_06_Randomiser_Suite
         /// <summary>
         /// Randomises all hint voices in SET data
         /// </summary>
-        public static void RandomiseVoices(S06SetData set, Random rng) {
+        public static void RandomiseVoices(ObjectPlacement set, Random rng) {
             string[] voiceLines = Resources.ParseLineBreaks(Properties.Resources.S06TextStrings);
             if (voiceLines.Length == 0) return;
 
-            foreach (SetObject obj in set.Objects)
+            foreach (ObjectPlacement.SetObject obj in set.Objects)
             {
-                switch (obj.ObjectType)
+                switch (obj.Type)
                 {
                     case "common_hint":
                     case "common_hint_collision":
@@ -211,13 +211,13 @@ namespace Sonic_06_Randomiser_Suite
         /// <summary>
         /// Randomises all physics props in SET data
         /// </summary>
-        public static void RandomisePhysicsProps(S06SetData set, Random rng) {
+        public static void RandomisePhysicsProps(ObjectPlacement set, Random rng) {
             string[] propList = Resources.ParseLineBreaks(Properties.Resources.S06PhysicsObjects);
             if (propList.Length == 0) return;
 
-            foreach (SetObject obj in set.Objects)
+            foreach (ObjectPlacement.SetObject obj in set.Objects)
             {
-                switch (obj.ObjectType)
+                switch (obj.Type)
                 {
                     case "objectphysics":
                         obj.Parameters[0].Data = propList[rng.Next(propList.Length)];

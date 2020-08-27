@@ -37,9 +37,9 @@
     <ApplicationIcon>res\Icons\Logo.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HedgeLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Marathon.IO, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>third_party\HedgeLib.dll</HintPath>
+      <HintPath>third_party\Marathon.IO.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -71,9 +71,7 @@
     <Compile Include="src\Randomisers\Lua.cs" />
     <Compile Include="src\Randomisers\Collision.cs" />
     <Compile Include="src\Environment\Console.cs" />
-    <Compile Include="src\Objects.cs" />
     <Compile Include="src\Randomisers\Audio.cs" />
-    <Compile Include="src\Randomisers\Beatable.cs" />
     <Compile Include="src\Randomisers\Scene.cs" />
     <Compile Include="src\Environment\Serialisers.cs" />
     <Compile Include="src\Environment\Archives.cs" />
@@ -208,6 +206,7 @@
     <Content Include="res\Text\General\S06PlayerLuaNames.txt" />
     <Content Include="res\Text\Miscellaneous\License.txt" />
     <Content Include="third_party\arctool.exe" />
+    <Content Include="third_party\Marathon.IO.dll" />
     <Content Include="third_party\unlub.jar" />
     <Content Include="res\Icons\Error.ico" />
     <Content Include="res\Icons\Logo.ico" />
@@ -279,7 +278,6 @@
     <Content Include="res\Text\Strings\msgTwnSilverEntries.txt" />
     <Content Include="res\Text\Strings\msgTwnSonicEntries.txt" />
     <Content Include="res\Text\Strings\staffEntries.txt" />
-    <Content Include="third_party\HedgeLib.dll" />
     <Content Include="third_party\Ookii.Dialogs\CustomDictionary.xml" />
     <Content Include="third_party\Ookii.Dialogs\InputDialog.bmp" />
     <Content Include="third_party\Ookii.Dialogs\license.txt" />
