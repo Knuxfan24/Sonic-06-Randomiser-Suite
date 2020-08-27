@@ -6,7 +6,8 @@ namespace Sonic_06_Randomiser_Suite
 {
     class Collision_Randomiser
     {
-        //Needs to be rewritten, doesn't work following the Marathon switch over.
+        //Could really do with being rewritten, as this is very messy.
+        //A way to make it do it by tag rather than by face would be a nice option.
         public static void PropertyRandomiser(string filePath, Random rng, bool respectWalls, bool respectWater, bool respectDeath)
         {
             Collision collision = new Collision();

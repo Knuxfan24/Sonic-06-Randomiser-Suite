@@ -359,8 +359,6 @@ namespace Sonic_06_Randomiser_Suite
                         switch (item)
                         {
                             case 0:
-                                Console.WriteLine("Collision Randomiser not currently supported due to Marathon erorrs.");
-                                break;
                                 // Unpack the archive
                                 string randomArchive = Archives.UnpackARC(archive, Path.Combine(Path.GetTempPath(), Path.GetRandomFileName()));
 
@@ -384,7 +382,7 @@ namespace Sonic_06_Randomiser_Suite
                     }
                 }
 
-                else if (Path.GetFileName(archive).ToLower() == "player.arc")
+                else if (Path.GetFileName(archive).ToLower() == "player.arc" && CheckedListBox_Package_General.CheckedIndices.Count != 0)
                 {
                     // Unpack the archive
                     string randomArchive = Archives.UnpackARC(archive, Path.Combine(Path.GetTempPath(), Path.GetRandomFileName()));
@@ -490,7 +488,7 @@ namespace Sonic_06_Randomiser_Suite
 
                 // Unpack sound.arc
                 // Replaces the common scene bank with one that contains all voice lines
-                else if (Path.GetFileName(archive).ToLower() == "sound.arc") {
+                else if (Path.GetFileName(archive).ToLower() == "sound.arc" && CheckedListBox_Placement_General.GetItemChecked(3)) {
                     // Unpack the archive
                     string randomArchive = Archives.UnpackARC(archive, Path.Combine(Path.GetTempPath(), Path.GetRandomFileName()));
                     string voiceSBK = Path.Combine(randomArchive, $"sound\\{Literal.Core(Properties.Settings.Default.Path_GameExecutable)}\\sound\\voice_all_e.sbk");
