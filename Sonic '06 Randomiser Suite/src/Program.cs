@@ -13,7 +13,6 @@ namespace Sonic_06_Randomiser_Suite
         public static readonly string GlobalVersionNumber = "Version 1.0";
 
         public static string ApplicationData   = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                             arctool           = $"{ApplicationData}\\Sonic_06_Randomiser_Suite\\Tools\\arctool.exe",
                              unlub             = $"{ApplicationData}\\Sonic_06_Randomiser_Suite\\Tools\\unlub.jar";
 
         [STAThread]
@@ -27,9 +26,6 @@ namespace Sonic_06_Randomiser_Suite
             #region Write required pre-requisites to the Tools directory
             if (!Directory.Exists($"{ApplicationData}\\Sonic_06_Randomiser_Suite\\Tools\\"))
                 Directory.CreateDirectory($"{ApplicationData}\\Sonic_06_Randomiser_Suite\\Tools\\");
-
-            if (!File.Exists(arctool))
-                File.WriteAllBytes(arctool, Properties.Resources.arctool);
 
             if (!File.Exists(unlub))
                 File.WriteAllBytes(unlub, Properties.Resources.unlub);

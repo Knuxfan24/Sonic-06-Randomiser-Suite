@@ -205,7 +205,6 @@
     <Content Include="res\Text\General\S06PackageNames.txt" />
     <Content Include="res\Text\General\S06PlayerLuaNames.txt" />
     <Content Include="res\Text\Miscellaneous\License.txt" />
-    <Content Include="third_party\arctool.exe" />
     <Content Include="third_party\Marathon.IO.dll" />
     <Content Include="third_party\unlub.jar" />
     <Content Include="res\Icons\Error.ico" />

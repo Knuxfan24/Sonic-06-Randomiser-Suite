@@ -2,6 +2,7 @@
 using System.IO;
 using ArcPackerLib;
 using System.Diagnostics;
+using Marathon.IO.Formats.Archives;
 
 namespace Sonic_06_Randomiser_Suite
 {
@@ -13,19 +14,11 @@ namespace Sonic_06_Randomiser_Suite
         public static string UnpackARC(string arc, string tempPath) {
             Console.WriteLine($"Unpacking Archive: {arc}");
             Directory.CreateDirectory(tempPath); // Create temporary location
-            File.Copy(arc, Path.Combine(tempPath, Path.GetFileName(arc))); // Copy archive to temporary location
 
-            // Extracts the archive in the temporary location
-            ProcessStartInfo unpack = new ProcessStartInfo() {
-                FileName = Program.arctool,
-                Arguments = $"-d \"{Path.Combine(tempPath, Path.GetFileName(arc))}\"",
-                WorkingDirectory = Path.GetDirectoryName(Program.arctool),
-                WindowStyle = ProcessWindowStyle.Hidden
-            };
-
-            var Unpack = Process.Start(unpack);
-            Unpack.WaitForExit();
-            Unpack.Close();
+            // Extract archive
+            CompressedU8Archive u8Archive = new CompressedU8Archive();
+            u8Archive.Load(arc);
+            u8Archive.Extract(Path.Combine(tempPath, Path.GetFileNameWithoutExtension(arc)));
 
             return tempPath;
         }
