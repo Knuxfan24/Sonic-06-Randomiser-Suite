@@ -526,7 +526,6 @@ namespace Sonic_06_Randomiser_Suite
                                                    "Hyper - Collision, Package, Lua and Textures\n\n" +
                                                    "" +
                                                    "Miscellaneous Developers:\n" +
-                                                   "darkhero1337 - Unlock Mid-air Momentum\n" +
                                                    "Kons - DirectDraw Surface Decoder\n" +
                                                    "David Polomis - Targa Decoder",
                                                    "About", MessageBoxButtons.OK, MessageBoxIcon.Information);
