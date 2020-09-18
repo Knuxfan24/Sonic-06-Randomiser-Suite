@@ -550,7 +550,8 @@ namespace Sonic_06_Randomiser_Suite
                                                    "Hyper - Archives, Lua, Package and Randomisation\n" +
                                                    "GerbilSoft - Archives and Strings\n" +
                                                    "Radfordhound - Package\n" +
-                                                   "Shadow LAG - Lua\n\n" +
+                                                   "Shadow LAG - Lua\n" +
+                                                   "Skyth - SonicAudioTools\n\n" +
                                                    "" +
                                                    "Randomiser Developers:\n" +
                                                    "Knux - Audio, Collision, Package, Placement, Scene and Strings\n" +
