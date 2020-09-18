@@ -52,6 +52,9 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="VGAudio, Version=2.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\VGAudio.2.2.1\lib\net45\VGAudio.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -185,6 +188,7 @@
     <EmbeddedResource Include="third_party\Ookii.Dialogs\ProgressDialog.resx">
       <DependentUpon>ProgressDialog.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -195,6 +199,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <None Include="res\Miscellaneous\voice_all_e.sbk" />
+    <None Include="third_party\CsbEditor.exe.config" />
     <None Include="third_party\Ookii.Dialogs\ookii.snk" />
   </ItemGroup>
   <ItemGroup>
@@ -205,7 +210,9 @@
     <Content Include="res\Text\General\S06PackageNames.txt" />
     <Content Include="res\Text\General\S06PlayerLuaNames.txt" />
     <Content Include="res\Text\Miscellaneous\License.txt" />
+    <None Include="third_party\CsbEditor.exe" />
     <Content Include="third_party\Marathon.IO.dll" />
+    <None Include="third_party\SonicAudioLib.dll" />
     <Content Include="third_party\unlub.jar" />
     <Content Include="res\Icons\Error.ico" />
     <Content Include="res\Icons\Logo.ico" />

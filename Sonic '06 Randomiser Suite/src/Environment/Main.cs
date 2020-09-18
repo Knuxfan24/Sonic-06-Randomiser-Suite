@@ -167,7 +167,7 @@ namespace Sonic_06_Randomiser_Suite
                     // If all important CheckedListBox elements for this archive are empty, continue to the next archive
                     if (CheckedListBox_Placement_General.CheckedIndices.Count == 0 &&
                         CheckedListBox_Scene_General.CheckedIndices.Count     == 0 &&
-                        CheckedListBox_Audio_General.CheckedIndices.Count     == 0) continue;
+                        !CheckedListBox_Audio_General.GetItemChecked(0)) continue;
 
                     // Unpack the archive
                     string randomArchive = Archives.UnpackARC(archive, Path.Combine(Path.GetTempPath(), Path.GetRandomFileName()));
@@ -510,46 +510,19 @@ namespace Sonic_06_Randomiser_Suite
                         foreach(string csb in csbFiles)
                         {
                             Console.WriteLine($"Extracting Criware Sound Bank: {csb}");
-                            Process tempProcess = new Process();
-                            tempProcess.StartInfo.FileName = @"C:\Users\Knuxfan24\Desktop\New folder\CsbEditor.exe";
-                            tempProcess.StartInfo.Arguments = csb;
-                            tempProcess.StartInfo.CreateNoWindow = true;
-                            tempProcess.StartInfo.UseShellExecute = false;
-                            tempProcess.Start();
-                            tempProcess.WaitForExit();
+                            Audio.EditCSB(csb);
                         }
 
-                        List<string> availableSounds = new List<string>();
-                        List<int> usedNumbers = new List<int>();
-                        foreach (string adxData in Directory.GetFiles($"{randomArchive}\\sound\\common\\sound", $"Intro.adx", SearchOption.AllDirectories))
-                        {
-                            availableSounds.Add(adxData);
-                            File.Move(adxData, Paths.ReplaceFilename(adxData, $"temp-{Path.GetFileName(adxData)}"));
-                        }
-                        foreach (string adxData in availableSounds)
-                        {
-                            int index = RNG.Next(availableSounds.Count);
-                            if (usedNumbers.Contains(index))
-                            {
-                                do { index = RNG.Next(availableSounds.Count); }
-                                while (usedNumbers.Contains(index));
-                            }
-                            usedNumbers.Add(index);
-
-                            File.Move(Paths.ReplaceFilename(adxData, $"temp-{Path.GetFileName(adxData)}"), availableSounds[index]);
-                        }
+                        Console.WriteLine("Randomising Intro Sound Effects");
+                        Audio.RandomiseSoundEffects(randomArchive, "Intro", RNG);
+                        Console.WriteLine("Randomising Loop Sound Effects");
+                        Audio.RandomiseSoundEffects(randomArchive, "Loop", RNG);
 
                         string[] subfolders = Directory.GetDirectories($"{randomArchive}\\sound\\common\\sound", "*", SearchOption.TopDirectoryOnly);
                         foreach (string folder in subfolders)
                         {
                             Console.WriteLine($"Repacking Criware Sound Bank: {folder}");
-                            Process tempProcess = new Process();
-                            tempProcess.StartInfo.FileName = @"C:\Users\Knuxfan24\Desktop\New folder\CsbEditor.exe";
-                            tempProcess.StartInfo.Arguments = folder;
-                            tempProcess.StartInfo.CreateNoWindow = true;
-                            tempProcess.StartInfo.UseShellExecute = false;
-                            tempProcess.Start();
-                            tempProcess.WaitForExit();
+                            Audio.EditCSB(folder);
                         }
                     }
 

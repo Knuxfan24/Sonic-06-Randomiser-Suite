@@ -113,6 +113,26 @@ namespace Sonic_06_Randomiser_Suite.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] CsbEditor {
+            get {
+                object obj = ResourceManager.GetObject("CsbEditor", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] CsbEditorConfig {
+            get {
+                object obj = ResourceManager.GetObject("CsbEditorConfig", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to cStalker_Fix
         ///cStalker_Freeze
         ///cStalker_Normal
@@ -710,8 +730,7 @@ namespace Sonic_06_Randomiser_Suite.Properties {
         ///msg_b0070
         ///msg_b0071
         ///msg_b0072
-        ///msg_b0073
-        /// [rest of string was truncated]&quot;;.
+        ///msg_b0073        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string msgBattleEntries {
             get {
@@ -807,8 +826,7 @@ namespace Sonic_06_Randomiser_Suite.Properties {
         ///hint_all01_a02_sd
         ///hint_all01_a02_rg
         ///hint_all01_a02_om
-        ///hint_all01_a02_am
-        /// [rest of string was truncated]&quot;;.
+        ///hint_all01_a02_am        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string msgHintEntries {
             get {
@@ -843,8 +861,7 @@ namespace Sonic_06_Randomiser_Suite.Properties {
         ///hint_all03_h11_so
         ///hint_all03_h12_so
         ///hint_all03_h13_so
-        ///hint_all03_h14_so
-        /// [rest of string was truncated]&quot;;.
+        ///hint_all03_h14_so        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string msgHintXenonEntries {
             get {
@@ -1422,8 +1439,7 @@ namespace Sonic_06_Randomiser_Suite.Properties {
         ///debrisB_br
         ///debrisB_h
         ///dtd_breakwall
-        ///dtd_obj_statue
-        /// [rest of string was truncated]&quot;;.
+        ///dtd_obj_statue        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string S06PhysicsObjects {
             get {
@@ -1495,8 +1511,7 @@ namespace Sonic_06_Randomiser_Suite.Properties {
         ///hint_all01_a02_sd
         ///hint_all01_a02_rg
         ///hint_all01_a02_om
-        ///hint_all01_a02_am
-        /// [rest of string was truncated]&quot;;.
+        ///hint_all01_a02_am        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string S06TextStrings {
             get {
@@ -1539,6 +1554,16 @@ namespace Sonic_06_Randomiser_Suite.Properties {
         internal static string solaris02Params {
             get {
                 return ResourceManager.GetString("solaris02Params", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] SonicAudioLib {
+            get {
+                object obj = ResourceManager.GetObject("SonicAudioLib", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         

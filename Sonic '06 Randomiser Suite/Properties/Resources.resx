@@ -130,6 +130,12 @@
   <data name="cGolemParams" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\res\text\parameters\cgolemparams.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="CsbEditor" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\third_party\CsbEditor.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="CsbEditorConfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\third_party\CsbEditor.exe.config;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="cStalkerParams" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\res\text\parameters\cstalkerparams.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
@@ -339,6 +345,9 @@
   </data>
   <data name="solaris02Params" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\res\text\parameters\solaris02params.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SonicAudioLib" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\third_party\SonicAudioLib.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="staffEntries" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\res\text\strings\staffentries.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>

@@ -13,7 +13,10 @@ namespace Sonic_06_Randomiser_Suite
         public static readonly string GlobalVersionNumber = "Version 1.0";
 
         public static string ApplicationData   = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                             unlub             = $"{ApplicationData}\\Sonic_06_Randomiser_Suite\\Tools\\unlub.jar";
+                             unlub             = $"{ApplicationData}\\Sonic_06_Randomiser_Suite\\Tools\\unlub.jar",
+                             CsbEditor         = $"{ApplicationData}\\Sonic_06_Randomiser_Suite\\Tools\\CsbEditor.exe",
+                             CsbEditorConfig   = $"{ApplicationData}\\Sonic_06_Randomiser_Suite\\Tools\\CsbEditor.exe.config",
+                             SonicAudioLib     = $"{ApplicationData}\\Sonic_06_Randomiser_Suite\\Tools\\SonicAudioLib.dll";
 
         [STAThread]
 
@@ -29,6 +32,12 @@ namespace Sonic_06_Randomiser_Suite
 
             if (!File.Exists(unlub))
                 File.WriteAllBytes(unlub, Properties.Resources.unlub);
+            if (!File.Exists(CsbEditor))
+                File.WriteAllBytes(CsbEditor, Properties.Resources.CsbEditor);
+            if (!File.Exists(CsbEditorConfig))
+                File.WriteAllBytes(CsbEditorConfig, Properties.Resources.CsbEditorConfig);
+            if (!File.Exists(SonicAudioLib))
+                File.WriteAllBytes(SonicAudioLib, Properties.Resources.SonicAudioLib);
             #endregion
 
             Application.EnableVisualStyles();
