@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.Collections.Generic;
 using Marathon.IO.Formats.Placement;
 using Sonic_06_Randomiser_Suite.Serialisers;
+using System.Diagnostics;
 
 namespace Sonic_06_Randomiser_Suite
 {
@@ -256,7 +257,7 @@ namespace Sonic_06_Randomiser_Suite
                     }
 
                     // Randomise Music
-                    if (CheckedListBox_Audio_General.CheckedIndices.Count != 0)
+                    if (CheckedListBox_Audio_General.CheckedIndices.Count != 0 && CheckedListBox_Audio_General.GetItemChecked(0))
                     {
                         // If the Music list enumerated nothing, continue to the next statement
                         if (Lua_Music.Count == 0) continue;
@@ -488,18 +489,75 @@ namespace Sonic_06_Randomiser_Suite
 
                 // Unpack sound.arc
                 // Replaces the common scene bank with one that contains all voice lines
-                else if (Path.GetFileName(archive).ToLower() == "sound.arc" && CheckedListBox_Placement_General.GetItemChecked(3)) {
+                else if (Path.GetFileName(archive).ToLower() == "sound.arc" && (CheckedListBox_Placement_General.GetItemChecked(3) || CheckedListBox_Audio_General.GetItemChecked(1))) {
                     // Unpack the archive
                     string randomArchive = Archives.UnpackARC(archive, Path.Combine(Path.GetTempPath(), Path.GetRandomFileName()));
-                    string voiceSBK = Path.Combine(randomArchive, $"sound\\{Literal.Core(Properties.Settings.Default.Path_GameExecutable)}\\sound\\voice_all_e.sbk");
 
-                    // Write custom SBK
-                    Console.WriteLine($"Patching Scene Bank: {voiceSBK}");
-                    File.WriteAllBytes(voiceSBK, Properties.Resources.voice_all_e);
+                    //SBK Patch
+                    if (CheckedListBox_Placement_General.GetItemChecked(3))
+                    {
+                        string voiceSBK = Path.Combine(randomArchive, $"sound\\{Literal.Core(Properties.Settings.Default.Path_GameExecutable)}\\sound\\voice_all_e.sbk");
+
+                        // Write custom SBK
+                        Console.WriteLine($"Patching Scene Bank: {voiceSBK}");
+                        File.WriteAllBytes(voiceSBK, Properties.Resources.voice_all_e);
+                    }
+
+                    // Sound Effect Randomisation (All awful & hacky)
+                    if (CheckedListBox_Audio_General.GetItemChecked(1))
+                    {
+                        string[] csbFiles = Directory.GetFiles($"{randomArchive}\\sound\\common\\sound", "*.csb", SearchOption.AllDirectories);
+                        foreach(string csb in csbFiles)
+                        {
+                            Console.WriteLine($"Extracting Criware Sound Bank: {csb}");
+                            Process tempProcess = new Process();
+                            tempProcess.StartInfo.FileName = @"C:\Users\Knuxfan24\Desktop\New folder\CsbEditor.exe";
+                            tempProcess.StartInfo.Arguments = csb;
+                            tempProcess.StartInfo.CreateNoWindow = true;
+                            tempProcess.StartInfo.UseShellExecute = false;
+                            tempProcess.Start();
+                            tempProcess.WaitForExit();
+                        }
+
+                        List<string> availableSounds = new List<string>();
+                        List<int> usedNumbers = new List<int>();
+                        foreach (string adxData in Directory.GetFiles($"{randomArchive}\\sound\\common\\sound", $"Intro.adx", SearchOption.AllDirectories))
+                        {
+                            availableSounds.Add(adxData);
+                            File.Move(adxData, Paths.ReplaceFilename(adxData, $"temp-{Path.GetFileName(adxData)}"));
+                        }
+                        foreach (string adxData in availableSounds)
+                        {
+                            int index = RNG.Next(availableSounds.Count);
+                            if (usedNumbers.Contains(index))
+                            {
+                                do { index = RNG.Next(availableSounds.Count); }
+                                while (usedNumbers.Contains(index));
+                            }
+                            usedNumbers.Add(index);
+
+                            File.Move(Paths.ReplaceFilename(adxData, $"temp-{Path.GetFileName(adxData)}"), availableSounds[index]);
+                        }
+
+                        string[] subfolders = Directory.GetDirectories($"{randomArchive}\\sound\\common\\sound", "*", SearchOption.TopDirectoryOnly);
+                        foreach (string folder in subfolders)
+                        {
+                            Console.WriteLine($"Repacking Criware Sound Bank: {folder}");
+                            Process tempProcess = new Process();
+                            tempProcess.StartInfo.FileName = @"C:\Users\Knuxfan24\Desktop\New folder\CsbEditor.exe";
+                            tempProcess.StartInfo.Arguments = folder;
+                            tempProcess.StartInfo.CreateNoWindow = true;
+                            tempProcess.StartInfo.UseShellExecute = false;
+                            tempProcess.Start();
+                            tempProcess.WaitForExit();
+                        }
+                    }
 
                     // Repack the archive
                     Archives.CreateModARC(randomArchive, archive, modDirectory);
                 }
+
+
             }
         }
 

@@ -1103,7 +1103,8 @@
             this.CheckedListBox_Audio_General.ForeColor = System.Drawing.SystemColors.Control;
             this.CheckedListBox_Audio_General.FormattingEnabled = true;
             this.CheckedListBox_Audio_General.Items.AddRange(new object[] {
-            "Randomise Music"});
+            "Randomise Music",
+            "Randomise Sound Effects"});
             this.CheckedListBox_Audio_General.Location = new System.Drawing.Point(0, 0);
             this.CheckedListBox_Audio_General.Name = "CheckedListBox_Audio_General";
             this.CheckedListBox_Audio_General.Size = new System.Drawing.Size(897, 288);
