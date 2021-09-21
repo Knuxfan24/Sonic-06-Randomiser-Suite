@@ -1,7 +1,0 @@
-eFlyer_Boss_Homing
-eFlyer_Boss_Vulcan
-eFlyer_Fix
-eFlyer_Fix_Rocket
-eFlyer_Fix_Vulcan
-eFlyer_Homing
-eFlyer_Normal

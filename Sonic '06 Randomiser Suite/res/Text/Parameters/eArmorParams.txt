@@ -1,2 +1,0 @@
-eArmor_Fix
-eArmor_Normal

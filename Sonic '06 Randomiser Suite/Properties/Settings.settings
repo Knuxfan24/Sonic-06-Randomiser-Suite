@@ -2,17 +2,11 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Sonic_06_Randomiser_Suite.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="Path_ModsDirectory" Type="System.String" Scope="User">
+    <Setting Name="gameExecutable" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="Path_GameExecutable" Type="System.String" Scope="User">
+    <Setting Name="modsDirectory" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="Forbidden_Textures" Type="System.String" Scope="User">
-      <Value Profile="(Default)">_sdw_,_lm_,envmap</Value>
-    </Setting>
-    <Setting Name="Forbidden_Animations" Type="System.String" Scope="User">
-      <Value Profile="(Default)">silver_style_Root.xnm,face</Value>
     </Setting>
   </Settings>
 </SettingsFile>

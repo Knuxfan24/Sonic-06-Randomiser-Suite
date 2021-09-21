@@ -12,7 +12,7 @@ namespace Sonic_06_Randomiser_Suite.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.5.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.0.3.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -26,48 +26,24 @@ namespace Sonic_06_Randomiser_Suite.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Path_ModsDirectory {
+        public string gameExecutable {
             get {
-                return ((string)(this["Path_ModsDirectory"]));
+                return ((string)(this["gameExecutable"]));
             }
             set {
-                this["Path_ModsDirectory"] = value;
+                this["gameExecutable"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Path_GameExecutable {
+        public string modsDirectory {
             get {
-                return ((string)(this["Path_GameExecutable"]));
+                return ((string)(this["modsDirectory"]));
             }
             set {
-                this["Path_GameExecutable"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("_sdw_,_lm_,envmap")]
-        public string Forbidden_Textures {
-            get {
-                return ((string)(this["Forbidden_Textures"]));
-            }
-            set {
-                this["Forbidden_Textures"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("silver_style_Root.xnm,face")]
-        public string Forbidden_Animations {
-            get {
-                return ((string)(this["Forbidden_Animations"]));
-            }
-            set {
-                this["Forbidden_Animations"] = value;
+                this["modsDirectory"] = value;
             }
         }
     }

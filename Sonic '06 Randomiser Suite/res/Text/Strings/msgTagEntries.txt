@@ -1,4 +1,0 @@
-msg_tag01
-msg_tag02
-msg_tag03
-msg_tag04

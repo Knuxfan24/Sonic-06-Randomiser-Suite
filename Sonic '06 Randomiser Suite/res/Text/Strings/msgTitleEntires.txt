@@ -1,3 +1,0 @@
-msg_pressstart
-msg_newgame
-msg_continue

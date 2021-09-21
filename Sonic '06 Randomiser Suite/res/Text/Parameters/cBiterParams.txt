@@ -1,5 +1,0 @@
-cBiter_Fix
-cBiter_Freeze
-cBiter_Normal
-cBiter_Wall_Fix
-cBiter_Wall_Normal

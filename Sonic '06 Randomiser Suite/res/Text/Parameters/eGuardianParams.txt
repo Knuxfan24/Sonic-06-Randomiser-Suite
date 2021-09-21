@@ -1,5 +1,0 @@
-eGuardian_Ball_Fix
-eGuardian_Ball_Normal
-eGuardian_Fix
-eGuardian_Freeze
-eGuardian_Normal

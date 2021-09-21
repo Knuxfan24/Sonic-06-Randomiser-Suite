@@ -1,6 +1,0 @@
-eCannon_Fix
-eCannon_Fix_Laser
-eCannon_Fix_Launcher
-eCannon_Normal
-eCannon_Trans
-eCannon_Wall_Fix

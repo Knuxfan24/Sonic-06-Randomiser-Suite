@@ -1,4 +1,0 @@
-cGolem_Alarm
-cGolem_Fix
-cGolem_Freeze
-cGolem_Normal
