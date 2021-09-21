@@ -43,4 +43,50 @@ A lot of the Object Placement features can be further randomised, see the Wiki f
 
 ### Event Randomisation
 
-Randomisation of various elements within the EventPlaybook.epb file that handles various factors of the game's cutscenes, these include:
+Randomisation of various elements within the EventPlaybook.epb file that handles various factors of the game's cutscenes, these are:
+
+* The scene parameter file used in cutscenes
+
+* The rotation of the scene
+
+* The position in the map to base the scene around
+
+* The voice lines used in cutscenes
+
+* The map to play the scene in
+
+* The order that cutscenes play in the game's story progression
+
+### Scene Parameter Randomisation
+
+Randomisation of various values within the game's scene lua binaries (.lub) files, these are:
+
+* The colour and strength of the three light types (including sub lights)
+
+* The direction of a scene's light source(s)
+
+* The colour and density of the scene's fog
+
+* The environment map the scene should use
+
+### Miscellaneous Randomisation
+
+Randomisation of miscellaneous elements across one off files, these are:
+
+* Change the music used in stages and missions
+
+* The minimum and maximum health that enemies and bosses can have
+
+* The surface type for stage collision
+
+* Shuffling all of the game's text around
+
+* Enabling random patches from the user's Mod Manager Patches Directory
+
+### Custom Elements
+
+Allows the user to add custom elements to the Randomisation, these being:
+
+* Custom Music, supporting WAV (which is always used as part of the process), MP3 and M4A
+
+* Voice Packs
