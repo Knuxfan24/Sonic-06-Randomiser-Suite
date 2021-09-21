@@ -164,6 +164,8 @@ namespace Sonic_06_Randomiser_Suite
             this.Button_Randomise = new System.Windows.Forms.Button();
             this.Tool_FolderBrowser = new System.Windows.Forms.FolderBrowserDialog();
             this.Tool_FileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.Button_Documentation = new System.Windows.Forms.Button();
+            this.Button_About = new System.Windows.Forms.Button();
             this.TabControl_Main.SuspendLayout();
             this.TabPage_General.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Numerical_General_WildcardWeight)).BeginInit();
@@ -4211,9 +4213,9 @@ namespace Sonic_06_Randomiser_Suite
             this.Button_Randomise.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.Button_Randomise.BackColor = System.Drawing.Color.LightGreen;
             this.Button_Randomise.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Button_Randomise.Location = new System.Drawing.Point(710, 415);
+            this.Button_Randomise.Location = new System.Drawing.Point(687, 415);
             this.Button_Randomise.Name = "Button_Randomise";
-            this.Button_Randomise.Size = new System.Drawing.Size(83, 23);
+            this.Button_Randomise.Size = new System.Drawing.Size(106, 23);
             this.Button_Randomise.TabIndex = 1;
             this.Button_Randomise.Text = "Randomise";
             this.Button_Randomise.UseVisualStyleBackColor = false;
@@ -4223,12 +4225,40 @@ namespace Sonic_06_Randomiser_Suite
             // 
             this.Tool_FolderBrowser.UseDescriptionForTitle = true;
             // 
+            // Button_Documentation
+            // 
+            this.Button_Documentation.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.Button_Documentation.BackColor = System.Drawing.SystemColors.Control;
+            this.Button_Documentation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_Documentation.Location = new System.Drawing.Point(12, 415);
+            this.Button_Documentation.Name = "Button_Documentation";
+            this.Button_Documentation.Size = new System.Drawing.Size(106, 23);
+            this.Button_Documentation.TabIndex = 2;
+            this.Button_Documentation.Text = "Documentation";
+            this.Button_Documentation.UseVisualStyleBackColor = false;
+            this.Button_Documentation.Click += new System.EventHandler(this.Button_Documentation_Click);
+            // 
+            // Button_About
+            // 
+            this.Button_About.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.Button_About.BackColor = System.Drawing.SystemColors.Control;
+            this.Button_About.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_About.Location = new System.Drawing.Point(124, 415);
+            this.Button_About.Name = "Button_About";
+            this.Button_About.Size = new System.Drawing.Size(106, 23);
+            this.Button_About.TabIndex = 3;
+            this.Button_About.Text = "About";
+            this.Button_About.UseVisualStyleBackColor = false;
+            this.Button_About.Click += new System.EventHandler(this.Button_About_Click);
+            // 
             // Form_Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
             this.ClientSize = new System.Drawing.Size(805, 450);
+            this.Controls.Add(this.Button_About);
+            this.Controls.Add(this.Button_Documentation);
             this.Controls.Add(this.Button_Randomise);
             this.Controls.Add(this.TabControl_Main);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -4409,6 +4439,8 @@ namespace Sonic_06_Randomiser_Suite
         private System.Windows.Forms.Button Button_Event_TerrainDeselectAll;
         private System.Windows.Forms.Button Button_Event_TerrainSelectAll;
         private System.Windows.Forms.CheckedListBox CheckedList_Event_Terrain;
+        private System.Windows.Forms.Button Button_Documentation;
+        private System.Windows.Forms.Button Button_About;
     }
 }
 

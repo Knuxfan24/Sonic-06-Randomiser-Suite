@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -309,6 +310,32 @@ namespace Sonic_06_Randomiser_Suite
         #endregion
 
         #region Buttons and Checkboxes
+        /// <summary>
+        /// Open the Randomiser's Wiki in the user's browser of choice.
+        /// </summary>
+        private void Button_Documentation_Click(object sender, EventArgs e)
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "https://github.com/Knuxfan24/Sonic-06-Randomiser-Suite/wiki",
+                UseShellExecute = true
+            });
+        }
+
+        /// <summary>
+        /// Display a message box of credits.
+        /// </summary>
+        private void Button_About_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Credits:\n\n" +
+                            "Knuxfan24: Development.\n" +
+                            "HyperBE32: Marathon.\n" +
+                            "ShadowLAG: Lua Decompilation.\n" +
+                            "Mark Heath: NAudio.",
+                            "Sonic '06 Randomiser Suite",
+                            MessageBoxButtons.OK);
+        }
+
         /// <summary>
         /// Saves the mods directory into the settings.
         /// </summary>
