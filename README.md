@@ -23,21 +23,21 @@ For a proper run down on the features and information on configuring and using t
 
 Randomisation of various elements within '06's Object Placement (.set) files, these are:
 
-*Enemy types and their behaviours
+* Enemy types and their behaviours
 
-*The characters that get used in stages
+* The characters that get used in stages
 
-*The contents of item capsules
+* The contents of item capsules
 
-*Types of props
+* Types of props
 
-*Voice lines that play throughout gameplay
+* Voice lines that play throughout gameplay
 
-*Types of doors
+* Types of doors
 
-*Object draw/activation distance
+* Object draw/activation distance
 
-*Miscellaneous cosmetic details.
+* Miscellaneous cosmetic details.
 
 A lot of the Object Placement features can be further randomised, see the Wiki for more information.
 
