@@ -6,7 +6,6 @@
     <RootNamespace>Sonic_06_Randomiser_Suite</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
-    <ApplicationIcon>C:\Users\Knuxf\source\repos\Sonic '06 Randomiser Suite\Sonic '06 Randomiser Suite\ExternalResources\Logo.ico</ApplicationIcon>
     <Authors>Knuxfan24</Authors>
     <PackageProjectUrl>https://github.com/Knuxfan24/Sonic-06-Randomiser-Suite</PackageProjectUrl>
     <PackageIcon>Logo.png</PackageIcon>
