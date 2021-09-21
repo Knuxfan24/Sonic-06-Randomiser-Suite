@@ -4227,7 +4227,7 @@ namespace Sonic_06_Randomiser_Suite
             // 
             // Button_Documentation
             // 
-            this.Button_Documentation.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.Button_Documentation.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Button_Documentation.BackColor = System.Drawing.SystemColors.Control;
             this.Button_Documentation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Button_Documentation.Location = new System.Drawing.Point(12, 415);
@@ -4240,7 +4240,7 @@ namespace Sonic_06_Randomiser_Suite
             // 
             // Button_About
             // 
-            this.Button_About.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.Button_About.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Button_About.BackColor = System.Drawing.SystemColors.Control;
             this.Button_About.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Button_About.Location = new System.Drawing.Point(124, 415);
