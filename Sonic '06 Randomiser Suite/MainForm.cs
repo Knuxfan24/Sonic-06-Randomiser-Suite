@@ -964,7 +964,7 @@ namespace Sonic_06_Randomiser_Suite
             List<string> SetVoices      = CheckListEnumerators.SET_EnumerateHintsList(CheckedList_SET_Voices);
             List<string> SetDoors       = CheckListEnumerators.SET_EnumerateDoorsList(CheckedList_SET_Doors);
             List<string> EventLighting  = CheckListEnumerators.Event_EnumerateLightingList(CheckedList_Event_Lighting);
-            List<string> EventTerrain   = CheckListEnumerators.Event_EnumerateLightingList(CheckedList_Event_Terrain);
+            List<string> EventTerrain   = CheckListEnumerators.Event_EnumerateTerrainList(CheckedList_Event_Terrain);
             List<string> SceneEnvMaps   = CheckListEnumerators.Scene_EnumerateEnvList(CheckedList_Scene_EnvMaps);
             List<string> MiscMusic      = CheckListEnumerators.Misc_EnumerateMusicList(CheckedList_Misc_Songs);
             List<string> MiscLanguages  = CheckListEnumerators.Misc_EnumerateLanguagesList(CheckedList_Misc_Languages);
