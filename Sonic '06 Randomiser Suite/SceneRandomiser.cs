@@ -73,16 +73,19 @@ namespace Sonic_06_Randomiser_Suite
                     if (lua[i].Contains("Direction_3dsmax") && direction)
                         Direction(lua, i + 2, enforceDirection);
 
-                    // Fog
-                    // Colour
-                    if (lua[i].Contains("BRay") && fogColour)
-                        RGBA(lua, i + 1, 4, false);
-                    // Density
-                    if (lua[i].Contains("BRay") && fogDensity)
+                    // Fog. Has special exceptions for Tropical Jungle B and C as they are the ONLY stages to handle fog differently, so they becoming pure, blinding white.
+                    if (!sceneLua.Contains("scene_tpj_b") && !sceneLua.Contains("scene_tpj_c"))
                     {
-                        string[] power = lua[i + 4].Split(' ');
-                        power[4] = $"{Form_Main.Randomiser.NextDouble() * (0.001 - 0) + 0}";
-                        lua[i+  4] = string.Join(' ', power);
+                        // Colour
+                        if (lua[i].Contains("BRay") && fogColour)
+                            RGBA(lua, i + 1, 4, false);
+                        // Density
+                        if (lua[i].Contains("BRay") && fogDensity)
+                        {
+                            string[] power = lua[i + 4].Split(' ');
+                            power[4] = $"{Form_Main.Randomiser.NextDouble() * (0.001 - 0) + 0}";
+                            lua[i + 4] = string.Join(' ', power);
+                        }
                     }
 
                     // Environment Maps
