@@ -835,26 +835,26 @@ namespace Sonic_06_Randomiser_Suite
             string[] archives = Directory.GetFiles($@"{Path.GetDirectoryName(TextBox_General_GameExecutable.Text)}", "*.arc", SearchOption.AllDirectories);
 
             // Create Mod Directory (prompting the user if they want to delete it first or cancel if it already exists.)
-            if (Directory.Exists($@"{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({TextBox_General_Seed.Text})"))
+            if (Directory.Exists($@"{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({UseSafeFormattedCharacters(TextBox_General_Seed.Text)})"))
             {
                 DialogResult check = MessageBox.Show($"A mod with the seed {TextBox_General_Seed.Text} already exists.\nDo you want to replace it?",
                                              "Sonic '06 Randomiser Suite",
                                              MessageBoxButtons.YesNoCancel);
 
                 if (check == DialogResult.Yes)
-                    Directory.Delete($@"{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({TextBox_General_Seed.Text})", true);
+                    Directory.Delete($@"{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({UseSafeFormattedCharacters(TextBox_General_Seed.Text)})", true);
 
                 if (check == DialogResult.Cancel)
                     return;
             }
 
-            Directory.CreateDirectory($@"{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({TextBox_General_Seed.Text})");
+            Directory.CreateDirectory($@"{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({UseSafeFormattedCharacters(TextBox_General_Seed.Text)})");
 
             // Create console window to show progress.
             NativeMethods.AllocConsole();
 
             // Write mod configuration ini.
-            using (Stream configCreate = File.Open(Path.Combine($@"{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({TextBox_General_Seed.Text})", "mod.ini"), FileMode.Create))
+            using (Stream configCreate = File.Open(Path.Combine($@"{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({UseSafeFormattedCharacters(TextBox_General_Seed.Text)})", "mod.ini"), FileMode.Create))
             using (StreamWriter configInfo = new(configCreate))
             {
                 configInfo.WriteLine("[Details]");
@@ -880,7 +880,7 @@ namespace Sonic_06_Randomiser_Suite
             if (Checkbox_General_Wildcard.Checked)
             {
                 // Backup configuration while we fuck with it.
-                SaveConfig(Path.Combine($@"{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({TextBox_General_Seed.Text})", "wildcard.ini"));
+                SaveConfig(Path.Combine($@"{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({UseSafeFormattedCharacters(TextBox_General_Seed.Text)})", "wildcard.ini"));
 
                 // SET
                 WildcardCheckbox(CheckBox_SET_Enemies);
@@ -972,7 +972,8 @@ namespace Sonic_06_Randomiser_Suite
             // Custom Stuff
             // Custom Music
             if (TextBox_Custom_Music.Text.Length != 0)
-                MiscMusic = Custom.CustomMusic(TextBox_Custom_Music.Text, TextBox_General_ModsDirectory.Text, TextBox_General_Seed.Text, Checkbox_Custom_XMACache.Checked, MiscMusic, archives, TextBox_General_GameExecutable.Text);
+                MiscMusic = Custom.CustomMusic(TextBox_Custom_Music.Text, TextBox_General_ModsDirectory.Text, UseSafeFormattedCharacters(TextBox_General_Seed.Text), Checkbox_Custom_XMACache.Checked,
+                                               MiscMusic, archives, TextBox_General_GameExecutable.Text);
 
             // Voice Packs.
             if (TextBox_Custom_Vox.Text.Length != 0)
@@ -989,7 +990,7 @@ namespace Sonic_06_Randomiser_Suite
                 }
 
                 // Handle the voice packs.
-                Custom.VoicePacks(TextBox_Custom_Vox.Text, TextBox_General_ModsDirectory.Text, TextBox_General_Seed.Text, SetVoices, archives, TextBox_General_GameExecutable.Text);
+                Custom.VoicePacks(TextBox_Custom_Vox.Text, TextBox_General_ModsDirectory.Text, UseSafeFormattedCharacters(TextBox_General_Seed.Text), SetVoices, archives, TextBox_General_GameExecutable.Text);
             }
 
             // Disable options if they have nothing to pick from.
@@ -1066,7 +1067,7 @@ namespace Sonic_06_Randomiser_Suite
                         EventPlaybookRandomiser.Load(unpackedArchive, CheckBox_Event_Scene.Checked, EventLighting, CheckBox_Event_RotationX.Checked, CheckBox_Event_RotationY.Checked,
                                                               CheckBox_Event_RotationZ.Checked, CheckBox_Event_PositionX.Checked, CheckBox_Event_PositionY.Checked, CheckBox_Event_PositionZ.Checked,
                                                               CheckBox_Event_Terrain.Checked, EventTerrain, CheckBox_Event_Order.Checked, TextBox_General_ModsDirectory.Text,
-                                                              TextBox_General_GameExecutable.Text, TextBox_General_Seed.Text);
+                                                              TextBox_General_GameExecutable.Text, UseSafeFormattedCharacters(TextBox_General_Seed.Text));
                     }
                 }
             }
@@ -1140,12 +1141,12 @@ namespace Sonic_06_Randomiser_Suite
             }
 
             if(Checkbox_Misc_Patches.Checked)
-                MiscellaneousRandomiser.PatchRandomiser(TextBox_General_ModsDirectory.Text, TextBox_General_Seed.Text);
+                MiscellaneousRandomiser.PatchRandomiser(TextBox_General_ModsDirectory.Text, UseSafeFormattedCharacters(TextBox_General_Seed.Text));
 
             //Repack Archives
             foreach (string archive in archives)
                 if (Directory.Exists($@"{Program.TemporaryDirectory}{archive.Substring(0, archive.Length - 4).Replace(Path.GetDirectoryName(TextBox_General_GameExecutable.Text), "")}"))
-                    ArchiveHandler.RepackArchive($@"{Program.TemporaryDirectory}{archive.Substring(0, archive.Length - 4).Replace(Path.GetDirectoryName(TextBox_General_GameExecutable.Text), "")}", $@"{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({TextBox_General_Seed.Text}){archive.Substring(0, archive.Length - 4).Replace(Path.GetDirectoryName(TextBox_General_GameExecutable.Text), "")}");
+                    ArchiveHandler.RepackArchive($@"{Program.TemporaryDirectory}{archive.Substring(0, archive.Length - 4).Replace(Path.GetDirectoryName(TextBox_General_GameExecutable.Text), "")}", $@"{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({UseSafeFormattedCharacters(TextBox_General_Seed.Text)}){archive.Substring(0, archive.Length - 4).Replace(Path.GetDirectoryName(TextBox_General_GameExecutable.Text), "")}");
 
             // XMA Shuffle for Event Randomisation
             if (CheckBox_Event_XMAs.Checked)
@@ -1171,7 +1172,7 @@ namespace Sonic_06_Randomiser_Suite
                     }
                     if (TextBox_Custom_Vox.Text != "")
                     {
-                        gameplayXMAs = gameplayXMAs.Concat(Directory.GetFiles($@"{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({TextBox_General_Seed.Text})\xenon\sound\voice\e\", "*.xma", SearchOption.AllDirectories)).ToArray();
+                        gameplayXMAs = gameplayXMAs.Concat(Directory.GetFiles($@"{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({UseSafeFormattedCharacters(TextBox_General_Seed.Text)})\xenon\sound\voice\e\", "*.xma", SearchOption.AllDirectories)).ToArray();
                         eventXMAs = eventXMAs.Concat(gameplayXMAs).ToArray();
                     }
                 }
@@ -1188,20 +1189,20 @@ namespace Sonic_06_Randomiser_Suite
                     }
                     usedNumbers.Add(index);
 
-                    if (!Directory.Exists($@"{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({TextBox_General_Seed.Text}){Path.GetDirectoryName(shuffleArray[i].Substring(0, shuffleArray[i].Length).Replace(Path.GetDirectoryName(TextBox_General_GameExecutable.Text), ""))}"))
-                        Directory.CreateDirectory($@"{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({TextBox_General_Seed.Text}){Path.GetDirectoryName(shuffleArray[i].Substring(0, shuffleArray[i].Length).Replace(Path.GetDirectoryName(TextBox_General_GameExecutable.Text), ""))}");
+                    if (!Directory.Exists($@"{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({UseSafeFormattedCharacters(TextBox_General_Seed.Text)}){Path.GetDirectoryName(shuffleArray[i].Substring(0, shuffleArray[i].Length).Replace(Path.GetDirectoryName(TextBox_General_GameExecutable.Text), ""))}"))
+                        Directory.CreateDirectory($@"{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({UseSafeFormattedCharacters(TextBox_General_Seed.Text)}){Path.GetDirectoryName(shuffleArray[i].Substring(0, shuffleArray[i].Length).Replace(Path.GetDirectoryName(TextBox_General_GameExecutable.Text), ""))}");
 
-                    System.Console.WriteLine($@"Replacing '{eventXMAs[index]}' with '{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({TextBox_General_Seed.Text}){shuffleArray[i].Substring(0, shuffleArray[i].Length).Replace(Path.GetDirectoryName(TextBox_General_GameExecutable.Text), "")}'.");
-                    File.Copy(eventXMAs[index], $@"{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({TextBox_General_Seed.Text}){shuffleArray[i].Substring(0, shuffleArray[i].Length).Replace(Path.GetDirectoryName(TextBox_General_GameExecutable.Text), "")}");
+                    System.Console.WriteLine($@"Replacing '{eventXMAs[index]}' with '{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({UseSafeFormattedCharacters(TextBox_General_Seed.Text)}){shuffleArray[i].Substring(0, shuffleArray[i].Length).Replace(Path.GetDirectoryName(TextBox_General_GameExecutable.Text), "")}'.");
+                    File.Copy(eventXMAs[index], $@"{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({UseSafeFormattedCharacters(TextBox_General_Seed.Text)}){shuffleArray[i].Substring(0, shuffleArray[i].Length).Replace(Path.GetDirectoryName(TextBox_General_GameExecutable.Text), "")}");
 }
             }
 
             // Undo the Wildcard's settings
             if (Checkbox_General_Wildcard.Checked)
             {
-                SaveConfig(Path.Combine($@"{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({TextBox_General_Seed.Text})", "wildcard.log"));
-                LoadConfig(Path.Combine($@"{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({TextBox_General_Seed.Text})", "wildcard.ini"));
-                File.Delete(Path.Combine($@"{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({TextBox_General_Seed.Text})", "wildcard.ini"));
+                SaveConfig(Path.Combine($@"{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({UseSafeFormattedCharacters(TextBox_General_Seed.Text)})", "wildcard.log"));
+                LoadConfig(Path.Combine($@"{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({UseSafeFormattedCharacters(TextBox_General_Seed.Text)})", "wildcard.ini"));
+                File.Delete(Path.Combine($@"{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({UseSafeFormattedCharacters(TextBox_General_Seed.Text)})", "wildcard.ini"));
             }
 
             // Delete the temp directory, as they quickly get large, esepecially when custom XMAs are involved.
@@ -1213,6 +1214,23 @@ namespace Sonic_06_Randomiser_Suite
             MessageBox.Show("Randomisation Complete!",
                             "Sonic '06 Randomiser Suite",
                             MessageBoxButtons.OK);
+        }
+
+        /// <summary>
+        /// Replaces illegal characters from a path with underscores.
+        /// </summary>
+        /// <param name="text">The string to strip out.</param>
+        static string UseSafeFormattedCharacters(string text)
+        {
+            return text.Replace(@"\", "_")
+                       .Replace("/", "_")
+                       .Replace(":", "_")
+                       .Replace("*", "_")
+                       .Replace("?", "_")
+                       .Replace("\"", "_")
+                       .Replace("<", "_")
+                       .Replace(">", "_")
+                       .Replace("|", "_");
         }
     }
 }
