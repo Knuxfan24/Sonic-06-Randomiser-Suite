@@ -28,8 +28,5 @@ namespace Sonic_06_Randomiser_Suite
     {
         [DllImport("kernel32.dll")]
         public static extern bool AllocConsole();
-
-        [DllImport("kernel32.dll")]
-        public static extern bool FreeConsole();
     }
 }

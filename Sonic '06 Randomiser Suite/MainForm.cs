@@ -20,6 +20,7 @@ namespace Sonic_06_Randomiser_Suite
         {
             InitializeComponent();
             SetDefaults();
+            NativeMethods.AllocConsole();
         }
 
         /// <summary>
@@ -850,8 +851,8 @@ namespace Sonic_06_Randomiser_Suite
 
             Directory.CreateDirectory($@"{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({UseSafeFormattedCharacters(TextBox_General_Seed.Text)})");
 
-            // Create console window to show progress.
-            NativeMethods.AllocConsole();
+            // Clear the console if it has stuff in from a previous randomisation.
+            System.Console.Clear();
 
             // Write mod configuration ini.
             using (Stream configCreate = File.Open(Path.Combine($@"{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({UseSafeFormattedCharacters(TextBox_General_Seed.Text)})", "mod.ini"), FileMode.Create))
@@ -1209,8 +1210,8 @@ namespace Sonic_06_Randomiser_Suite
             if(Directory.Exists(Program.TemporaryDirectory))
                 Directory.Delete(Program.TemporaryDirectory, true);
 
-            // Close the console window and show the complete message box.
-            NativeMethods.FreeConsole();
+            // Show the complete message box.
+            System.Console.WriteLine($@"Done!");
             MessageBox.Show("Randomisation Complete!",
                             "Sonic '06 Randomiser Suite",
                             MessageBoxButtons.OK);
