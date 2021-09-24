@@ -10,6 +10,7 @@
     <PackageProjectUrl>https://github.com/Knuxfan24/Sonic-06-Randomiser-Suite</PackageProjectUrl>
     <PackageIcon>Logo.png</PackageIcon>
     <RepositoryUrl>https://github.com/Knuxfan24/Sonic-06-Randomiser-Suite</RepositoryUrl>
+    <ApplicationIcon>ExternalResources\Logo.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,6 +27,10 @@
 
   <ItemGroup>
     <Content Remove="ExternalResources\Marathon.IO.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="ExternalResources\Logo.ico" />
   </ItemGroup>
 
   <ItemGroup>
