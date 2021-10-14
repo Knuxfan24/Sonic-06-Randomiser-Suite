@@ -1,0 +1,8 @@
+Aquatic Base,aqa_door,True
+Dusty Desert,dtd_door,True
+Flame Core,flc_door,True
+Kingdom Valley,kdv_door,True
+Radical Train,rct_door,True
+White Acropolis,wap_door,True
+Wave Ocean (Small),wvo_doorA,True
+Wave Ocean (Large),wvo_doorB,True

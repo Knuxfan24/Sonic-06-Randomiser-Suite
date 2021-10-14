@@ -1,0 +1,43 @@
+Iblis Biter,cBiter,true
+Iblis Golem,cGolem,true
+Iblis Taker,cTaker,true
+Iblis Worm,cCrawler,true
+Mephiles Gazer,cGazer,true
+Mephiles Stalker,cStalker,true
+Mephiles Titan,cTitan,true
+Mephiles Tricker,cTricker,true
+Egg Armour,eArmor,true
+Egg Buster,eBluster,true
+Egg Buster (Egg Gunner),eBuster,true
+Egg Buster (Egg Gunner) (Fly),eBuster(Fly),true
+Egg Bomber,eBomber,true
+Egg Cannon,eCannon,true
+Egg Cannon (Fly),eCannon(Fly),true
+Egg Chaser,eChaser,true
+Egg Commander,eCommander,true
+Egg Flyer,eFlyer,true
+Egg Guardian,eGuardian,true
+Egg Gunner,eGunner,true
+Egg Gunner (Fly),eGunner(Fly),true
+Egg Hunter,eHunter,true
+Egg Keeper,eKeeper,true
+Egg Lancer,eLancer,true
+Egg Lancer(Fly),eLancer(Fly),true
+Egg Liner,eLiner,true
+Egg Rounder,eRounder,true
+Egg Searcher,eSearcher,true
+Egg Stinger,eStinger,true
+Egg Stinger (Fly),eStinger(Fly),true
+Egg Sweeper,eSweeper,true
+Egg Walker,eWalker,true
+Egg Cerberus,eCerberus,false
+Egg Genesis,eGenesis,false
+Egg Wyvern,eWyvern,false
+Iblis (Phase 1),firstIblis,false
+Iblis (Phase 2),secondIblis,false
+Iblis (Phase 3),thirdIblis,false
+Mephiles (Phase 1),firstmefiress,false
+Mephiles (Phase 2),secondmefiress,false
+Mephiles Kyozoress,kyozoress,false
+Solaris (Phase 1),solaris01,false
+Solaris (Phase 2),solaris02,false

@@ -112,13 +112,46 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Seed" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\ExternalResources\Seed.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="CharacterTypes" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\TextLists\CharacterTypes.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="CommonPropTypes" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\TextLists\CommonPropTypes.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="DoorTypes" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\TextLists\DoorTypes.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="EnemyTypes" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\TextLists\EnemyTypes.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="EnvMaps" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\TextLists\EnvMaps.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="EventLighting" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\TextLists\EventLighting.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="EventTerrain" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\TextLists\EventTerrain.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="ItemTypes" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\TextLists\ItemTypes.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="MiscLanguages" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\TextLists\MiscLanguages.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="MiscSongs" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\TextLists\MiscSongs.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="PathPropTypes" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\TextLists\PathPropTypes.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="VoiceTypes" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\TextLists\VoiceTypes.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
 </root>

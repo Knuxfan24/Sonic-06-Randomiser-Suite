@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Sonic_06_Randomiser_Suite.Properties {
+namespace SonicNextRandomiser.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -26,24 +26,24 @@ namespace Sonic_06_Randomiser_Suite.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string gameExecutable {
-            get {
-                return ((string)(this["gameExecutable"]));
-            }
-            set {
-                this["gameExecutable"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string modsDirectory {
             get {
                 return ((string)(this["modsDirectory"]));
             }
             set {
                 this["modsDirectory"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string gameExecutable {
+            get {
+                return ((string)(this["gameExecutable"]));
+            }
+            set {
+                this["gameExecutable"] = value;
             }
         }
     }

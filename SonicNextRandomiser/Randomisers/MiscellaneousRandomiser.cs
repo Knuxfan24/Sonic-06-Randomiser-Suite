@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Sonic_06_Randomiser_Suite
+namespace SonicNextRandomiser.Randomisers
 {
     class MiscellaneousRandomiser
     {
@@ -42,7 +42,7 @@ namespace Sonic_06_Randomiser_Suite
                 {
                     // Decompile this lua binary.
                     System.Console.WriteLine($@"Randomising music in '{luaFile}'.");
-                    LuaHandler.Decompile(luaFile);
+                    Helpers.DecompileLua(luaFile);
 
                     // Read the decompiled lua file into a string array.
                     string[] lua = File.ReadAllLines(luaFile);
@@ -57,7 +57,7 @@ namespace Sonic_06_Randomiser_Suite
                             string[] song = lua[i].Split('"');
 
                             // Replace the second value in the split array (the one containing the song name) with a song from the list of valid songs.
-                            song[1] = songs[Form_Main.Randomiser.Next(songs.Count)];
+                            song[1] = songs[MainWindow.Randomiser.Next(songs.Count)];
 
                             // Rejoin the split array into one line and add it back to the original lua array.
                             lua[i] = string.Join("\"", song);
@@ -98,7 +98,7 @@ namespace Sonic_06_Randomiser_Suite
                 {
                     // Check this enemy parameter actually has a health value before changing it.
                     if (parameter.Health != -1)
-                        parameter.Health = Form_Main.Randomiser.Next(minHealth, maxHealth + 1);
+                        parameter.Health = MainWindow.Randomiser.Next(minHealth, maxHealth + 1);
                 }
             }
 
@@ -114,16 +114,16 @@ namespace Sonic_06_Randomiser_Suite
         public static void SurfaceRandomiser(string archivePath, bool perFace)
         {
             // Predetermine what each type will be.
-            string concrete  = Form_Main.Randomiser.Next(0, 16).ToString("X");
-            string water     = Form_Main.Randomiser.Next(0, 16).ToString("X");
-            string wood      = Form_Main.Randomiser.Next(0, 16).ToString("X");
-            string metal     = Form_Main.Randomiser.Next(0, 16).ToString("X");
-            string grass     = Form_Main.Randomiser.Next(0, 16).ToString("X");
-            string sand      = Form_Main.Randomiser.Next(0, 16).ToString("X");
-            string snow      = Form_Main.Randomiser.Next(0, 16).ToString("X");
-            string dirt      = Form_Main.Randomiser.Next(0, 16).ToString("X");
-            string glass     = Form_Main.Randomiser.Next(0, 16).ToString("X");
-            string metalEcho = Form_Main.Randomiser.Next(0, 16).ToString("X");
+            string concrete  = MainWindow.Randomiser.Next(0, 16).ToString("X");
+            string water     = MainWindow.Randomiser.Next(0, 16).ToString("X");
+            string wood      = MainWindow.Randomiser.Next(0, 16).ToString("X");
+            string metal     = MainWindow.Randomiser.Next(0, 16).ToString("X");
+            string grass     = MainWindow.Randomiser.Next(0, 16).ToString("X");
+            string sand      = MainWindow.Randomiser.Next(0, 16).ToString("X");
+            string snow      = MainWindow.Randomiser.Next(0, 16).ToString("X");
+            string dirt      = MainWindow.Randomiser.Next(0, 16).ToString("X");
+            string glass     = MainWindow.Randomiser.Next(0, 16).ToString("X");
+            string metalEcho = MainWindow.Randomiser.Next(0, 16).ToString("X");
 
             // Get a list of all the collision.bin files in stage.arc.
             string[] collisionFiles = Directory.GetFiles(archivePath, "collision.bin", SearchOption.AllDirectories);
@@ -143,7 +143,7 @@ namespace Sonic_06_Randomiser_Suite
 
                     // If we're randomising the collision by face rather than type, then replace the last value in the string with a random hex value from 0 to F.
                     if (perFace)
-                        hexValue = hexValue.Remove(hexValue.Length - 1, 1) + Form_Main.Randomiser.Next(0, 16).ToString("X");
+                        hexValue = hexValue.Remove(hexValue.Length - 1, 1) + MainWindow.Randomiser.Next(0, 16).ToString("X");
 
                     // If not, then check what the last value in the string is and apply the approriate, predetermined value.
                     else
@@ -266,12 +266,12 @@ namespace Sonic_06_Randomiser_Suite
                 foreach (Message message in mst.Data.Messages)
                 {
                     // Pick a random number from the amount of entires in the list message table.
-                    int index = Form_Main.Randomiser.Next(list.Data.Messages.Count);
+                    int index = MainWindow.Randomiser.Next(list.Data.Messages.Count);
 
                     // If the selected number is already used, pick another until it isn't.
                     if (usedNumbers.Contains(index))
                     {
-                        do { index = Form_Main.Randomiser.Next(list.Data.Messages.Count); }
+                        do { index = MainWindow.Randomiser.Next(list.Data.Messages.Count); }
                         while (usedNumbers.Contains(index));
                     }
 
@@ -313,7 +313,7 @@ namespace Sonic_06_Randomiser_Suite
                     !patch.Contains("DoNotUseTheSnowboard.mlua") && !patch.Contains("OmegaBlurFix.mlua") && !patch.Contains("TGS2006Menu.mlua"))
                 {
                     // Toss a coin to see if we should actually use this patch, if so, add the name of its mlua file to the list.
-                    if (Form_Main.Randomiser.Next(0, 2) == 1)
+                    if (MainWindow.Randomiser.Next(0, 2) == 1)
                         patchList += $"{Path.GetFileName(patch)},";
                 }
             }

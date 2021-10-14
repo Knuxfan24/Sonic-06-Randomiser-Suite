@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace Sonic_06_Randomiser_Suite
+namespace SonicNextRandomiser.Randomisers
 {
     class SceneRandomiser
     {
@@ -29,7 +29,7 @@ namespace Sonic_06_Randomiser_Suite
             {
                 // Decompile this lua binary.
                 System.Console.WriteLine($@"Randomising scene parameters in '{sceneLua}'.");
-                LuaHandler.Decompile(sceneLua);
+                Helpers.DecompileLua(sceneLua);
 
                 // Read the decompiled lua file into a string array.
                 string[] lua = File.ReadAllLines(sceneLua);
@@ -42,9 +42,9 @@ namespace Sonic_06_Randomiser_Suite
                     {
                         // Alternate Lighting Setups have another line denoting their type, factor this in.
                         if (!lua[i + 1].Contains("Type"))
-                            RGBA(lua, i+2, 6, true);
+                            RGBA(lua, i + 2, 6, true);
                         else
-                            RGBA(lua, i+3, 6, true);
+                            RGBA(lua, i + 3, 6, true);
                     }
 
                     if (lua[i].Contains("Main = {") && !lua[i].Contains("FarDistance") && !lua[i].Contains("ClipDistance") && main)
@@ -83,7 +83,7 @@ namespace Sonic_06_Randomiser_Suite
                         if (lua[i].Contains("BRay") && fogDensity)
                         {
                             string[] power = lua[i + 4].Split(' ');
-                            power[4] = $"{Form_Main.Randomiser.NextDouble() * (0.001 - 0) + 0}";
+                            power[4] = $"{MainWindow.Randomiser.NextDouble() * (0.001 - 0) + 0}";
                             lua[i + 4] = string.Join(' ', power);
                         }
                     }
@@ -92,7 +92,7 @@ namespace Sonic_06_Randomiser_Suite
                     if (lua[i].Contains("EnvMap"))
                     {
                         string[] envMap = lua[i + 1].Split(' ');
-                        envMap[4] = $"\"{envMaps[Form_Main.Randomiser.Next(envMaps.Count)]}\"";
+                        envMap[4] = $"\"{envMaps[MainWindow.Randomiser.Next(envMaps.Count)]}\"";
                         lua[i + 1] = string.Join(' ', envMap);
                     }
                 }
@@ -113,26 +113,26 @@ namespace Sonic_06_Randomiser_Suite
         static string[] RGBA(string[] lua, int startPos, int splitLength, bool usePower)
         {
             // Split the RGB values into string arrays.
-            string[] rSplit     = lua[startPos].Split(' ');
-            string[] gSplit     = lua[startPos + 1].Split(' ');
-            string[] bSplit     = lua[startPos + 2].Split(' ');
+            string[] rSplit = lua[startPos].Split(' ');
+            string[] gSplit = lua[startPos + 1].Split(' ');
+            string[] bSplit = lua[startPos + 2].Split(' ');
 
             // Replace the value at the specified position with a random floating point number between 0 and 1.
-            rSplit[splitLength]     = $"{Form_Main.Randomiser.NextDouble()},";
-            gSplit[splitLength]     = $"{Form_Main.Randomiser.NextDouble()},";
-            bSplit[splitLength]     = $"{Form_Main.Randomiser.NextDouble()},";
+            rSplit[splitLength] = $"{MainWindow.Randomiser.NextDouble()},";
+            gSplit[splitLength] = $"{MainWindow.Randomiser.NextDouble()},";
+            bSplit[splitLength] = $"{MainWindow.Randomiser.NextDouble()},";
 
             // Rejoin the splits into the main string array.
-            lua[startPos]     = string.Join(' ', rSplit);
+            lua[startPos] = string.Join(' ', rSplit);
             lua[startPos + 1] = string.Join(' ', gSplit);
             lua[startPos + 2] = string.Join(' ', bSplit);
 
             // Repeat the previous three steps for power if required.
-            if(usePower)
+            if (usePower)
             {
-                string[] powerSplit     = lua[startPos + 3].Split(' ');
-                powerSplit[splitLength] = $"{Form_Main.Randomiser.NextDouble()}";
-                lua[startPos + 3]       = string.Join(' ', powerSplit);
+                string[] powerSplit = lua[startPos + 3].Split(' ');
+                powerSplit[splitLength] = $"{MainWindow.Randomiser.NextDouble()}";
+                lua[startPos + 3] = string.Join(' ', powerSplit);
             }
 
             // Return the edited string array.
@@ -154,16 +154,16 @@ namespace Sonic_06_Randomiser_Suite
             string[] zSplit = lua[startPos + 2].Split(' ');
 
             // Generate random floating point numbers between -1 and 1, with six decimal places.
-            xSplit[8] = $"{Math.Round(Form_Main.Randomiser.NextDouble() * (1 - -1) + -1, 6)},";
-            ySplit[8] = $"{Math.Round(Form_Main.Randomiser.NextDouble() * (1 - -1) + -1, 6)},";
-            zSplit[8] = $"{Math.Round(Form_Main.Randomiser.NextDouble() * (1 - -1) + -1, 6)}";
+            xSplit[8] = $"{Math.Round(MainWindow.Randomiser.NextDouble() * (1 - -1) + -1, 6)},";
+            ySplit[8] = $"{Math.Round(MainWindow.Randomiser.NextDouble() * (1 - -1) + -1, 6)},";
+            zSplit[8] = $"{Math.Round(MainWindow.Randomiser.NextDouble() * (1 - -1) + -1, 6)}";
 
             // If the light value on the Z Axis is negative, flip it.
-            if(zSplit[8].Contains('-') && enforce)
+            if (zSplit[8].Contains('-') && enforce)
                 zSplit[8] = zSplit[8].Replace("-", string.Empty);
 
             // Rejoin the splits into the main string array.
-            lua[startPos]     = string.Join(' ', xSplit);
+            lua[startPos] = string.Join(' ', xSplit);
             lua[startPos + 1] = string.Join(' ', ySplit);
             lua[startPos + 2] = string.Join(' ', zSplit);
 

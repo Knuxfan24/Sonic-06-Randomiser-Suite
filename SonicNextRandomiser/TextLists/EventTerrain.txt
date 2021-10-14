@@ -1,0 +1,60 @@
+Aquatic Base A,stage/aqa/a,True
+Aquatic Base B,stage/aqa/b,True
+Aquatic Base Hanger,stage/event/ev0028,True
+Aquatic Base Sealing Chamber,stage/event/ev0221,True
+Crisis City A,stage/csc/a,True
+Crisis City B,stage/csc/b,True
+Crisis City C,stage/csc/c,True
+Crisis City E,stage/csc/e,True
+Crisis City F,stage/csc/f,True
+Crisis City Arena,stage/csc/iblis01,True
+Crisis City Computer Room,stage/event/ev0106,True
+Crisis City Database,stage/event/ev0012,True
+Crisis City Overlook,stage/event/ev0105,True
+Dusty Desert Prison,stage/event/ev0003,True
+Dusty Desert Outside Arena,stage/boss/dr1_dtd,True
+Dusty Desert A,stage/dtd/a,True
+Dusty Desert B,stage/dtd/b,True
+Dusty Desert Inside Arena,stage/boss/secondmefiress_dtd,True
+Egg Carrier Arena,stage/boss/dr3_eggcarrier,True
+Egg Carrier Arena Alternate?,stage/boss/dr3_eggcarrier/action,True
+Egg Carrier Interior,stage/event/ev0022,True
+End of the World Arena,stage/boss/solaris_last,True
+Flame Core A,stage/flc/a,True
+Flame Core Outside Arena,stage/boss/thirdiblis_flc,True
+Flame Core B,stage/flc/b,True
+Flame Core Inside Arena 1,stage/boss/secondiblis_flc,True
+Flame Core Inside Arena 2,stage/boss/firstmefiress_flc,True
+Kingdom Valley Pathway,stage/event/ev0023,True
+Kingdom Valley A,stage/kdv/a,True
+Kingdom Valley B,stage/kdv/b,True
+Kingdom Valley C,stage/kdv/c,True
+Kingdom Valley D,stage/kdv/d,True
+Kingdom Valley Castle,stage/event/ev0104,True
+Kingdom Valley Crash Site,stage/event/ev0026,True
+Kingdom Valley (Past),stage/event/ev0125,True
+Radical Train A,stage/rct/a,True
+Radical Train B,stage/rct/b,True
+Egg Train,stage/event/ev0120,True
+Radical Train Arena,stage/boss/charaboss2_rct,True
+Soleanna Castle Town,stage/twn/a,True
+Soleanna Castle Town (Night),stage/event/ev0031,True
+Soleanna Castle Town (Night 2),stage/event/ev0206,True
+Soleanna Castle Town (End of the World),stage/event/ev0304,True
+Soleanna Castle,stage/event/ev0216,True
+Soleanna Castle Balcony,stage/event/ev0021,True
+Soleanna New City,stage/twn/b,True
+Soleanna Forest,stage/twn/c,True
+Soleanna Forest Arena,stage/boss/dr2_forest,True
+Soleanna Highway,stage/twn/circuit,True
+Tropical Jungle A,stage/tpj/a,True
+Tropical Jungle B,stage/tpj/b,True
+Tropical Jungle C,stage/tpj/c,True
+Wave Ocean A,stage/wvo/a,True
+Wave Ocean B,stage/wvo/b,True
+White Acropolis A,stage/wap/a,True
+White Acropolis B,stage/wap/b,True
+White Acropolis Arena,stage/boss/dr1_wap,True
+White Acropolis Interior,stage/event/ev0009,True
+White Acropolis Interior (Future),stage/event/ev0010,True
+White Acropolis Prison,stage/event/ev0214,True

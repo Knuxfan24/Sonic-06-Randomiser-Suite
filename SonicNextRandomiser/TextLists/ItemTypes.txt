@@ -1,0 +1,8 @@
+5 Rings,1,true
+10 Rings,2,true
+20 Rings,3,true
+Extra Life,4,true
+Power Sneakers,5,true
+Gauge Refill,6,true
+Invincibility,7,true
+Shield,8,true

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace Sonic_06_Randomiser_Suite
+namespace SonicNextRandomiser.Randomisers
 {
     class ObjectPlacementRandomiser
     {
@@ -51,7 +51,7 @@ namespace Sonic_06_Randomiser_Suite
                 {
                     // If we're randomising the object's draw distance, then pick a number for it between the specified values
                     if(drawDistance)
-                        setObject.DrawDistance = Form_Main.Randomiser.Next(minDrawDistance, maxDrawDistance + 1);
+                        setObject.DrawDistance = MainWindow.Randomiser.Next(minDrawDistance, maxDrawDistance + 1);
 
                     // If we're randomising the cosmetic stuff, then pass this object to that function to see if we have to do anything to it.
                     if (cosmetics)
@@ -72,14 +72,14 @@ namespace Sonic_06_Randomiser_Suite
                         // Randomise character types if we need to.
                         case "player_start2":
                             if(characters)
-                                setObject.Parameters[1].Data = characterTypes[Form_Main.Randomiser.Next(characterTypes.Count)];
+                                setObject.Parameters[1].Data = characterTypes[MainWindow.Randomiser.Next(characterTypes.Count)];
                             break;
 
                         // Randomise item capsule contents if we need to.
                         case "itemboxg":
                         case "itemboxa":
                             if (items)
-                                setObject.Parameters[0].Data = itemTypes[Form_Main.Randomiser.Next(itemTypes.Count)];
+                                setObject.Parameters[0].Data = itemTypes[MainWindow.Randomiser.Next(itemTypes.Count)];
                             break;
 
                         // Randomise prop elements if we need to.
@@ -93,14 +93,14 @@ namespace Sonic_06_Randomiser_Suite
                             break;
                         case "common_path_obj":
                             if (pathProps)
-                                setObject.Parameters[0].Data = pathPropTypes[Form_Main.Randomiser.Next(pathPropTypes.Count)];
+                                setObject.Parameters[0].Data = pathPropTypes[MainWindow.Randomiser.Next(pathPropTypes.Count)];
                             break;
 
                         // Randomise voice line triggers if we need to.
                         case "common_hint":
                         case "common_hint_collision":
                             if (voices)
-                                setObject.Parameters[0].Data = voiceLines[Form_Main.Randomiser.Next(voiceLines.Count)];
+                                setObject.Parameters[0].Data = voiceLines[MainWindow.Randomiser.Next(voiceLines.Count)];
                             break;
 
                         // Randomise door types if we need to.
@@ -113,7 +113,7 @@ namespace Sonic_06_Randomiser_Suite
                         case "wvo_doorA":
                         case "wvo_doorB":
                             if (doors)
-                                setObject.Type = doorTypes[Form_Main.Randomiser.Next(doorTypes.Count)];
+                                setObject.Type = doorTypes[MainWindow.Randomiser.Next(doorTypes.Count)];
                             break;
                     }
 
@@ -132,7 +132,7 @@ namespace Sonic_06_Randomiser_Suite
         static void EnemyTypeRandomiser(SetObject setObject, List<string> enemyTypes)
         {
             // Set the type of enemy from the list of types.
-            setObject.Parameters[0].Data = enemyTypes[Form_Main.Randomiser.Next(enemyTypes.Count)];
+            setObject.Parameters[0].Data = enemyTypes[MainWindow.Randomiser.Next(enemyTypes.Count)];
 
             // Set this enemy's palette value depending on what enemy it is.
             switch (setObject.Parameters[0].Data.ToString())
@@ -173,7 +173,7 @@ namespace Sonic_06_Randomiser_Suite
 
             // If this enemy is an Egg Cerberus, then set the palette to either 0 (Sonic) or 1 (Shadow).
             if (setObject.Parameters[0].Data.ToString() == "eCerberus")
-                setObject.Parameters[1].Data = Form_Main.Randomiser.Next(0, 2);
+                setObject.Parameters[1].Data = MainWindow.Randomiser.Next(0, 2);
         }
 
         /// <summary>
@@ -228,46 +228,46 @@ namespace Sonic_06_Randomiser_Suite
                 // Get the enemy type and pick a behaviour from the approriate parameter list.
                 switch (setObject.Parameters[0].Data.ToString())
                 {
-                    case "eGunner":        setObject.Parameters[2].Data = eGunnerParameters[Form_Main.Randomiser.Next(eGunnerParameters.Count)];             break;
-                    case "eGunner(Fly)":   setObject.Parameters[2].Data = eGunnerFlyParameters[Form_Main.Randomiser.Next(eGunnerFlyParameters.Count)];       break;
-                    case "eStinger":       setObject.Parameters[2].Data = eStingerParameters[Form_Main.Randomiser.Next(eStingerParameters.Count)];           break;
-                    case "eStinger(Fly)":  setObject.Parameters[2].Data = eStingerFlyParameters[Form_Main.Randomiser.Next(eStingerFlyParameters.Count)];     break;
-                    case "eLancer":        setObject.Parameters[2].Data = eLancerParameters[Form_Main.Randomiser.Next(eLancerParameters.Count)];             break;
-                    case "eLancer(Fly)":   setObject.Parameters[2].Data = eLancerFlyParameters[Form_Main.Randomiser.Next(eLancerFlyParameters.Count)];       break;
-                    case "eBuster":        setObject.Parameters[2].Data = eBusterParameters[Form_Main.Randomiser.Next(eBusterParameters.Count)];             break;
-                    case "eBuster(Fly)":   setObject.Parameters[2].Data = eBusterFlyParameters[Form_Main.Randomiser.Next(eBusterFlyParameters.Count)];       break;
-                    case "eFlyer":         setObject.Parameters[2].Data = eFlyerParameters[Form_Main.Randomiser.Next(eFlyerParameters.Count)];               break;
-                    case "eBluster":       setObject.Parameters[2].Data = eBlusterParameters[Form_Main.Randomiser.Next(eBlusterParameters.Count)];           break;
-                    case "eSearcher":      setObject.Parameters[2].Data = eSearcherParameters[Form_Main.Randomiser.Next(eSearcherParameters.Count)];         break;
-                    case "eHunter":        setObject.Parameters[2].Data = eHunterParameters[Form_Main.Randomiser.Next(eHunterParameters.Count)];             break;
-                    case "eRounder":       setObject.Parameters[2].Data = eRounderParameters[Form_Main.Randomiser.Next(eRounderParameters.Count)];           break;
-                    case "eCommander":     setObject.Parameters[2].Data = eCommanderParameters[Form_Main.Randomiser.Next(eCommanderParameters.Count)];       break;
-                    case "eLiner":         setObject.Parameters[2].Data = eLinerParameters[Form_Main.Randomiser.Next(eLinerParameters.Count)];               break;
-                    case "eChaser":        setObject.Parameters[2].Data = eChaserParameters[Form_Main.Randomiser.Next(eChaserParameters.Count)];             break;
-                    case "eBomber":        setObject.Parameters[2].Data = eBomberParameters[Form_Main.Randomiser.Next(eBomberParameters.Count)];             break;
-                    case "eArmor":         setObject.Parameters[2].Data = eArmorParameters[Form_Main.Randomiser.Next(eArmorParameters.Count)];               break;
-                    case "eSweeper":       setObject.Parameters[2].Data = eSweeperParameters[Form_Main.Randomiser.Next(eSweeperParameters.Count)];           break;
-                    case "eCannon":        setObject.Parameters[2].Data = eCannonParameters[Form_Main.Randomiser.Next(eCannonParameters.Count)];             break;
-                    case "eWalker":        setObject.Parameters[2].Data = eWalkerParameters[Form_Main.Randomiser.Next(eWalkerParameters.Count)];             break;
-                    case "eCannon(Fly)":   setObject.Parameters[2].Data = eCannonFlyParameters[Form_Main.Randomiser.Next(eCannonFlyParameters.Count)];       break;
-                    case "eGuardian":      setObject.Parameters[2].Data = eGuardianParameters[Form_Main.Randomiser.Next(eGuardianParameters.Count)];         break;
-                    case "eKeeper":        setObject.Parameters[2].Data = eKeeperParameters[Form_Main.Randomiser.Next(eKeeperParameters.Count)];             break;
-                    case "cBiter":         setObject.Parameters[2].Data = cBiterParameters[Form_Main.Randomiser.Next(cBiterParameters.Count)];               break;
-                    case "cStalker":       setObject.Parameters[2].Data = cStalkerParameters[Form_Main.Randomiser.Next(cStalkerParameters.Count)];           break;
-                    case "cTaker":         setObject.Parameters[2].Data = cTakerParameters[Form_Main.Randomiser.Next(cTakerParameters.Count)];               break;
-                    case "cTriker":        setObject.Parameters[2].Data = cTrickerParameters[Form_Main.Randomiser.Next(cTrickerParameters.Count)];           break;
-                    case "cCrawler":       setObject.Parameters[2].Data = cCrawlerParameters[Form_Main.Randomiser.Next(cCrawlerParameters.Count)];           break;
-                    case "cGazer":         setObject.Parameters[2].Data = cGazerParameters[Form_Main.Randomiser.Next(cGazerParameters.Count)];               break;
-                    case "cGolem":         setObject.Parameters[2].Data = cGolemParameters[Form_Main.Randomiser.Next(cGolemParameters.Count)];               break;
-                    case "cTitan":         setObject.Parameters[2].Data = cTitanParameters[Form_Main.Randomiser.Next(cTitanParameters.Count)];               break;
+                    case "eGunner":        setObject.Parameters[2].Data = eGunnerParameters[MainWindow.Randomiser.Next(eGunnerParameters.Count)];             break;
+                    case "eGunner(Fly)":   setObject.Parameters[2].Data = eGunnerFlyParameters[MainWindow.Randomiser.Next(eGunnerFlyParameters.Count)];       break;
+                    case "eStinger":       setObject.Parameters[2].Data = eStingerParameters[MainWindow.Randomiser.Next(eStingerParameters.Count)];           break;
+                    case "eStinger(Fly)":  setObject.Parameters[2].Data = eStingerFlyParameters[MainWindow.Randomiser.Next(eStingerFlyParameters.Count)];     break;
+                    case "eLancer":        setObject.Parameters[2].Data = eLancerParameters[MainWindow.Randomiser.Next(eLancerParameters.Count)];             break;
+                    case "eLancer(Fly)":   setObject.Parameters[2].Data = eLancerFlyParameters[MainWindow.Randomiser.Next(eLancerFlyParameters.Count)];       break;
+                    case "eBuster":        setObject.Parameters[2].Data = eBusterParameters[MainWindow.Randomiser.Next(eBusterParameters.Count)];             break;
+                    case "eBuster(Fly)":   setObject.Parameters[2].Data = eBusterFlyParameters[MainWindow.Randomiser.Next(eBusterFlyParameters.Count)];       break;
+                    case "eFlyer":         setObject.Parameters[2].Data = eFlyerParameters[MainWindow.Randomiser.Next(eFlyerParameters.Count)];               break;
+                    case "eBluster":       setObject.Parameters[2].Data = eBlusterParameters[MainWindow.Randomiser.Next(eBlusterParameters.Count)];           break;
+                    case "eSearcher":      setObject.Parameters[2].Data = eSearcherParameters[MainWindow.Randomiser.Next(eSearcherParameters.Count)];         break;
+                    case "eHunter":        setObject.Parameters[2].Data = eHunterParameters[MainWindow.Randomiser.Next(eHunterParameters.Count)];             break;
+                    case "eRounder":       setObject.Parameters[2].Data = eRounderParameters[MainWindow.Randomiser.Next(eRounderParameters.Count)];           break;
+                    case "eCommander":     setObject.Parameters[2].Data = eCommanderParameters[MainWindow.Randomiser.Next(eCommanderParameters.Count)];       break;
+                    case "eLiner":         setObject.Parameters[2].Data = eLinerParameters[MainWindow.Randomiser.Next(eLinerParameters.Count)];               break;
+                    case "eChaser":        setObject.Parameters[2].Data = eChaserParameters[MainWindow.Randomiser.Next(eChaserParameters.Count)];             break;
+                    case "eBomber":        setObject.Parameters[2].Data = eBomberParameters[MainWindow.Randomiser.Next(eBomberParameters.Count)];             break;
+                    case "eArmor":         setObject.Parameters[2].Data = eArmorParameters[MainWindow.Randomiser.Next(eArmorParameters.Count)];               break;
+                    case "eSweeper":       setObject.Parameters[2].Data = eSweeperParameters[MainWindow.Randomiser.Next(eSweeperParameters.Count)];           break;
+                    case "eCannon":        setObject.Parameters[2].Data = eCannonParameters[MainWindow.Randomiser.Next(eCannonParameters.Count)];             break;
+                    case "eWalker":        setObject.Parameters[2].Data = eWalkerParameters[MainWindow.Randomiser.Next(eWalkerParameters.Count)];             break;
+                    case "eCannon(Fly)":   setObject.Parameters[2].Data = eCannonFlyParameters[MainWindow.Randomiser.Next(eCannonFlyParameters.Count)];       break;
+                    case "eGuardian":      setObject.Parameters[2].Data = eGuardianParameters[MainWindow.Randomiser.Next(eGuardianParameters.Count)];         break;
+                    case "eKeeper":        setObject.Parameters[2].Data = eKeeperParameters[MainWindow.Randomiser.Next(eKeeperParameters.Count)];             break;
+                    case "cBiter":         setObject.Parameters[2].Data = cBiterParameters[MainWindow.Randomiser.Next(cBiterParameters.Count)];               break;
+                    case "cStalker":       setObject.Parameters[2].Data = cStalkerParameters[MainWindow.Randomiser.Next(cStalkerParameters.Count)];           break;
+                    case "cTaker":         setObject.Parameters[2].Data = cTakerParameters[MainWindow.Randomiser.Next(cTakerParameters.Count)];               break;
+                    case "cTriker":        setObject.Parameters[2].Data = cTrickerParameters[MainWindow.Randomiser.Next(cTrickerParameters.Count)];           break;
+                    case "cCrawler":       setObject.Parameters[2].Data = cCrawlerParameters[MainWindow.Randomiser.Next(cCrawlerParameters.Count)];           break;
+                    case "cGazer":         setObject.Parameters[2].Data = cGazerParameters[MainWindow.Randomiser.Next(cGazerParameters.Count)];               break;
+                    case "cGolem":         setObject.Parameters[2].Data = cGolemParameters[MainWindow.Randomiser.Next(cGolemParameters.Count)];               break;
+                    case "cTitan":         setObject.Parameters[2].Data = cTitanParameters[MainWindow.Randomiser.Next(cTitanParameters.Count)];               break;
                     case "firstIblis":     setObject.Parameters[2].Data = "firstIblis";                                                                      break;
-                    case "secondIblis":    setObject.Parameters[2].Data = secondIblisParameters[Form_Main.Randomiser.Next(secondIblisParameters.Count)];     break;
+                    case "secondIblis":    setObject.Parameters[2].Data = secondIblisParameters[MainWindow.Randomiser.Next(secondIblisParameters.Count)];     break;
                     case "thirdIblis":     setObject.Parameters[2].Data = "thirdIblis";                                                                      break;
-                    case "firstmefiress":  setObject.Parameters[2].Data = firstmefiressParameters[Form_Main.Randomiser.Next(firstmefiressParameters.Count)]; break;
+                    case "firstmefiress":  setObject.Parameters[2].Data = firstmefiressParameters[MainWindow.Randomiser.Next(firstmefiressParameters.Count)]; break;
                     case "secondmefiress": setObject.Parameters[2].Data = "secondmefiress_shadow";                                                           break;
                     case "kyozoress":      setObject.Parameters[2].Data = "kyozoress";                                                                       break;
-                    case "eCerberus":      setObject.Parameters[2].Data = eCerberusParameters[Form_Main.Randomiser.Next(eCerberusParameters.Count)];         break;
-                    case "eGenesis":       setObject.Parameters[2].Data = eGenesisParameters[Form_Main.Randomiser.Next(eGenesisParameters.Count)];           break;
+                    case "eCerberus":      setObject.Parameters[2].Data = eCerberusParameters[MainWindow.Randomiser.Next(eCerberusParameters.Count)];         break;
+                    case "eGenesis":       setObject.Parameters[2].Data = eGenesisParameters[MainWindow.Randomiser.Next(eGenesisParameters.Count)];           break;
                     case "eWyvern":        setObject.Parameters[2].Data = "eWyvern";                                                                         break;
                     case "solaris01":      setObject.Parameters[2].Data = "solaris01";                                                                       break;
                     case "solaris02":      setObject.Parameters[2].Data = "solaris02";                                                                       break;
@@ -303,7 +303,7 @@ namespace Sonic_06_Randomiser_Suite
                                                   "eGenesisSpotLight", "eWyvern", "eWyvernOption", "eWyvernEggman", "solaris01", "solaris02" };
                 
                 // Pick a random parameter from the list to use on this enemy.
-                setObject.Parameters[2].Data = Parameters[Form_Main.Randomiser.Next(Parameters.Count)];
+                setObject.Parameters[2].Data = Parameters[MainWindow.Randomiser.Next(Parameters.Count)];
             }
         }
 
@@ -318,7 +318,7 @@ namespace Sonic_06_Randomiser_Suite
             if (setObject.Type == "objectphysics" /*|| SetObject.Type == "physicspath" */|| setObject.Type == "objectphysics_item")
             {
                 // Set a random prop type from the list.
-                setObject.Parameters[0].Data = commonPropTypes[Form_Main.Randomiser.Next(commonPropTypes.Count)];
+                setObject.Parameters[0].Data = commonPropTypes[MainWindow.Randomiser.Next(commonPropTypes.Count)];
 
                 // If we picked wap_confier (which is a standalone object), then change the object's type to it and remove its parameters.
                 // Return here so we don't accidentaly undo the wap_confifer change.
@@ -340,7 +340,7 @@ namespace Sonic_06_Randomiser_Suite
                 // Create the parameters that objectphysics needs, the prop type from the list and the restart boolean.
                 SetParameter setparam = new()
                 {
-                    Data = commonPropTypes[Form_Main.Randomiser.Next(commonPropTypes.Count)],
+                    Data = commonPropTypes[MainWindow.Randomiser.Next(commonPropTypes.Count)],
                     DataType = typeof(string)
                 };
                 setObject.Parameters.Add(setparam);
@@ -367,10 +367,10 @@ namespace Sonic_06_Randomiser_Suite
                 // Loop through 10 times, as this object has 10 different slots for prop types it can spawn, just make sure it can't be wap_conifer.
                 for (int i = 0; i <= 9; i++)
                 {
-                    setObject.Parameters[i].Data = commonPropTypes[Form_Main.Randomiser.Next(commonPropTypes.Count)];
+                    setObject.Parameters[i].Data = commonPropTypes[MainWindow.Randomiser.Next(commonPropTypes.Count)];
                     if (setObject.Parameters[i].Data.ToString() == "wap_conifer")
                     {
-                        do { setObject.Parameters[i].Data = commonPropTypes[Form_Main.Randomiser.Next(commonPropTypes.Count)]; }
+                        do { setObject.Parameters[i].Data = commonPropTypes[MainWindow.Randomiser.Next(commonPropTypes.Count)]; }
                         while (setObject.Parameters[i].Data.ToString() == "wap_conifer");
                     }
                 }
@@ -389,7 +389,7 @@ namespace Sonic_06_Randomiser_Suite
                 // Toss a coin and change the Aquatic Base glass doors to the other type.
                 case "aqa_glass_blue":
                 case "aqa_glass_red":
-                    if (Form_Main.Randomiser.Next(0, 2) == 0)
+                    if (MainWindow.Randomiser.Next(0, 2) == 0)
                         setObject.Type = "aqa_glass_blue";
                     else
                         setObject.Type = "aqa_glass_red";
@@ -397,22 +397,22 @@ namespace Sonic_06_Randomiser_Suite
 
                 // Choose a different colour for the Chaos Emeralds.
                 case "common_chaosemerald":
-                    setObject.Parameters[0].Data = Form_Main.Randomiser.Next(1, 8);
+                    setObject.Parameters[0].Data = MainWindow.Randomiser.Next(1, 8);
                     break;
 
                 // Choose a different character for player_npc points.
                 case "player_npc":
-                    setObject.Parameters[0].Data = Form_Main.Randomiser.Next(1, 15);
+                    setObject.Parameters[0].Data = MainWindow.Randomiser.Next(1, 15);
                     break;
 
                 // Choose a different colour for the posts used to indicate the Trials of Soleanna.
                 case "trial_post":
-                    setObject.Parameters[2].Data = Form_Main.Randomiser.Next(1, 4);
+                    setObject.Parameters[2].Data = MainWindow.Randomiser.Next(1, 4);
                     break;
 
                 // Choose a different stage graphic for the Mirrors of Soleanna.
                 case "warpgate":
-                    setObject.Parameters[1].Data = Form_Main.Randomiser.Next(0, 10);
+                    setObject.Parameters[1].Data = MainWindow.Randomiser.Next(0, 10);
 
                     // Wave Ocean's mirror graphic is on slots 3, 9 AND 11. If we roll a 9, set it to 10 so we use End of the World's mirror instead.
                     if (setObject.Parameters[1].Data.ToString() == "9")
@@ -438,7 +438,7 @@ namespace Sonic_06_Randomiser_Suite
             {
                 // Decompile this lua binary.
                 System.Console.WriteLine($@"Patching '{luaFile}'.");
-                LuaHandler.Decompile(luaFile);
+                Helpers.DecompileLua(luaFile);
 
                 // Read the decompiled lua file into a string array.
                 string[] lua = File.ReadAllLines(luaFile);
@@ -447,17 +447,17 @@ namespace Sonic_06_Randomiser_Suite
                 for (int i = 0; i < lua.Length; i++)
                 {
                     // If enemy randomisation is on, then comment out the lines that control the camera forcing, player movement forcing and Mephiles' random teleportations.
-                    if((lua[i].Contains("CallSetCamera") || lua[i].Contains("CallMoveTargetPos") || lua[i].Contains("FirstMefiress_RandomWarp")) && enemies)
+                    if ((lua[i].Contains("CallSetCamera") || lua[i].Contains("CallMoveTargetPos") || lua[i].Contains("FirstMefiress_RandomWarp")) && enemies)
                         lua[i] = $"--{lua[i]}";
 
                     // If voice randomisation is on, then randomise the lua hint messages.
-                    if(lua[i].Contains("CallHintMessage") && voices)
+                    if (lua[i].Contains("CallHintMessage") && voices)
                     {
                         // Split the line controlling the hint up based on the quote marks around the hint name.
                         string[] split = lua[i].Split('\"');
 
                         // Replace the second value in the split array (the one containing the hint name) with a song from the list of valid hint voice lines.
-                        split[1] = voiceLines[Form_Main.Randomiser.Next(voiceLines.Count)];
+                        split[1] = voiceLines[MainWindow.Randomiser.Next(voiceLines.Count)];
 
                         // Rejoin the split array into one line and add it back to the original lua array.
                         lua[i] = string.Join('\"', split);

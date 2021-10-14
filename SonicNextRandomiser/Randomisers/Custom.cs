@@ -6,7 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 
-namespace Sonic_06_Randomiser_Suite
+namespace SonicNextRandomiser.Randomisers
 {
     class Custom
     {
@@ -28,7 +28,7 @@ namespace Sonic_06_Randomiser_Suite
             string[] customSongs = customSongFiles.Split('|');
 
             // Create Directories.
-            Directory.CreateDirectory($@"{Program.TemporaryDirectory}\tempWavs");
+            Directory.CreateDirectory($@"{MainWindow.TemporaryDirectory}\tempWavs");
             Directory.CreateDirectory($@"{modsDirectory}\Sonic '06 Randomised ({seed})\xenon\sound");
             if(cache)
                 Directory.CreateDirectory($"{Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)}\\Cache\\XMA\\");
@@ -74,8 +74,8 @@ namespace Sonic_06_Randomiser_Suite
                         // If this file isn't a WAV, try convert it using NAudio.
                         if (Path.GetExtension(customSongs[i]) != ".wav")
                         {
-                            WaveConversion(customSongs[i], $@"{Program.TemporaryDirectory}\tempWavs\custom{i}.wav");
-                            customSongs[i] = $@"{Program.TemporaryDirectory}\tempWavs\custom{i}.wav";
+                            WaveConversion(customSongs[i], $@"{MainWindow.TemporaryDirectory}\tempWavs\custom{i}.wav");
+                            customSongs[i] = $@"{MainWindow.TemporaryDirectory}\tempWavs\custom{i}.wav";
                         }
 
                         // Convert WAV file to XMA.
@@ -142,7 +142,7 @@ namespace Sonic_06_Randomiser_Suite
                 if (Path.GetFileName(archive).ToLower() == "sound.arc")
                 {
                     // Unpack sound.arc.
-                    string unpackedArchive = ArchiveHandler.UnpackArchive(archive, Path.GetDirectoryName(gameExecutable));
+                    string unpackedArchive = Helpers.UnpackArchive(archive, Path.GetDirectoryName(gameExecutable));
 
                     // Load bgm.sbk.
                     SoundBank bgmSBK = new($@"{unpackedArchive}\xenon\sound\bgm.sbk");
@@ -206,7 +206,7 @@ namespace Sonic_06_Randomiser_Suite
                 string sounds = "Custom=\"";
 
                 // Ensure the folders needed for this voice pack exist.
-                Directory.CreateDirectory($@"{Program.TemporaryDirectory}\{Path.GetFileNameWithoutExtension(voxPack)}");
+                Directory.CreateDirectory($@"{MainWindow.TemporaryDirectory}\{Path.GetFileNameWithoutExtension(voxPack)}");
                 Directory.CreateDirectory($@"{modsDirectory}\Sonic '06 Randomised ({seed})\xenon\sound\voice\e\");
 
                 // Load the mod configuration ini to see if we already have custom content. If we do, then read the custom files line.
@@ -222,7 +222,7 @@ namespace Sonic_06_Randomiser_Suite
                 using (Process process = new())
                 {
                     process.StartInfo.FileName = $"\"{Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)}\\ExternalResources\\7z.exe\"";
-                    process.StartInfo.Arguments = $"x \"{voxPack}\" -o\"{Program.TemporaryDirectory}\"";
+                    process.StartInfo.Arguments = $"x \"{voxPack}\" -o\"{MainWindow.TemporaryDirectory}\"";
                     process.StartInfo.UseShellExecute = false;
                     process.StartInfo.RedirectStandardOutput = true;
                     process.StartInfo.CreateNoWindow = true;
@@ -233,14 +233,14 @@ namespace Sonic_06_Randomiser_Suite
                 }
 
                 // If there isn't a messageTable.mst file, abort.
-                if (!File.Exists($@"{Program.TemporaryDirectory}\{Path.GetFileNameWithoutExtension(voxPack)}\messageTable.mst"))
+                if (!File.Exists($@"{MainWindow.TemporaryDirectory}\{Path.GetFileNameWithoutExtension(voxPack)}\messageTable.mst"))
                 {
                     System.Console.WriteLine($@"'{voxPack}' doesn't appear to be a Sonic '06 Randomiser Suite Voice Pack. Skipping.");
                     continue;
                 }
 
                 // Copy XMAs to the Mod Directory and add them to the list of custom files.
-                string[] voiceXmas = Directory.GetFiles($@"{Program.TemporaryDirectory}\{Path.GetFileNameWithoutExtension(voxPack)}", "*.xma", SearchOption.TopDirectoryOnly);
+                string[] voiceXmas = Directory.GetFiles($@"{MainWindow.TemporaryDirectory}\{Path.GetFileNameWithoutExtension(voxPack)}", "*.xma", SearchOption.TopDirectoryOnly);
                 foreach(string voiceXma in voiceXmas)
                 {
                     System.Console.WriteLine($@"Copying '{voiceXma}' to '{modsDirectory}\Sonic '06 Randomised ({seed})\xenon\sound\voice\e\{Path.GetFileNameWithoutExtension(voiceXma)}.xma'.");
@@ -276,7 +276,7 @@ namespace Sonic_06_Randomiser_Suite
                     if (Path.GetFileName(archive).ToLower() == "sound.arc")
                     {
                         // Unpack sound.arc.
-                        string unpackedArchive = ArchiveHandler.UnpackArchive(archive, Path.GetDirectoryName(gameExecutable));
+                        string unpackedArchive = Helpers.UnpackArchive(archive, Path.GetDirectoryName(gameExecutable));
 
                         // Load voice_all_e.sbk.
                         SoundBank voiceSBK = new($@"{unpackedArchive}\xenon\sound\voice_all_e.sbk");
@@ -302,7 +302,7 @@ namespace Sonic_06_Randomiser_Suite
 
                 // Add all the hints in this voice pack's messageTable.mst file to msg_hint.e.mst so they can display in game.
                 // Load this voice pack's messageTable.mst file.
-                MessageTable customMST = new($@"{Program.TemporaryDirectory}\{Path.GetFileNameWithoutExtension(voxPack)}\messageTable.mst");
+                MessageTable customMST = new($@"{MainWindow.TemporaryDirectory}\{Path.GetFileNameWithoutExtension(voxPack)}\messageTable.mst");
 
                 System.Console.WriteLine($@"Updating msg_hint.e.mst with {voiceXmas.Length} voice lines from '{voxPack}'.");
                 foreach (string archive in archives)
@@ -311,7 +311,7 @@ namespace Sonic_06_Randomiser_Suite
                     if (Path.GetFileName(archive).ToLower() == "text.arc")
                     {
                         // Unpack text.arc.
-                        string unpackedArchive = ArchiveHandler.UnpackArchive(archive, Path.GetDirectoryName(gameExecutable));
+                        string unpackedArchive = Helpers.UnpackArchive(archive, Path.GetDirectoryName(gameExecutable));
 
                         // Load the original msg_hint.e.mst
                         MessageTable origMST = new($@"{unpackedArchive}\xenon\text\english\msg_hint.e.mst");

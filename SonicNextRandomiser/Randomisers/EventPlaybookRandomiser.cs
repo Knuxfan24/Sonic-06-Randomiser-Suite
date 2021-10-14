@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace Sonic_06_Randomiser_Suite
+namespace SonicNextRandomiser.Randomisers
 {
     class EventPlaybookRandomiser
     {
@@ -35,11 +35,11 @@ namespace Sonic_06_Randomiser_Suite
             {
                 // Pick a random scene lua binary from the list if we're randomising it and this event actually uses one.
                 if (eventEntry.SceneLua != null && scene)
-                    eventEntry.SceneLua = sceneLuas[Form_Main.Randomiser.Next(sceneLuas.Count)];
+                    eventEntry.SceneLua = sceneLuas[MainWindow.Randomiser.Next(sceneLuas.Count)];
 
                 // Pick a random terrain folder path from the list if we're randomising it and this event actually uses one.
                 if (eventEntry.Terrain != null && terrain)
-                    eventEntry.Terrain = terrainFolders[Form_Main.Randomiser.Next(terrainFolders.Count)];
+                    eventEntry.Terrain = terrainFolders[MainWindow.Randomiser.Next(terrainFolders.Count)];
 
                 // Rotation
                 if (rotX || rotY || rotZ)
@@ -74,11 +74,11 @@ namespace Sonic_06_Randomiser_Suite
 
             // Randomise the rotation values if required.
             if (rotX)
-                rotationX = Form_Main.Randomiser.Next(-180, 181);
+                rotationX = MainWindow.Randomiser.Next(-180, 181);
             if (rotY)
-                rotationY = Form_Main.Randomiser.Next(-180, 181);
+                rotationY = MainWindow.Randomiser.Next(-180, 181);
             if (rotZ)
-                rotationZ = Form_Main.Randomiser.Next(-180, 181);
+                rotationZ = MainWindow.Randomiser.Next(-180, 181);
 
             // Build a Vector3 out of the rotation values and save it over the original values.
             eventEntry.Rotation = new(rotationX, rotationY, rotationZ);
@@ -100,11 +100,11 @@ namespace Sonic_06_Randomiser_Suite
 
             // Randomise the position values if required.
             if (posX)
-                positionX = Form_Main.Randomiser.Next(-50000, 50001);
+                positionX = MainWindow.Randomiser.Next(-50000, 50001);
             if (posY)
-                positionY = Form_Main.Randomiser.Next(-50000, 50001);
+                positionY = MainWindow.Randomiser.Next(-50000, 50001);
             if (posZ)
-                positionZ = Form_Main.Randomiser.Next(-50000, 50001);
+                positionZ = MainWindow.Randomiser.Next(-50000, 50001);
 
             // Build a Vector3 out of the position values and save it over the original values.
             eventEntry.Position = new(positionX, positionY, positionZ);
@@ -157,12 +157,12 @@ namespace Sonic_06_Randomiser_Suite
                 if (epb.Events[i].Terrain != null)
                 {
                     // Pick a random number from the amount of entires in the standard events table.
-                    int index = Form_Main.Randomiser.Next(events.Count);
+                    int index = MainWindow.Randomiser.Next(events.Count);
 
                     // If the selected number is already used, pick another until it isn't.
                     if (usedNumbers.Contains(index))
                     {
-                        do { index = Form_Main.Randomiser.Next(events.Count); }
+                        do { index = MainWindow.Randomiser.Next(events.Count); }
                         while (usedNumbers.Contains(index));
                     }
                     usedNumbers.Add(index);
@@ -188,12 +188,12 @@ namespace Sonic_06_Randomiser_Suite
                 if (epb.Events[i].Terrain == null)
                 {
                     // Pick a random number from the amount of entires in the fvm event table.
-                    int index = Form_Main.Randomiser.Next(eventsFMV.Count);
+                    int index = MainWindow.Randomiser.Next(eventsFMV.Count);
 
                     // If the selected number is already used, pick another until it isn't.
                     if (usedNumbers.Contains(index))
                     {
-                        do { index = Form_Main.Randomiser.Next(eventsFMV.Count); }
+                        do { index = MainWindow.Randomiser.Next(eventsFMV.Count); }
                         while (usedNumbers.Contains(index));
                     }
                     usedNumbers.Add(index);

@@ -1,0 +1,13 @@
+Sonic the Hedgehog,sonic_new,true
+Sonic the Hedgehog (Mach Speed),sonic_fast,false
+Sonic the Hedgehog (Elise),princess,false
+Sonic the Hedgehog (White Acropolis Snowboard),snow_board_wap,false
+Sonic the Hedgehog (Crisis City Snowboard),snow_board,false
+Shadow the Hedgehog,shadow,true
+Silver the Hedgehog,silver,true
+Miles "Tails" Prower,tails,true
+Knuckles the Echidna,knuckles,true
+Rouge the Bat,rouge,true
+E-123 Omega,omega,true
+Blaze the Cat,blaze,true
+Amy Rose,amy,true

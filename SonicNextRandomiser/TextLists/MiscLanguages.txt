@@ -1,0 +1,6 @@
+English,e,True
+French,f,False
+German,g,False
+Italian,i,False
+Japanese,j,False
+Spanish,s,False
