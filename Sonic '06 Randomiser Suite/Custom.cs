@@ -1,6 +1,7 @@
 ﻿using Marathon.Formats.Audio;
 using Marathon.Formats.Text;
 using NAudio.Wave;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -13,6 +14,7 @@ namespace Sonic_06_Randomiser_Suite
         /// <summary>
         /// Takes the contents of the custom songs textbox, converts them to XMA, copies them to the mod directory, adds them to the music list and bgm.sbk.
         /// Also caches the resulting XMAs if requested.
+        /// TODO: Replace NAudio's conversion with vgmstream's for consistency?
         /// </summary>
         /// <param name="customSongFiles">The value of the custom songs textbox.</param>
         /// <param name="modsDirectory">The location of the mods.</param>
@@ -48,6 +50,8 @@ namespace Sonic_06_Randomiser_Suite
             for (int i = 0; i < customSongs.Length; i++)
             {
                 string origName = $"{Path.GetFileNameWithoutExtension(customSongs[i])}.xma";
+                int startLoop = 0;
+                int endLoop = 0;
 
                 // If this song is already an XMA we can just copy it straight over.
                 if (Path.GetExtension(customSongs[i]) == ".xma")
@@ -74,8 +78,41 @@ namespace Sonic_06_Randomiser_Suite
                         // If this file isn't a WAV, try convert it using NAudio.
                         if (Path.GetExtension(customSongs[i]) != ".wav")
                         {
-                            WaveConversion(customSongs[i], $@"{Program.TemporaryDirectory}\tempWavs\custom{i}.wav");
-                            customSongs[i] = $@"{Program.TemporaryDirectory}\tempWavs\custom{i}.wav";
+                            if(Path.GetExtension(customSongs[i]) == ".mp3" || Path.GetExtension(customSongs[i]) == ".m4a")
+                            {
+                                WaveConversion(customSongs[i], $@"{Program.TemporaryDirectory}\tempWavs\custom{i}.wav");
+                                customSongs[i] = $@"{Program.TemporaryDirectory}\tempWavs\custom{i}.wav";
+                            }
+                            else
+                            {
+                                Process process = new();
+                                process.StartInfo.FileName = $"\"{Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)}\\ExternalResources\\vgmstream\\vgmstream-cli.exe\"";
+                                process.StartInfo.Arguments = $"-i -o \"{Program.TemporaryDirectory}\\tempWavs\\custom{i}.wav\" \"{customSongs[i]}\"";
+                                process.StartInfo.UseShellExecute = false;
+                                process.StartInfo.CreateNoWindow = true;
+                                process.StartInfo.RedirectStandardOutput = true;
+                                process.Start();
+
+                                StreamReader sr = process.StandardOutput;
+                                string[] output = sr.ReadToEnd().Split("\r\n");
+                                process.WaitForExit();
+
+                                foreach(string value in output)
+                                {
+                                    if(value.StartsWith("loop start"))
+                                    {
+                                        string[] split = value.Split(' ');
+                                        startLoop = int.Parse(split[2]);
+                                    }
+                                    if(value.StartsWith("loop end"))
+                                    {
+                                        string[] split = value.Split(' ');
+                                        endLoop = int.Parse(split[2]);
+                                    }
+                                }
+
+                                customSongs[i] = $@"{Program.TemporaryDirectory}\tempWavs\custom{i}.wav";
+                            }
                         }
 
                         // Convert WAV file to XMA.
@@ -99,11 +136,38 @@ namespace Sonic_06_Randomiser_Suite
                             // Find the XMA2 Chunk Header
                             if (xma[x] == 0x58 && xma[x + 1] == 0x4D && xma[x + 2] == 0x41 && xma[x + 3] == 0x32)
                             {
-                                // Set the part of the file that controls the end loop (0x10 ahead of the XMA2 Chunk Header) to the sample count (0x20 ahead of the XMA2 Chunk Header).
-                                xma[x + 0x10] = xma[x + 0x20];
-                                xma[(x + 1) + 0x10] = xma[(x + 1) + 0x20];
-                                xma[(x + 2) + 0x10] = xma[(x + 2) + 0x20];
-                                xma[(x + 3) + 0x10] = xma[(x + 3) + 0x20];
+                                // If we haven't fetched any loop points, then just add a start to end loop.
+                                if (startLoop == 0 && endLoop == 0)
+                                {
+                                    // Set the part of the file that controls the end loop (0x10 ahead of the XMA2 Chunk Header) to the sample count (0x20 ahead of the XMA2 Chunk Header).
+                                    xma[x + 0x10] = xma[x + 0x20];
+                                    xma[(x + 1) + 0x10] = xma[(x + 1) + 0x20];
+                                    xma[(x + 2) + 0x10] = xma[(x + 2) + 0x20];
+                                    xma[(x + 3) + 0x10] = xma[(x + 3) + 0x20];
+                                }
+
+                                // If we DO have loop points, then add them.
+                                else
+                                {
+                                    // Make a byte array out of the values.
+                                    byte[] startBytes = BitConverter.GetBytes(startLoop);
+                                    Array.Reverse(startBytes);
+                                    byte[] endBytes = BitConverter.GetBytes(endLoop);
+                                    Array.Reverse(endBytes);
+
+                                    // Start Loop Bytes
+                                    xma[x + 0xC] = startBytes[0];
+                                    xma[(x + 1) + 0xC] = startBytes[1];
+                                    xma[(x + 2) + 0xC] = startBytes[2];
+                                    xma[(x + 3) + 0xC] = startBytes[3];
+
+                                    // End Loop Bytes
+                                    xma[x + 0x10] = endBytes[0];
+                                    xma[(x + 1) + 0x10] = endBytes[1];
+                                    xma[(x + 2) + 0x10] = endBytes[2];
+                                    xma[(x + 3) + 0x10] = endBytes[3];
+
+                                }
                             }
                         }
                         // Save the updated XMA.

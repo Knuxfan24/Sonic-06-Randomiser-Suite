@@ -738,7 +738,7 @@ namespace Sonic_06_Randomiser_Suite
             // Configure the Tool_FileDialog control with the settings for the custom music.
             Tool_FileDialog.Title = "Select Songs";
             Tool_FileDialog.Multiselect = true;
-            Tool_FileDialog.Filter = "All Supported Types|*.wav;*.mp3;*.m4a;*.xma|Waveform Audio File|*.wav|MP3 Audio File|*.mp3|MPEG4 Audio File|*.m4a|Xbox Media Audio File|*.xma";
+            Tool_FileDialog.Filter = "All Supported Types|*.wav;*.mp3;*.m4a;*.xma|Waveform Audio File|*.wav|MP3 Audio File|*.mp3|MPEG4 Audio File|*.m4a|Xbox Media Audio File|*.xma|All Types (vgmstream)|*.*";
 
             // If the selections are valid, add them to the list of text in the custom music textbox.
             if (Tool_FileDialog.ShowDialog() == DialogResult.OK)
