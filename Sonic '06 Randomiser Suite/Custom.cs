@@ -1,6 +1,5 @@
 ﻿using Marathon.Formats.Audio;
 using Marathon.Formats.Text;
-using NAudio.Wave;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,7 +13,6 @@ namespace Sonic_06_Randomiser_Suite
         /// <summary>
         /// Takes the contents of the custom songs textbox, converts them to XMA, copies them to the mod directory, adds them to the music list and bgm.sbk.
         /// Also caches the resulting XMAs if requested.
-        /// TODO: Replace NAudio's conversion with vgmstream's for consistency?
         /// </summary>
         /// <param name="customSongFiles">The value of the custom songs textbox.</param>
         /// <param name="modsDirectory">The location of the mods.</param>
@@ -60,7 +58,7 @@ namespace Sonic_06_Randomiser_Suite
                     File.Copy(customSongs[i], $@"{modsDirectory}\Sonic '06 Randomised ({seed})\xenon\sound\custom{i}.xma");
                 }
 
-                // If not, we have to convert it using xmaencode (and potentially NAudio).
+                // If not, we have to convert it using xmaencode (and potentially vgmstream).
                 else
                 {
                     // If we're using the cache and an XMA with this name is present in the cache folder, copy it rather than converting anything.
@@ -75,44 +73,38 @@ namespace Sonic_06_Randomiser_Suite
                     {
                         System.Console.WriteLine($@"Converting and copying '{customSongs[i]}'.");
 
-                        // If this file isn't a WAV, try convert it using NAudio.
+                        // If this file isn't a WAV, try convert it using vgmstream.
                         if (Path.GetExtension(customSongs[i]) != ".wav")
                         {
-                            if(Path.GetExtension(customSongs[i]) == ".mp3" || Path.GetExtension(customSongs[i]) == ".m4a")
-                            {
-                                WaveConversion(customSongs[i], $@"{Program.TemporaryDirectory}\tempWavs\custom{i}.wav");
-                                customSongs[i] = $@"{Program.TemporaryDirectory}\tempWavs\custom{i}.wav";
-                            }
-                            else
-                            {
-                                Process process = new();
-                                process.StartInfo.FileName = $"\"{Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)}\\ExternalResources\\vgmstream\\vgmstream-cli.exe\"";
-                                process.StartInfo.Arguments = $"-i -o \"{Program.TemporaryDirectory}\\tempWavs\\custom{i}.wav\" \"{customSongs[i]}\"";
-                                process.StartInfo.UseShellExecute = false;
-                                process.StartInfo.CreateNoWindow = true;
-                                process.StartInfo.RedirectStandardOutput = true;
-                                process.Start();
+                            Process process = new();
+                            process.StartInfo.FileName = $"\"{Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)}\\ExternalResources\\vgmstream\\vgmstream-cli.exe\"";
+                            process.StartInfo.Arguments = $"-i -o \"{Program.TemporaryDirectory}\\tempWavs\\custom{i}.wav\" \"{customSongs[i]}\"";
+                            process.StartInfo.UseShellExecute = false;
+                            process.StartInfo.CreateNoWindow = true;
+                            process.StartInfo.RedirectStandardOutput = true;
+                            process.Start();
 
-                                StreamReader sr = process.StandardOutput;
-                                string[] output = sr.ReadToEnd().Split("\r\n");
-                                process.WaitForExit();
+                            StreamReader sr = process.StandardOutput;
+                            string[] output = sr.ReadToEnd().Split("\r\n");
+                            process.WaitForExit();
 
-                                foreach(string value in output)
+                            // If vgmstream has reported any loop points, then store them.
+                            foreach(string value in output)
+                            {
+                                if(value.StartsWith("loop start"))
                                 {
-                                    if(value.StartsWith("loop start"))
-                                    {
-                                        string[] split = value.Split(' ');
-                                        startLoop = int.Parse(split[2]);
-                                    }
-                                    if(value.StartsWith("loop end"))
-                                    {
-                                        string[] split = value.Split(' ');
-                                        endLoop = int.Parse(split[2]);
-                                    }
+                                    string[] split = value.Split(' ');
+                                    startLoop = int.Parse(split[2]);
                                 }
-
-                                customSongs[i] = $@"{Program.TemporaryDirectory}\tempWavs\custom{i}.wav";
+                                if(value.StartsWith("loop end"))
+                                {
+                                    string[] split = value.Split(' ');
+                                    endLoop = int.Parse(split[2]);
+                                }
                             }
+
+                            // Set the path to the song to our wav for the rest of the function.
+                            customSongs[i] = $@"{Program.TemporaryDirectory}\tempWavs\custom{i}.wav";
                         }
 
                         // Convert WAV file to XMA.
@@ -232,17 +224,6 @@ namespace Sonic_06_Randomiser_Suite
 
             // Return the updated list to be used by the music randomiser.
             return miscMusic;
-        }
-
-        /// <summary>
-        /// Simple sample function from NAudio (https://github.com/naudio/NAudio/blob/master/Docs/ConvertMp3ToWav.md) to convert a file to a WAV file.
-        /// </summary>
-        /// <param name="infile">The file to convert.</param>
-        /// <param name="outfile">Where to save the new WAV file.</param>
-        private static void WaveConversion(string infile, string outfile)
-        {
-            using (var reader = new MediaFoundationReader(infile))
-                WaveFileWriter.CreateWaveFile(outfile, reader);
         }
 
         /// <summary>
