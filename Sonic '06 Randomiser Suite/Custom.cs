@@ -31,7 +31,7 @@ namespace Sonic_06_Randomiser_Suite
             Directory.CreateDirectory($@"{Program.TemporaryDirectory}\tempWavs");
             Directory.CreateDirectory($@"{modsDirectory}\Sonic '06 Randomised ({seed})\xenon\sound");
             if(cache)
-                Directory.CreateDirectory($"{Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)}\\Cache\\XMA\\");
+                Directory.CreateDirectory($"{Environment.CurrentDirectory}\\Cache\\XMA\\");
 
             // Set the CustomFilesystem value in the mod ini to true.
             string[] configFile = File.ReadAllLines(Path.Combine($@"{modsDirectory}\Sonic '06 Randomised ({seed})", "mod.ini"));
@@ -62,10 +62,10 @@ namespace Sonic_06_Randomiser_Suite
                 else
                 {
                     // If we're using the cache and an XMA with this name is present in the cache folder, copy it rather than converting anything.
-                    if (File.Exists($"{Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)}\\Cache\\XMA\\{origName}") && cache)
+                    if (File.Exists($"{Environment.CurrentDirectory}\\Cache\\XMA\\{origName}") && cache)
                     {
                         System.Console.WriteLine($@"Copying '{customSongs[i]}' from XMA cache.");
-                        File.Copy($"{Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)}\\Cache\\XMA\\{origName}", $@"{modsDirectory}\Sonic '06 Randomised ({seed})\xenon\sound\custom{i}.xma");
+                        File.Copy($"{Environment.CurrentDirectory}\\Cache\\XMA\\{origName}", $@"{modsDirectory}\Sonic '06 Randomised ({seed})\xenon\sound\custom{i}.xma");
                     }
 
                     // If not, then convert it.
@@ -77,7 +77,7 @@ namespace Sonic_06_Randomiser_Suite
                         if (Path.GetExtension(customSongs[i]) != ".wav")
                         {
                             Process process = new();
-                            process.StartInfo.FileName = $"\"{Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)}\\ExternalResources\\vgmstream\\vgmstream-cli.exe\"";
+                            process.StartInfo.FileName = $"\"{Environment.CurrentDirectory}\\ExternalResources\\vgmstream\\vgmstream-cli.exe\"";
                             process.StartInfo.Arguments = $"-i -o \"{Program.TemporaryDirectory}\\tempWavs\\custom{i}.wav\" \"{customSongs[i]}\"";
                             process.StartInfo.UseShellExecute = false;
                             process.StartInfo.CreateNoWindow = true;
@@ -110,7 +110,7 @@ namespace Sonic_06_Randomiser_Suite
                         // Convert WAV file to XMA.
                         using (Process process = new())
                         {
-                            process.StartInfo.FileName = $"\"{Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)}\\ExternalResources\\xmaencode.exe\"";
+                            process.StartInfo.FileName = $"\"{Environment.CurrentDirectory}\\ExternalResources\\xmaencode.exe\"";
                             process.StartInfo.Arguments = $"\"{customSongs[i]}\" /b 64 /t \"{modsDirectory}\\Sonic '06 Randomised ({seed})\\xenon\\sound\\custom{i}.xma\"";
                             process.StartInfo.UseShellExecute = false;
                             process.StartInfo.RedirectStandardOutput = true;
@@ -167,7 +167,7 @@ namespace Sonic_06_Randomiser_Suite
 
                         // If the cache is enabled, copy the newly converted file to the XMA cache folder.
                         if (cache)
-                            File.Copy($@"{modsDirectory}\Sonic '06 Randomised ({seed})\xenon\sound\custom{i}.xma", $"{Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)}\\Cache\\XMA\\{origName}");
+                            File.Copy($@"{modsDirectory}\Sonic '06 Randomised ({seed})\xenon\sound\custom{i}.xma", $"{Environment.CurrentDirectory}\\Cache\\XMA\\{origName}");
                     }
                 }
 
@@ -266,7 +266,7 @@ namespace Sonic_06_Randomiser_Suite
                 // Extract the voice pack zip archive.
                 using (Process process = new())
                 {
-                    process.StartInfo.FileName = $"\"{Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)}\\ExternalResources\\7z.exe\"";
+                    process.StartInfo.FileName = $"\"{Environment.CurrentDirectory}\\ExternalResources\\7z.exe\"";
                     process.StartInfo.Arguments = $"x \"{voxPack}\" -o\"{Program.TemporaryDirectory}\"";
                     process.StartInfo.UseShellExecute = false;
                     process.StartInfo.RedirectStandardOutput = true;

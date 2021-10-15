@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -23,7 +24,7 @@ namespace Sonic_06_Randomiser_Suite
                 using (Process process = new())
                 {
                     process.StartInfo.FileName = "java.exe";
-                    process.StartInfo.Arguments = $"-jar \"{Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)}\\ExternalResources\\unlub.jar\" \"{luaFile}\"";
+                    process.StartInfo.Arguments = $"-jar \"{Environment.CurrentDirectory}\\ExternalResources\\unlub.jar\" \"{luaFile}\"";
                     process.StartInfo.UseShellExecute = false;
                     process.StartInfo.RedirectStandardOutput = true;
                     process.StartInfo.CreateNoWindow = true;

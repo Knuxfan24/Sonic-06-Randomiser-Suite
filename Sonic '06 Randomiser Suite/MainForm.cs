@@ -986,7 +986,7 @@ namespace Sonic_06_Randomiser_Suite
                     {
                         string unpackedArchive = ArchiveHandler.UnpackArchive(archive, Path.GetDirectoryName(TextBox_General_GameExecutable.Text));
                         System.Console.WriteLine($@"Patching 'voice_all_e.sbk'.");
-                        File.Copy($@"{Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)}\ExternalResources\voice_all_e.sbk", $@"{unpackedArchive}\xenon\sound\voice_all_e.sbk", true);
+                        File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\voice_all_e.sbk", $@"{unpackedArchive}\xenon\sound\voice_all_e.sbk", true);
                     }
                 }
 
@@ -1050,7 +1050,7 @@ namespace Sonic_06_Randomiser_Suite
                         {
                             string unpackedArchive = ArchiveHandler.UnpackArchive(archive, Path.GetDirectoryName(TextBox_General_GameExecutable.Text));
                             System.Console.WriteLine($@"Patching 'voice_all_e.sbk'.");
-                            File.Copy($@"{Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)}\ExternalResources\voice_all_e.sbk", $@"{unpackedArchive}\xenon\sound\voice_all_e.sbk", true);
+                            File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\voice_all_e.sbk", $@"{unpackedArchive}\xenon\sound\voice_all_e.sbk", true);
                         }
                     }
                 }
