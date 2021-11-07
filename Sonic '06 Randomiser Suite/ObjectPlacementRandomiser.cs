@@ -405,6 +405,23 @@ namespace Sonic_06_Randomiser_Suite
                     setObject.Parameters[0].Data = Form_Main.Randomiser.Next(1, 15);
                     break;
 
+                // Choose different appearances for town NPCs in Soleanna.
+                // TODO: Maybe make this a seperate option?
+                case "townsman":
+                    // Change mantype, exempt value 17 (the shopkeeper, as changing them seems to break the shop)
+                    if ((int)setObject.Parameters[1].Data != 17)
+                        setObject.Parameters[1].Data = Form_Main.Randomiser.Next(0, 48);
+
+                    // Change bodycolour.
+                    setObject.Parameters[2].Data = Form_Main.Randomiser.Next(0, 3);
+
+                    // Change haircolour.
+                    setObject.Parameters[3].Data = Form_Main.Randomiser.Next(0, 3);
+
+                    // Change manvariation
+                    setObject.Parameters[10].Data = Form_Main.Randomiser.Next(0, 15);
+                    break;
+
                 // Choose a different colour for the posts used to indicate the Trials of Soleanna.
                 case "trial_post":
                     setObject.Parameters[2].Data = Form_Main.Randomiser.Next(1, 4);
