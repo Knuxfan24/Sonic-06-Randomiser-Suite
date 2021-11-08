@@ -1056,6 +1056,18 @@ namespace Sonic_06_Randomiser_Suite
                 }
             }
 
+            if (CheckBox_SET_Characters.Checked || CheckBox_SET_Enemies.Checked)
+            {
+                foreach (string archive in archives)
+                {
+                    if (Path.GetFileName(archive).ToLower() == "scripts.arc")
+                    {
+                        string unpackedArchive = ArchiveHandler.UnpackArchive(archive, Path.GetDirectoryName(TextBox_General_GameExecutable.Text));
+                        ObjectPlacementRandomiser.LuaPlayerStartRandomiser(unpackedArchive, SetCharacters, CheckBox_SET_Characters.Checked, CheckBox_SET_Enemies.Checked);
+                    }
+                }
+            }
+
             // Event Randomisation.
             if (CheckBox_Event_Scene.Checked || CheckBox_Event_RotationX.Checked || CheckBox_Event_RotationY.Checked || CheckBox_Event_RotationZ.Checked || CheckBox_Event_PositionX.Checked ||
                 CheckBox_Event_PositionY.Checked || CheckBox_Event_PositionZ.Checked || CheckBox_Event_Terrain.Checked || CheckBox_Event_Order.Checked)

@@ -485,6 +485,86 @@ namespace Sonic_06_Randomiser_Suite
                 File.WriteAllLines(luaFile, lua);
             }
         }
-    
+
+        /// <summary>
+        /// Replaces the player_start2s found in stage luas, while most stages overwrite these in SET, some (like bosses) do not.
+        /// </summary>
+        /// <param name="archivePath">The path to the already unpacked scripts.arc containing the stage lua binaries.</param>
+        /// <param name="characterTypes">The valid character types to use.</param>
+        /// <param name="characters">Whether to randomise player characters.</param>
+        /// <param name="bosses">Whether to randomise boss characters.</param>
+        public static void LuaPlayerStartRandomiser(string archivePath, List<string> characterTypes, bool characters, bool bosses)
+        {
+            // Make a list of the three boss player luas to pick from.
+            List<string> BossCharacters = new() { "boss_sonic.lua", "boss_shadow.lua", "boss_silver.lua" };
+
+            // Get a list of all the lua binaries in scripts.arc
+            string[] luaFiles = Directory.GetFiles(archivePath, "*.lub", SearchOption.AllDirectories);
+
+            // Loop through the lua binaries.
+            foreach (string luaFile in luaFiles)
+            {
+                // Ignore any lua binaries that are not in a stage folder or don't contain a mission name.
+                if (!luaFile.Contains("\\stage\\") && !luaFile.Contains("mission"))
+                    continue;
+
+                // Minimise the number of unnecessary lua decompilations.
+                if (luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("a_")               || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("b_")               ||
+                    luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("c_")               || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("d_")               ||
+                    luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("e_")               || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("f_")               ||
+                    luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("f1_")              || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("f2_")              ||
+                    luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("g_")               || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("eCerberus")        ||
+                    luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("eGenesis")         || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("eWyvern")          ||
+                    luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("firstmefiress")    || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("iblis01")          ||
+                    luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("secondiblis")      || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("secondmefiress")   ||
+                    luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("shadow_vs_silver") || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("silver_vs_shadow") ||
+                    luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("solaris_super3")   || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("sonic_vs_silver")  ||
+                    luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("thirdiblis"))
+                {
+                    // Decompile this lua binary.
+                    System.Console.WriteLine($@"Randomising player spawns in in '{luaFile}'.");
+                    LuaHandler.Decompile(luaFile);
+
+                    // Read the decompiled lua file into a string array.
+                    string[] lua = File.ReadAllLines(luaFile);
+
+                    // Loop through each line in this lua binary.
+                    for (int i = 0; i < lua.Length; i++)
+                    {
+                        // Search for the line that controls player spawns.
+                        if (lua[i].Contains("Game.SetPlayer"))
+                        {
+                            // Check if we need to use a regular character for this line.
+                            if (!lua[i].Contains("boss_") && characters)
+                            {
+                                // Split the line controlling the music playback up based on the quote marks around the song name.
+                                string[] character = lua[i].Split('"');
+
+                                // Replace the second value in the split array (the one containing the player lua name) with a selection from the characters list.
+                                character[1] = $"{characterTypes[Form_Main.Randomiser.Next(characterTypes.Count)]}.lua";
+
+                                // Rejoin the split array into one line and add it back to the original lua array.
+                                lua[i] = string.Join("\"", character);
+                            }
+                            // Check if we need to use a boss for this line.
+                            if (lua[i].Contains("boss_") && bosses)
+                            {
+                                // Split the line controlling the music playback up based on the quote marks around the song name.
+                                string[] character = lua[i].Split('"');
+
+                                // Replace the second value in the split array (the one containing the player lua name) with a selection from the three valid boss luas.
+                                character[1] = BossCharacters[Form_Main.Randomiser.Next(BossCharacters.Count)];
+
+                                // Rejoin the split array into one line and add it back to the original lua array.
+                                lua[i] = string.Join("\"", character);
+                            }
+                        }
+                    }
+
+                    // Save the updated lua binary.
+                    File.WriteAllLines(luaFile, lua);
+                }
+            }
+        }
     }
 }
