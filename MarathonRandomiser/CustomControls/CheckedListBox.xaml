@@ -1,0 +1,45 @@
+﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:hc="https://handyorg.github.io/handycontrol"
+             xmlns:local="clr-namespace:MarathonRandomiser"
+             x:Name="Root"
+             x:Class="MarathonRandomiser.CheckedListBox"
+             mc:Ignorable="d">
+
+    <UserControl.Resources>
+
+        <!-- Set up converters -->
+        <local:Boolean2MultiColumnOrientationConverter x:Key="Boolean2MultiColumnOrientationConverter"/>
+        <local:Boolean2MultiColumnHorizontalScrollBarVisibilityConverter x:Key="Boolean2MultiColumnHorizontalScrollBarVisibilityConverter"/>
+        <local:Boolean2MultiColumnVerticalScrollBarVisibilityConverter x:Key="Boolean2MultiColumnVerticalScrollBarVisibilityConverter"/>
+
+    </UserControl.Resources>
+
+    <hc:ScrollViewer Name="ScrollViewer" Margin="5,5,0,5"
+                     Orientation="{Binding ElementName=Root, Path=MultiColumn, Converter={StaticResource Boolean2MultiColumnOrientationConverter}}"
+                     HorizontalScrollBarVisibility="{Binding ElementName=Root, Path=MultiColumn, Converter={StaticResource Boolean2MultiColumnHorizontalScrollBarVisibilityConverter}}"
+                     VerticalScrollBarVisibility="{Binding ElementName=Root, Path=MultiColumn, Converter={StaticResource Boolean2MultiColumnVerticalScrollBarVisibilityConverter}}">
+        <ItemsControl ItemsSource="{Binding Items}">
+            <ItemsControl.Resources>
+                <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource CheckBoxBaseStyle}">
+                    <Setter Property="HorizontalAlignment" Value="Left"/>
+                </Style>
+            </ItemsControl.Resources>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Vertical"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox IsChecked="{Binding Checked}" Margin="3,3,3,3" Tag="{Binding Tag}"/>
+                        <TextBlock Text="{Binding DisplayName}" Margin="3,0,3,0" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </hc:ScrollViewer>
+</UserControl>
