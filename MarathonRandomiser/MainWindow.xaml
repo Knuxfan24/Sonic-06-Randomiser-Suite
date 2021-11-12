@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         Title="Sonic '06 Randomiser Suite" Height="640" Width="1100" MinHeight="640" MinWidth="1100">
     <Grid Background="#FF181818">
-        <hc:TabControl Style="{StaticResource TabControlInLine}" Margin="0,0,0,50">
+        <hc:TabControl Style="{StaticResource TabControlInLine}" Margin="0,0,0,50" x:Name="TabControl_Main">
             <!--General Tab-->
             <hc:TabItem Header="General" BorderBrush="#B146C2" >
                 <Grid Background="#FF181818">
@@ -63,7 +63,7 @@
                                 <Setter Property="HorizontalAlignment" Value="Left"/>
                             </Style>
                         </StackPanel.Resources>
-                        <CheckBox x:Name="CheckBox_SET_Enemies" Content="Randomise Enemies" ToolTip="Changes what enemy types will appear within the stages." Click="Dependency_CheckBox_Changed"/>
+                        <CheckBox x:Name="CheckBox_SET_Enemies" Content="Randomise Enemies" ToolTip="Changes what enemy types will appear within the stages." Click="Dependency_CheckBox_Changed" x:FieldModifier="public"/>
                         <CheckBox x:Name="CheckBox_SET_Enemies_NoBosses" Content="Exclude Bosses" IsChecked="True" IsEnabled="False" ToolTip="Prevents bosses from being changed into other enemy types."/>
                         <CheckBox x:Name="CheckBox_SET_Enemies_Behaviour" Content="Randomise Enemy Behaviour" ToolTip="Changes how the enemies within the stage will behave." Click="Dependency_CheckBox_Changed"/>
                         <CheckBox x:Name="CheckBox_SET_Enemies_Behaviour_NoEnforce" Content="Don't Enforce Behaviour Types" Foreground="Firebrick" ToolTip="Removes the enforcement that the enemy's behaviour should belong to its type." IsEnabled="False"/>
@@ -283,22 +283,25 @@
             <hc:TabItem Header="Debug" BorderBrush="#B146C2" Name="TabItem_Debug">
                 <Grid Background="#FF181818" Name="Grid_Debug">
                     <Button Content="Open Temporary Directory" Margin="10,10,10,0" VerticalAlignment="Top" HorizontalAlignment="Stretch" Click="Debug_OpenTempDir"/>
-                    <Button Content="Extract and repack scripts.arc" Margin="10,45,10,0" VerticalAlignment="Top" HorizontalAlignment="Stretch" Click="Debug_ScriptsArchive"/>
-                    <Button Content="Extract scripts.arc and decompile mission_2001.lub" Margin="10,80,10,0" VerticalAlignment="Top" HorizontalAlignment="Stretch" Click="Debug_MissionLua"/>
                 </Grid>
             </hc:TabItem>
         </hc:TabControl>
 
         <!--Bottom Buttons-->
+        <hc:Divider Margin="0,0,0,50" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Bottom"/>
         <Button Content="Documentation" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="128" hc:IconElement.Geometry="{StaticResource ResourceKey=InfoGeometry}"/>
         <Button Content="About" HorizontalAlignment="Left" Margin="143,0,0,10" VerticalAlignment="Bottom" Width="128" hc:IconElement.Geometry="{StaticResource ResourceKey=AskGeometry}"/>
-        <Button Content="Randomise" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="128" Click="Randomise"/>
-        <hc:Divider Margin="0,0,0,50" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Bottom"/>
         <hc:Divider HorizontalAlignment="Left" Margin="276,0,0,0" Width="8" Orientation="Vertical" Height="51" VerticalAlignment="Bottom"/>
         <Button Content="Save Config" HorizontalAlignment="Left" Margin="289,0,0,10" VerticalAlignment="Bottom" Width="128" hc:IconElement.Geometry="{StaticResource ResourceKey=SaveGeometry}"/>
-        <Button Content="Load Config" Margin="422,0,0,10" VerticalAlignment="Bottom" Width="128" hc:IconElement.Geometry="{StaticResource ResourceKey=DownloadGeometry}" HorizontalAlignment="Left"/>
+        <Button x:Name ="Button_LoadConfig" Content="Load Config" Margin="422,0,0,10" VerticalAlignment="Bottom" Width="128" hc:IconElement.Geometry="{StaticResource ResourceKey=DownloadGeometry}" HorizontalAlignment="Left"/>
         <hc:Divider HorizontalAlignment="Left" Margin="555,0,0,0" Width="8" Orientation="Vertical" Height="51" VerticalAlignment="Bottom"/>
+        <ProgressBar x:Name="ProgressBar_ProgressLogger" Height="30" Margin="568,0,156,10" VerticalAlignment="Bottom" Width="Auto" IsIndeterminate="True"  Visibility="Hidden"/>
         <hc:Divider Margin="0,0,143,0" Orientation="Vertical" Height="51" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="8"/>
-        <ProgressBar Height="30" Margin="568,0,156,10" VerticalAlignment="Bottom" Width="Auto"/>
+        <Button x:Name ="Button_Randomise" Content="Randomise" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="128" Click="Randomise"/>
+
+        <!--Progress Logger-->
+        <ScrollViewer x:Name="ScrollViewer_ProgressLogger" Visibility="Hidden" VerticalScrollBarVisibility="Hidden" Margin="0,0,0,50" >
+            <TextBlock x:Name="TextBlock_ProgressLogger" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Width="1080" Visibility="Hidden" Foreground="#FFFFFFFF" />
+        </ScrollViewer>
     </Grid>
 </Window>

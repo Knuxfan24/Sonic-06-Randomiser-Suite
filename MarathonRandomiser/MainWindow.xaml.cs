@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -287,29 +288,13 @@ namespace MarathonRandomiser
         /// <summary>
         /// Opens the temporary directory. Will open the documents folder if the temporary directory does not exist.
         /// </summary>
-        private void Debug_OpenTempDir(object sender, RoutedEventArgs e)
+        private async void Debug_OpenTempDir(object sender, RoutedEventArgs e)
         {
             System.Diagnostics.Process.Start(Environment.GetEnvironmentVariable("WINDIR") + @"\explorer.exe", TemporaryDirectory);
         }
 
-        // Unpack and repack scripts.arc to test archive handling.
-        private void Debug_ScriptsArchive(object sender, RoutedEventArgs e)
-        {
-            string ScriptsArchivePath = Helpers.ArchiveHandler(@$"{Path.GetDirectoryName(TextBox_General_GameExecutable.Text)}\xenon\archives\scripts.arc");
-            Helpers.ArchiveHandler(ScriptsArchivePath, $@"{TemporaryDirectory}\scripts.arc");
-            Directory.Delete($@"{TemporaryDirectory}\xenon", true);
-        }
-
-        // Unpacks scripts.arc and decompiles mission_2001.lub to test Lua Binary handling.
-        private void Debug_MissionLua(object sender, RoutedEventArgs e)
-        {
-            string ScriptsArchivePath = Helpers.ArchiveHandler(@$"{Path.GetDirectoryName(TextBox_General_GameExecutable.Text)}\xenon\archives\scripts.arc");
-            Helpers.LuaDecompile($@"{ScriptsArchivePath}\xenon\scripts\mission\2000\mission_2001.lub");
-            System.Diagnostics.Process.Start(Environment.GetEnvironmentVariable("WINDIR") + @"\explorer.exe", $@"{ScriptsArchivePath}\xenon\scripts\mission\2000\");
-        }
         #endregion
-
-        private void Randomise(object sender, RoutedEventArgs e)
+        private async void Randomise(object sender, RoutedEventArgs e)
         {
             // Check that our mods directory and game executable actually exist.
             if (!Directory.Exists(TextBox_General_ModsDirectory.Text) || !File.Exists(TextBox_General_GameExecutable.Text))
@@ -327,6 +312,9 @@ namespace MarathonRandomiser
             string[] archives = Directory.GetFiles($@"{Path.GetDirectoryName(TextBox_General_GameExecutable.Text)}", "*.arc", SearchOption.AllDirectories);
 
             // Create Mod Directory (prompting the user if they want to delete it first or cancel if it already exists.)
+            // TODO: Update these to all use this variable.
+            string ModDirectory = $@"{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({Helpers.UseSafeFormattedCharacters(TextBox_General_Seed.Text)})";
+            string GameExecutable = TextBox_General_GameExecutable.Text;
             if (Directory.Exists($@"{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({Helpers.UseSafeFormattedCharacters(TextBox_General_Seed.Text)})"))
             {
                 MessageBoxResult check = MessageBox.Show($"A mod with the seed {TextBox_General_Seed.Text} already exists.\nDo you want to replace it?",
@@ -339,7 +327,6 @@ namespace MarathonRandomiser
                 if (check == MessageBoxResult.No)
                     return;
             }
-
             Directory.CreateDirectory($@"{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({Helpers.UseSafeFormattedCharacters(TextBox_General_Seed.Text)})");
 
             // Write mod configuration ini.
@@ -365,7 +352,15 @@ namespace MarathonRandomiser
                 configInfo.Close();
             }
 
-            // TODO: Reimplement Wildcard Configuration
+            // Display the Progress Logger.
+            TabControl_Main.Visibility = Visibility.Hidden;
+            TextBlock_ProgressLogger.Visibility = Visibility.Visible;
+            ScrollViewer_ProgressLogger.Visibility = Visibility.Visible;
+            ProgressBar_ProgressLogger.Visibility = Visibility.Visible;
+            Button_Randomise.IsEnabled = false;
+            Button_LoadConfig.IsEnabled = false;
+
+            // TODO: Reimplement the Wildcard.
 
             // Enumerate the Checked List Boxes for the user's settings on lists.
             List<string> SetEnemies = Helpers.EnumerateCheckedListBox(CheckedList_SET_EnemyTypes);
@@ -390,17 +385,74 @@ namespace MarathonRandomiser
 
             // Custom Music
             if (TextBox_Custom_Music.Text.Length != 0)
-                Custom.Music(CustomMusic, $@"{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({TextBox_General_Seed.Text})", CheckBox_Custom_Music_XMACache.IsChecked, MiscMusic, archives);
+            {
+                // Get the status of the XMA Cache Checkbox.
+                bool? EnableCache = CheckBox_Custom_Music_XMACache.IsChecked;
+
+                // Create the directories for the process.
+                Directory.CreateDirectory($@"{TemporaryDirectory}\tempWavs");
+                Directory.CreateDirectory($@"{ModDirectory}\xenon\sound");
+
+                // Set up the string for the custom files in the mod.ini
+                string songs = "Custom=\"";
+
+                // Loops through the custom songs and process them.
+                for (int i = 0; i < CustomMusic.Length; i++)
+                {
+                    UpdateLogger($"Importing: '{CustomMusic[i]}' as custom music.");
+                    await Task.Run(() => Custom.Music(CustomMusic[i], ModDirectory, i, EnableCache));
+                    songs += $"custom{i}.xma,";
+                    MiscMusic.Add($"custom{i}");
+                }
+
+                // Add all the songs to the mod configuration ini.
+                // Remove the last comma and replace it with a closing quote.
+                songs = songs.Remove(songs.LastIndexOf(','));
+                songs += "\"";
+
+                // Write the list of custom files to the mod configuration ini.
+                using (StreamWriter configInfo = File.AppendText(Path.Combine($@"{ModDirectory}", "mod.ini")))
+                {
+                    configInfo.WriteLine(songs);
+                    configInfo.Close();
+                }
+
+                // Add all the songs to bgm.sbk in sound.arc
+                foreach (string archive in archives)
+                {
+                    // Find sound.arc.
+                    if (Path.GetFileName(archive).ToLower() == "sound.arc")
+                    {
+                        UpdateLogger($"Updating 'bgm.sbk' with {CustomMusic.Length} custom songs.");
+                        string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+                        await Task.Run(() => Custom.UpdateBGMSoundBank(unpackedArchive, CustomMusic.Length));
+                    }
+                }
+            }
 
             // Voice Packs
             if (CustomVoxPacks.Count > 0)
             {
+                // Create voice directory.
+                Directory.CreateDirectory($@"{ModDirectory}\xenon\sound\voice\e\");
+
                 // Insert the patched voice_all_e.sbk file into sound.arc first.
                 foreach (string archive in archives)
+                {
                     if (Path.GetFileName(archive).ToLower() == "sound.arc")
-                        File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\voice_all_e.sbk", $@"{Helpers.ArchiveHandler(archive)}\xenon\sound\voice_all_e.sbk", true);
+                    {
+                        UpdateLogger($"Patching 'voice_all_e.sbk'.");
+                        string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+                        File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\voice_all_e.sbk", $@"{unpackedArchive}\xenon\sound\voice_all_e.sbk", true);
+                    }
+                }
 
-                Custom.VoicePacks(CustomVoxPacks, $@"{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({TextBox_General_Seed.Text})", archives, SetHints);
+                // Process the selected voice packs.
+                for (int i = 0; i < CustomVoxPacks.Count; i++)
+                {
+                    UpdateLogger($"Processing '{CustomVoxPacks[i]}' voice pack.");
+                    await Task.Run(() => Custom.VoicePacks(CustomVoxPacks[i], ModDirectory, archives, SetHints));
+                }
             }
 
             // Disable options if they have nothing to pick from.
@@ -435,118 +487,243 @@ namespace MarathonRandomiser
                 CheckBox_Misc_Patches.IsChecked = false;
 
             // Object Placement
-            if ((bool)CheckBox_SET_Enemies.IsChecked || (bool)CheckBox_SET_Enemies_Behaviour.IsChecked || (bool)CheckBox_SET_Characters.IsChecked || (bool)CheckBox_SET_ItemCapsules.IsChecked ||
-                (bool)CheckBox_SET_CommonProps.IsChecked || (bool)CheckBox_SET_PathProps.IsChecked || (bool)CheckBox_SET_Hints.IsChecked || (bool)CheckBox_SET_Doors.IsChecked ||
-                (bool)CheckBox_SET_DrawDistance.IsChecked || (bool)CheckBox_SET_Cosmetic.IsChecked)
+            bool? setEnemies = CheckBox_SET_Enemies.IsChecked;
+            bool? setEnemiesNoBosses = CheckBox_SET_Enemies_NoBosses.IsChecked;
+            bool? setBehaviour = CheckBox_SET_Enemies_Behaviour.IsChecked;
+            bool? setBehaviourNoEnforce = CheckBox_SET_Enemies_Behaviour_NoEnforce.IsChecked;
+            bool? setCharacters = CheckBox_SET_Characters.IsChecked;
+            bool? setItemCapsules = CheckBox_SET_ItemCapsules.IsChecked;
+            bool? setCommonProps = CheckBox_SET_CommonProps.IsChecked;
+            bool? setPathProps = CheckBox_SET_PathProps.IsChecked;
+            bool? setHints = CheckBox_SET_Hints.IsChecked;
+            bool? setDoors = CheckBox_SET_Doors.IsChecked;
+            bool? setDrawDistance = CheckBox_SET_DrawDistance.IsChecked;
+            bool? setCosmetic = CheckBox_SET_Cosmetic.IsChecked;
+            int setMinDrawDistance = (int)NumericUpDown_SET_DrawDistance_Min.Value;
+            int setMaxDrawDistance = (int)NumericUpDown_SET_DrawDistance_Max.Value;
+
+            // Check if we actually need to do SET stuff.
+            if (setEnemies == true || setBehaviour == true || setCharacters == true || setItemCapsules == true || setCommonProps == true || setPathProps == true || setHints == true || setDoors == true ||
+                setDrawDistance == true || setCosmetic == true)
             {
                 foreach (string archive in archives)
                 {
                     if (Path.GetFileName(archive).ToLower() == "scripts.arc")
                     {
-                        ObjectPlacementRandomiser.Load(Helpers.ArchiveHandler(archive), (bool)CheckBox_SET_Enemies.IsChecked, (bool)CheckBox_SET_Enemies_NoBosses.IsChecked,
-                                                       (bool)CheckBox_SET_Enemies_Behaviour.IsChecked, (bool)CheckBox_SET_Enemies_Behaviour_NoEnforce.IsChecked, (bool)CheckBox_SET_Characters.IsChecked,
-                                                       (bool)CheckBox_SET_ItemCapsules.IsChecked, (bool)CheckBox_SET_CommonProps.IsChecked, (bool)CheckBox_SET_PathProps.IsChecked,
-                                                       (bool)CheckBox_SET_Hints.IsChecked, (bool)CheckBox_SET_Doors.IsChecked, (bool)CheckBox_SET_DrawDistance.IsChecked,
-                                                       (bool)CheckBox_SET_Cosmetic.IsChecked, SetEnemies, SetCharacters, SetItemCapsules, SetCommonProps, SetPathProps, SetHints, SetDoors,
-                                                       (int)NumericUpDown_SET_DrawDistance_Min.Value, (int)NumericUpDown_SET_DrawDistance_Max.Value);
+                        string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
 
-                        // If we have voices enabled or the enemy list contains a boss, then patch them.
-                        if ((bool)CheckBox_SET_Hints.IsChecked || SetEnemies.Contains("eCerberus") || SetEnemies.Contains("eGenesis") || SetEnemies.Contains("eWyvern") || SetEnemies.Contains("firstIblis") || SetEnemies.Contains("secondIblis") ||
-                            SetEnemies.Contains("thirdIblis") || SetEnemies.Contains("firstmefiress") || SetEnemies.Contains("secondmefiress") || SetEnemies.Contains("solaris01") || SetEnemies.Contains("solaris02"))
-                            ObjectPlacementRandomiser.BossPatch(Helpers.ArchiveHandler(archive), (bool)CheckBox_SET_Enemies.IsChecked, (bool)CheckBox_SET_Hints.IsChecked, SetHints);
+                        // Get a list of all the set files in scripts.arc.
+                        string[] setFiles = Directory.GetFiles(unpackedArchive, "*.set", SearchOption.AllDirectories);
 
-                        // If we have Characters or Enemies (with Bosses) enabled, then edit the stage luas to handle lua spawns.
-                        if (((bool)CheckBox_SET_Enemies.IsChecked && (bool)!CheckBox_SET_Enemies_NoBosses.IsChecked) || (bool)CheckBox_SET_Characters.IsChecked)
-                            ObjectPlacementRandomiser.LuaPlayerStartRandomiser(Helpers.ArchiveHandler(archive), (bool)CheckBox_SET_Characters.IsChecked, SetCharacters, (bool)CheckBox_SET_Enemies.IsChecked, (bool)CheckBox_SET_Enemies_NoBosses.IsChecked);
+                        // Process each set file.
+                        foreach (string setFile in setFiles)
+                        {
+                            UpdateLogger($"Randomising: '{setFile}'.");
+                            await Task.Run(() => ObjectPlacementRandomiser.Load(setFile, setEnemies, setEnemiesNoBosses, setBehaviour, setBehaviourNoEnforce, setCharacters, setItemCapsules, setCommonProps, setPathProps,
+                                                                                     setHints, setDoors, setDrawDistance, setCosmetic, SetEnemies, SetCharacters, SetItemCapsules, SetCommonProps, SetPathProps,
+                                                                                     SetHints, SetDoors, setMinDrawDistance, setMaxDrawDistance));
+                        }
+
+                        // Patch enemy luas if they need patching.
+                        if (setEnemies == true || SetEnemies.Contains("eCerberus") || SetEnemies.Contains("eGenesis") || SetEnemies.Contains("eWyvern") || SetEnemies.Contains("firstIblis") ||
+                            SetEnemies.Contains("secondIblis") || SetEnemies.Contains("thirdIblis") || SetEnemies.Contains("firstmefiress") || SetEnemies.Contains("secondmefiress") ||
+                            SetEnemies.Contains("solaris01") || SetEnemies.Contains("solaris02"))
+                        {
+                            string[] luaFiles = Directory.GetFiles($"{unpackedArchive}\\xenon\\scripts\\enemy", "*.lub", SearchOption.TopDirectoryOnly);
+                            foreach (string luaFile in luaFiles)
+                            {
+                                UpdateLogger($"Patching '{luaFile}'.");
+                                await Task.Run(() => ObjectPlacementRandomiser.BossPatch(luaFile, setEnemies, setHints, SetHints));
+                            }
+                        }
+
+                        // Patch stage and mission luas for player_start2 entities
+                        if ((setEnemies == true && setEnemiesNoBosses != true) || setCharacters == true)
+                        {
+                            string[] luaFiles = Directory.GetFiles(unpackedArchive, "*.lub", SearchOption.AllDirectories);
+                            foreach (string luaFile in luaFiles)
+                            {
+
+                                if (luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("a_")               || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("b_")               ||
+                                    luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("c_")               || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("d_")               ||
+                                    luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("e_")               || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("f_")               ||
+                                    luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("f1_")              || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("f2_")              ||
+                                    luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("g_")               || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("eCerberus")        ||
+                                    luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("eGenesis")         || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("eWyvern")          ||
+                                    luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("firstmefiress")    || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("iblis01")          ||
+                                    luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("secondiblis")      || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("secondmefiress")   ||
+                                    luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("shadow_vs_silver") || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("silver_vs_shadow") ||
+                                    luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("solaris_super3")   || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("sonic_vs_silver")  ||
+                                    luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("thirdiblis")       || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("silver_vs_sonic"))
+                                {
+                                    UpdateLogger($"Randomising player_start2 entities in '{luaFile}'.");
+                                    await Task.Run(() => ObjectPlacementRandomiser.LuaPlayerStartRandomiser(luaFile, setCharacters, SetCharacters, setEnemies, setEnemiesNoBosses));
+                                }
+                            }
+                        }
                     }
 
-                    // Patch voice_all_e.sbk to include every in game voice.
-                    // Only do this if we have no voice packs installed, as the voice pack installation process already handles this.
+                    // Patch voice_all_e.sbk if we aren't using any voice packs.
                     if (CustomVoxPacks.Count == 0)
                     {
                         if (Path.GetFileName(archive).ToLower() == "sound.arc")
-                            File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\voice_all_e.sbk", $@"{Helpers.ArchiveHandler(archive)}\xenon\sound\voice_all_e.sbk", true);
+                        {
+                            UpdateLogger($"Patching 'voice_all_e.sbk'.");
+                            string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+                            File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\voice_all_e.sbk", $@"{unpackedArchive}\xenon\sound\voice_all_e.sbk", true);
+                        }
                     }
                 }
             }
-            
+
             // Event Randomisation
-            if ((bool)CheckBox_Event_Lighting.IsChecked || (bool)CheckBox_Event_XRotation.IsChecked || (bool)CheckBox_Event_YRotation.IsChecked || (bool)CheckBox_Event_ZRotation.IsChecked ||
-                (bool)CheckBox_Event_XPosition.IsChecked || (bool)CheckBox_Event_YPosition.IsChecked || (bool)CheckBox_Event_ZPosition.IsChecked ||
-                (bool)CheckBox_Event_Terrain.IsChecked || (bool)CheckBox_Event_Order.IsChecked)
+            bool? eventLighting = CheckBox_Event_Lighting.IsChecked;
+            bool? eventRotX = CheckBox_Event_XRotation.IsChecked;
+            bool? eventRotY = CheckBox_Event_YRotation.IsChecked;
+            bool? eventRotZ = CheckBox_Event_ZRotation.IsChecked;
+            bool? eventPosX = CheckBox_Event_XPosition.IsChecked;
+            bool? eventPosY = CheckBox_Event_YPosition.IsChecked;
+            bool? eventPosZ = CheckBox_Event_ZPosition.IsChecked;
+            bool? eventVoice = CheckBox_Event_Voices.IsChecked;
+            bool? eventVoiceJpn = CheckBox_Event_Voices_Japanese.IsChecked;
+            bool? eventVoiceGame = CheckBox_Event_Voices_Gameplay.IsChecked;
+            bool? eventTerrain = CheckBox_Event_Terrain.IsChecked;
+            bool? eventOrder = CheckBox_Event_Order.IsChecked;
+
+            // Check if we actually need to do event stuff.
+            if (eventLighting == true || eventRotX == true || eventRotY == true || eventRotZ == true || eventPosX == true || eventPosY == true || eventPosZ == true || eventTerrain == true || eventOrder == true)
             {
                 foreach (string archive in archives)
                 {
                     if (Path.GetFileName(archive).ToLower() == "cache.arc")
                     {
-                        EventRandomiser.Load(Helpers.ArchiveHandler(archive), (bool)CheckBox_Event_Lighting.IsChecked, EventLighting, (bool)CheckBox_Event_Terrain.IsChecked, EventTerrain,
-                                             (bool)CheckBox_Event_XRotation.IsChecked, (bool)CheckBox_Event_YRotation.IsChecked, (bool)CheckBox_Event_ZRotation.IsChecked,
-                                             (bool)CheckBox_Event_XPosition.IsChecked, (bool)CheckBox_Event_YPosition.IsChecked, (bool)CheckBox_Event_ZPosition.IsChecked,
-                                             (bool)CheckBox_Event_Order.IsChecked, $@"{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({TextBox_General_Seed.Text})",
-                                             TextBox_General_GameExecutable.Text);
+                        string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+                        if (eventLighting == true || eventRotX == true || eventRotY == true || eventRotZ == true || eventPosX == true || eventPosY == true || eventPosZ == true || eventTerrain == true)
+                        {
+                            UpdateLogger($"Randomising 'eventplaybook.epb' parameters.");
+                            await Task.Run(() => EventRandomiser.Load(unpackedArchive, eventLighting, EventLighting, eventTerrain, EventTerrain, eventRotX, eventRotY, eventRotZ, eventPosX, eventPosY, eventPosZ));
+                        }
+
+                        if (eventOrder == true)
+                        {
+                            UpdateLogger($"Shuffling event order.");
+                            await Task.Run(() => EventRandomiser.EventShuffler(unpackedArchive, ModDirectory, GameExecutable));
+                        }
+
+                        if (eventVoice == true)
+                        {
+                            UpdateLogger($"Shuffling event voice files.");
+                            await Task.Run(() => EventRandomiser.ShuffleVoiceLines(GameExecutable, eventVoiceJpn, eventVoiceGame, CustomVoxPacks.Count != 0, ModDirectory));
+                        }
                     }
                 }
             }
-            
-            if((bool)CheckBox_Event_Voices.IsChecked)
-                EventRandomiser.ShuffleVoiceLines(TextBox_General_GameExecutable.Text, (bool)CheckBox_Event_Voices_Japanese.IsChecked, (bool)CheckBox_Event_Voices_Gameplay.IsChecked, CustomVoxPacks,
-                                                  $@"{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({TextBox_General_Seed.Text})");
 
             // Scene Randomisation
-            if ((bool)CheckBox_Scene_Light_Ambient.IsChecked || (bool)CheckBox_Scene_Light_Main.IsChecked || (bool)CheckBox_Scene_Light_Sub.IsChecked || (bool)CheckBox_Scene_Light_Direction.IsChecked ||
-                (bool)CheckBox_Scene_Fog_Colour.IsChecked || (bool)CheckBox_Scene_Fog_Density.IsChecked|| (bool)CheckBox_Scene_EnvMaps.IsChecked)
+            bool? sceneLightAmbient = CheckBox_Scene_Light_Ambient.IsChecked;
+            bool? sceneLightMain = CheckBox_Scene_Light_Main.IsChecked;
+            bool? sceneLightSub = CheckBox_Scene_Light_Sub.IsChecked;
+            bool? sceneLightDirection = CheckBox_Scene_Light_Direction.IsChecked;
+            bool? sceneLightDirectionEnforce = CheckBox_Scene_Light_Direction_Enforce.IsChecked;
+            bool? sceneFogColour = CheckBox_Scene_Fog_Colour.IsChecked;
+            bool? sceneFogDensity = CheckBox_Scene_Fog_Density.IsChecked;
+            bool? sceneEnvMaps = CheckBox_Scene_EnvMaps.IsChecked;
+            if (sceneLightAmbient == true || sceneLightMain == true || sceneLightSub == true || sceneLightDirection == true || sceneFogColour == true ||
+                sceneFogDensity == true || sceneEnvMaps == true)
             {
                 foreach (string archive in archives)
                 {
                     if (Path.GetFileName(archive).ToLower() == "scripts.arc")
                     {
-                        SceneRandomiser.Load(Helpers.ArchiveHandler(archive), (bool)CheckBox_Scene_Light_Ambient.IsChecked, (bool)CheckBox_Scene_Light_Main.IsChecked,
-                                             (bool)CheckBox_Scene_Light_Sub.IsChecked, (bool)CheckBox_Scene_Light_Direction.IsChecked, (bool)CheckBox_Scene_Light_Direction_Enforce.IsChecked,
-                                             (bool)CheckBox_Scene_Fog_Colour.IsChecked, (bool)CheckBox_Scene_Fog_Density.IsChecked, (bool)CheckBox_Scene_EnvMaps.IsChecked, SceneEnvMaps);
+                        string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+
+                        string[] sceneLuas = Directory.GetFiles(unpackedArchive, "scene*.lub", SearchOption.AllDirectories);
+                        foreach (string luaFile in sceneLuas)
+                        {
+                            UpdateLogger($"Randomising scene parameters in '{luaFile}'.");
+                            await Task.Run(() => SceneRandomiser.Load(luaFile, sceneLightAmbient, sceneLightMain, sceneLightSub, sceneLightDirection, sceneLightDirectionEnforce, sceneFogColour,
+                                                                      sceneFogDensity, sceneEnvMaps, SceneEnvMaps));
+                        }
                     }
                 }
             }
 
-            // Miscellaneous Randomisation
-            // Music
-            if ((bool)CheckBox_Misc_Music.IsChecked)
+            // Music Randomisation
+            bool? miscMusic = CheckBox_Misc_Music.IsChecked;
+            foreach (string archive in archives)
             {
-                foreach (string archive in archives)
+                if (Path.GetFileName(archive).ToLower() == "scripts.arc")
                 {
-                    if (Path.GetFileName(archive).ToLower() == "scripts.arc")
+                    string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+
+                    string[] luaFiles = Directory.GetFiles(unpackedArchive, "*.lub", SearchOption.AllDirectories);
+                    foreach (string luaFile in luaFiles)
                     {
-                        MiscellaneousRandomisers.MusicRandomiser(Helpers.ArchiveHandler(archive), MiscMusic);
+                        if (luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("a_") || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("b_") ||
+                        luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("c_") || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("d_") ||
+                        luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("e_") || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("f_") ||
+                        luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("f1_") || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("f2_") ||
+                        luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("g_") || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("eCerberus") ||
+                        luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("eGenesis") || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("eWyvern") ||
+                        luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("firstmefiress") || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("iblis01") ||
+                        luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("secondiblis") || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("secondmefiress") ||
+                        luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("shadow_vs_silver") || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("silver_vs_shadow") ||
+                        luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("solaris_super3") || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("sonic_vs_silver") ||
+                        luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("thirdiblis") || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("silver_vs_sonic") ||
+                        luaFile.Contains("mission"))
+                        {
+                            UpdateLogger($"Randomising music in '{luaFile}'.");
+                            await Task.Run(() => MiscellaneousRandomisers.MusicRandomiser(luaFile, MiscMusic));
+                        }
                     }
                 }
             }
 
-            // Enemy Health
-            if ((bool)CheckBox_Misc_EnemyHealth.IsChecked)
+            // Enemy Health Randomisation
+            bool? miscEnemyHealth = CheckBox_Misc_EnemyHealth.IsChecked;
+            bool? miscEnemyHealthBosses = CheckBox_Misc_EnemyHealth_Bosses.IsChecked;
+            int miscEnemyHealthMin = (int)NumericUpDown_Misc_EnemyHealth_Min.Value;
+            int miscEnemyHealthMax = (int)NumericUpDown_Misc_EnemyHealth_Max.Value;
+
+            foreach (string archive in archives)
             {
-                foreach (string archive in archives)
+                if (miscEnemyHealth == true)
                 {
                     if (Path.GetFileName(archive).ToLower() == "enemy.arc")
                     {
-                        MiscellaneousRandomisers.EnemyHealthRandomiser(Helpers.ArchiveHandler(archive), (int)NumericUpDown_Misc_EnemyHealth_Min.Value, (int)NumericUpDown_Misc_EnemyHealth_Max.Value,
-                                                                       (bool)CheckBox_Misc_EnemyHealth_Bosses.IsChecked);
+                        string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+                        UpdateLogger($"Randomising enemy health values.");
+                        await Task.Run(() => MiscellaneousRandomisers.EnemyHealthRandomiser(unpackedArchive, miscEnemyHealthMin, miscEnemyHealthMax, miscEnemyHealthBosses));
                     }
                 }
             }
 
-            // Collision
-            if ((bool)CheckBox_Misc_Collision.IsChecked)
+            // Collision Randomisation
+            bool? miscCollision = CheckBox_Misc_Collision.IsChecked;
+            bool? miscCollisionPerFace = CheckBox_Misc_Collision_PerFace.IsChecked;
+
+            if (miscCollision == true)
             {
                 foreach (string archive in archives)
                 {
                     if (Path.GetFileName(archive).ToLower() == "stage.arc")
                     {
-                        MiscellaneousRandomisers.SurfaceRandomiser(Helpers.ArchiveHandler(archive), (bool)CheckBox_Misc_Collision_PerFace.IsChecked);
+                        string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+
+                        string[] collisionFiles = Directory.GetFiles(unpackedArchive, "collision.bin", SearchOption.AllDirectories);
+                        foreach (string collisionFile in collisionFiles)
+                        {
+                            UpdateLogger($"Randomising collision surface tags in '{collisionFile}'.");
+                            await Task.Run(() => MiscellaneousRandomisers.SurfaceRandomiser(collisionFile, miscCollisionPerFace));
+                        }
                     }
                 }
             }
 
-            // Text
-            if ((bool)CheckBox_Misc_Text.IsChecked)
+            // Text Randomisation
+            bool? miscText = CheckBox_Misc_Text.IsChecked;
+
+            if (miscText == true)
             {
                 string eventArc = "";
                 string textArc = "";
@@ -554,26 +731,25 @@ namespace MarathonRandomiser
                 foreach (string archive in archives)
                 {
                     if (Path.GetFileName(archive).ToLower() == "event.arc")
-                        eventArc = Helpers.ArchiveHandler(archive);
+                        eventArc = await Task.Run(() => Helpers.ArchiveHandler(archive));
 
                     if (Path.GetFileName(archive).ToLower() == "text.arc")
-                        textArc = Helpers.ArchiveHandler(archive);
+                        textArc = await Task.Run(() => Helpers.ArchiveHandler(archive));
                 }
 
-                MiscellaneousRandomisers.TextRandomiser(eventArc, textArc, MiscLanguages);
+                UpdateLogger($"Shuffling text.");
+                await Task.Run(() => MiscellaneousRandomisers.TextRandomiser(eventArc, textArc, MiscLanguages));
             }
 
-            // Patches.
-            // TODO: Allow the user to choose patches to allow and disallow for this process.
-            if ((bool)CheckBox_Misc_Patches.IsChecked)
+            // Patch Randomisation
+            bool? miscPatches = CheckBox_Misc_Patches.IsChecked;
+            int miscPatchesWeight = (int)NumericUpDown_Misc_Patches_Weight.Value;
+
+            if (miscPatches == true)
             {
-                MiscellaneousRandomisers.PatchRandomiser($@"{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({TextBox_General_Seed.Text})", MiscPatches,
-                                                         (int)NumericUpDown_Misc_Patches_Weight.Value);
+                await Task.Run(() => MiscellaneousRandomisers.PatchRandomiser(ModDirectory, MiscPatches, miscPatchesWeight));
             }
 
-
-            // Repack Archives
-            // This feels kinda dodgy honestly...
             foreach (string archive in archives)
             {
                 if (Directory.Exists($@"{TemporaryDirectory}{archive[0..^4].Replace(Path.GetDirectoryName(TextBox_General_GameExecutable.Text), "")}"))
@@ -582,9 +758,28 @@ namespace MarathonRandomiser
                     saveDir = saveDir.Remove(saveDir.LastIndexOf('\\'));
 
                     Directory.CreateDirectory(saveDir);
-                    Helpers.ArchiveHandler($@"{TemporaryDirectory}{archive[0..^4].Replace(Path.GetDirectoryName(TextBox_General_GameExecutable.Text), "")}", $@"{saveDir}\{Path.GetFileName(archive)}");
+                    UpdateLogger($"Repacking '{Path.GetFileName(archive)}'.");
+                    await Task.Run(() => Helpers.ArchiveHandler($@"{TemporaryDirectory}{archive[0..^4].Replace(Path.GetDirectoryName(GameExecutable), "")}", $@"{saveDir}\{Path.GetFileName(archive)}"));
                 }
             }
+
+            // Delete the temp directory, as they quickly get large, esepecially when custom XMAs are involved.
+            if (Directory.Exists(TemporaryDirectory))
+                Directory.Delete(TemporaryDirectory, true);
+
+            // Restore Form Visiblity.
+            TabControl_Main.Visibility = Visibility.Visible;
+            ScrollViewer_ProgressLogger.Visibility = Visibility.Hidden;
+            TextBlock_ProgressLogger.Visibility = Visibility.Hidden;
+            ProgressBar_ProgressLogger.Visibility = Visibility.Hidden;
+            Button_Randomise.IsEnabled = true;
+            Button_LoadConfig.IsEnabled = true;
+        }
+
+        private void UpdateLogger(string text)
+        {
+            TextBlock_ProgressLogger.Text += $"{text}\n";
+            ScrollViewer_ProgressLogger.ScrollToEnd();
         }
     }
 }

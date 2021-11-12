@@ -1,90 +1,84 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace MarathonRandomiser
 {
     internal class SceneRandomiser
     {
-        public static void Load(string archivePath, bool ambient, bool main, bool sub, bool direction, bool enforceDirection, bool fogColour, bool fogDensity, bool env, List<string> SceneEnvMaps)
+        public static async Task Load(string sceneLua, bool? ambient, bool? main, bool? sub, bool? direction, bool? enforceDirection, bool? fogColour, bool? fogDensity, bool? env, List<string> SceneEnvMaps)
         {
-            // Get a list of all the scene lua binaries in scripts.arc.
-            string[] sceneLuas = Directory.GetFiles(archivePath, "scene*.lub", SearchOption.AllDirectories);
+            await Task.Run(() => Helpers.LuaDecompile(sceneLua));
 
-            // Loop through all the lua binaries.
-            foreach (string sceneLua in sceneLuas)
+            // Read the decompiled lua file into a string array.
+            string[] lua = File.ReadAllLines(sceneLua);
+
+            // Loop through each line in this lua binary.
+            for (int i = 0; i < lua.Length; i++)
             {
-                Helpers.LuaDecompile(sceneLua);
-
-                // Read the decompiled lua file into a string array.
-                string[] lua = File.ReadAllLines(sceneLua);
-
-                // Loop through each line in this lua binary.
-                for (int i = 0; i < lua.Length; i++)
+                // Lighting Colours
+                if (lua[i].Contains("Ambient = {") && ambient == true)
                 {
-                    // Lighting Colours
-                    if (lua[i].Contains("Ambient = {") && ambient)
+                    // Alternate Lighting Setups have another line denoting their type, factor this in.
+                    if (!lua[i + 1].Contains("Type"))
+                        await Task.Run(() => RGBA(lua, i + 2, 6, true));
+                    else
+                        await Task.Run(() => RGBA(lua, i + 3, 6, true));
+                }
+
+                if (lua[i].Contains("Main = {") && !lua[i].Contains("FarDistance") && !lua[i].Contains("ClipDistance") && main == true)
+                {
+                    // Check if this Lua doesn't have the final main block divided up because fuck you.
+                    if (lua[i + 1].Contains("ClumpClipDistance") || lua[i + 1].Contains("FarDistance"))
+                        continue;
+
+                    // Alternate Lighting Setups have another line denoting their type, factor this in.
+                    if (!lua[i + 1].Contains("Type"))
+                        await Task.Run(() => RGBA(lua, i + 2, 6, true));
+                    else
+                        await Task.Run(() => RGBA(lua, i + 3, 6, true));
+                }
+
+                if (lua[i].Contains("Sub = {") && sub == true)
+                {
+                    // Alternate Lighting Setups have another line denoting their type, factor this in.
+                    if (!lua[i + 1].Contains("Type"))
+                        await Task.Run(() => RGBA(lua, i + 2, 6, true));
+                    else
+                        await Task.Run(() => RGBA(lua, i + 3, 6, true));
+                }
+
+                // Lighting Direction
+                if (lua[i].Contains("Direction_3dsmax") && direction == true)
+                    await Task.Run(() => Direction(lua, i + 2, enforceDirection));
+
+                // Fog. Has special exceptions for Tropical Jungle B and C as they are the ONLY stages to handle fog differently, so they becoming pure, blinding white.
+                if (!sceneLua.Contains("scene_tpj_b") && !sceneLua.Contains("scene_tpj_c"))
+                {
+                    // Colour
+                    if (lua[i].Contains("BRay") && fogColour == true)
+                        await Task.Run(() => RGBA(lua, i + 1, 4, false));
+                    // Density
+                    if (lua[i].Contains("BRay") && fogDensity == true)
                     {
-                        // Alternate Lighting Setups have another line denoting their type, factor this in.
-                        if (!lua[i + 1].Contains("Type"))
-                            RGBA(lua, i + 2, 6, true);
-                        else
-                            RGBA(lua, i + 3, 6, true);
-                    }
-
-                    if (lua[i].Contains("Main = {") && !lua[i].Contains("FarDistance") && !lua[i].Contains("ClipDistance") && main)
-                    {
-                        // Check if this Lua doesn't have the final main block divided up because fuck you.
-                        if (lua[i + 1].Contains("ClumpClipDistance") || lua[i + 1].Contains("FarDistance"))
-                            continue;
-
-                        // Alternate Lighting Setups have another line denoting their type, factor this in.
-                        if (!lua[i + 1].Contains("Type"))
-                            RGBA(lua, i + 2, 6, true);
-                        else
-                            RGBA(lua, i + 3, 6, true);
-                    }
-
-                    if (lua[i].Contains("Sub = {") && sub)
-                    {
-                        // Alternate Lighting Setups have another line denoting their type, factor this in.
-                        if (!lua[i + 1].Contains("Type"))
-                            RGBA(lua, i + 2, 6, true);
-                        else
-                            RGBA(lua, i + 3, 6, true);
-                    }
-
-                    // Lighting Direction
-                    if (lua[i].Contains("Direction_3dsmax") && direction)
-                        Direction(lua, i + 2, enforceDirection);
-
-                    // Fog. Has special exceptions for Tropical Jungle B and C as they are the ONLY stages to handle fog differently, so they becoming pure, blinding white.
-                    if (!sceneLua.Contains("scene_tpj_b") && !sceneLua.Contains("scene_tpj_c"))
-                    {
-                        // Colour
-                        if (lua[i].Contains("BRay") && fogColour)
-                            RGBA(lua, i + 1, 4, false);
-                        // Density
-                        if (lua[i].Contains("BRay") && fogDensity)
-                        {
-                            string[] power = lua[i + 4].Split(' ');
-                            power[4] = $"{MainWindow.Randomiser.NextDouble() * (0.001 - 0) + 0}";
-                            lua[i + 4] = string.Join(' ', power);
-                        }
-                    }
-
-                    // Environment Maps
-                    if (lua[i].Contains("EnvMap"))
-                    {
-                        string[] envMap = lua[i + 1].Split(' ');
-                        envMap[4] = $"\"{SceneEnvMaps[MainWindow.Randomiser.Next(SceneEnvMaps.Count)]}\"";
-                        lua[i + 1] = string.Join(' ', envMap);
+                        string[] power = lua[i + 4].Split(' ');
+                        power[4] = $"{MainWindow.Randomiser.NextDouble() * (0.001 - 0) + 0}";
+                        lua[i + 4] = string.Join(' ', power);
                     }
                 }
 
-                // Save the updated lua binary.
-                File.WriteAllLines(sceneLua, lua);
+                // Environment Maps
+                if (lua[i].Contains("EnvMap") && env == true)
+                {
+                    string[] envMap = lua[i + 1].Split(' ');
+                    envMap[4] = $"\"{SceneEnvMaps[MainWindow.Randomiser.Next(SceneEnvMaps.Count)]}\"";
+                    lua[i + 1] = string.Join(' ', envMap);
+                }
             }
+
+            // Save the updated lua binary.
+            File.WriteAllLines(sceneLua, lua);
 
             /// <summary>
             /// Generates random RGBA values.
@@ -94,7 +88,7 @@ namespace MarathonRandomiser
             /// <param name="splitLength">How long the split's length is (used by the fog colour).</param>
             /// <param name="usePower">Whether the power value should be handled too (used by the fog colour to avoid changing the fog density as well).</param>
             /// <returns></returns>
-            static string[] RGBA(string[] lua, int startPos, int splitLength, bool usePower)
+            static async Task<string[]> RGBA(string[] lua, int startPos, int splitLength, bool usePower)
             {
                 // Split the RGB values into string arrays.
                 string[] rSplit = lua[startPos].Split(' ');
@@ -130,7 +124,7 @@ namespace MarathonRandomiser
             /// <param name="startPos">Where in the string array we should be.</param>
             /// <param name="enforce">Whether the direction should be enforced.</param>
             /// <returns></returns>
-            static string[] Direction(string[] lua, int startPos, bool enforce)
+            static async Task<string[]> Direction(string[] lua, int startPos, bool? enforce)
             {
                 // Split the XYZ values into string arrays.
                 string[] xSplit = lua[startPos].Split(' ');
@@ -143,7 +137,7 @@ namespace MarathonRandomiser
                 zSplit[8] = $"{Math.Round(MainWindow.Randomiser.NextDouble() * (1 - -1) + -1, 6)}";
 
                 // If the light value on the Z Axis is negative, flip it.
-                if (zSplit[8].Contains('-') && enforce)
+                if (zSplit[8].Contains('-') && enforce == true)
                     zSplit[8] = zSplit[8].Replace("-", string.Empty);
 
                 // Rejoin the splits into the main string array.

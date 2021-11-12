@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace MarathonRandomiser
 {
     internal class EventRandomiser
     {
-        public static void Load(string archivePath, bool scene, List<string> EventLighting, bool terrain, List<string> EventTerrain, bool rotX, bool rotY, bool rotZ, bool posX, bool posY, bool posZ,
-                                bool eventShuffle, string ModDirectory, string GameExecutable)
+        public static async Task Load(string archivePath, bool? lighting, List<string> EventLighting, bool? terrain, List<string> EventTerrain, bool? rotX, bool? rotY, bool? rotZ, bool? posX, bool? posY,
+                                      bool? posZ)
         {
             EventPlaybook epb = new($@"{archivePath}\xenon\eventplaybook.epb");
 
@@ -16,29 +17,58 @@ namespace MarathonRandomiser
             foreach (Event eventEntry in epb.Events)
             {
                 // Pick a random scene lua binary from the list if we're randomising it and this event actually uses one.
-                if (eventEntry.SceneLua != null && scene)
+                if (eventEntry.SceneLua != null && lighting == true)
                     eventEntry.SceneLua = EventLighting[MainWindow.Randomiser.Next(EventLighting.Count)];
 
                 // Pick a random terrain folder path from the list if we're randomising it and this event actually uses one.
-                if (eventEntry.Terrain != null && terrain)
+                if (eventEntry.Terrain != null && terrain == true)
                     eventEntry.Terrain = EventTerrain[MainWindow.Randomiser.Next(EventTerrain.Count)];
 
                 // Rotation
-                if (rotX || rotY || rotZ)
+                if (rotX == true || rotY == true || rotZ == true)
                     Rotation(eventEntry, rotX, rotY, rotZ);
 
                 // Position
-                if (posX || posY || posZ)
+                if (posX == true || posY == true || posZ == true)
                     Position(eventEntry, posX, posY, posZ);
+
+                // Save the updated EventPlaybook.epb.
+                epb.Save();
             }
 
-            // Shuffle events.
-            if (eventShuffle)
-                EventShuffler(epb, ModDirectory, GameExecutable);
-
-            // Save the updated EventPlaybook.epb.
-            epb.Save();
         }
+        //public static void Load(string archivePath, bool scene, List<string> EventLighting, bool terrain, List<string> EventTerrain, bool rotX, bool rotY, bool rotZ, bool posX, bool posY, bool posZ,
+        //                        bool eventShuffle, string ModDirectory, string GameExecutable)
+        //{
+        //    EventPlaybook epb = new($@"{archivePath}\xenon\eventplaybook.epb");
+
+        //    // Loop through each event present in eventplaybook.epb.
+        //    foreach (Event eventEntry in epb.Events)
+        //    {
+        //        // Pick a random scene lua binary from the list if we're randomising it and this event actually uses one.
+        //        if (eventEntry.SceneLua != null && scene)
+        //            eventEntry.SceneLua = EventLighting[MainWindow.Randomiser.Next(EventLighting.Count)];
+
+        //        // Pick a random terrain folder path from the list if we're randomising it and this event actually uses one.
+        //        if (eventEntry.Terrain != null && terrain)
+        //            eventEntry.Terrain = EventTerrain[MainWindow.Randomiser.Next(EventTerrain.Count)];
+
+        //        // Rotation
+        //        if (rotX || rotY || rotZ)
+        //            Rotation(eventEntry, rotX, rotY, rotZ);
+
+        //        // Position
+        //        if (posX || posY || posZ)
+        //            Position(eventEntry, posX, posY, posZ);
+        //    }
+
+        //    // Shuffle events.
+        //    if (eventShuffle)
+        //        EventShuffler(epb, ModDirectory, GameExecutable);
+
+        //    // Save the updated EventPlaybook.epb.
+        //    epb.Save();
+        //}
 
         /// <summary>
         /// Randomises an event's rotation values.
@@ -47,7 +77,7 @@ namespace MarathonRandomiser
         /// <param name="rotX">Whether we should randomise the rotation on the X axis.</param>
         /// <param name="rotY">Whether we should randomise the rotation on the Y axis.</param>
         /// <param name="rotZ">Whether we should randomise the rotation on the Z axis.</param>
-        static void Rotation(Event eventEntry, bool rotX, bool rotY, bool rotZ)
+        static void Rotation(Event eventEntry, bool? rotX, bool? rotY, bool? rotZ)
         {
             // Get original rotation values.
             float rotationX = eventEntry.Rotation.X;
@@ -55,11 +85,11 @@ namespace MarathonRandomiser
             float rotationZ = eventEntry.Rotation.Z;
 
             // Randomise the rotation values if required.
-            if (rotX)
+            if (rotX == true)
                 rotationX = MainWindow.Randomiser.Next(-180, 181);
-            if (rotY)
+            if (rotY == true)
                 rotationY = MainWindow.Randomiser.Next(-180, 181);
-            if (rotZ)
+            if (rotZ == true)
                 rotationZ = MainWindow.Randomiser.Next(-180, 181);
 
             // Build a Vector3 out of the rotation values and save it over the original values.
@@ -73,7 +103,7 @@ namespace MarathonRandomiser
         /// <param name="posX">Whether we should randomise the position on the X axis.</param>
         /// <param name="posY">Whether we should randomise the position on the Y axis.</param>
         /// <param name="posZ">Whether we should randomise the position on the Z axis.</param>
-        static void Position(Event eventEntry, bool posX, bool posY, bool posZ)
+        static void Position(Event eventEntry, bool? posX, bool? posY, bool? posZ)
         {
             // Get original position values.
             float positionX = eventEntry.Position.X;
@@ -81,11 +111,11 @@ namespace MarathonRandomiser
             float positionZ = eventEntry.Position.Z;
 
             // Randomise the position values if required.
-            if (posX)
+            if (posX == true)
                 positionX = MainWindow.Randomiser.Next(-50000, 50001);
-            if (posY)
+            if (posY == true)
                 positionY = MainWindow.Randomiser.Next(-50000, 50001);
-            if (posZ)
+            if (posZ == true)
                 positionZ = MainWindow.Randomiser.Next(-50000, 50001);
 
             // Build a Vector3 out of the position values and save it over the original values.
@@ -99,8 +129,10 @@ namespace MarathonRandomiser
         /// <param name="modsDirectory">The path to the user's mods directory (used to find where to place the WMV files).</param>
         /// <param name="GameExecutable">The path to the user's game directory (used to find the event FMVs).</param>
         /// <param name="seed">The seed being used (used to find where to place the WMV files).</param>
-        static void EventShuffler(EventPlaybook epb, string ModDirectory, string GameExecutable)
+        public static async Task EventShuffler(string archivePath, string ModDirectory, string GameExecutable)
         {
+            EventPlaybook epb = new($@"{archivePath}\xenon\eventplaybook.epb");
+
             // Set up a list so we can track which events have already been used.
             List<int> usedNumbers = new();
 
@@ -204,28 +236,28 @@ namespace MarathonRandomiser
             }
         }
     
-        public static void ShuffleVoiceLines(string GameExecutable, bool includeJapanese, bool includeGameplay, List<string> CustomVoxPacks, string ModDirectory)
+        public static async Task ShuffleVoiceLines(string GameExecutable, bool? includeJapanese, bool? includeGameplay, bool hasVox, string ModDirectory)
         {
             string neededFolder = "xenon";
             if (GameExecutable.ToLower().EndsWith(".bin"))
                 neededFolder = "ps3";
 
             string[] eventXMAs = Directory.GetFiles($@"{Path.GetDirectoryName(GameExecutable)}\{neededFolder}\event", "E*.xma", SearchOption.AllDirectories);
-            if (includeJapanese)
+            if (includeJapanese == true)
                 eventXMAs = Directory.GetFiles($@"{Path.GetDirectoryName(GameExecutable)}\{neededFolder}\event", "*.xma", SearchOption.AllDirectories);
 
             // Do this so we don't accidentally shuffle EVERY voice line.
             string[] shuffleArray = eventXMAs;
 
-            if (includeGameplay)
+            if (includeGameplay == true)
             {
                 string[] gameplayXMAs = Directory.GetFiles($@"{Path.GetDirectoryName(GameExecutable)}\{neededFolder}\sound\voice\e", "*.xma", SearchOption.AllDirectories);
-                if (includeJapanese)
+                if (includeJapanese == true)
                 {
                     gameplayXMAs = gameplayXMAs.Concat(Directory.GetFiles($@"{Path.GetDirectoryName(GameExecutable)}\{neededFolder}\sound\voice\j", "*.xma", SearchOption.AllDirectories)).ToArray();
                     eventXMAs = eventXMAs.Concat(gameplayXMAs).ToArray();
                 }
-                if (CustomVoxPacks.Count > 0)
+                if (hasVox)
                 {
                     gameplayXMAs = gameplayXMAs.Concat(Directory.GetFiles($@"{ModDirectory}\xenon\sound\voice\e\", "*.xma", SearchOption.AllDirectories)).ToArray();
                     eventXMAs = eventXMAs.Concat(gameplayXMAs).ToArray();

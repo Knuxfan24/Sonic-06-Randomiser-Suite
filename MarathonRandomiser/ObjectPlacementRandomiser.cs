@@ -10,95 +10,88 @@ namespace MarathonRandomiser
 {
     internal class ObjectPlacementRandomiser
     {
-        public static void Load(string archivePath, bool enemies, bool enemiesNoBosses, bool behaviour, bool behaviourNoEnforce, bool characters, bool itemCapsules, bool commonProps, bool pathProps,
-                                bool hints, bool doors, bool drawDistance, bool cosmetic, List<string> SetEnemies, List<string> SetCharacters, List<string> SetItemCapsules, List<string> SetCommonProps,
-                                List<string> SetPathProps, List<string> SetHints, List<string> SetDoors, int minDrawDistance, int maxDrawDistance)
+        public static async Task Load(string setFile, bool? enemies, bool? enemiesNoBosses, bool? behaviour, bool? behaviourNoEnforce, bool? characters, bool? itemCapsules, bool? commonProps,
+                                      bool? pathProps, bool? hints, bool? doors, bool? drawDistance, bool? cosmetic, List<string> SetEnemies, List<string> SetCharacters, List<string> SetItemCapsules,
+                                      List<string> SetCommonProps, List<string> SetPathProps, List<string> SetHints, List<string> SetDoors, int minDrawDistance, int maxDrawDistance)
         {
-            // Get a list of all the set files in scripts.arc.
-            string[] setFiles = Directory.GetFiles(archivePath, "*.set", SearchOption.AllDirectories);
+            // Load this set file.
+            using ObjectPlacement set = new(setFile);
 
-            // Loop through all the set files.
-            foreach (string setFile in setFiles)
+            // Loop through all the objects in this set file.
+            foreach (SetObject setObject in set.Data.Objects)
             {
-                // Load this set file.
-                ObjectPlacement set = new(setFile);
+                // If we're randomising the object's draw distance, then pick a number for it between the specified values
+                if (drawDistance == true)
+                    setObject.DrawDistance = MainWindow.Randomiser.Next(minDrawDistance, maxDrawDistance + 1);
 
-                // Loop through all the objects in this set file.
-                foreach (SetObject setObject in set.Data.Objects)
+                // If we're randomising the cosmetic stuff, then pass this object to that function to see if we have to do anything to it.
+                if (cosmetic == true)
+                    await Task.Run(() => CosmeticRandomiser(setObject));
+
+                // Check this object's type to see if we need to do anything with it.
+                switch (setObject.Type)
                 {
-                    // If we're randomising the object's draw distance, then pick a number for it between the specified values
-                    if (drawDistance)
-                        setObject.DrawDistance = MainWindow.Randomiser.Next(minDrawDistance, maxDrawDistance + 1);
+                    // Randomise enemy types and/or their behaviours if we need to.
+                    case "enemy":
+                    case "enemyextra":
+                        if (enemies == true)
+                            await Task.Run(() => EnemyTypeRandomiser(setObject, SetEnemies, (bool)enemiesNoBosses));
+                        if (behaviour == true)
+                            await Task.Run(() => EnemyBehaviourRandomiser(setObject, (bool)behaviourNoEnforce));
+                        break;
 
-                    // If we're randomising the cosmetic stuff, then pass this object to that function to see if we have to do anything to it.
-                    if (cosmetic)
-                        CosmeticRandomiser(setObject);
+                    // Randomise character types if we need to.
+                    case "player_start2":
+                        if (characters == true)
+                            setObject.Parameters[1].Data = SetCharacters[MainWindow.Randomiser.Next(SetCharacters.Count)];
+                        break;
 
-                    // Check this object's type to see if we need to do anything with it.
-                    switch (setObject.Type)
-                    {
-                        // Randomise enemy types and/or their behaviours if we need to.
-                        case "enemy":
-                        case "enemyextra":
-                            if (enemies)
-                                EnemyTypeRandomiser(setObject, SetEnemies, enemiesNoBosses);
-                            if (behaviour)
-                                EnemyBehaviourRandomiser(setObject, behaviourNoEnforce);
-                            break;
+                    // Randomise item capsule contents if we need to.
+                    case "itemboxg":
+                    case "itemboxa":
+                        if (itemCapsules == true)
+                            setObject.Parameters[0].Data = int.Parse(SetItemCapsules[MainWindow.Randomiser.Next(SetItemCapsules.Count)]);
+                        break;
 
-                        // Randomise character types if we need to.
-                        case "player_start2":
-                            if (characters)
-                                setObject.Parameters[1].Data = SetCharacters[MainWindow.Randomiser.Next(SetCharacters.Count)];
-                            break;
+                    // Randomise prop elements if we need to.
+                    case "objectphysics":
+                    case "physicspath":
+                    case "objectphysics_item":
+                    case "wap_conifer":
+                    case "end_outputwarp":
+                        if (commonProps == true)
+                            await Task.Run(() => CommonPropRandomiser(setObject, SetCommonProps));
+                        break;
+                    case "common_path_obj":
+                        if (pathProps == true)
+                            setObject.Parameters[0].Data = SetPathProps[MainWindow.Randomiser.Next(SetPathProps.Count)];
+                        break;
 
-                        // Randomise item capsule contents if we need to.
-                        case "itemboxg":
-                        case "itemboxa":
-                            if (itemCapsules)
-                                setObject.Parameters[0].Data = int.Parse(SetItemCapsules[MainWindow.Randomiser.Next(SetItemCapsules.Count)]);
-                            break;
+                    // Randomise voice line triggers if we need to.
+                    case "common_hint":
+                    case "common_hint_collision":
+                        if (hints == true)
+                            setObject.Parameters[0].Data = SetHints[MainWindow.Randomiser.Next(SetHints.Count)];
+                        break;
 
-                        // Randomise prop elements if we need to.
-                        case "objectphysics":
-                        case "physicspath":
-                        case "objectphysics_item":
-                        case "wap_conifer":
-                        case "end_outputwarp":
-                            if (commonProps)
-                                CommonPropRandomiser(setObject, SetCommonProps);
-                            break;
-                        case "common_path_obj":
-                            if (pathProps)
-                                setObject.Parameters[0].Data = SetPathProps[MainWindow.Randomiser.Next(SetPathProps.Count)];
-                            break;
-
-                        // Randomise voice line triggers if we need to.
-                        case "common_hint":
-                        case "common_hint_collision":
-                            if (hints)
-                                setObject.Parameters[0].Data = SetHints[MainWindow.Randomiser.Next(SetHints.Count)];
-                            break;
-
-                        // Randomise door types if we need to.
-                        case "aqa_door":
-                        case "dtd_door":
-                        case "flc_door":
-                        case "kdv_door":
-                        case "rct_door":
-                        case "wap_door":
-                        case "wvo_doorA":
-                        case "wvo_doorB":
-                            if (doors)
-                                setObject.Type = SetDoors[MainWindow.Randomiser.Next(SetDoors.Count)];
-                            break;
-                    }
-
+                    // Randomise door types if we need to.
+                    case "aqa_door":
+                    case "dtd_door":
+                    case "flc_door":
+                    case "kdv_door":
+                    case "rct_door":
+                    case "wap_door":
+                    case "wvo_doorA":
+                    case "wvo_doorB":
+                        if (doors == true)
+                            setObject.Type = SetDoors[MainWindow.Randomiser.Next(SetDoors.Count)];
+                        break;
                 }
 
-                // Save the updated set file.
-                set.Save();
             }
+
+            // Save the updated set file.
+            set.Save();
         }
 
         /// <summary>
@@ -106,7 +99,7 @@ namespace MarathonRandomiser
         /// </summary>
         /// <param name="setObject">The object we're editing.</param>
         /// <param name="enemyTypes">The list of valid enemy types.</param>
-        static void EnemyTypeRandomiser(SetObject setObject, List<string> enemyTypes, bool enemiesNoBosses)
+        static async Task EnemyTypeRandomiser(SetObject setObject, List<string> enemyTypes, bool enemiesNoBosses)
         {
             if (enemiesNoBosses && (setObject.Parameters[0].Data.ToString() == "eCerberus" || setObject.Parameters[0].Data.ToString() == "eGenesis" ||
                 setObject.Parameters[0].Data.ToString() == "eWyvern" || setObject.Parameters[0].Data.ToString() == "firstIblis" || setObject.Parameters[0].Data.ToString() == "secondIblis" ||
@@ -164,7 +157,7 @@ namespace MarathonRandomiser
         /// </summary>
         /// <param name="setObject">The object we're editing.</param>
         /// <param name="dontEnforceBehaviours">Whether we should ensure that the chosen behaviour belongs to this enemy type.</param>
-        static void EnemyBehaviourRandomiser(SetObject setObject, bool dontEnforceBehaviours)
+        static async Task EnemyBehaviourRandomiser(SetObject setObject, bool dontEnforceBehaviours)
         {
             // Setup for if we are enforcing the behaviour type.
             if (!dontEnforceBehaviours)
@@ -289,13 +282,13 @@ namespace MarathonRandomiser
                 setObject.Parameters[2].Data = Parameters[MainWindow.Randomiser.Next(Parameters.Count)];
             }
         }
-        
+
         /// <summary>
         /// Randomises props that use values in Common.bin.
         /// </summary>
         /// <param name="setObject">The object we're editing.</param>
         /// <param name="commonPropTypes">The list of valid prop types.</param>
-        static void CommonPropRandomiser(SetObject setObject, List<string> commonPropTypes)
+        static async Task CommonPropRandomiser(SetObject setObject, List<string> commonPropTypes)
         {
             // Standard physics props (physicspath seemed to crash the game a lot, so it's disabled for now).
             if (setObject.Type == "objectphysics" /*|| SetObject.Type == "physicspath" */|| setObject.Type == "objectphysics_item")
@@ -365,7 +358,7 @@ namespace MarathonRandomiser
         /// Randomises various tiny cosmetic elements of the SETs
         /// </summary>
         /// <param name="setObject">The object we're editing.</param>
-        static void CosmeticRandomiser(SetObject setObject)
+        static async Task CosmeticRandomiser(SetObject setObject)
         {
             switch (setObject.Type)
             {
@@ -421,113 +414,83 @@ namespace MarathonRandomiser
             }
         }
 
-        public static void BossPatch(string archivePath, bool enemies, bool hints, List<string> SetHints)
+        public static async Task BossPatch(string luaFile, bool? enemies, bool? hints, List<string> SetHints)
         {
-            // Get a list of all the lua binaries in the enemy folder of scripts.arc.
-            string[] luaFiles = Directory.GetFiles($"{archivePath}\\xenon\\scripts\\enemy", "*.lub", SearchOption.TopDirectoryOnly);
+            await Task.Run(() => Helpers.LuaDecompile(luaFile));
 
-            foreach(string luaFile in luaFiles)
+            // Read the decompiled lua file into a string array.
+            string[] lua = File.ReadAllLines(luaFile);
+
+            // Loop through each line in this lua binary.
+            for (int i = 0; i < lua.Length; i++)
             {
-                Helpers.LuaDecompile(luaFile);
+                // If enemy randomisation is on, then comment out the lines that control the camera forcing, player movement forcing and Mephiles' random teleportations.
+                if ((lua[i].Contains("CallSetCamera") || lua[i].Contains("CallMoveTargetPos") || lua[i].Contains("FirstMefiress_RandomWarp")) && enemies == true)
+                    lua[i] = $"--{lua[i]}";
 
-                // Read the decompiled lua file into a string array.
-                string[] lua = File.ReadAllLines(luaFile);
-
-                // Loop through each line in this lua binary.
-                for (int i = 0; i < lua.Length; i++)
+                // If voice randomisation is on, then randomise the lua hint messages.
+                if (lua[i].Contains("CallHintMessage") && hints == true)
                 {
-                    // If enemy randomisation is on, then comment out the lines that control the camera forcing, player movement forcing and Mephiles' random teleportations.
-                    if ((lua[i].Contains("CallSetCamera") || lua[i].Contains("CallMoveTargetPos") || lua[i].Contains("FirstMefiress_RandomWarp")) && enemies)
-                        lua[i] = $"--{lua[i]}";
+                    // Split the line controlling the hint up based on the quote marks around the hint name.
+                    string[] split = lua[i].Split('\"');
 
-                    // If voice randomisation is on, then randomise the lua hint messages.
-                    if (lua[i].Contains("CallHintMessage") && hints)
+                    // Replace the second value in the split array (the one containing the hint name) with a song from the list of valid hint voice lines.
+                    split[1] = SetHints[MainWindow.Randomiser.Next(SetHints.Count)];
+
+                    // Rejoin the split array into one line and add it back to the original lua array.
+                    lua[i] = string.Join('\"', split);
+                }
+            }
+
+            // Save the updated lua binary.
+            File.WriteAllLines(luaFile, lua);
+        }
+
+        public static async Task LuaPlayerStartRandomiser(string luaFile, bool? characters, List<string> SetCharacters, bool? enemies, bool? enemiesNoBosses)
+        {
+            // Make a list of the three boss player luas to pick from.
+            List<string> BossCharacters = new() { "boss_sonic.lua", "boss_shadow.lua", "boss_silver.lua" };
+
+            await Task.Run(() => Helpers.LuaDecompile(luaFile));
+
+            // Read the decompiled lua file into a string array.
+            string[] lua = File.ReadAllLines(luaFile);
+
+            // Loop through each line in this lua binary.
+            for (int i = 0; i < lua.Length; i++)
+            {
+                // Search for the line that controls player spawns.
+                if (lua[i].Contains("Game.SetPlayer"))
+                {
+                    // Check if we need to use a regular character for this line.
+                    if (!lua[i].Contains("boss_") && characters == true)
                     {
-                        // Split the line controlling the hint up based on the quote marks around the hint name.
-                        string[] split = lua[i].Split('\"');
+                        // Split the line controlling the music playback up based on the quote marks around the song name.
+                        string[] character = lua[i].Split('"');
 
-                        // Replace the second value in the split array (the one containing the hint name) with a song from the list of valid hint voice lines.
-                        split[1] = SetHints[MainWindow.Randomiser.Next(SetHints.Count)];
+                        // Replace the second value in the split array (the one containing the player lua name) with a selection from the characters list.
+                        character[1] = $"{SetCharacters[MainWindow.Randomiser.Next(SetCharacters.Count)]}.lua";
 
                         // Rejoin the split array into one line and add it back to the original lua array.
-                        lua[i] = string.Join('\"', split);
+                        lua[i] = string.Join("\"", character);
+                    }
+
+                    // Check if we need to use a boss for this line.
+                    if (lua[i].Contains("boss_") && enemies == true && enemiesNoBosses == false)
+                    {
+                        // Split the line controlling the music playback up based on the quote marks around the song name.
+                        string[] character = lua[i].Split('"');
+
+                        // Replace the second value in the split array (the one containing the player lua name) with a selection from the three valid boss luas.
+                        character[1] = BossCharacters[MainWindow.Randomiser.Next(BossCharacters.Count)];
+
+                        // Rejoin the split array into one line and add it back to the original lua array.
+                        lua[i] = string.Join("\"", character);
                     }
                 }
 
                 // Save the updated lua binary.
                 File.WriteAllLines(luaFile, lua);
-            }
-        }
-    
-        public static void LuaPlayerStartRandomiser(string archivePath, bool characters, List<string> SetCharacters, bool enemies, bool enemiesNoBosses)
-        {
-            // Make a list of the three boss player luas to pick from.
-            List<string> BossCharacters = new() { "boss_sonic.lua", "boss_shadow.lua", "boss_silver.lua" };
-
-            // Get a list of all the lua binaries in scripts.arc
-            string[] luaFiles = Directory.GetFiles(archivePath, "*.lub", SearchOption.AllDirectories);
-
-            // Loop through the lua binaries.
-            foreach (string luaFile in luaFiles)
-            {
-                // Ignore any lua binaries that are not in a stage folder.
-                if (!luaFile.Contains("\\stage\\"))
-                    continue;
-
-                // Minimise the number of unnecessary lua decompilations.
-                if (luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("a_")               || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("b_")               ||
-                    luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("c_")               || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("d_")               ||
-                    luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("e_")               || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("f_")               ||
-                    luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("f1_")              || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("f2_")              ||
-                    luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("g_")               || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("eCerberus")        ||
-                    luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("eGenesis")         || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("eWyvern")          ||
-                    luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("firstmefiress")    || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("iblis01")          ||
-                    luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("secondiblis")      || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("secondmefiress")   ||
-                    luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("shadow_vs_silver") || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("silver_vs_shadow") ||
-                    luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("solaris_super3")   || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("sonic_vs_silver")  ||
-                    luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("thirdiblis")       || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("silver_vs_sonic"))
-                {
-                    Helpers.LuaDecompile(luaFile);
-
-                    // Read the decompiled lua file into a string array.
-                    string[] lua = File.ReadAllLines(luaFile);
-
-                    // Loop through each line in this lua binary.
-                    for (int i = 0; i < lua.Length; i++)
-                    {
-                        // Search for the line that controls player spawns.
-                        if (lua[i].Contains("Game.SetPlayer"))
-                        {
-                            // Check if we need to use a regular character for this line.
-                            if (!lua[i].Contains("boss_") && characters)
-                            {
-                                // Split the line controlling the music playback up based on the quote marks around the song name.
-                                string[] character = lua[i].Split('"');
-
-                                // Replace the second value in the split array (the one containing the player lua name) with a selection from the characters list.
-                                character[1] = $"{SetCharacters[MainWindow.Randomiser.Next(SetCharacters.Count)]}.lua";
-
-                                // Rejoin the split array into one line and add it back to the original lua array.
-                                lua[i] = string.Join("\"", character);
-                            }
-                            // Check if we need to use a boss for this line.
-                            if (lua[i].Contains("boss_") && enemies && !enemiesNoBosses)
-                            {
-                                // Split the line controlling the music playback up based on the quote marks around the song name.
-                                string[] character = lua[i].Split('"');
-
-                                // Replace the second value in the split array (the one containing the player lua name) with a selection from the three valid boss luas.
-                                character[1] = BossCharacters[MainWindow.Randomiser.Next(BossCharacters.Count)];
-
-                                // Rejoin the split array into one line and add it back to the original lua array.
-                                lua[i] = string.Join("\"", character);
-                            }
-                        }
-                    }
-
-                    // Save the updated lua binary.
-                    File.WriteAllLines(luaFile, lua);
-                }
             }
         }
     }
