@@ -10,9 +10,19 @@ namespace MarathonRandomiser
 {
     internal class Custom
     {
+        /// <summary>
+        /// Converts and saves custom XMAs to the randomisation's mod directory.
+        /// </summary>
+        /// <param name="CustomSong">The filepath to the current song to process.</param>
+        /// <param name="ModDirectory">The path to the randomisation's mod directory.</param>
+        /// <param name="index">The number in the list of custom songs of the one we're processing.</param>
+        /// <param name="EnableCache">Whether or not we need to store the generated XMA file.</param>
         public static async Task Music(string CustomSong, string ModDirectory, int index, bool? EnableCache)
         {
+            // Get the name of the file with the extension replaced with .xma (used for the XMA Cache system).
             string origName = $"{Path.GetFileNameWithoutExtension(CustomSong)}.xma";
+
+            // Set up values we'll use for looping.
             int startLoop = 0;
             int endLoop = 0;
 
@@ -21,11 +31,14 @@ namespace MarathonRandomiser
             {
                 File.Copy(CustomSong, $@"{ModDirectory}\xenon\sound\custom{index}.xma");
             }
+
+            // If not, we need to check for it in the cache if we're using it, or convert it.
             else
             {
-                if (File.Exists($"{Environment.CurrentDirectory}\\Cache\\XMA\\{origName}") && EnableCache == true)
+                // Check if this file exists in the XMA Cache and copy it if the cache is enabled.
+                if (File.Exists($@"{Environment.CurrentDirectory}\Cache\XMA\{origName}") && EnableCache == true)
                 {
-                    File.Copy($"{Environment.CurrentDirectory}\\Cache\\XMA\\{origName}", $@"{ModDirectory}\xenon\sound\custom{index}.xma");
+                    File.Copy($@"{Environment.CurrentDirectory}\Cache\XMA\{origName}", $@"{ModDirectory}\xenon\sound\custom{index}.xma");
                 }
 
                 // If not, then convert it.
@@ -124,12 +137,17 @@ namespace MarathonRandomiser
                     File.WriteAllBytes($@"{ModDirectory}\xenon\sound\custom{index}.xma", xma);
 
                     // If the cache is enabled, copy the newly converted file to the XMA cache folder.
-                    if ((bool)EnableCache)
-                        File.Copy($@"{ModDirectory}\xenon\sound\custom{index}.xma", $"{Environment.CurrentDirectory}\\Cache\\XMA\\{origName}");
+                    if (EnableCache == true)
+                        File.Copy($@"{ModDirectory}\xenon\sound\custom{index}.xma", $@"{Environment.CurrentDirectory}\Cache\XMA\{origName}");
                 }
             }
         }
 
+        /// <summary>
+        /// Adds all the custom songs to bgm.sbk so they can play in game.
+        /// </summary>
+        /// <param name="archivePath">The path to the extracted sound.arc</param>
+        /// <param name="count">How many songs we're adding.</param>
         public static async Task UpdateBGMSoundBank(string archivePath, int count)
         {
             // Load bgm.sbk.
@@ -152,10 +170,18 @@ namespace MarathonRandomiser
             // Save the updated bgm.sbk.
             bgm.Save();
         }
-        
-        public static async Task VoicePacks(string VoxPack, string ModDirectory, string[] archives, List<string> setHints)
+
+        /// <summary>
+        /// Unpacks and copies over the content needed for Voice Packs to the randomisation's mod directory.
+        /// </summary>
+        /// <param name="VoxPack">The filepath to the current voice pack to process.</param>
+        /// <param name="ModDirectory">The path to the randomisation's mod directory.</param>
+        /// <param name="archives">The filepaths to the game's archives (needed to find sound.arc and text.arc so we can update voice_all_e.sbk and msg_hint.e.mst).</param>
+        /// <param name="setHints">The list of voice lines valid for Object Placement randomisation (needed so we can update it so the custom voices can be included).</param>
+        /// <returns>A boolean used by the ProgressLogger to report if the process was aborted.</returns>
+        public static async Task<bool> VoicePacks(string VoxPack, string ModDirectory, string[] archives, List<string> setHints)
         {
-            // Setup a check in chase we already have Custom Files.
+            // Setup a check in chase we already have Custom Files (as the Custom Music function always runs before this one).
             bool alreadyHasCustom = false;
             string sounds = "Custom=\"";
 
@@ -185,9 +211,9 @@ namespace MarathonRandomiser
                 process.WaitForExit();
             }
 
-            // If there isn't a messageTable.mst file, abort.
+            // If there isn't a messageTable.mst file, abort and return false so the logger can report it.
             if (!File.Exists($@"{MainWindow.TemporaryDirectory}\tempVox\{VoxPack}\messageTable.mst"))
-                return;
+                return false;
 
             // Copy XMAs to the Mod Directory and add them to the list of custom files.
             string[] voiceXmas = Directory.GetFiles($@"{MainWindow.TemporaryDirectory}\tempVox\{VoxPack}", "*.xma", SearchOption.TopDirectoryOnly);
@@ -204,11 +230,9 @@ namespace MarathonRandomiser
             // If we aren't already using custom files, then write the custom list the same way as the custom music function does.
             if (!alreadyHasCustom)
             {
-                using (StreamWriter configInfo = File.AppendText(Path.Combine($@"{ModDirectory}", "mod.ini")))
-                {
-                    configInfo.WriteLine(sounds);
-                    configInfo.Close();
-                }
+                using StreamWriter configInfo = File.AppendText(Path.Combine($@"{ModDirectory}", "mod.ini"));
+                configInfo.WriteLine(sounds);
+                configInfo.Close();
             }
             // If not, then patch the expanded list over the top of the existing one.
             else
@@ -270,7 +294,9 @@ namespace MarathonRandomiser
                     origMST.Save();
                 }
             }
-        }
 
+            // Return true to confirm it succeeded so the Logger doesn't need to report a failure.
+            return true;
+        }
     }
 }

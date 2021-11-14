@@ -289,7 +289,7 @@
 
         <!--Bottom Buttons-->
         <hc:Divider Margin="0,0,0,50" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Bottom"/>
-        <Button Content="Documentation" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="128" hc:IconElement.Geometry="{StaticResource ResourceKey=InfoGeometry}"/>
+        <Button Content="Documentation" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="128" hc:IconElement.Geometry="{StaticResource ResourceKey=InfoGeometry}" Click="Button_Documentation"/>
         <Button Content="About" HorizontalAlignment="Left" Margin="143,0,0,10" VerticalAlignment="Bottom" Width="128" hc:IconElement.Geometry="{StaticResource ResourceKey=AskGeometry}"/>
         <hc:Divider HorizontalAlignment="Left" Margin="276,0,0,0" Width="8" Orientation="Vertical" Height="51" VerticalAlignment="Bottom"/>
         <Button Content="Save Config" HorizontalAlignment="Left" Margin="289,0,0,10" VerticalAlignment="Bottom" Width="128" hc:IconElement.Geometry="{StaticResource ResourceKey=SaveGeometry}"/>

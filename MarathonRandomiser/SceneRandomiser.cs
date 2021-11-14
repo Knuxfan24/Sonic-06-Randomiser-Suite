@@ -7,8 +7,23 @@ namespace MarathonRandomiser
 {
     internal class SceneRandomiser
     {
-        public static async Task Load(string sceneLua, bool? ambient, bool? main, bool? sub, bool? direction, bool? enforceDirection, bool? fogColour, bool? fogDensity, bool? env, List<string> SceneEnvMaps)
+        /// <summary>
+        /// Process and randomise elements in a scene lua binary.
+        /// </summary>
+        /// <param name="sceneLua">The filepath to the lua binary we're processing.</param>
+        /// <param name="ambient">Whether or not to randomise ambient lighting.</param>
+        /// <param name="main">Whether or not to randomise main lighting.</param>
+        /// <param name="sub">Whether or not to randomise sub lighting.</param>
+        /// <param name="direction">Whether or not to randomise light directions.</param>
+        /// <param name="enforceDirection">Whether or not to force the main lights to be above the player/horizon in some way.</param>
+        /// <param name="fogColour">Whether or not to randomise fog colour.</param>
+        /// <param name="fogDensity">Whether or not to randomise how thick the fog is.</param>
+        /// <param name="env">Whether or not to randomise the cubemap.</param>
+        /// <param name="SceneEnvMaps">The list of valid cubemap file paths.</param>
+        /// <returns></returns>
+        public static async Task Process(string sceneLua, bool? ambient, bool? main, bool? sub, bool? direction, bool? enforceDirection, bool? fogColour, bool? fogDensity, bool? env, List<string> SceneEnvMaps)
         {
+            // Decompile this lua file.
             await Task.Run(() => Helpers.LuaDecompile(sceneLua));
 
             // Read the decompiled lua file into a string array.
@@ -79,75 +94,68 @@ namespace MarathonRandomiser
 
             // Save the updated lua binary.
             File.WriteAllLines(sceneLua, lua);
+        }
 
-            /// <summary>
-            /// Generates random RGBA values.
-            /// </summary>
-            /// <param name="lua">The string array we're using.</param>
-            /// <param name="startPos">Where in the string array we should be.</param>
-            /// <param name="splitLength">How long the split's length is (used by the fog colour).</param>
-            /// <param name="usePower">Whether the power value should be handled too (used by the fog colour to avoid changing the fog density as well).</param>
-            /// <returns></returns>
-            static async Task<string[]> RGBA(string[] lua, int startPos, int splitLength, bool usePower)
+        /// <summary>
+        /// Generates random RGBA values.
+        /// </summary>
+        /// <param name="lua">The string array we're using.</param>
+        /// <param name="startPos">Where in the string array we should be.</param>
+        /// <param name="splitLength">How long the split's length is (used by the fog colour).</param>
+        /// <param name="usePower">Whether the power value should be handled too (used by the fog colour to avoid changing the fog density as well).</param>
+        static async Task RGBA(string[] lua, int startPos, int splitLength, bool usePower)
+        {
+            // Split the RGB values into string arrays.
+            string[] rSplit = lua[startPos].Split(' ');
+            string[] gSplit = lua[startPos + 1].Split(' ');
+            string[] bSplit = lua[startPos + 2].Split(' ');
+
+            // Replace the value at the specified position with a random floating point number between 0 and 1.
+            rSplit[splitLength] = $"{MainWindow.Randomiser.NextDouble()},";
+            gSplit[splitLength] = $"{MainWindow.Randomiser.NextDouble()},";
+            bSplit[splitLength] = $"{MainWindow.Randomiser.NextDouble()},";
+
+            // Rejoin the splits into the main string array.
+            lua[startPos] = string.Join(' ', rSplit);
+            lua[startPos + 1] = string.Join(' ', gSplit);
+            lua[startPos + 2] = string.Join(' ', bSplit);
+
+            // Repeat the previous three steps for power if required.
+            if (usePower)
             {
-                // Split the RGB values into string arrays.
-                string[] rSplit = lua[startPos].Split(' ');
-                string[] gSplit = lua[startPos + 1].Split(' ');
-                string[] bSplit = lua[startPos + 2].Split(' ');
-
-                // Replace the value at the specified position with a random floating point number between 0 and 1.
-                rSplit[splitLength] = $"{MainWindow.Randomiser.NextDouble()},";
-                gSplit[splitLength] = $"{MainWindow.Randomiser.NextDouble()},";
-                bSplit[splitLength] = $"{MainWindow.Randomiser.NextDouble()},";
-
-                // Rejoin the splits into the main string array.
-                lua[startPos] = string.Join(' ', rSplit);
-                lua[startPos + 1] = string.Join(' ', gSplit);
-                lua[startPos + 2] = string.Join(' ', bSplit);
-
-                // Repeat the previous three steps for power if required.
-                if (usePower)
-                {
-                    string[] powerSplit = lua[startPos + 3].Split(' ');
-                    powerSplit[splitLength] = $"{MainWindow.Randomiser.NextDouble()}";
-                    lua[startPos + 3] = string.Join(' ', powerSplit);
-                }
-
-                // Return the edited string array.
-                return lua;
+                string[] powerSplit = lua[startPos + 3].Split(' ');
+                powerSplit[splitLength] = $"{MainWindow.Randomiser.NextDouble()}";
+                lua[startPos + 3] = string.Join(' ', powerSplit);
             }
+        }
 
-            /// <summary>
-            /// Generates a random set of light direction values.
-            /// </summary>
-            /// <param name="lua">The string array we're using.</param>
-            /// <param name="startPos">Where in the string array we should be.</param>
-            /// <param name="enforce">Whether the direction should be enforced.</param>
-            /// <returns></returns>
-            static async Task<string[]> Direction(string[] lua, int startPos, bool? enforce)
-            {
-                // Split the XYZ values into string arrays.
-                string[] xSplit = lua[startPos].Split(' ');
-                string[] ySplit = lua[startPos + 1].Split(' ');
-                string[] zSplit = lua[startPos + 2].Split(' ');
+        /// <summary>
+        /// Generates a random set of light direction values.
+        /// </summary>
+        /// <param name="lua">The string array we're using.</param>
+        /// <param name="startPos">Where in the string array we should be.</param>
+        /// <param name="enforce">Whether the direction should be enforced.</param>
+        /// <returns></returns>
+        static async Task Direction(string[] lua, int startPos, bool? enforce)
+        {
+            // Split the XYZ values into string arrays.
+            string[] xSplit = lua[startPos].Split(' ');
+            string[] ySplit = lua[startPos + 1].Split(' ');
+            string[] zSplit = lua[startPos + 2].Split(' ');
 
-                // Generate random floating point numbers between -1 and 1, with six decimal places.
-                xSplit[8] = $"{Math.Round(MainWindow.Randomiser.NextDouble() * (1 - -1) + -1, 6)},";
-                ySplit[8] = $"{Math.Round(MainWindow.Randomiser.NextDouble() * (1 - -1) + -1, 6)},";
-                zSplit[8] = $"{Math.Round(MainWindow.Randomiser.NextDouble() * (1 - -1) + -1, 6)}";
+            // Generate random floating point numbers between -1 and 1, with six decimal places.
+            xSplit[8] = $"{Math.Round(MainWindow.Randomiser.NextDouble() * (1 - -1) + -1, 6)},";
+            ySplit[8] = $"{Math.Round(MainWindow.Randomiser.NextDouble() * (1 - -1) + -1, 6)},";
+            zSplit[8] = $"{Math.Round(MainWindow.Randomiser.NextDouble() * (1 - -1) + -1, 6)}";
 
-                // If the light value on the Z Axis is negative, flip it.
-                if (zSplit[8].Contains('-') && enforce == true)
-                    zSplit[8] = zSplit[8].Replace("-", string.Empty);
+            // If the light value on the Z Axis is negative, flip it.
+            if (zSplit[8].Contains('-') && enforce == true)
+                zSplit[8] = zSplit[8].Replace("-", string.Empty);
 
-                // Rejoin the splits into the main string array.
-                lua[startPos] = string.Join(' ', xSplit);
-                lua[startPos + 1] = string.Join(' ', ySplit);
-                lua[startPos + 2] = string.Join(' ', zSplit);
-
-                // Return the edited string array.
-                return lua;
-            }
+            // Rejoin the splits into the main string array.
+            lua[startPos] = string.Join(' ', xSplit);
+            lua[startPos + 1] = string.Join(' ', ySplit);
+            lua[startPos + 2] = string.Join(' ', zSplit);
         }
     }
 }

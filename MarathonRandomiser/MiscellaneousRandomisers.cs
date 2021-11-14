@@ -5,13 +5,18 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MarathonRandomiser
 {
     internal class MiscellaneousRandomisers
     {
+        /// <summary>
+        /// Randomises the music to play.
+        /// </summary>
+        /// <param name="luaFile">The lua to process.</param>
+        /// <param name="MiscMusic">The list of valid songs.</param>
+        /// <returns></returns>
         public static async Task MusicRandomiser(string luaFile, List<string> MiscMusic)
         {
             // Decompile this lua binary.
@@ -75,11 +80,11 @@ namespace MarathonRandomiser
             // Save the updated ScriptParameter.bin.
             scriptPackage.Save();
         }
-        
+
         /// <summary>
         /// Randomises the final nibble of the collision files to change their surface types.
         /// </summary>
-        /// <param name="archivePath">The path to the already unpacked stage.arc containing all the collision binary files.</param>
+        /// <param name="collisionFile">The filepath to the collision.bin file we're processing.</param>
         /// <param name="perFace">Whether the collision should be randomised per face rather than per type.</param>
         public static async Task SurfaceRandomiser(string collisionFile, bool? perFace)
         {
@@ -249,14 +254,22 @@ namespace MarathonRandomiser
             }
         }
 
+        /// <summary>
+        /// Sets random patches to be required so the Mod Manager will auto install them with the randomisation.
+        /// </summary>
+        /// <param name="ModDirectory">The path to the randomisation's mod directory.</param>
+        /// <param name="MiscPatches">The list of valid patch files.</param>
+        /// <param name="Weight">The likelyhood for a patch to be enabled.</param>
+        /// <returns></returns>
         public static async Task PatchRandomiser(string ModDirectory, List<string> MiscPatches, int Weight)
         {
             // Create the template list of patches to add to the mod configuration ini.
             string patchList = "RequiredPatches=\"";
 
+            // Loop through our list of valid patches.
             foreach(string patch in MiscPatches)
             {
-                // Toss a coin to see if we should actually use this patch, if so, add the name of its mlua file to the list.
+                // Roll a number between 0 and 100, if it's smaller than or equal to Weight, then add the patch's name to the list to write to mod.ini.
                 if (MainWindow.Randomiser.Next(0, 101) <= Weight)
                     patchList += $"{Path.GetFileName(patch)},";
             }

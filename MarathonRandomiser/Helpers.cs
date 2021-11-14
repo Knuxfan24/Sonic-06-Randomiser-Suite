@@ -70,16 +70,25 @@ namespace MarathonRandomiser
                 listBox.Items.Add(item);
         }
 
+        /// <summary>
+        /// Loops through every item in a CheckedListBox element and return a list of their tags if checked.
+        /// </summary>
+        /// <param name="listBox">The CheckedListBox element to loop through.</param>
+        /// <returns>The string list to return.</returns>
         public static List<string> EnumerateCheckedListBox(CheckedListBox listBox)
         {
+            // Set up our string list.
             List<string> list = new();
 
+            // Loop through each item in the CheckedListBox element.
             foreach (CheckedListBoxItem item in listBox.Items)
             {
+                // If the item is checked, add its tag value to the list.
                 if (item.Checked)
                     list.Add(item.Tag);
             }
 
+            // Return the string list.
             return list;
         }
 
@@ -89,7 +98,7 @@ namespace MarathonRandomiser
         /// <param name="path">Path to the Lua Binary to decompile.</param>
         public static async Task LuaDecompile(string path)
         {
-            // Marathon throws an exception if a Lua is already decompiled, so catch any.
+            // Marathon throws an exception if a Lua is already decompiled, so catch any to prevent a program crash.
             try
             {
                 LuaBinary lub = new(path, true);

@@ -1,16 +1,39 @@
 ﻿using Marathon.Formats.Placement;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MarathonRandomiser
 {
     internal class ObjectPlacementRandomiser
     {
-        public static async Task Load(string setFile, bool? enemies, bool? enemiesNoBosses, bool? behaviour, bool? behaviourNoEnforce, bool? characters, bool? itemCapsules, bool? commonProps,
+        /// <summary>
+        /// Process and randomise elements in a set file.
+        /// </summary>
+        /// <param name="setFile">The filepath to the set file we're processing.</param>
+        /// <param name="enemies">Whether or not enemy types should be randomised.</param>
+        /// <param name="enemiesNoBosses">Whether or not bosses should be excluded from enemy randomisation/</param>
+        /// <param name="behaviour">Whether or not enemy behaviours should be randomised.</param>
+        /// <param name="behaviourNoEnforce">Whether or not enemy behaviours can be from another enemy type.</param>
+        /// <param name="characters">Whether or not player_start2 objects have their characters randomised.</param>
+        /// <param name="itemCapsules">Whether or not the contents of Item Capsules are randomised.</param>
+        /// <param name="commonProps">Whether or not props that pull from Common.bin should be randomised.</param>
+        /// <param name="pathProps">Whether or not props that pull from PathObj.bin should be randomised.</param>
+        /// <param name="hints">Whether or not voice lines should be randomised.</param>
+        /// <param name="doors">Whether or not door types should be randomised.</param>
+        /// <param name="drawDistance">Whether or not object draw distances should be randomised.</param>
+        /// <param name="cosmetic">Whether or not various small cosmetic elements should be randomised.</param>
+        /// <param name="SetEnemies">The list of valid enemies.</param>
+        /// <param name="SetCharacters">The list of valid characters.</param>
+        /// <param name="SetItemCapsules">The list of valid item types.</param>
+        /// <param name="SetCommonProps">The list of valid Common.bin based props.</param>
+        /// <param name="SetPathProps">The list of valid PathObj.bin based props.</param>
+        /// <param name="SetHints">The list of valid hint voice lines.</param>
+        /// <param name="SetDoors">The list of valid door types.</param>
+        /// <param name="minDrawDistance">The minimum allowed draw distance.</param>
+        /// <param name="maxDrawDistance">The maximum allowed draw distance.</param>
+        /// <returns></returns>
+        public static async Task Process(string setFile, bool? enemies, bool? enemiesNoBosses, bool? behaviour, bool? behaviourNoEnforce, bool? characters, bool? itemCapsules, bool? commonProps,
                                       bool? pathProps, bool? hints, bool? doors, bool? drawDistance, bool? cosmetic, List<string> SetEnemies, List<string> SetCharacters, List<string> SetItemCapsules,
                                       List<string> SetCommonProps, List<string> SetPathProps, List<string> SetHints, List<string> SetDoors, int minDrawDistance, int maxDrawDistance)
         {
@@ -35,9 +58,9 @@ namespace MarathonRandomiser
                     case "enemy":
                     case "enemyextra":
                         if (enemies == true)
-                            await Task.Run(() => EnemyTypeRandomiser(setObject, SetEnemies, (bool)enemiesNoBosses));
+                            await Task.Run(() => EnemyTypeRandomiser(setObject, SetEnemies, enemiesNoBosses));
                         if (behaviour == true)
-                            await Task.Run(() => EnemyBehaviourRandomiser(setObject, (bool)behaviourNoEnforce));
+                            await Task.Run(() => EnemyBehaviourRandomiser(setObject, behaviourNoEnforce));
                         break;
 
                     // Randomise character types if we need to.
@@ -99,9 +122,10 @@ namespace MarathonRandomiser
         /// </summary>
         /// <param name="setObject">The object we're editing.</param>
         /// <param name="enemyTypes">The list of valid enemy types.</param>
-        static async Task EnemyTypeRandomiser(SetObject setObject, List<string> enemyTypes, bool enemiesNoBosses)
+        static async Task EnemyTypeRandomiser(SetObject setObject, List<string> enemyTypes, bool? enemiesNoBosses)
         {
-            if (enemiesNoBosses && (setObject.Parameters[0].Data.ToString() == "eCerberus" || setObject.Parameters[0].Data.ToString() == "eGenesis" ||
+            // If this object is a boss but the user has disallowed boss randomisation, then don't change anything.
+            if (enemiesNoBosses == true && (setObject.Parameters[0].Data.ToString() == "eCerberus" || setObject.Parameters[0].Data.ToString() == "eGenesis" ||
                 setObject.Parameters[0].Data.ToString() == "eWyvern" || setObject.Parameters[0].Data.ToString() == "firstIblis" || setObject.Parameters[0].Data.ToString() == "secondIblis" ||
                 setObject.Parameters[0].Data.ToString() == "thirdIblis" || setObject.Parameters[0].Data.ToString() == "firstmefiress" || setObject.Parameters[0].Data.ToString() == "secondmefiress" ||
                 setObject.Parameters[0].Data.ToString() == "solaris01" || setObject.Parameters[0].Data.ToString() == "solaris02"))
@@ -157,10 +181,10 @@ namespace MarathonRandomiser
         /// </summary>
         /// <param name="setObject">The object we're editing.</param>
         /// <param name="dontEnforceBehaviours">Whether we should ensure that the chosen behaviour belongs to this enemy type.</param>
-        static async Task EnemyBehaviourRandomiser(SetObject setObject, bool dontEnforceBehaviours)
+        static async Task EnemyBehaviourRandomiser(SetObject setObject, bool? dontEnforceBehaviours)
         {
             // Setup for if we are enforcing the behaviour type.
-            if (!dontEnforceBehaviours)
+            if (dontEnforceBehaviours == false)
             {
                 // Create lists of the valid parameters for each enemy (based on data previously gathered from examination of ScriptParameter.bin).
                 List<string> eGunnerParameters       = new() { "eGunner_Normal", "eGunner_Fix", "eGunner_Fix_Vulcan", "eGunner_Fix_Rocket", "eGunner_Wall_Fix", "eGunner_Chase", "eGunner_Trans" };
@@ -291,7 +315,7 @@ namespace MarathonRandomiser
         static async Task CommonPropRandomiser(SetObject setObject, List<string> commonPropTypes)
         {
             // Standard physics props (physicspath seemed to crash the game a lot, so it's disabled for now).
-            if (setObject.Type == "objectphysics" /*|| SetObject.Type == "physicspath" */|| setObject.Type == "objectphysics_item")
+            if (setObject.Type == "objectphysics" /*|| SetObject.Type == "physicspath"*/ || setObject.Type == "objectphysics_item")
             {
                 // Set a random prop type from the list.
                 setObject.Parameters[0].Data = commonPropTypes[MainWindow.Randomiser.Next(commonPropTypes.Count)];
@@ -310,31 +334,29 @@ namespace MarathonRandomiser
             // If this object is a wap_conifer object, then we change it into an objectphyiscs object instead.
             if (setObject.Type == "wap_conifer")
             {
-                // Change the object type.
-                setObject.Type = "objectphysics";
+                // Roll the prop type here, as there's no point changing it, only to find we made it a wap_confier and have to undo the change.
+                string newProp = commonPropTypes[MainWindow.Randomiser.Next(commonPropTypes.Count)];
+                
+                // If we wouldn't just be making it back into a wap_confier, then proceed.
+                if (newProp != "wap_confier")
+                {
+                    // Change the object type.
+                    setObject.Type = "objectphysics";
 
-                // Create the parameters that objectphysics needs, the prop type from the list and the restart boolean.
-                SetParameter setparam = new()
-                {
-                    Data = commonPropTypes[MainWindow.Randomiser.Next(commonPropTypes.Count)],
-                    Type = ObjectDataType.String
-                };
-                setObject.Parameters.Add(setparam);
-                setparam = new()
-                {
-                    Data = false,
-                    Type = ObjectDataType.Boolean
-                };
-                setObject.Parameters.Add(setparam);
-
-                // If we SOMEHOW picked wap_confier for this one, then just undo what we did.
-                if (setObject.Parameters[0].Data.ToString() == "wap_confier")
-                {
-                    setObject.Type = "wap_conifer";
-                    setObject.Parameters.Clear();
+                    // Create the parameters that objectphysics needs, the prop type from the list and the restart boolean.
+                    SetParameter setparam = new()
+                    {
+                        Data = newProp,
+                        Type = ObjectDataType.String
+                    };
+                    setObject.Parameters.Add(setparam);
+                    setparam = new()
+                    {
+                        Data = false,
+                        Type = ObjectDataType.Boolean
+                    };
+                    setObject.Parameters.Add(setparam);
                 }
-
-                return;
             }
 
             // Red Solaris Eyes in End of the World
@@ -414,8 +436,17 @@ namespace MarathonRandomiser
             }
         }
 
+        /// <summary>
+        /// Patch boss scripts (also includes enemy scripts because hmm) so they don't screw with the camera if randomised into regular enemies.
+        /// Also used to change the voice lines used during the fights.
+        /// </summary>
+        /// <param name="luaFile">The lua binary we're processing.</param>
+        /// <param name="enemies">Whether enemy randomisation is on.</param>
+        /// <param name="hints">Whether hint randomisation is on.</param>
+        /// <param name="SetHints">The list of valid hint voice lines</param>
         public static async Task BossPatch(string luaFile, bool? enemies, bool? hints, List<string> SetHints)
         {
+            // Decompile this luaFile.
             await Task.Run(() => Helpers.LuaDecompile(luaFile));
 
             // Read the decompiled lua file into a string array.
@@ -446,11 +477,21 @@ namespace MarathonRandomiser
             File.WriteAllLines(luaFile, lua);
         }
 
+        /// <summary>
+        /// Randomises player_start2 values set in Lua, used for a few stages and character battles.
+        /// </summary>
+        /// <param name="luaFile">The lua binary we're processing.</param>
+        /// <param name="characters">Whether character randomisation is on.</param>
+        /// <param name="SetCharacters">The list of valid characters.</param>
+        /// <param name="enemies">Whether enemy randomisation is on.</param>
+        /// <param name="enemiesNoBosses">Whether we're randomising bosses or not.</param>
+        /// <returns></returns>
         public static async Task LuaPlayerStartRandomiser(string luaFile, bool? characters, List<string> SetCharacters, bool? enemies, bool? enemiesNoBosses)
         {
             // Make a list of the three boss player luas to pick from.
             List<string> BossCharacters = new() { "boss_sonic.lua", "boss_shadow.lua", "boss_silver.lua" };
 
+            // Decompile this lua binary.
             await Task.Run(() => Helpers.LuaDecompile(luaFile));
 
             // Read the decompiled lua file into a string array.
@@ -465,7 +506,7 @@ namespace MarathonRandomiser
                     // Check if we need to use a regular character for this line.
                     if (!lua[i].Contains("boss_") && characters == true)
                     {
-                        // Split the line controlling the music playback up based on the quote marks around the song name.
+                        // Split the line controlling the character type based on the quote marks around the lua name.
                         string[] character = lua[i].Split('"');
 
                         // Replace the second value in the split array (the one containing the player lua name) with a selection from the characters list.
@@ -478,7 +519,7 @@ namespace MarathonRandomiser
                     // Check if we need to use a boss for this line.
                     if (lua[i].Contains("boss_") && enemies == true && enemiesNoBosses == false)
                     {
-                        // Split the line controlling the music playback up based on the quote marks around the song name.
+                        // Split the line controlling the character type based on the quote marks around the lua name.
                         string[] character = lua[i].Split('"');
 
                         // Replace the second value in the split array (the one containing the player lua name) with a selection from the three valid boss luas.
