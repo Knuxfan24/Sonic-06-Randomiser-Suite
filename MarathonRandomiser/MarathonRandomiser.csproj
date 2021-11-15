@@ -5,7 +5,12 @@
     <TargetFramework>net5.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>ExternalResources\Logo.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="ExternalResources\Logo.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="BE32.Marathon" Version="1.0.24" />
@@ -15,7 +20,6 @@
 
   <ItemGroup>
     <Folder Include="CustomControls\" />
-    <Folder Include="ExternalResources\" />
   </ItemGroup>
 
   <ItemGroup>
