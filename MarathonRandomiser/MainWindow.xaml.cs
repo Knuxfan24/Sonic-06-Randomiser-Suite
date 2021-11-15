@@ -1,5 +1,6 @@
 ﻿using Ookii.Dialogs.Wpf;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -38,7 +39,7 @@ namespace MarathonRandomiser
         /// <summary>
         /// Create the Voice Packs and XMA Cache Directories if they don't exist.
         /// </summary>
-        private void GenerateDirectories()
+        private static void GenerateDirectories()
         {
             // Create the Voice Packs directory.
             if (!Directory.Exists($@"{Environment.CurrentDirectory}\VoicePacks"))
@@ -314,6 +315,16 @@ namespace MarathonRandomiser
                     throw new NotImplementedException();
             }
         }
+        
+        /// <summary>
+        /// Add text to the TextBlock_ProgressLogger element and snap the scroll bar to the bottom.
+        /// </summary>
+        /// <param name="text">The text to add to the element.</param>
+        private void UpdateLogger(string text)
+        {
+            TextBlock_ProgressLogger.Text += $"{text}\n";
+            ScrollViewer_ProgressLogger.ScrollToEnd();
+        }
         #endregion
 
         #region Debug Functions
@@ -339,6 +350,38 @@ namespace MarathonRandomiser
                 UseShellExecute = true
             };
             Process.Start(psi);
+        }
+
+        /// <summary>
+        /// Opens a File Browser to select where to save a config ini to.
+        /// </summary>
+        private void SaveConfig_Button(object sender, RoutedEventArgs e)
+        {
+            VistaSaveFileDialog configSaveBrowser = new()
+            {
+                Filter = "Randomiser Config (*.ini)|*.ini",
+                RestoreDirectory = true
+            };
+
+            // Run the SaveConfig funciton if the file location specified is valid.
+            if (configSaveBrowser.ShowDialog() == true)
+                SaveConfig(configSaveBrowser.FileName);
+        }
+
+        /// <summary>
+        /// Opens a File Browser to select a config ini to load.
+        /// </summary>
+        private void LoadConfig_Button(object sender, RoutedEventArgs e)
+        {
+            VistaOpenFileDialog OpenFileDialog = new()
+            {
+                Title = "Select Configuration INI",
+                Multiselect = false,
+                Filter = "Randomiser Config (*.ini)|*.ini"
+            };
+
+            if (OpenFileDialog.ShowDialog() == true)
+                LoadConfig(OpenFileDialog.FileName);
         }
 
         /// <summary>
@@ -846,14 +889,207 @@ namespace MarathonRandomiser
         }
         #endregion
 
+        #region Config Saving/Loading
         /// <summary>
-        /// Add text to the TextBlock_ProgressLogger element and snap the scroll bar to the bottom.
+        /// Saves a configuration ini.
         /// </summary>
-        /// <param name="text">The text to add to the element.</param>
-        private void UpdateLogger(string text)
+        /// <param name="location">The filepath we're saving to.</param>
+        private void SaveConfig(string location)
         {
-            TextBlock_ProgressLogger.Text += $"{text}\n";
-            ScrollViewer_ProgressLogger.ScrollToEnd();
+            // Set up our StreamWriter.
+            StreamWriter configInfo = new(File.Open(location, FileMode.Create));
+
+            // Basic Header, used to identify in the loading process.
+            configInfo.WriteLine($"[Sonic '06 Randomiser Suite Configuration File]");
+            configInfo.WriteLine();
+
+            // General Block.
+            configInfo.WriteLine($"[General]");
+            configInfo.WriteLine($"TextBox_General_ModsDirectory={TextBox_General_ModsDirectory.Text}");
+            configInfo.WriteLine($"TextBox_General_GameExecutable={TextBox_General_GameExecutable.Text}");
+            configInfo.WriteLine($"TextBox_General_Seed={TextBox_General_Seed.Text}");
+            configInfo.WriteLine();
+
+            // Object Placement Block.
+            ConfigTabRead(configInfo, "Object Placement", StackPanel_ObjectPlacement);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_SET_EnemyTypes);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_SET_Characters);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_SET_ItemCapsules);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_SET_CommonProps);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_SET_PathProps);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_SET_Hints);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_SET_Doors);
+            configInfo.WriteLine();
+
+            // Event Block.
+            ConfigTabRead(configInfo, "Event", StackPanel_Event);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_Event_Lighting);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_Event_Terrain);
+            configInfo.WriteLine();
+
+            // Scene Block.
+            ConfigTabRead(configInfo, "Scene", StackPanel_Scene);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_Scene_EnvMaps);
+            configInfo.WriteLine();
+
+            // Misc Block.
+            ConfigTabRead(configInfo, "Misc", StackPanel_Misc);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_Misc_Songs);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_Misc_Languages);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_Misc_Patches);
+            configInfo.WriteLine();
+
+            // Custom Block.
+            configInfo.WriteLine($"[Custom]");
+            configInfo.WriteLine($"TextBox_Custom_Music={TextBox_Custom_Music.Text}");
+            configInfo.WriteLine($"CheckBox_Custom_Music_XMACache={CheckBox_Custom_Music_XMACache.IsChecked}");
+            ConfigCheckedListBoxRead(configInfo, CheckedList_Custom_Vox);
+
+            // End Write.
+            configInfo.Close();
         }
+
+        /// <summary>
+        /// Reads all the check box states and numeric up down reels from a tab and adds them to the config writer.
+        /// </summary>
+        /// <param name="configInfo">The StreamWriter from the main save function.</param>
+        /// <param name="sectionHeader">The section header to write.</param>
+        /// <param name="element">The StackPanel we're looking through.</param>
+        private static void ConfigTabRead(StreamWriter configInfo, string sectionHeader, DependencyObject element)
+        {
+            // Write the header for this section of the ini.
+            configInfo.WriteLine($"[{sectionHeader}]");
+
+            // Get all the children of this StackPanel element.
+            IEnumerable? children = LogicalTreeHelper.GetChildren(element);
+
+            // Loop through each item in this StackPanel element.
+            foreach (object? item in children)
+            {
+                // Try to get the item as both a Checkbox and an NumericUpDown element.
+                CheckBox? checkbox = item as CheckBox;
+                HandyControl.Controls.NumericUpDown? numeric = item as HandyControl.Controls.NumericUpDown;
+
+                // If it's a Checkbox element, write the name and checked state.
+                if (checkbox != null)
+                    configInfo.WriteLine($"{checkbox.Name}={checkbox.IsChecked}");
+
+                // If it's a NumericUpDown element, write the name and value.
+                if (numeric != null)
+                    configInfo.WriteLine($"{numeric.Name}={numeric.Value}");
+            }
+        }
+
+        /// <summary>
+        /// Reads data from a CheckedListBox element to add to the configuration ini.
+        /// </summary>
+        /// <param name="configInfo">The StreamWriter from the main save function.</param>
+        /// <param name="listBox">The CheckedListBox to parse.</param>
+        private static void ConfigCheckedListBoxRead(StreamWriter configInfo, CheckedListBox listBox)
+        {
+            // Set up the key.
+            string typeList = $"{listBox.Name}=";
+
+            // Loop through the CheckedListBox element.
+            for (int i = 0; i < listBox.Items.Count; i++)
+            {
+                // If this element is checked, add its tag to the list.
+                if (listBox.Items[i].Checked)
+                    typeList += $"{listBox.Items[i].Tag},";
+            }
+
+            // Remove the last comma.
+            if (typeList.Contains(','))
+                typeList = typeList.Remove(typeList.LastIndexOf(','));
+
+            // Write this list to the ini.
+            configInfo.WriteLine(typeList);
+        }
+
+        /// <summary>
+        /// Loads and updates settings from a configuration ini.
+        /// </summary>
+        /// <param name="location">The config ini to load.</param>
+        /// <exception cref="NotImplementedException">Thrown if we just cannot find element or its type.</exception>
+        private void LoadConfig(string location)
+        {
+            // Read the config file into a string array.
+            string[] config = File.ReadAllLines(location);
+
+            // Check that the first thing in the config file is our header. If not, abort.
+            if (config[0] != "[Sonic '06 Randomiser Suite Configuration File]")
+                return;
+
+            // Loop through each line in the string array.
+            foreach (string setting in config)
+            {
+                // Ignore comment values (currently don't write any, but could do), empty lines and section tags.
+                if (setting.StartsWith(';') || setting == "" || setting.StartsWith('[') || setting.EndsWith(']'))
+                    continue;
+
+                // Split this line so we can get the key and the value(s).
+                var split = setting.Split('=');
+
+                // Search for this key's name.
+                object element = Grid_General.FindName(split[0]);
+                element = Grid_ObjectPlacement.FindName(split[0]);
+                element = Grid_Event.FindName(split[0]);
+                element = Grid_Scene.FindName(split[0]);
+                element = Grid_Miscellaneous.FindName(split[0]);
+                element = Grid_Custom.FindName(split[0]);
+
+                // If we find this key's name, continue on.
+                if (element != null)
+                {
+                    // Determine this element type.
+                    CheckBox? checkbox = element as CheckBox;
+                    HandyControl.Controls.NumericUpDown? numeric = element as HandyControl.Controls.NumericUpDown;
+                    TextBox? textbox = element as TextBox;
+                    CheckedListBox? checkedlist = element as CheckedListBox;
+                    
+                    // If it's a check box, check it or uncheck it depending on the key value.
+                    if (checkbox != null)
+                        checkbox.IsChecked = bool.Parse(split[1]);
+
+                    // If it's a numericupdown, set its value depending on the key's.
+                    if (numeric != null)
+                        numeric.Value = double.Parse(split[1]);
+
+                    // If it's a text box, fill it in with the key's value.
+                    if (textbox != null)
+                        textbox.Text = split[1];
+
+                    // If it's a checkedlistbox, invalidate the existing list, loop through and check ones that have the tags specified in the list.
+                    if (checkedlist != null)
+                    {
+                        string[] checkedlistValues = split[1].Split(',');
+                        Helpers.InvalidateCheckedListBox(checkedlist, true, false);
+
+                        foreach(string value in checkedlistValues)
+                        {
+                            foreach (var item in checkedlist.Items)
+                            {
+                                if (item.Tag == value)
+                                    item.Checked = true;
+                            }
+                        }
+                    }
+
+                    // If we've failed to find this element, we've buggered something up, throw an exception.
+                    if (checkbox == null && numeric == null && textbox == null && checkedlist == null)
+                    {
+                        throw new NotImplementedException();
+                    }
+                }
+
+                // If not, we've buggered something up, throw an exception.
+                else
+                {
+                    throw new NotImplementedException();
+                }
+            }
+        }
+        #endregion
+
     }
 }

@@ -12,7 +12,7 @@
         <hc:TabControl Style="{StaticResource TabControlInLine}" Margin="0,0,0,50" x:Name="TabControl_Main">
             <!--General Tab-->
             <hc:TabItem Header="General" BorderBrush="#B146C2" >
-                <Grid Background="#FF181818">
+                <Grid Background="#FF181818" Name="Grid_General">
                     <!--Mods Directory-->
                     <Label Content="Mods Directory" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}"/>
                     <Label Content="The directory to place the generated mod into." HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" FontStyle="Italic">
@@ -56,7 +56,7 @@
             <hc:TabItem Header="Object Placement" BorderBrush="#B146C2" >
                 <Grid Background="#FF181818" Name="Grid_ObjectPlacement">
                     <!--Object Placement Configuration Checkboxes/Controls-->
-                    <StackPanel HorizontalAlignment="Left" Width="210">
+                    <StackPanel HorizontalAlignment="Left" Width="210" Name="StackPanel_ObjectPlacement">
                         <StackPanel.Resources>
                             <Style BasedOn="{StaticResource CheckBoxBaseStyle}" TargetType="{x:Type CheckBox}">
                                 <Setter Property="Margin" Value="10,10,0,0" />
@@ -128,7 +128,7 @@
             <hc:TabItem Header="Event" BorderBrush="#B146C2" >
                 <Grid Background="#FF181818" Name="Grid_Event">
                     <!--Event Configuration Checkboxes/Controls-->
-                    <StackPanel HorizontalAlignment="Left" Width="210">
+                    <StackPanel HorizontalAlignment="Left" Width="210" Name="StackPanel_Event">
                         <StackPanel.Resources>
                             <Style BasedOn="{StaticResource CheckBoxBaseStyle}" TargetType="{x:Type CheckBox}">
                                 <Setter Property="Margin" Value="10,10,0,0" />
@@ -171,7 +171,7 @@
             <hc:TabItem Header="Scene" BorderBrush="#B146C2" >
                 <Grid Background="#FF181818" Name="Grid_Scene">
                     <!--Scene Configuration Checkboxes/Controls-->
-                    <StackPanel HorizontalAlignment="Left" Width="210">
+                    <StackPanel HorizontalAlignment="Left" Width="210" Name="StackPanel_Scene">
                         <StackPanel.Resources>
                             <Style BasedOn="{StaticResource CheckBoxBaseStyle}" TargetType="{x:Type CheckBox}">
                                 <Setter Property="Margin" Value="10,10,0,0" />
@@ -205,7 +205,7 @@
             <hc:TabItem Header="Miscellaneous" BorderBrush="#B146C2" >
                 <Grid Background="#FF181818" Name="Grid_Miscellaneous">
                     <!--Miscellaneous Configuration Checkboxes/Controls-->
-                    <StackPanel HorizontalAlignment="Left" Width="210">
+                    <StackPanel HorizontalAlignment="Left" Width="210" Name="StackPanel_Misc">
                         <StackPanel.Resources>
                             <Style BasedOn="{StaticResource CheckBoxBaseStyle}" TargetType="{x:Type CheckBox}">
                                 <Setter Property="Margin" Value="10,10,0,0" />
@@ -262,6 +262,7 @@
                     </Label>
                     <hc:TextBox x:Name="TextBox_Custom_Music" Margin="10,45,53,0" TextWrapping="NoWrap" VerticalAlignment="Top" SelectionBrush="#FFB146C2"/>
                     <Button HorizontalAlignment="Right" Margin="0,45,10,0" VerticalAlignment="Top" hc:IconElement.Geometry="{StaticResource DragHorizontalGeometry}" Width="38" Click="CustomMusic_Browse"/>
+                    <CheckBox x:Name="CheckBox_Custom_Music_XMACache" Content="Cache Custom XMAs" HorizontalAlignment="Left" Margin="10,80,0,0" VerticalAlignment="Top" IsChecked="True"/>
 
                     <!--Voice Packs-->
                     <Label Content="Voice Packs" HorizontalAlignment="Left" Margin="10,103,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}"/>
@@ -275,7 +276,6 @@
                     </Grid>
                     <Button Content="Select All" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Height="40" Width="128" Click="CheckedListBox_SelectionToggle"/>
                     <Button Content="Deselect All" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Height="40" Width="128" Click="CheckedListBox_SelectionToggle"/>
-                    <CheckBox x:Name="CheckBox_Custom_Music_XMACache" Content="Cache Custom XMAs" HorizontalAlignment="Left" Margin="10,80,0,0" VerticalAlignment="Top" IsChecked="True"/>
                 </Grid>
             </hc:TabItem>
 
@@ -292,8 +292,8 @@
         <Button Content="Documentation" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="128" hc:IconElement.Geometry="{StaticResource ResourceKey=InfoGeometry}" Click="Button_Documentation"/>
         <Button Content="About" HorizontalAlignment="Left" Margin="143,0,0,10" VerticalAlignment="Bottom" Width="128" hc:IconElement.Geometry="{StaticResource ResourceKey=AskGeometry}"/>
         <hc:Divider HorizontalAlignment="Left" Margin="276,0,0,0" Width="8" Orientation="Vertical" Height="51" VerticalAlignment="Bottom"/>
-        <Button Content="Save Config" HorizontalAlignment="Left" Margin="289,0,0,10" VerticalAlignment="Bottom" Width="128" hc:IconElement.Geometry="{StaticResource ResourceKey=SaveGeometry}"/>
-        <Button x:Name ="Button_LoadConfig" Content="Load Config" Margin="422,0,0,10" VerticalAlignment="Bottom" Width="128" hc:IconElement.Geometry="{StaticResource ResourceKey=DownloadGeometry}" HorizontalAlignment="Left"/>
+        <Button Content="Save Config" HorizontalAlignment="Left" Margin="289,0,0,10" VerticalAlignment="Bottom" Width="128" hc:IconElement.Geometry="{StaticResource ResourceKey=SaveGeometry}" Click="SaveConfig_Button"/>
+        <Button x:Name ="Button_LoadConfig" Content="Load Config" Margin="422,0,0,10" VerticalAlignment="Bottom" Width="128" hc:IconElement.Geometry="{StaticResource ResourceKey=DownloadGeometry}" HorizontalAlignment="Left" Click="LoadConfig_Button"/>
         <hc:Divider HorizontalAlignment="Left" Margin="555,0,0,0" Width="8" Orientation="Vertical" Height="51" VerticalAlignment="Bottom"/>
         <ProgressBar x:Name="ProgressBar_ProgressLogger" Height="30" Margin="568,0,156,10" VerticalAlignment="Bottom" Width="Auto" IsIndeterminate="True"  Visibility="Hidden"/>
         <hc:Divider Margin="0,0,143,0" Orientation="Vertical" Height="51" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="8"/>
