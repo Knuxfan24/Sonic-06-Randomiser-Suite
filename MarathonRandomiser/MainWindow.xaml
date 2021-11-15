@@ -46,9 +46,9 @@
                     <hc:Divider Margin="0,233,0,0" VerticalAlignment="Top" Height="8" Width="Auto"/>
 
                     <!--Wildcard-->
-                    <CheckBox Content="Wildcard" HorizontalAlignment="Left" Margin="10,246,0,0" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="CheckBox_General_Wildcard" Content="Wildcard" HorizontalAlignment="Left" Margin="10,246,0,0" VerticalAlignment="Top" Click="Dependency_CheckBox_Changed"/>
                     <Label Content="Weight" HorizontalAlignment="Left" Margin="21,269,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" Width="65"/>
-                    <hc:NumericUpDown HorizontalAlignment="Left" Margin="86,269,0,0" VerticalAlignment="Top" Minimum="1" Maximum="100" Value="75" Width="69" SelectionBrush="#FFB146C2"/>
+                    <hc:NumericUpDown x:Name="NumericUpDown_Wildcard_Weight" HorizontalAlignment="Left" Margin="86,269,0,0" VerticalAlignment="Top" Minimum="1" Maximum="100" Value="75" Width="69" SelectionBrush="#FFB146C2"/>
                 </Grid>
             </hc:TabItem>
 
@@ -73,11 +73,11 @@
                         <CheckBox x:Name="CheckBox_SET_PathProps" Content="Randomise Detail Props" IsChecked="True"/>
                         <CheckBox x:Name="CheckBox_SET_Hints" Content="Randomise Voice Triggers" IsChecked="True"/>
                         <CheckBox x:Name="CheckBox_SET_Doors" Content="Randomise Door Types" IsChecked="True"/>
-                        <CheckBox x:Name="CheckBox_SET_DrawDistance" Content="Randomise Draw Distance" Foreground="Firebrick"/>
-                        <Label Content="Minimum:" Background="{x:Null}" BorderBrush="{x:Null}"/>
-                        <hc:NumericUpDown x:Name="NumericUpDown_SET_DrawDistance_Min" Margin="10,0,10,0" SelectionBrush="#FFB146C2"/>
-                        <Label Content="Maximum:" Background="{x:Null}" BorderBrush="{x:Null}"/>
-                        <hc:NumericUpDown x:Name="NumericUpDown_SET_DrawDistance_Max" Value="10000" Margin="10,0,10,0" SelectionBrush="#FFB146C2"/>
+                        <CheckBox x:Name="CheckBox_SET_DrawDistance" Content="Randomise Draw Distance" Foreground="Firebrick" Click="Dependency_CheckBox_Changed"/>
+                        <Label x:Name="Label_SET_DrawDistance_Min" Content="Minimum:" Background="{x:Null}" BorderBrush="{x:Null}" IsEnabled="False"/>
+                        <hc:NumericUpDown x:Name="NumericUpDown_SET_DrawDistance_Min" Margin="10,0,10,0" SelectionBrush="#FFB146C2" IsEnabled="False"/>
+                        <Label x:Name="Label_SET_DrawDistance_Max" Content="Maximum:" Background="{x:Null}" BorderBrush="{x:Null}" IsEnabled="False"/>
+                        <hc:NumericUpDown x:Name="NumericUpDown_SET_DrawDistance_Max" Value="10000" Margin="10,0,10,0" SelectionBrush="#FFB146C2" IsEnabled="False"/>
                         <CheckBox x:Name="CheckBox_SET_Cosmetic" Content="Randomise Cosmetic Details" IsChecked="True"/>
                     </StackPanel>
 
@@ -125,7 +125,7 @@
             </hc:TabItem>
 
             <!--Event Tab-->
-            <hc:TabItem Header="Event" BorderBrush="#B146C2" >
+            <hc:TabItem Header="Event" BorderBrush="#B146C2" x:Name="TabItem_Event" >
                 <Grid Background="#FF181818" Name="Grid_Event">
                     <!--Event Configuration Checkboxes/Controls-->
                     <StackPanel HorizontalAlignment="Left" Width="210" Name="StackPanel_Event">
@@ -168,7 +168,7 @@
             </hc:TabItem>
 
             <!--Scene Tab-->
-            <hc:TabItem Header="Scene" BorderBrush="#B146C2" >
+            <hc:TabItem Header="Scene" BorderBrush="#B146C2" x:Name="TabItem_Scene" >
                 <Grid Background="#FF181818" Name="Grid_Scene">
                     <!--Scene Configuration Checkboxes/Controls-->
                     <StackPanel HorizontalAlignment="Left" Width="210" Name="StackPanel_Scene">
@@ -231,12 +231,12 @@
                     <Button Content="Select All" HorizontalAlignment="Left" Margin="215,0,0,10" VerticalAlignment="Bottom" Height="40" Width="128" Click="CheckedListBox_SelectionToggle"/>
                     <Button Content="Deselect All" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Height="40" Width="128" Click="CheckedListBox_SelectionToggle"/>
                     <hc:TabControl Style="{StaticResource TabControlInLine}" Margin="210,0,0,60" HorizontalAlignment="Stretch" Name="TabControl_Miscellaneous">
-                        <hc:TabItem Header="Songs" BorderBrush="#B146C2">
+                        <hc:TabItem Header="Songs" BorderBrush="#B146C2" x:Name="TabItem_Misc_Songs" >
                             <Grid>
                                 <local:CheckedListBox x:Name="CheckedList_Misc_Songs" MultiColumn="True" Margin="0,0,0,0"/>
                             </Grid>
                         </hc:TabItem>
-                        <hc:TabItem Header="Text Languages" BorderBrush="#B146C2">
+                        <hc:TabItem Header="Text Languages" BorderBrush="#B146C2" x:Name="TabItem_Misc_Languages" >
                             <Grid>
                                 <local:CheckedListBox x:Name="CheckedList_Misc_Languages" MultiColumn="True" Margin="0,0,0,0"/>
                             </Grid>

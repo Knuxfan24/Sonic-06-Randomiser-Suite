@@ -228,6 +228,12 @@ namespace MarathonRandomiser
             {
                 case "CheckBox_SET_Enemies": CheckBox_SET_Enemies_NoBosses.IsEnabled = (bool)NewCheckedStatus; break;
                 case "CheckBox_SET_Enemies_Behaviour": CheckBox_SET_Enemies_Behaviour_NoEnforce.IsEnabled = (bool)NewCheckedStatus; break;
+                case "CheckBox_SET_DrawDistance":
+                    Label_SET_DrawDistance_Min.IsEnabled = (bool)NewCheckedStatus;
+                    NumericUpDown_SET_DrawDistance_Min.IsEnabled = (bool)NewCheckedStatus;
+                    Label_SET_DrawDistance_Max.IsEnabled = (bool)NewCheckedStatus;
+                    NumericUpDown_SET_DrawDistance_Max.IsEnabled = (bool)NewCheckedStatus;
+                    break;
 
                 case "CheckBox_Event_Voices":
                     CheckBox_Event_Voices_Japanese.IsEnabled = (bool)NewCheckedStatus;
@@ -248,6 +254,49 @@ namespace MarathonRandomiser
                 case "CheckBox_Misc_Patches":
                     Label_Misc_Patches_Weight.IsEnabled = (bool)NewCheckedStatus;
                     NumericUpDown_Misc_Patches_Weight.IsEnabled = (bool)NewCheckedStatus;
+                    break;
+
+                case "CheckBox_General_Wildcard":
+                    // Object Placement Tab.
+                    CheckBox_SET_Enemies.IsEnabled = (bool)!NewCheckedStatus;
+                    CheckBox_SET_Enemies_NoBosses.IsEnabled = (bool)!NewCheckedStatus;
+                    if (NewCheckedStatus == false)
+                    {
+                        if (CheckBox_SET_Enemies.IsChecked == true)
+                            CheckBox_SET_Enemies_NoBosses.IsEnabled = true;
+
+                        if (CheckBox_SET_Enemies.IsChecked == false)
+                            CheckBox_SET_Enemies_NoBosses.IsEnabled = false;
+                    }
+                    CheckBox_SET_Characters.IsEnabled = (bool)!NewCheckedStatus;
+                    CheckBox_SET_ItemCapsules.IsEnabled = (bool)!NewCheckedStatus;
+                    CheckBox_SET_CommonProps.IsEnabled = (bool)!NewCheckedStatus;
+                    CheckBox_SET_PathProps.IsEnabled = (bool)!NewCheckedStatus;
+                    CheckBox_SET_Hints.IsEnabled = (bool)!NewCheckedStatus;
+                    CheckBox_SET_Doors.IsEnabled = (bool)!NewCheckedStatus;
+                    CheckBox_SET_Cosmetic.IsEnabled = (bool)!NewCheckedStatus;
+                    TabControl_ObjectPlacement.IsEnabled = (bool)!NewCheckedStatus;
+
+                    // Event and Scene Tabs.
+                    TabItem_Event.IsEnabled = (bool)!NewCheckedStatus;
+                    TabItem_Scene.IsEnabled = (bool)!NewCheckedStatus;
+
+                    // Misc Tab.
+                    CheckBox_Misc_Music.IsEnabled = (bool)!NewCheckedStatus;
+                    CheckBox_Misc_Collision.IsEnabled = (bool)!NewCheckedStatus;
+                    CheckBox_Misc_Collision_PerFace.IsEnabled = (bool)!NewCheckedStatus;
+                    if (NewCheckedStatus == false)
+                    {
+                        if (CheckBox_Misc_Collision.IsChecked == true)
+                            CheckBox_Misc_Collision_PerFace.IsEnabled = true;
+
+                        if (CheckBox_Misc_Collision.IsChecked == false)
+                            CheckBox_Misc_Collision_PerFace.IsEnabled = false;
+                    }
+                    CheckBox_Misc_Text.IsEnabled = (bool)!NewCheckedStatus;
+                    TabItem_Misc_Songs.IsEnabled = (bool)!NewCheckedStatus;
+                    TabItem_Misc_Languages.IsEnabled = (bool)!NewCheckedStatus;
+                    TabControl_Miscellaneous.SelectedIndex = 2;
                     break;
             }
         }
@@ -377,7 +426,7 @@ namespace MarathonRandomiser
             {
                 Title = "Select Configuration INI",
                 Multiselect = false,
-                Filter = "Randomiser Config (*.ini)|*.ini"
+                Filter = "Randomiser Config (*.ini)|*.ini|Wildcard Log (*.log)|*.log"
             };
 
             if (OpenFileDialog.ShowDialog() == true)
@@ -455,7 +504,36 @@ namespace MarathonRandomiser
             Button_Randomise.IsEnabled = false;
             Button_LoadConfig.IsEnabled = false;
 
-            // TODO: Reimplement the Wildcard.
+            // Wildcard Setup
+            if (CheckBox_General_Wildcard.IsChecked == true)
+            {
+                // Save user's config so we can make it seemlessTM.
+                SaveConfig(Path.Combine(ModDirectory, "wildcard.bak"));
+
+                // Object Placement Tab.
+                WildcardTabRoll(StackPanel_ObjectPlacement, (int)NumericUpDown_Wildcard_Weight.Value);
+                WildcardCheckedList(CheckedList_SET_EnemyTypes, (int)NumericUpDown_Wildcard_Weight.Value);
+                WildcardCheckedList(CheckedList_SET_Characters, (int)NumericUpDown_Wildcard_Weight.Value);
+                WildcardCheckedList(CheckedList_SET_ItemCapsules, (int)NumericUpDown_Wildcard_Weight.Value);
+                WildcardCheckedList(CheckedList_SET_CommonProps, (int)NumericUpDown_Wildcard_Weight.Value);
+                WildcardCheckedList(CheckedList_SET_PathProps, (int)NumericUpDown_Wildcard_Weight.Value);
+                WildcardCheckedList(CheckedList_SET_Hints, (int)NumericUpDown_Wildcard_Weight.Value);
+                WildcardCheckedList(CheckedList_SET_Doors, (int)NumericUpDown_Wildcard_Weight.Value);
+
+                // Event Tab.
+                WildcardTabRoll(StackPanel_Event, (int)NumericUpDown_Wildcard_Weight.Value);
+                WildcardCheckedList(CheckedList_Event_Lighting, (int)NumericUpDown_Wildcard_Weight.Value);
+                WildcardCheckedList(CheckedList_Event_Terrain, (int)NumericUpDown_Wildcard_Weight.Value);
+
+                // Scene Tab.
+                WildcardTabRoll(StackPanel_Scene, (int)NumericUpDown_Wildcard_Weight.Value);
+                WildcardCheckedList(CheckedList_Scene_EnvMaps, (int)NumericUpDown_Wildcard_Weight.Value);
+
+                // Misc Tab.
+                WildcardTabRoll(StackPanel_Misc, (int)NumericUpDown_Wildcard_Weight.Value);
+                WildcardCheckedList(CheckedList_Misc_Songs, (int)NumericUpDown_Wildcard_Weight.Value);
+                WildcardCheckedList(CheckedList_Misc_Languages, (int)NumericUpDown_Wildcard_Weight.Value);
+            }
 
             // Enumerate the Checked List Boxes for the user's settings on lists.
             List<string> SetEnemies = Helpers.EnumerateCheckedListBox(CheckedList_SET_EnemyTypes);
@@ -477,6 +555,16 @@ namespace MarathonRandomiser
 
             string[] CustomMusic = TextBox_Custom_Music.Text.Split('|');
             List<string> CustomVoxPacks = Helpers.EnumerateCheckedListBox(CheckedList_Custom_Vox);
+
+            // Wildcard Custom Overrides
+            if (CheckBox_General_Wildcard.IsChecked == true)
+            {
+                if (TextBox_Custom_Music.Text.Length != 0)
+                    CheckBox_Misc_Music.IsChecked = true;
+
+                if (CustomVoxPacks.Count > 0)
+                    CheckBox_SET_Hints.IsChecked = true;
+            }
 
             // Custom Music
             if (TextBox_Custom_Music.Text.Length != 0)
@@ -879,6 +967,14 @@ namespace MarathonRandomiser
             if (Directory.Exists(TemporaryDirectory))
                 Directory.Delete(TemporaryDirectory, true);
 
+            // Clean up the Wildcard's settings tampering.
+            if (CheckBox_General_Wildcard.IsChecked == true)
+            {
+                SaveConfig(Path.Combine(ModDirectory, "wildcard.log"));
+                LoadConfig(Path.Combine(ModDirectory, "wildcard.bak"));
+                File.Delete(Path.Combine(ModDirectory, "wildcard.bak"));
+            }
+
             // Restore Form Visiblity.
             TabControl_Main.Visibility = Visibility.Visible;
             ScrollViewer_ProgressLogger.Visibility = Visibility.Hidden;
@@ -1091,5 +1187,57 @@ namespace MarathonRandomiser
         }
         #endregion
 
+        #region Wildcard
+        /// <summary>
+        /// Goes through a StackPanel can chooses whether to check or uncheck CheckBox elements within it.
+        /// </summary>
+        /// <param name="element">The StackPanel to search.</param>
+        /// <param name="wildcardWeight">The likelyhood the Wildcard will toggle an option on.</param>
+        private static void WildcardTabRoll(DependencyObject element, int wildcardWeight)
+        {
+            // List of Checkboxes the Wildcard is forbidden from changing.
+            List<string> Forbidden = new() { "CheckBox_SET_Enemies_Behaviour", "CheckBox_SET_Enemies_Behaviour_NoEnforce", "CheckBox_SET_DrawDistance", "CheckBox_Misc_EnemyHealth", "CheckBox_Misc_Patches" };
+            
+            // Get all the children of this StackPanel element.
+            IEnumerable? children = LogicalTreeHelper.GetChildren(element);
+
+            // Loop through each item in this StackPanel element.
+            foreach (object? item in children)
+            {
+                // Try to get the item as a Checkbox element.
+                CheckBox? checkbox = item as CheckBox;
+
+                // If the element is a Checkbox and is not forbidden, then roll a number and check the box based on the outcome.
+                if (checkbox != null)
+                {
+                    if (!Forbidden.Contains(checkbox.Name))
+                    {
+                        if (Randomiser.Next(0, 101) <= wildcardWeight)
+                            checkbox.IsChecked = true;
+                        else
+                            checkbox.IsChecked = false;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Loops through a CheckedListBox element and enables or disables the values within it.
+        /// </summary>
+        /// <param name="listbox">The CheckedListBox element to process.</param>
+        /// <param name="wildcardWeight">The likelyhood the Wildcard will toggle an option on.</param>
+        private static void WildcardCheckedList(CheckedListBox listbox, int wildcardWeight)
+        {
+            // Uncheck everything in the CheckedListBox.
+            Helpers.InvalidateCheckedListBox(listbox, true, false);
+
+            // Loop through each item in the CheckedListBox, roll a number to determine what to do with it.
+            foreach (CheckedListBoxItem? item in listbox.Items)
+            {
+                if (Randomiser.Next(0, 101) <= wildcardWeight)
+                    item.Checked = true;
+            }
+        }
+        #endregion
     }
 }
