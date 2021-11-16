@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
@@ -36,6 +37,9 @@ namespace MarathonRandomiser
             GenerateDirectories();
             SetDefaults();
             
+            // Force culture info 'en-GB' to prevent errors with values altered by language-specific differences.
+            CultureInfo.DefaultThreadCurrentCulture = CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("en-GB");
+
             // If this is a debug build, set the seed to WPF Test for the sake of consistent testing.
             // If not, hide the Debug Tab, Release Builds don't need it.
             #if DEBUG
