@@ -7,7 +7,7 @@
 
 <p align="center">An all in one software suite for randomising various elements in Sonic '06 on the Xbox 360 and PlayStation 3.</p>
 
-<img src="https://raw.githubusercontent.com/wiki/Knuxfan24/Sonic-06-Randomiser-Suite/images/tab_general.png"
+<img src="https://raw.githubusercontent.com/wiki/Knuxfan24/Sonic-06-Randomiser-Suite/images/tab_general.png">
 
 # Building
 To build the Randomiser Suite, simply clone the project and open the `MarathonRandomiser.sln` file in a recent version of Visual Studio (anything supporting .NET 5 should work fine, all the development was done on preview builds of Visual Studio 2022) and then compile it as normal, if the build fails it may be due to missing Nuget Packages, as the project uses [Marathon](https://github.com/Big-Endian-32/Marathon) for interfacing with Sonic '06's file formats and [HandyControl](https://github.com/HandyOrg/HandyControl) for much nicer looking UI controls., ensuring that both of those are present and accounted for should resolve any compile errors.
@@ -23,7 +23,7 @@ For a proper run down on the features and information on configuring and using t
 
 ### Object Placement Randomisation
 
-<img src="https://raw.githubusercontent.com/wiki/Knuxfan24/Sonic-06-Randomiser-Suite/images/tab_object_placement.png"
+<img src="https://raw.githubusercontent.com/wiki/Knuxfan24/Sonic-06-Randomiser-Suite/images/tab_object_placement.png">
 
 Randomisation of various elements within '06's Object Placement (.set) files, these are:
 
@@ -47,7 +47,7 @@ A lot of the Object Placement features can be further randomised, see the Wiki f
 
 ### Event Randomisation
 
-<img src="https://raw.githubusercontent.com/wiki/Knuxfan24/Sonic-06-Randomiser-Suite/images/tab_event.png"
+<img src="https://raw.githubusercontent.com/wiki/Knuxfan24/Sonic-06-Randomiser-Suite/images/tab_event.png">
 
 Randomisation of various elements within the EventPlaybook.epb file that handles various factors of the game's cutscenes, these are:
 
@@ -65,7 +65,7 @@ Randomisation of various elements within the EventPlaybook.epb file that handles
 
 ### Scene Parameter Randomisation
 
-<img src="https://raw.githubusercontent.com/wiki/Knuxfan24/Sonic-06-Randomiser-Suite/images/tab_scene.png"
+<img src="https://raw.githubusercontent.com/wiki/Knuxfan24/Sonic-06-Randomiser-Suite/images/tab_scene.png">
 
 Randomisation of various values within the game's scene lua binaries (.lub) files, these are:
 
@@ -79,7 +79,7 @@ Randomisation of various values within the game's scene lua binaries (.lub) file
 
 ### Miscellaneous Randomisation
 
-<img src="https://raw.githubusercontent.com/wiki/Knuxfan24/Sonic-06-Randomiser-Suite/images/tab_miscellaneous.png"
+<img src="https://raw.githubusercontent.com/wiki/Knuxfan24/Sonic-06-Randomiser-Suite/images/tab_miscellaneous.png">
 
 Randomisation of miscellaneous elements across one off files, these are:
 
@@ -95,7 +95,7 @@ Randomisation of miscellaneous elements across one off files, these are:
 
 ### Custom Elements
 
-<img src="https://raw.githubusercontent.com/wiki/Knuxfan24/Sonic-06-Randomiser-Suite/images/tab_custom.png"
+<img src="https://raw.githubusercontent.com/wiki/Knuxfan24/Sonic-06-Randomiser-Suite/images/tab_custom.png">
 
 Allows the user to add custom elements to the Randomisation, these being:
 
