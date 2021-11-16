@@ -441,9 +441,10 @@ namespace MarathonRandomiser
             // Check that our mods directory and game executable actually exist.
             if (!Directory.Exists(TextBox_General_ModsDirectory.Text) || !File.Exists(TextBox_General_GameExecutable.Text))
             {
-                MessageBox.Show("Either your Game Executable or Mods Directory don't exist, please check your general settings.",
-                                "Sonic '06 Randomiser Suite",
-                                MessageBoxButton.OK);
+                HandyControl.Controls.MessageBox.Show("Either your Game Executable or Mods Directory don't exist, please check your general settings.",
+                                                      "Sonic '06 Randomiser Suite",
+                                                      MessageBoxButton.OK,
+                                                      MessageBoxImage.Error);
                 return;
             }
 
@@ -460,9 +461,10 @@ namespace MarathonRandomiser
             // Create Mod Directory (prompting the user if they want to delete it first or cancel if it already exists.)
             if (Directory.Exists(ModDirectory))
             {
-                MessageBoxResult check = MessageBox.Show($"A mod with the seed {TextBox_General_Seed.Text} already exists.\nDo you want to replace it?",
-                                             "Sonic '06 Randomiser Suite",
-                                             MessageBoxButton.YesNo);
+                MessageBoxResult check = HandyControl.Controls.MessageBox.Show($"A mod with the seed {TextBox_General_Seed.Text} already exists.\nDo you want to replace it?",
+                                                                               "Sonic '06 Randomiser Suite",
+                                                                               MessageBoxButton.YesNo,
+                                                                               MessageBoxImage.Exclamation);
 
                 if (check == MessageBoxResult.Yes)
                     Directory.Delete(ModDirectory, true);
@@ -982,6 +984,12 @@ namespace MarathonRandomiser
             ProgressBar_ProgressLogger.Visibility = Visibility.Hidden;
             Button_Randomise.IsEnabled = true;
             Button_LoadConfig.IsEnabled = true;
+
+            // Show the Randomisation Complete message box.
+            HandyControl.Controls.MessageBox.Show("Randomisation Complete!",
+                                                  "Sonic '06 Randomiser Suite",
+                                                  MessageBoxButton.OK,
+                                                  MessageBoxImage.Information);
         }
         #endregion
 
