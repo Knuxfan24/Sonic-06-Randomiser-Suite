@@ -15,8 +15,17 @@ namespace MarathonRandomiser
     /// </summary>
     public partial class MainWindow : Window
     {
+        // Version Number.
+        public static readonly string GlobalVersionNumber = $"Version 2.1";
+
+        #if !DEBUG
+        public static readonly string VersionNumber = GlobalVersionNumber;
+        #else
+        public static readonly string VersionNumber = $"{GlobalVersionNumber}-indev-{File.GetLastAccessTime(Environment.CurrentDirectory):ddMMyy}";
+        #endif
+        
         // Generate the path to a temp directory we can use for the Randomisation process.
-        public static string TemporaryDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+        public static readonly string TemporaryDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
 
         // Set up the Randomiser.
         public static Random Randomiser = new();
@@ -56,6 +65,9 @@ namespace MarathonRandomiser
         /// </summary>
         private void SetDefaults()
         {
+            // Include the version number in the title bar.
+            Title = $"Sonic '06 Randomiser Suite ({VersionNumber})";
+
             // Load consistent settings.
             TextBox_General_ModsDirectory.Text = Properties.Settings.Default.ModsDirectory;
             TextBox_General_GameExecutable.Text = Properties.Settings.Default.GameExecutable;
@@ -400,6 +412,24 @@ namespace MarathonRandomiser
                 UseShellExecute = true
             };
             Process.Start(psi);
+        }
+
+        /// <summary>
+        /// Opens the About Message Box
+        /// </summary>
+        private void Button_About(object sender, RoutedEventArgs e)
+        {
+            HandyControl.Controls.MessageBox.Show($"Sonic '06 Randomiser Suite {VersionNumber} Credits:\n\n" +
+                                                  "Knuxfan24: Development, Marathon.\n" +
+                                                  "HyperBE32: Marathon.\n" +
+                                                  "Sajid: Marathon Lua Decompilation.\n" +
+                                                  "ShadowLAG: Original Lua Decompilation Source.\n" +
+                                                  "vgmstream: Audio Conversion.\n" +
+                                                  "Microsoft: xmaencode utility.\n" +
+                                                  "HandyControl: WPF Form Controls.",
+                                                  "Sonic '06 Randomiser Suite",
+                                                  MessageBoxButton.OK,
+                                                  MessageBoxImage.Information);
         }
 
         /// <summary>
