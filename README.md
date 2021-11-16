@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://github.com/Knuxfan24/Sonic-06-Randomiser-Suite/blob/master/Sonic%20'06%20Randomiser%20Suite/ExternalResources/Logo.png"
+    <img src="https://raw.githubusercontent.com/Knuxfan24/Sonic-06-Randomiser-Suite/master/MarathonRandomiser/ExternalResources/Logo.png"
          width="256"/>
 </p>
 
