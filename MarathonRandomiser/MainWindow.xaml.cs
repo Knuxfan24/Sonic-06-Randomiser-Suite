@@ -31,6 +31,7 @@ namespace MarathonRandomiser
             // If not, hide the Debug Tab, Release Builds don't need it.
             #if DEBUG
             TextBox_General_Seed.Text = "WPF Test";
+            Debug.WriteLine($"Current temporary path is: {TemporaryDirectory}.");
             #else
             TabItem_Debug.Visibility = System.Windows.Visibility.Collapsed;
             #endif

@@ -74,6 +74,12 @@ namespace MarathonRandomiser
                             }
                         }
 
+                        // If we've failed to convert, throw a proper exception.
+                        if (output.Length == 1)
+                        {
+                            throw new Exception($"Failed to convert '{CustomSong}', this may be due to a character in the filename?");
+                        }
+
                         // Set the path to the song to our wav for the rest of the function.
                         CustomSong = $@"{MainWindow.TemporaryDirectory}\tempWavs\custom{index}.wav";
                     }
