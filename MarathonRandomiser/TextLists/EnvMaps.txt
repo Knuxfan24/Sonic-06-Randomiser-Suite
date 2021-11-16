@@ -1,0 +1,32 @@
+Aquatic Base,stage/aqa/a/aqa_envmap.dds,true
+Crisis City (Original),stage/csc/a/csc_envmap.dds,true
+Crisis City (Filtered),stage/csc/b/csc_envmap.dds,true
+Crisis City (End of the World),stage/end/a/endA_envmap.dds,true
+Dusty Desert (Outside),stage/dtd/a/suna_cube.dds,true
+Dusty Desert (Inside),stage/dtd/b/suna_cube.dds,true
+Dusty Desert (Mephiles),stage/boss/secondmefiress_dtd/suna_cube.dds,true
+Dusty Desert (End of the World),stage/end/d/endD_envmap.dds,true
+End of the World,stage/boss/solaris_last/solaris_envmap.dds,true
+Flame Core (Outside),stage/flc/a/flcA_envmap.dds,true
+Flame Core (Inside),stage/flc/b/flcB_envmap.dds,true
+Flame Core (End of the World),stage/end/b/endB_envmap.dds,true
+Gold Medal,object/twn/goldmdl/item_envmap.dds,true
+Kingdom Valley (Cliffs),stage/kdv/a/kdv_envmap.dds,true
+Kingdom Valley (Castle Light),stage/kdv/b/kdv_envmap.dds,true
+Kingdom Valley (Castle Dark),stage/kdv/d/kdv_envmap.dds,true
+Kingdom Valley (Water),stage/kdv/c/kdv_envmap.dds,true
+Kingdom Valley (End of the World),stage/end/g/endG_envmap.dds,true
+Radical Train,stage/boss/charaboss2_rct/rct_envmap.dds,true
+Soleanna Castle Town,stage/twn/a/twn_a_cubemap_df_e.dds,true
+Soleanna Castle Town (Night),stage/event/ev0031/ev0031_cubemap.dds,true
+Soleanna Castle Town (End of the World),stage/event/ev0304/e0304_envmap.dds,true
+Soleanna New City,stage/twn/b/twn_n_cubemap_df_e.dds,true
+Soleanna Forest,stage/twn/c/twn_c_cubemap_df_e.dds,true
+Soleanna Highway,stage/twn/d/twn_r_cubemap_df_e.dds,true
+Tropical Jungle,stage/tpj/a/tpj_envmap.dds,true
+Tropical Jungle (Ruins),stage/tpj/c/tpjC_envmap.dds,true
+Tropical Jungle (End of the World),stage/end/c/endC_envmap.dds,true
+Wave Ocean,stage/wvo/a/wvo_envmap.dds,true
+Wave Ocean (End of the World),stage/end/e/endE_envmap.dds,true
+White Acropolis,stage/wap/a/wap_envmap.dds,true
+White Acropolis (End of the World),stage/end/f/endF_envmap.dds,true

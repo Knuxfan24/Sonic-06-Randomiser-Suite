@@ -1,0 +1,51 @@
+Wave Ocean - The Water's Edge,stg_wvo_a,True
+Wave Ocean - The Inlet,stg_wvo_b,True
+Dusty Desert - Quicksand,stg_dtd_a,True
+Dusty Desert - The Ruins,stg_dtd_b,True
+White Acropolis - Snowy Peak,stg_wap_a,True
+White Acropolis - The Base,stg_wap_b,True
+Crisis City - The Flames,stg_csc_a,True
+Crisis City - Skyscraper,stg_csc_b,True
+Crisis City - Whirlwind,stage_csc_e,True
+Crisis City - Tornado,stg_csc_f,True
+Flame Core - Volcano,stg_flc_a,True
+Flame Core - The Cavern,stg_flc_b,True
+Radical Train - The Abandoned Mine,stg_rct_a,True
+Radical Train - The Chase,stg_rct_b,True
+Tropical Jungle - The Jungle,stg_tpj_a,True
+Tropical Jungle - The Swamp,stg_tpj_b,True
+Tropical Jungle - The Ruins,stg_tpj_c,True
+Kingdom Valley - Wind,stg_kdv_a,True
+Kingdom Valley - The Castle,stg_kdv_b,True
+Kingdom Valley - Lakeside,stg_kdv_c,True
+Kingdom Valley - Water,stg_kdv_d,True
+Aquatic Base - Level 1,stg_aqa_a,True
+Aquatic Base - Level 2,stg_aqa_b,True
+End of the World - Yellow,stg_end_a,True
+End of the World - Green,stg_end_b,True
+End of the World - Light Blue,stg_end_c,True
+End of the World - White,stg_end_d,True
+End of the World - Purple,stg_end_e,True
+End of the World - Blue,stg_end_f,True
+End of the World - Red,stg_end_g,True
+Iblis (Phase 1 and Phase 2),boss_iblis01,True
+Iblis (Phase 3),boss_iblis03,True
+Mephiles (Phase 1),boss_mefiless01,True
+Mephiles (Phase 2),boss_mefiless02,True
+Character Battle,boss_character,True
+Egg Cereberus and Egg Genesis,boss_cerberus,True
+Egg Wyvern,boss_wyvern,True
+Solaris,boss_solaris1,True
+Solaris (Phase 2),boss_solaris2,True
+Soleanna Castle Town,stg_twn_a,True
+Soleanna New City,stg_twn_b,True
+Soleanna Forest,stg_twn_c,True
+Town Mission 1,stg_twn_shop,True
+Town Mission 2,twn_mission_slow,True
+Town Mission 3,twn_mission_comical,True
+Town Mission 4,twn_mission_fast,True
+Accordion Song,twn_accordion,True
+Results,result,True
+Main Menu,mainmenu,True
+Multiplayer Menu,select,True
+Extras Menu,extra,True

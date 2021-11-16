@@ -1,0 +1,107 @@
+[Event] The Chaos Emeralds entrusted,scripts/stage/event/scene_e0031.lub,True
+[Event] Meeting with Tails,scripts/stage/event/scene_e0001.lub,True
+[Event] Too late Sonic,scripts/stage/event/scene_e0002.lub,True
+[Event] Sonic Rescues Elise,scripts/stage/event/scene_e0003.lub,True
+[Event] Let's Split Up,scripts/stage/event/scene_e0004.lub,True
+[Event] Silver appears,scripts/stage/event/scene_e0006.lub,True
+[Event] Saved by Amy,scripts/stage/event/scene_e0007.lub,True
+[Event] Eggman sends Sonic to the future,scripts/stage/event/scene_e0009.lub,True
+[Event] Shadow and Rouge,scripts/stage/event/scene_e0010.lub,True
+[Event] Allies,scripts/stage/event/scene_e0011.lub,True
+[Event] The death of Elise!?,scripts/stage/event/scene_e0012.lub,True
+[Event] Beyond the flames...,scripts/stage/event/scene_e0013.lub,True
+[Event] Fiery Iblis,scripts/stage/event/scene_e0014.lub,True
+[Event] Return to the present,scripts/stage/event/scene_e0016.lub,True
+[Event] Silver and Shadow,scripts/stage/event/scene_e0017.lub,True
+[Event] Elise jumps,scripts/stage/event/scene_e0018.lub,True
+[Event] Thanks to you...,scripts/stage/event/scene_e0019.lub,True
+[Event] Elise goes alone,scripts/stage/event/scene_e0021.lub,True
+[Event] Eggman's plot,scripts/stage/event/scene_e0022.lub,True
+[Event] Things have changed,scripts/stage/event/scene_e0023.lub,True
+[Event] Battleship explosion,scripts/stage/event/scene_e0026.lub,True
+[Event] The day before,scripts/stage/event/scene_e0027.lub,True
+[Event] Sonic boards the battleship,scripts/stage/event/scene_e0028.lub,True
+[Event] Attempt to escape,scripts/stage/event/scene_e0102.lub,True
+[Event] To the ancient Soleanna castle,scripts/stage/event/scene_e0103.lub,True
+[Event] The resurrection of Mephiles,scripts/stage/event/scene_e0104.lub,True
+[Event] The destroyed world,scripts/stage/event/scene_e0105.lub,True
+[Event] Confirming the future,scripts/stage/event/scene_e0106.lub,True
+[Event] Omega located,scripts/stage/event/scene_e0109.lub,True
+[Event] Rouge returns to the present,scripts/stage/event/scene_e0113.lub,True
+[Event] Trusting Omega,scripts/stage/event/scene_e0114.lub,True
+[Event] Mephiles' whisper,scripts/stage/event/scene_e0115.lub,True
+[Event] Shadow & Omega return to the present,scripts/stage/event/scene_e0118.lub,True
+[Event] Working with Rouge,scripts/stage/event/scene_e0119.lub,True
+[Event] Who is Mephiles?,scripts/stage/event/scene_e0120.lub,True
+[Event] Leaving the Scepter of Darkness,scripts/stage/event/scene_e0125.lub,True
+[Event] The sealing revealed,scripts/stage/event/scene_e0126.lub,True
+[Event] Omega's confession,scripts/stage/event/scene_e0127.lub,True
+[Event] To the ruins,scripts/stage/event/scene_e0128.lub,True
+[Event] Mephiles' temptation,scripts/stage/event/scene_e0129.lub,True
+[Event] Confrontation with Iblis,scripts/stage/event/scene_e0201.lub,True
+[Event] Silver goes to the present,scripts/stage/event/scene_e0204.lub,True
+[Event] Blaze goes to the present,scripts/stage/event/scene_e0205.lub,True
+[Event] Amy leaves,scripts/stage/event/scene_e0210.lub,True
+[Event] Is it right...?,scripts/stage/event/scene_e0211.lub,True
+[Event] Amy meets Elise,scripts/stage/event/scene_e0214.lub,True
+[Event] Elise and Amy's discussion of love,scripts/stage/event/scene_e0215.lub,True
+[Event] Eggman attacks,scripts/stage/event/scene_e0216.lub,True
+[Event] Head for the Train Terminal,scripts/stage/event/scene_e0217.lub,True
+[Event] Iblis' Seal,scripts/stage/event/scene_e0221.lub,True
+[Event] Meeting up with Blaze,scripts/stage/event/scene_e0223.lub,True
+[Event] Return to the future,scripts/stage/event/scene_e0226.lub,True
+[Event] The last battle,scripts/stage/event/scene_e0227.lub,True
+[Event] Mephiles' smile,scripts/stage/event/scene_e0300.lub,True
+[Event] Elise's tears,scripts/stage/event/scene_e0301.lub,True
+[Event] The time-space rift,scripts/stage/event/scene_e0304.lub,True
+[Event] Unused?,scripts/stage/event/scene_event.lub,True
+Aquatic Base A,scripts/stage/aqa/scene_aqa_a.lub,True
+Aquatic Base B,scripts/stage/aqa/scene_aqa_b.lub,True
+Aquatic Base Test?,scripts/stage/other/scene_test_aqa.lub,True
+Egg Carrier Arena,scripts/stage/boss/scene_eWyvern_sonic.lub,True
+Crisis City A,scripts/stage/csc/scene_csc_a.lub,True
+Crisis City B,scripts/stage/csc/scene_csc_b.lub,True
+Crisis City C,scripts/stage/csc/scene_csc_c.lub,True
+Crisis City E,scripts/stage/csc/scene_csc_e.lub,True
+Crisis City F,scripts/stage/csc/scene_csc_f.lub,True
+Crisis City ~ End of the World,scripts/stage/end/scene_end_a.lub,True
+Crisis City Arena,scripts/stage/boss/scene_firstiblis.lub,True
+Dusty Desert Outside Arena,scripts/stage/boss/scene_eCerberus_sonic.lub,True
+Dusty Desert A,scripts/stage/dtd/scene_dtd_a_sonic.lub,True
+Dusty Desert ~ End of the World,scripts/stage/end/scene_end_d.lub,True
+Dusty Desert B,scripts/stage/dtd/scene_dtd_b_sonic.lub,True
+Dusty Desert Inside Arena,scripts/stage/boss/scene_secondmefiress.lub,True
+Dusty Desert C?,scripts/stage/dtd/scene_dtd_c_shadow.lub,True
+End of the World Arena,scripts/stage/boss/scene_solaris_super3.lub,True
+Flame Core A,scripts/stage/flc/scene_flc_a.lub,True
+Flame Core ~ End of the World,scripts/stage/end/scene_end_b.lub,True
+Flame Core Arena Outside,scripts/stage/boss/scene_thirdiblis.lub,True
+Flame Core B,scripts/stage/flc/scene_flc_b.lub.lub,True
+Flame Core Inside Arena 1,scripts/stage/boss/scene_secondiblis.lub,True
+Flame Core Inside Arena 2,scripts/stage/boss/scene_firstmefiress.lub,True
+Gold Medal,scripts/stage/other/scene_getgoldmedal.lub,True
+Kingdom Valley A,scripts/stage/kdv/scene_kdv_a.lub,True
+Kingdom Valley ~ End of the World,scripts/stage/end/scene_end_g.lub,True
+Kingdom Valley B,scripts/stage/kdv/scene_kdv_b.lub,True
+Kingdom Valley C,scripts/stage/kdv/scene_kdv_c.lub,True
+Kingdom Valley D,scripts/stage/kdv/scene_kdv_d.lub,True
+Radical Train A,scripts/stage/rct/scene_rct_a.lub,True
+Radical Train B,scripts/stage/rct/scene_rct_b.lub,True
+Radical Train Arena,scripts/stage/boss/scene_shadow_vs_silver.lub,True
+Soleanna Castle Town,scripts/stage/twn/scene_twn_a.lub,True
+Soleanna New City,scripts/stage/twn/scene_twn_b.lub,True
+Soleanna Forest,scripts/stage/twn/scene_twn_c.lub,True
+Soleanna Forest Arena,scripts/stage/boss/scene_eGenesis_sonic.lub,True
+Soleanna Highway,scripts/stage/twn/scene_twn_d.lub,True
+Tropical Jungle A,scripts/stage/tpj/scene_tpj_a.lub,True
+Tropical Jungle B,scripts/stage/tpj/scene_tpj_b.lub,True
+Tropical Jungle C,scripts/stage/tpj/scene_tpj_c.lub,True
+Tropical Jungle ~ End of the World,scripts/stage/end/scene_end_c.lub,True
+Wave Ocean A,scripts/stage/wvo/scene_wvo_a.lub,True
+Wave Ocean ~ End of the World,scripts/stage/end/scene_end_e.lub,True
+Wave Ocean B,scripts/stage/wvo/scene_wvo_b.lub,True
+White Acropolis A,scripts/stage/wap/scene_wap_a.lub,True
+White Acropolis B,scripts/stage/wap/scene_wap_b.lub,True
+White Acropolis ~ End of the World,scripts/stage/end/scene_end_f.lub,True
+White Acropolis Arena (Shadow),scripts/stage/boss/scene_eGenesis_silver.lub,True
+White Acropolis Arena (Silver),scripts/stage/boss/scene_eCerberus_shadow.lub,True
