@@ -257,7 +257,7 @@
             </hc:TabItem>
 
             <!--Custom Tab-->
-            <hc:TabItem Header="Custom" BorderBrush="#B146C2" Closed="CustomMusic_Browse" >
+            <hc:TabItem x:Name="TabItem_Custom" Header="Custom" BorderBrush="#B146C2" Closed="CustomMusic_Browse" >
                 <Grid Background="#FF181818" Name="Grid_Custom">
                     <!--Music-->
                     <Label Content="Music" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}"/>

@@ -179,8 +179,13 @@ namespace MarathonRandomiser
             }
 
             // FMVs (this shit doesn't work right and dupes an FMV because Aquatic Base can go fuck itself).
+            // Determine what the file extension for the FMVs are.
+            string filetype = "wmv";
+            if (GameExecutable.ToLower().EndsWith(".bin"))
+                filetype = "pam";
+
             usedNumbers.Clear();
-            string[] fmvs = Directory.GetFiles($@"{Path.GetDirectoryName(GameExecutable)}\xenon\event", "*.wmv", SearchOption.AllDirectories);
+            string[] fmvs = Directory.GetFiles($@"{Path.GetDirectoryName(GameExecutable)}\xenon\event", $"*{filetype}", SearchOption.AllDirectories);
             for (int i = 0; i < epb.Events.Count; i++)
             {
                 if (epb.Events[i].Terrain == null)
@@ -213,7 +218,7 @@ namespace MarathonRandomiser
                         if (fmv.Contains(eventsFMV[index].Folder.Replace('/', '\\')) && epb.Events[i].Name != "e0220")
                         {
                             Directory.CreateDirectory($@"{ModDirectory}\xenon\event\{epb.Events[i].Name}");
-                            File.Copy(fmv, $@"{ModDirectory}\xenon\event\{epb.Events[i].Name}\{epb.Events[i].Name}.wmv");
+                            File.Copy(fmv, $@"{ModDirectory}\xenon\event\{epb.Events[i].Name}\{epb.Events[i].Name}.{filetype}");
                         }
                     }
                 }

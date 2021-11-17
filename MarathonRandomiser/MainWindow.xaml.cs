@@ -17,7 +17,7 @@ namespace MarathonRandomiser
     public partial class MainWindow : Window
     {
         // Version Number.
-        public static readonly string GlobalVersionNumber = $"Version 2.1.1_01";
+        public static readonly string GlobalVersionNumber = $"Version 2.1.2";
 
         #if !DEBUG
         public static readonly string VersionNumber = GlobalVersionNumber;
@@ -183,11 +183,17 @@ namespace MarathonRandomiser
 
         /// <summary>
         /// Saves the Game Executable setting when the value changes.
+        /// Also kills the Custom Tab if we're using the PS3 version.
         /// </summary>
         private void GameExecutable_Update(object sender, TextChangedEventArgs e)
         {
             Properties.Settings.Default.GameExecutable = TextBox_General_GameExecutable.Text;
             Properties.Settings.Default.Save();
+
+            if (TextBox_General_GameExecutable.Text.ToLower().EndsWith(".bin"))
+                TabItem_Custom.IsEnabled = false;
+            else
+                TabItem_Custom.IsEnabled = true;
         }
 
         /// <summary>
@@ -596,88 +602,92 @@ namespace MarathonRandomiser
 
             string[] CustomMusic = TextBox_Custom_Music.Text.Split('|');
             List<string> CustomVoxPacks = Helpers.EnumerateCheckedListBox(CheckedList_Custom_Vox);
-
-            // Wildcard Custom Overrides
-            if (CheckBox_General_Wildcard.IsChecked == true)
+            
+            // Don't do the Custom stuff if we're using a PS3 version
+            if (GameExecutable.ToLower().EndsWith(".xex"))
             {
+                // Wildcard Custom Overrides
+                if (CheckBox_General_Wildcard.IsChecked == true)
+                {
+                    if (TextBox_Custom_Music.Text.Length != 0)
+                        CheckBox_Misc_Music.IsChecked = true;
+
+                    if (CustomVoxPacks.Count > 0)
+                        CheckBox_SET_Hints.IsChecked = true;
+                }
+
+                // Custom Music
                 if (TextBox_Custom_Music.Text.Length != 0)
-                    CheckBox_Misc_Music.IsChecked = true;
+                {
+                    // Get the status of the XMA Cache Checkbox.
+                    bool? EnableCache = CheckBox_Custom_Music_XMACache.IsChecked;
 
+                    // Create the directories for the process.
+                    Directory.CreateDirectory($@"{TemporaryDirectory}\tempWavs");
+                    Directory.CreateDirectory($@"{ModDirectory}\xenon\sound");
+
+                    // Set up the string for the custom files in the mod.ini
+                    string songs = "Custom=\"";
+
+                    // Loops through the custom songs and process them.
+                    for (int i = 0; i < CustomMusic.Length; i++)
+                    {
+                        UpdateLogger($"Importing: '{CustomMusic[i]}' as custom music.");
+                        await Task.Run(() => Custom.Music(CustomMusic[i], ModDirectory, i, EnableCache));
+                        songs += $"custom{i}.xma,";
+                        MiscMusic.Add($"custom{i}");
+                    }
+
+                    // Add all the songs to the mod configuration ini.
+                    // Remove the last comma and replace it with a closing quote.
+                    songs = songs.Remove(songs.LastIndexOf(','));
+                    songs += "\"";
+
+                    // Write the list of custom files to the mod configuration ini.
+                    using (StreamWriter configInfo = File.AppendText(Path.Combine($@"{ModDirectory}", "mod.ini")))
+                    {
+                        configInfo.WriteLine(songs);
+                        configInfo.Close();
+                    }
+
+                    // Add all the songs to bgm.sbk in sound.arc
+                    foreach (string archive in archives)
+                    {
+                        // Find sound.arc.
+                        if (Path.GetFileName(archive).ToLower() == "sound.arc")
+                        {
+                            UpdateLogger($"Updating 'bgm.sbk' with {CustomMusic.Length} custom songs.");
+                            string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+                            await Task.Run(() => Custom.UpdateBGMSoundBank(unpackedArchive, CustomMusic.Length));
+                        }
+                    }
+                }
+
+                // Voice Packs
                 if (CustomVoxPacks.Count > 0)
-                    CheckBox_SET_Hints.IsChecked = true;
-            }
-
-            // Custom Music
-            if (TextBox_Custom_Music.Text.Length != 0)
-            {
-                // Get the status of the XMA Cache Checkbox.
-                bool? EnableCache = CheckBox_Custom_Music_XMACache.IsChecked;
-
-                // Create the directories for the process.
-                Directory.CreateDirectory($@"{TemporaryDirectory}\tempWavs");
-                Directory.CreateDirectory($@"{ModDirectory}\xenon\sound");
-
-                // Set up the string for the custom files in the mod.ini
-                string songs = "Custom=\"";
-
-                // Loops through the custom songs and process them.
-                for (int i = 0; i < CustomMusic.Length; i++)
                 {
-                    UpdateLogger($"Importing: '{CustomMusic[i]}' as custom music.");
-                    await Task.Run(() => Custom.Music(CustomMusic[i], ModDirectory, i, EnableCache));
-                    songs += $"custom{i}.xma,";
-                    MiscMusic.Add($"custom{i}");
-                }
+                    // Create voice directory.
+                    Directory.CreateDirectory($@"{ModDirectory}\xenon\sound\voice\e\");
 
-                // Add all the songs to the mod configuration ini.
-                // Remove the last comma and replace it with a closing quote.
-                songs = songs.Remove(songs.LastIndexOf(','));
-                songs += "\"";
-
-                // Write the list of custom files to the mod configuration ini.
-                using (StreamWriter configInfo = File.AppendText(Path.Combine($@"{ModDirectory}", "mod.ini")))
-                {
-                    configInfo.WriteLine(songs);
-                    configInfo.Close();
-                }
-
-                // Add all the songs to bgm.sbk in sound.arc
-                foreach (string archive in archives)
-                {
-                    // Find sound.arc.
-                    if (Path.GetFileName(archive).ToLower() == "sound.arc")
+                    // Insert the patched voice_all_e.sbk file into sound.arc first.
+                    foreach (string archive in archives)
                     {
-                        UpdateLogger($"Updating 'bgm.sbk' with {CustomMusic.Length} custom songs.");
-                        string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
-                        await Task.Run(() => Custom.UpdateBGMSoundBank(unpackedArchive, CustomMusic.Length));
+                        if (Path.GetFileName(archive).ToLower() == "sound.arc")
+                        {
+                            UpdateLogger($"Patching 'voice_all_e.sbk'.");
+                            string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+                            File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\voice_all_e.sbk", $@"{unpackedArchive}\xenon\sound\voice_all_e.sbk", true);
+                        }
                     }
-                }
-            }
 
-            // Voice Packs
-            if (CustomVoxPacks.Count > 0)
-            {
-                // Create voice directory.
-                Directory.CreateDirectory($@"{ModDirectory}\xenon\sound\voice\e\");
-
-                // Insert the patched voice_all_e.sbk file into sound.arc first.
-                foreach (string archive in archives)
-                {
-                    if (Path.GetFileName(archive).ToLower() == "sound.arc")
+                    // Process the selected voice packs.
+                    for (int i = 0; i < CustomVoxPacks.Count; i++)
                     {
-                        UpdateLogger($"Patching 'voice_all_e.sbk'.");
-                        string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
-                        File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\voice_all_e.sbk", $@"{unpackedArchive}\xenon\sound\voice_all_e.sbk", true);
+                        UpdateLogger($"Processing '{CustomVoxPacks[i]}' voice pack.");
+                        bool success = await Task.Run(() => Custom.VoicePacks(CustomVoxPacks[i], ModDirectory, archives, SetHints));
+                        if (!success)
+                            UpdateLogger($"Ignored '{CustomVoxPacks[i]}' as it does not appear to be a voice pack.");
                     }
-                }
-
-                // Process the selected voice packs.
-                for (int i = 0; i < CustomVoxPacks.Count; i++)
-                {
-                    UpdateLogger($"Processing '{CustomVoxPacks[i]}' voice pack.");
-                    bool success = await Task.Run(() => Custom.VoicePacks(CustomVoxPacks[i], ModDirectory, archives, SetHints));
-                    if (!success)
-                        UpdateLogger($"Ignored '{CustomVoxPacks[i]}' as it does not appear to be a voice pack.");
                 }
             }
 
@@ -763,6 +773,62 @@ namespace MarathonRandomiser
                                 UpdateLogger($"Patching '{luaFile}'.");
                                 await Task.Run(() => ObjectPlacementRandomiser.BossPatch(luaFile, setEnemies, setHints, SetHints));
                             }
+                        }
+
+                        // The Egg Cerberus is dumb and does its hints lines in the executable instead.
+                        // Also changes the Radical Train train lines too because why not?
+                        // Offsets are different on the PS3, so this is a 360 only thing.
+                        if (setHints == true && TextBox_General_GameExecutable.Text.ToLower().EndsWith(".xex"))
+                        {
+                            UpdateLogger($"Writing Hybrid Patch for hardcoded voice lines.");
+
+                            // Determine what hint strings to use, as this is an XEX patch, we only have 19 characters free.
+                            List<string> hintsToUse = new();
+                            for (int i = 0; i < 20; i++)
+                            {
+                                string hint = SetHints[Randomiser.Next(SetHints.Count)];
+                                do { hint = SetHints[Randomiser.Next(SetHints.Count)]; }
+                                while (hint.Length > 19);
+                                hintsToUse.Add(hint);
+                            }
+
+                            // Write the actual Hybrid Patch
+                            using (Stream patchCreate = File.Open(Path.Combine(ModDirectory, "patch.mlua"), FileMode.Create))
+                            using (StreamWriter patchInfo = new(patchCreate))
+                            {
+                                patchInfo.WriteLine("--[Patch]--");
+                                patchInfo.WriteLine($"Title(\"Sonic '06 Randomised ({TextBox_General_Seed.Text})\")");
+                                patchInfo.WriteLine($"Author(\"Sonic '06 Randomiser Suite\")");
+                                patchInfo.WriteLine($"Platform(\"Xbox 360\")");
+
+                                patchInfo.WriteLine("\n--[Functions]--");
+                                patchInfo.WriteLine($"DecryptExecutable()");
+                                patchInfo.WriteLine($"--Radical Train Voice Lines--");
+                                Helpers.HybridPatchWriter(patchInfo, 0x1B300, hintsToUse[0]);
+                                Helpers.HybridPatchWriter(patchInfo, 0x1B314, hintsToUse[1]);
+                                Helpers.HybridPatchWriter(patchInfo, 0x1B328, hintsToUse[2]);
+                                Helpers.HybridPatchWriter(patchInfo, 0x1B33C, hintsToUse[3]);
+                                Helpers.HybridPatchWriter(patchInfo, 0x1B350, hintsToUse[4]);
+                                patchInfo.WriteLine($"\n--Egg Cerberus Voice Lines--");
+                                Helpers.HybridPatchWriter(patchInfo, 0x288A4, hintsToUse[5]);
+                                Helpers.HybridPatchWriter(patchInfo, 0x288B8, hintsToUse[6]);
+                                Helpers.HybridPatchWriter(patchInfo, 0x288CC, hintsToUse[7]);
+                                Helpers.HybridPatchWriter(patchInfo, 0x288E0, hintsToUse[8]);
+                                Helpers.HybridPatchWriter(patchInfo, 0x288F4, hintsToUse[9]);
+                                Helpers.HybridPatchWriter(patchInfo, 0x28908, hintsToUse[10]);
+                                Helpers.HybridPatchWriter(patchInfo, 0x2891C, hintsToUse[11]);
+                                Helpers.HybridPatchWriter(patchInfo, 0x28930, hintsToUse[12]);
+                                Helpers.HybridPatchWriter(patchInfo, 0x28944, hintsToUse[13]);
+                                Helpers.HybridPatchWriter(patchInfo, 0x28958, hintsToUse[14]);
+                                Helpers.HybridPatchWriter(patchInfo, 0x2896C, hintsToUse[15]);
+                                Helpers.HybridPatchWriter(patchInfo, 0x28980, hintsToUse[16]);
+                                Helpers.HybridPatchWriter(patchInfo, 0x28994, hintsToUse[17]);
+                                Helpers.HybridPatchWriter(patchInfo, 0x289A8, hintsToUse[18]);
+                                Helpers.HybridPatchWriter(patchInfo, 0x289BC, hintsToUse[19]);
+
+                                patchInfo.Close();
+                            }
+
                         }
 
                         // Patch stage and mission luas for player_start2 entities

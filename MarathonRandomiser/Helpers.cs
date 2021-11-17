@@ -162,5 +162,11 @@ namespace MarathonRandomiser
             U8Archive arc = new(path, true, CompressionLevel.Optimal);
             arc.Save(savePath);
         }
+
+        public static void HybridPatchWriter(StreamWriter patchInfo, int offset, string hint)
+        {
+            patchInfo.WriteLine($"WriteTextBytes(Executable|0x{offset:X}|\"{hint}\")");
+            patchInfo.WriteLine($"WriteNullBytes(Executable|0x{offset + hint.Length:X}|{19 - hint.Length})");
+        }
     }
 }
