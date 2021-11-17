@@ -362,6 +362,7 @@ namespace MarathonRandomiser
                     switch (TabControl_Scene.SelectedIndex)
                     {
                         case 0: Helpers.InvalidateCheckedListBox(CheckedList_Scene_EnvMaps, true, selectAll); break;
+                        case 1: Helpers.InvalidateCheckedListBox(CheckedList_Scene_Skyboxes, true, selectAll); break;
                         default: throw new NotImplementedException();
                     }
                     break;
