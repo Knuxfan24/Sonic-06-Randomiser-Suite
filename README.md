@@ -77,6 +77,8 @@ Randomisation of various values within the game's scene lua binaries (.lub) file
 
 * The environment map the scene should use
 
+* The skybox a stage map should use
+
 ### Miscellaneous Randomisation
 
 <img src="https://raw.githubusercontent.com/wiki/Knuxfan24/Sonic-06-Randomiser-Suite/images/tab_miscellaneous.png">
