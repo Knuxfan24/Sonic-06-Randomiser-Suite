@@ -427,11 +427,11 @@ namespace MarathonRandomiser
 
                 // Choose a different stage graphic for the Mirrors of Soleanna.
                 case "warpgate":
-                    setObject.Parameters[1].Data = MainWindow.Randomiser.Next(0, 10);
+                    setObject.Parameters[1].Data = MainWindow.Randomiser.Next(1, 11);
 
-                    // Wave Ocean's mirror graphic is on slots 3, 9 AND 11. If we roll a 9, set it to 10 so we use End of the World's mirror instead.
-                    if (setObject.Parameters[1].Data.ToString() == "9")
-                        setObject.Parameters[1].Data = 10;
+                    // Wave Ocean's mirror graphic is on slots 4, 10 AND 12. If we roll a 10, set it to 11 so we use End of the World's mirror instead.
+                    if (setObject.Parameters[1].Data.ToString() == "10")
+                        setObject.Parameters[1].Data = 11;
                     break;
             }
         }
