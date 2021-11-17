@@ -17,7 +17,7 @@ namespace MarathonRandomiser
     public partial class MainWindow : Window
     {
         // Version Number.
-        public static readonly string GlobalVersionNumber = $"Version 2.1";
+        public static readonly string GlobalVersionNumber = $"Version 2.1.1";
 
         #if !DEBUG
         public static readonly string VersionNumber = GlobalVersionNumber;
@@ -90,6 +90,7 @@ namespace MarathonRandomiser
             Helpers.FillCheckedListBox(Properties.Resources.EventLighting, CheckedList_Event_Lighting);
             Helpers.FillCheckedListBox(Properties.Resources.EventTerrain, CheckedList_Event_Terrain);
             Helpers.FillCheckedListBox(Properties.Resources.EnvMaps, CheckedList_Scene_EnvMaps);
+            Helpers.FillCheckedListBox(Properties.Resources.SceneSkyboxes, CheckedList_Scene_Skyboxes);
             Helpers.FillCheckedListBox(Properties.Resources.MiscSongs, CheckedList_Misc_Songs);
             Helpers.FillCheckedListBox(Properties.Resources.MiscLanguages, CheckedList_Misc_Languages);
 
@@ -423,7 +424,7 @@ namespace MarathonRandomiser
         /// </summary>
         private void Button_About(object sender, RoutedEventArgs e)
         {
-            HandyControl.Controls.MessageBox.Show($"Sonic '06 Randomiser Suite {VersionNumber} Credits:\n\n" +
+            HandyControl.Controls.MessageBox.Show($"Sonic '06 Randomiser Suite ({VersionNumber}) Credits:\n\n" +
                                                   "Knuxfan24: Development, Marathon.\n" +
                                                   "HyperBE32: Marathon.\n" +
                                                   "Sajid: Marathon Lua Decompilation.\n" +
@@ -565,6 +566,7 @@ namespace MarathonRandomiser
                 // Scene Tab.
                 WildcardTabRoll(StackPanel_Scene, (int)NumericUpDown_Wildcard_Weight.Value);
                 WildcardCheckedList(CheckedList_Scene_EnvMaps, (int)NumericUpDown_Wildcard_Weight.Value);
+                WildcardCheckedList(CheckedList_Scene_Skyboxes, (int)NumericUpDown_Wildcard_Weight.Value);
 
                 // Misc Tab.
                 WildcardTabRoll(StackPanel_Misc, (int)NumericUpDown_Wildcard_Weight.Value);
@@ -585,6 +587,7 @@ namespace MarathonRandomiser
             List<string> EventTerrain = Helpers.EnumerateCheckedListBox(CheckedList_Event_Terrain);
 
             List<string> SceneEnvMaps = Helpers.EnumerateCheckedListBox(CheckedList_Scene_EnvMaps);
+            List<string> SceneSkyboxes = Helpers.EnumerateCheckedListBox(CheckedList_Scene_Skyboxes);
 
             List<string> MiscMusic = Helpers.EnumerateCheckedListBox(CheckedList_Misc_Songs);
             List<string> MiscLanguages = Helpers.EnumerateCheckedListBox(CheckedList_Misc_Languages);
@@ -700,6 +703,8 @@ namespace MarathonRandomiser
 
             if (SceneEnvMaps.Count == 0)
                 CheckBox_Scene_EnvMaps.IsChecked = false;
+            if (SceneSkyboxes.Count == 0)
+                CheckBox_Scene_Skyboxes.IsChecked = false;
 
             if (MiscMusic.Count == 0)
                 CheckBox_Misc_Music.IsChecked = false;
@@ -850,6 +855,7 @@ namespace MarathonRandomiser
             bool? sceneFogColour = CheckBox_Scene_Fog_Colour.IsChecked;
             bool? sceneFogDensity = CheckBox_Scene_Fog_Density.IsChecked;
             bool? sceneEnvMaps = CheckBox_Scene_EnvMaps.IsChecked;
+            bool? sceneSkyboxes = CheckBox_Scene_Skyboxes.IsChecked;
 
             // Check if we actually need to do scene randomisation.
             if (sceneLightAmbient == true || sceneLightMain == true || sceneLightSub == true || sceneLightDirection == true || sceneFogColour == true ||
@@ -872,6 +878,37 @@ namespace MarathonRandomiser
                 }
             }
 
+            if (sceneSkyboxes == true)
+            {
+                foreach (string archive in archives)
+                {
+                    if (Path.GetFileName(archive).ToLower() == "scripts.arc")
+                    {
+                        string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+                        string[] skyLuas = Directory.GetFiles(unpackedArchive, "*.lub", SearchOption.AllDirectories);
+                        foreach (string skyLua in skyLuas)
+                        {
+                            // Check if we need to actually use this lua file.
+                            if (!skyLua.Contains("enemy") && (skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("a_") || skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("b_") ||
+                            skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("c_") || skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("d_") ||
+                            skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("e_") || skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("f_") ||
+                            skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("f1_") || skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("f2_") ||
+                            skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("g_") || skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("eCerberus") ||
+                            skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("eGenesis") || skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("eWyvern") ||
+                            skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("firstmefiress") || skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("iblis01") ||
+                            skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("secondiblis") || skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("secondmefiress") ||
+                            skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("shadow_vs_silver") || skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("silver_vs_shadow") ||
+                            skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("solaris_super3") || skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("sonic_vs_silver") ||
+                            skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("thirdiblis") || skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("silver_vs_sonic")))
+                            {
+                                UpdateLogger($"Randomising skybox in '{skyLua}'.");
+                                await Task.Run(() => SceneRandomiser.SkyboxRandomisation(skyLua, SceneSkyboxes));
+                            }
+                        }
+                    }
+                }
+            }
+
             // Music Randomisation
             bool? miscMusic = CheckBox_Misc_Music.IsChecked;
 
@@ -888,7 +925,7 @@ namespace MarathonRandomiser
                         foreach (string luaFile in luaFiles)
                         {
                             // Check if we need to actually use this lua file.
-                            if (luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("a_") || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("b_") ||
+                            if (!luaFile.Contains("enemy") && (luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("a_") || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("b_") ||
                             luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("c_") || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("d_") ||
                             luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("e_") || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("f_") ||
                             luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("f1_") || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("f2_") ||
@@ -899,7 +936,7 @@ namespace MarathonRandomiser
                             luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("shadow_vs_silver") || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("silver_vs_shadow") ||
                             luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("solaris_super3") || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("sonic_vs_silver") ||
                             luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("thirdiblis") || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("silver_vs_sonic") ||
-                            luaFile.Contains("mission"))
+                            luaFile.Contains("mission")))
                             {
                                 UpdateLogger($"Randomising music in '{luaFile}'.");
                                 await Task.Run(() => MiscellaneousRandomisers.MusicRandomiser(luaFile, MiscMusic));
@@ -1069,6 +1106,7 @@ namespace MarathonRandomiser
             // Scene Block.
             ConfigTabRead(configInfo, "Scene", StackPanel_Scene);
             ConfigCheckedListBoxRead(configInfo, CheckedList_Scene_EnvMaps);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_Scene_Skyboxes);
             configInfo.WriteLine();
 
             // Misc Block.

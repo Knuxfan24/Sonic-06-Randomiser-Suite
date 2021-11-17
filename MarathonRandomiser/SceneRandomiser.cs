@@ -157,5 +157,56 @@ namespace MarathonRandomiser
             lua[startPos + 1] = string.Join(' ', ySplit);
             lua[startPos + 2] = string.Join(' ', zSplit);
         }
+    
+        /// <summary>
+        /// Randomises the skybox a stage should load.
+        /// </summary>
+        /// <param name="skyLua">The lua file we're processing.</param>
+        /// <param name="SceneSkyboxes">The list of valid skybox paths.</param>
+        public static async Task SkyboxRandomisation(string skyLua, List<string> SceneSkyboxes)
+        {
+            // Decompile this lua file.
+            await Task.Run(() => Helpers.LuaDecompile(skyLua));
+
+            // Read the decompiled lua file into a string array.
+            string[] lua = File.ReadAllLines(skyLua);
+
+            // Loop through each line in this lua binary. We'll do this twice, as some already use this function, so let's not add it a second time.
+            bool foundSky = false;
+            for (int i = 0; i < lua.Length; i++)
+            {
+                if(lua[i].Contains("Game.LoadSky"))
+                {
+                    // Set our indicator that this lua already had skybox set.
+                    foundSky = true;
+
+                    // Split the line controlling the skybox based on the quote marks around the stage folder path.
+                    string[] sky = lua[i].Split('"');
+
+                    // Replace the second value in the split array (the one containing the stage folder path) with a path from the list of valid skyboxes.
+                    sky[1] = SceneSkyboxes[MainWindow.Randomiser.Next(SceneSkyboxes.Count)];
+
+                    // Rejoin the split array into one line and add it back to the original lua array.
+                    lua[i] = string.Join("\"", sky);
+                }
+            }
+
+            // If we haven't found an existing Game.LoadSky() function, then loop through and create one.
+            if(!foundSky)
+            {
+                for (int i = 0; i < lua.Length; i++)
+                {
+                    // Use the AddComponent call as a donor, as those always seem to be on the block that controls terrain loading.
+                    if (lua[i].Contains("_ARG_0_:AddComponent({"))
+                    {
+                        // Add a new line under the AddComponent call with the Game.LoadSky() function.
+                        lua[i] += $"\n    Game.LoadSky(\"{SceneSkyboxes[MainWindow.Randomiser.Next(SceneSkyboxes.Count)]}\"),";
+                    }
+                }
+            }
+
+            // Save the updated lua binary.
+            File.WriteAllLines(skyLua, lua);
+        }
     }
 }

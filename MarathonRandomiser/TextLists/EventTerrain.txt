@@ -17,7 +17,6 @@ Dusty Desert A,stage/dtd/a,True
 Dusty Desert B,stage/dtd/b,True
 Dusty Desert Inside Arena,stage/boss/secondmefiress_dtd,True
 Egg Carrier Arena,stage/boss/dr3_eggcarrier,True
-Egg Carrier Arena Alternate?,stage/boss/dr3_eggcarrier/action,True
 Egg Carrier Interior,stage/event/ev0022,True
 End of the World Arena,stage/boss/solaris_last,True
 Flame Core A,stage/flc/a,True

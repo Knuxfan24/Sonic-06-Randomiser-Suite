@@ -186,6 +186,7 @@
                         <CheckBox x:Name="CheckBox_Scene_Fog_Colour" Content="Randomise Fog Colour" IsChecked="True"/>
                         <CheckBox x:Name="CheckBox_Scene_Fog_Density" Content="Randomise Fog Density" Foreground="Firebrick"/>
                         <CheckBox x:Name="CheckBox_Scene_EnvMaps" Content="Randomise Environment Maps" IsChecked="True"/>
+                        <CheckBox x:Name="CheckBox_Scene_Skyboxes" Content="Randomise Skyboxes"/>
                     </StackPanel>
 
                     <!--Scene Configuration Toggles-->
@@ -195,6 +196,11 @@
                         <hc:TabItem Header="Environment Maps" BorderBrush="#B146C2">
                             <Grid>
                                 <local:CheckedListBox x:Name="CheckedList_Scene_EnvMaps" MultiColumn="True" Margin="0,0,0,0"/>
+                            </Grid>
+                        </hc:TabItem>
+                        <hc:TabItem Header="Skyboxes" BorderBrush="#B146C2">
+                            <Grid>
+                                <local:CheckedListBox x:Name="CheckedList_Scene_Skyboxes" MultiColumn="True" Margin="0,0,0,0"/>
                             </Grid>
                         </hc:TabItem>
                     </hc:TabControl>

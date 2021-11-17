@@ -283,6 +283,27 @@ namespace MarathonRandomiser.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Aquatic Base A,stage/aqa/a/,false
+        ///Aquatic Base B,stage/aqa/b/,false
+        ///Egg Carrier,stage/boss/dr3_eggcarrier/action,false
+        ///End of the World,stage/boss/solaris_last,true
+        ///Crisis City,stage/csc/a,true
+        ///Crisis City (End of the World),stage/end/a,true
+        ///Dusty Desert,stage/dtd/a,true
+        ///Dusty Desert (End of the World),stage/end/d,true
+        ///Flame Core (Outside),stage/flc/a,true
+        ///Flame Core (Inside),stage/flc/b,true
+        ///Flame Core (End of the World),stage/end/b,true
+        ///Kingdom Valley,stage/kdv/a,true
+        ///Kingdom Valley (End of th [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string SceneSkyboxes {
+            get {
+                return ResourceManager.GetString("SceneSkyboxes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to hint_all01_a00_sn,hint_all01_a00_sn,True
         ///hint_all01_a00_tl,hint_all01_a00_tl,True
         ///hint_all01_a00_kn,hint_all01_a00_kn,True

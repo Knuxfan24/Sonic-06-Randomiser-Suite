@@ -1,0 +1,24 @@
+Aquatic Base A,stage/aqa/a/,false
+Aquatic Base B,stage/aqa/b/,false
+Egg Carrier,stage/boss/dr3_eggcarrier/action,false
+End of the World,stage/boss/solaris_last,true
+Crisis City,stage/csc/a,true
+Crisis City (End of the World),stage/end/a,true
+Dusty Desert,stage/dtd/a,true
+Dusty Desert (End of the World),stage/end/d,true
+Flame Core (Outside),stage/flc/a,true
+Flame Core (Inside),stage/flc/b,true
+Flame Core (End of the World),stage/end/b,true
+Kingdom Valley,stage/kdv/a,true
+Kingdom Valley (End of the World),stage/end/g,true
+Radical Train,stage/rct/a,true
+Soleanna Castle Town,stage/twn/a,true
+Soleanna Castle Town (Night),stage/event/ev0031,true
+Soleanna Forest,stage/twn/c,true
+Soleanna Highway,stage/twn/circuit,true
+Tropical Jungle,stage/tpj/a,true
+Tropical Jungle (End of the World),stage/end/c,true
+White Acropolis,stage/wap/a,true
+White Acropolis (End of the World),stage/end/f,true
+Wave Ocean,stage/wvo/a,true
+Wave Ocean (End of the World),stage/end/e,true
