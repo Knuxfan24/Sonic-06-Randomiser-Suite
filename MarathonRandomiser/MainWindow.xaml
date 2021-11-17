@@ -63,10 +63,10 @@
                                 <Setter Property="HorizontalAlignment" Value="Left"/>
                             </Style>
                         </StackPanel.Resources>
-                        <CheckBox x:Name="CheckBox_SET_Enemies" Content="Randomise Enemies" Click="Dependency_CheckBox_Changed" x:FieldModifier="public"/>
-                        <CheckBox x:Name="CheckBox_SET_Enemies_NoBosses" Content="Exclude Bosses" IsChecked="True" IsEnabled="False"/>
-                        <CheckBox x:Name="CheckBox_SET_Enemies_Behaviour" Content="Randomise Enemy Behaviour" Click="Dependency_CheckBox_Changed"/>
-                        <CheckBox x:Name="CheckBox_SET_Enemies_Behaviour_NoEnforce" Content="Don't Enforce Behaviour Types" Foreground="Firebrick" IsEnabled="False"/>
+                        <CheckBox x:Name="CheckBox_SET_Enemies" Content="Randomise Enemies" Click="Dependency_CheckBox_Changed" x:FieldModifier="public" IsChecked="True"/>
+                        <CheckBox x:Name="CheckBox_SET_Enemies_NoBosses" Content="Exclude Bosses" IsChecked="True"/>
+                        <CheckBox x:Name="CheckBox_SET_Enemies_Behaviour" Content="Randomise Enemy Behaviour" Click="Dependency_CheckBox_Changed" IsChecked="True"/>
+                        <CheckBox x:Name="CheckBox_SET_Enemies_Behaviour_NoEnforce" Content="Don't Enforce Behaviour Types" Foreground="Firebrick"/>
                         <CheckBox x:Name="CheckBox_SET_Characters" Content="Randomise Characters"/>
                         <CheckBox x:Name="CheckBox_SET_ItemCapsules" Content="Randomise Item Capsules" IsChecked="True"/>
                         <CheckBox x:Name="CheckBox_SET_CommonProps" Content="Randomise Standard Props"/>
@@ -186,7 +186,7 @@
                         <CheckBox x:Name="CheckBox_Scene_Fog_Colour" Content="Randomise Fog Colour" IsChecked="True"/>
                         <CheckBox x:Name="CheckBox_Scene_Fog_Density" Content="Randomise Fog Density" Foreground="Firebrick"/>
                         <CheckBox x:Name="CheckBox_Scene_EnvMaps" Content="Randomise Environment Maps" IsChecked="True"/>
-                        <CheckBox x:Name="CheckBox_Scene_Skyboxes" Content="Randomise Skyboxes"/>
+                        <CheckBox x:Name="CheckBox_Scene_Skyboxes" Content="Randomise Skyboxes" IsChecked="True"/>
                     </StackPanel>
 
                     <!--Scene Configuration Toggles-->
@@ -226,7 +226,7 @@
                         <hc:NumericUpDown x:Name="NumericUpDown_Misc_EnemyHealth_Max" Value="4" Margin="10,0,10,0" SelectionBrush="#FFB146C2" IsEnabled="False"/>
                         <CheckBox x:Name="CheckBox_Misc_EnemyHealth_Bosses" Content="Include Bosses" Foreground="Firebrick" IsEnabled="False"/>
                         <CheckBox x:Name="CheckBox_Misc_Collision" Content="Randomise Surface Types" IsChecked="True" Click="Dependency_CheckBox_Changed"/>
-                        <CheckBox x:Name="CheckBox_Misc_Collision_PerFace" Content="Randomise Per Face"/>
+                        <CheckBox x:Name="CheckBox_Misc_Collision_PerFace" Content="Randomise Per Face" IsChecked="True"/>
                         <CheckBox x:Name="CheckBox_Misc_Text" Content="Shuffle Text"/>
                         <CheckBox x:Name="CheckBox_Misc_Patches" Content="Use Random Patches" Foreground="Firebrick" Click="Dependency_CheckBox_Changed"/>
                         <Label x:Name="Label_Misc_Patches_Weight" Content="Weight:" Background="{x:Null}" BorderBrush="{x:Null}" IsEnabled="False"/>
