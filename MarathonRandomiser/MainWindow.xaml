@@ -63,10 +63,10 @@
                                 <Setter Property="HorizontalAlignment" Value="Left"/>
                             </Style>
                         </StackPanel.Resources>
-                        <CheckBox x:Name="CheckBox_SET_Enemies" Content="Randomise Enemies" ToolTip="Changes what enemy types will appear within the stages." Click="Dependency_CheckBox_Changed" x:FieldModifier="public"/>
-                        <CheckBox x:Name="CheckBox_SET_Enemies_NoBosses" Content="Exclude Bosses" IsChecked="True" IsEnabled="False" ToolTip="Prevents bosses from being changed into other enemy types."/>
-                        <CheckBox x:Name="CheckBox_SET_Enemies_Behaviour" Content="Randomise Enemy Behaviour" ToolTip="Changes how the enemies within the stage will behave." Click="Dependency_CheckBox_Changed"/>
-                        <CheckBox x:Name="CheckBox_SET_Enemies_Behaviour_NoEnforce" Content="Don't Enforce Behaviour Types" Foreground="Firebrick" ToolTip="Removes the enforcement that the enemy's behaviour should belong to its type." IsEnabled="False"/>
+                        <CheckBox x:Name="CheckBox_SET_Enemies" Content="Randomise Enemies" Click="Dependency_CheckBox_Changed" x:FieldModifier="public"/>
+                        <CheckBox x:Name="CheckBox_SET_Enemies_NoBosses" Content="Exclude Bosses" IsChecked="True" IsEnabled="False"/>
+                        <CheckBox x:Name="CheckBox_SET_Enemies_Behaviour" Content="Randomise Enemy Behaviour" Click="Dependency_CheckBox_Changed"/>
+                        <CheckBox x:Name="CheckBox_SET_Enemies_Behaviour_NoEnforce" Content="Don't Enforce Behaviour Types" Foreground="Firebrick" IsEnabled="False"/>
                         <CheckBox x:Name="CheckBox_SET_Characters" Content="Randomise Characters"/>
                         <CheckBox x:Name="CheckBox_SET_ItemCapsules" Content="Randomise Item Capsules" IsChecked="True"/>
                         <CheckBox x:Name="CheckBox_SET_CommonProps" Content="Randomise Standard Props"/>
