@@ -444,7 +444,7 @@ namespace MarathonRandomiser
         /// <param name="enemies">Whether enemy randomisation is on.</param>
         /// <param name="hints">Whether hint randomisation is on.</param>
         /// <param name="SetHints">The list of valid hint voice lines</param>
-        public static async Task BossPatch(string luaFile, bool? enemies, bool? hints, List<string> SetHints)
+        public static async Task BossPatch(string luaFile, bool? enemies, bool? hints, List<string> SetHints, List<string> SetEnemies)
         {
             // Decompile this luaFile.
             await Task.Run(() => Helpers.LuaDecompile(luaFile));
@@ -456,7 +456,7 @@ namespace MarathonRandomiser
             for (int i = 0; i < lua.Length; i++)
             {
                 // If enemy randomisation is on, then comment out the lines that control the camera forcing, player movement forcing and Mephiles' random teleportations.
-                if ((lua[i].Contains("CallSetCamera") || lua[i].Contains("CallMoveTargetPos") || lua[i].Contains("FirstMefiress_RandomWarp")) && enemies == true)
+                if ((lua[i].Contains("CallSetCamera") || lua[i].Contains("CallMoveTargetPos") || lua[i].Contains("FirstMefiress_RandomWarp")) && enemies == true && SetEnemies.Contains(Path.GetFileNameWithoutExtension(luaFile)))
                     lua[i] = $"--{lua[i]}";
 
                 // If voice randomisation is on, then randomise the lua hint messages.

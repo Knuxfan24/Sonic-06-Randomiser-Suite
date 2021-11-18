@@ -771,7 +771,7 @@ namespace MarathonRandomiser
                             foreach (string luaFile in luaFiles)
                             {
                                 UpdateLogger($"Patching '{luaFile}'.");
-                                await Task.Run(() => ObjectPlacementRandomiser.BossPatch(luaFile, setEnemies, setHints, SetHints));
+                                await Task.Run(() => ObjectPlacementRandomiser.BossPatch(luaFile, setEnemies, setHints, SetHints, SetEnemies));
                             }
                         }
 
