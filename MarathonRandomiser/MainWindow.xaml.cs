@@ -17,7 +17,7 @@ namespace MarathonRandomiser
     public partial class MainWindow : Window
     {
         // Version Number.
-        public static readonly string GlobalVersionNumber = $"Version 2.1.2";
+        public static readonly string GlobalVersionNumber = $"Version 2.1.3";
 
         #if !DEBUG
         public static readonly string VersionNumber = GlobalVersionNumber;
@@ -945,6 +945,7 @@ namespace MarathonRandomiser
                 }
             }
 
+            // Check if we need to do skybox randomisation.
             if (sceneSkyboxes == true)
             {
                 foreach (string archive in archives)
@@ -1087,7 +1088,23 @@ namespace MarathonRandomiser
             // Check if we need to actually do patch randomisation.
             if (miscPatches == true)
             {
+                UpdateLogger($"Randomising Patches.");
                 await Task.Run(() => MiscellaneousRandomisers.PatchRandomiser(ModDirectory, MiscPatches, miscPatchesWeight));
+            }
+
+            bool? miscUnlock = CheckBox_Misc_AutoUnlock.IsChecked;
+
+            if (miscUnlock == true)
+            {
+                foreach (string archive in archives)
+                {
+                    if (Path.GetFileName(archive).ToLower() == "scripts.arc")
+                    {
+                        UpdateLogger($"Patching first Sonic mission Lua to unlock Shadow and Silver's episodes.");
+                        string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+                        await Task.Run(() => MiscellaneousRandomisers.UnlockEpisodes(unpackedArchive, GameExecutable));
+                    }
+                }
             }
 
             // Repack all the used archives (kinda don't like how this is done right now).
@@ -1129,6 +1146,15 @@ namespace MarathonRandomiser
                                                   "Sonic '06 Randomiser Suite",
                                                   MessageBoxButton.OK,
                                                   MessageBoxImage.Information);
+
+            // If the user has chosen to enable Auto Unlock, inform them of how to actually make it take.
+            if (miscUnlock == true)
+            {
+                HandyControl.Controls.MessageBox.Show("To enable access to Shadow and Silver's episodes, load Sonic's and save the game from the pause menu.",
+                                                      "Sonic '06 Randomiser Suite",
+                                                      MessageBoxButton.OK,
+                                                      MessageBoxImage.Information);
+            }
         }
         #endregion
 
@@ -1344,7 +1370,7 @@ namespace MarathonRandomiser
         private static void WildcardTabRoll(DependencyObject element, int wildcardWeight)
         {
             // List of Checkboxes the Wildcard is forbidden from changing.
-            List<string> Forbidden = new() { "CheckBox_SET_Enemies_Behaviour", "CheckBox_SET_Enemies_Behaviour_NoEnforce", "CheckBox_SET_DrawDistance", "CheckBox_Misc_EnemyHealth", "CheckBox_Misc_Patches" };
+            List<string> Forbidden = new() { "CheckBox_SET_Enemies_Behaviour", "CheckBox_SET_Enemies_Behaviour_NoEnforce", "CheckBox_SET_DrawDistance", "CheckBox_Misc_EnemyHealth", "CheckBox_Misc_Patches", "CheckBox_Misc_AutoUnlock" };
             
             // Get all the children of this StackPanel element.
             IEnumerable? children = LogicalTreeHelper.GetChildren(element);

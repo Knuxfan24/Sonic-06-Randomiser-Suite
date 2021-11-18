@@ -289,5 +289,38 @@ namespace MarathonRandomiser
                 configInfo.Close();
             }
         }
+
+        /// <summary>
+        /// Patches the first mission lua in Sonic's story to instantly unlock Shadow and Silver's episodes.
+        /// </summary>
+        /// <param name="archivePath">The path to the extracted scripts.arc.</param>
+        /// <param name="GameExecutable">The filepath of the game executable (used to determine the path).</param>
+        /// <returns></returns>
+        public static async Task UnlockEpisodes(string archivePath, string GameExecutable)
+        {
+            // Determine if we need a xenon folder or a ps3 folder.
+            string corePath = "xenon";
+            if (GameExecutable.ToLower().EndsWith(".bin"))
+                corePath = "ps3";
+
+            // Decompile the 0001 mission lua.
+            await Task.Run(() => Helpers.LuaDecompile($@"{archivePath}\{corePath}\scripts\mission\0001\mission.lub"));
+
+            // Read the decompiled lua file into a string array.
+            string[] lua = File.ReadAllLines($@"{archivePath}\{corePath}\scripts\mission\0001\mission.lub");
+
+            // Loop through each line in this lua binary.
+            for (int i = 0; i < lua.Length; i++)
+            {
+                // Search for the opening cutscene's ending event and set the global flags used after Silver's boss and after Crisis City.
+                if (lua[i] == "  elseif _ARG_1_ == \"e0000_end\" then")
+                {
+                    lua[i] += "\n    SetGlobalFlag(_ARG_0_, 4047, 1)\n    SetGlobalFlag(_ARG_0_, 50, 1)\n    SetGlobalFlag(_ARG_0_, 4015, 1)\n    SetGlobalFlag(_ARG_0_, 51, 1)";
+                }
+            }
+
+            // Save the updated lua binary.
+            File.WriteAllLines($@"{archivePath}\{corePath}\scripts\mission\0001\mission.lub", lua);
+        }
     }
 }

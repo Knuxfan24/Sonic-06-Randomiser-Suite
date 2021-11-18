@@ -231,6 +231,7 @@
                         <CheckBox x:Name="CheckBox_Misc_Patches" Content="Use Random Patches" Foreground="Firebrick" Click="Dependency_CheckBox_Changed"/>
                         <Label x:Name="Label_Misc_Patches_Weight" Content="Weight:" Background="{x:Null}" BorderBrush="{x:Null}" IsEnabled="False"/>
                         <hc:NumericUpDown x:Name="NumericUpDown_Misc_Patches_Weight" Minimum="1" Maximum="100" Value="50" Margin="10,0,10,0" SelectionBrush="#FFB146C2" IsEnabled="False"/>
+                        <CheckBox x:Name="CheckBox_Misc_AutoUnlock" Content="Auto Unlock Episodes"/>
                     </StackPanel>
 
                     <!--Miscellaneous Configuration Toggles-->
