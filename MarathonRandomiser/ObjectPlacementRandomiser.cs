@@ -126,8 +126,8 @@ namespace MarathonRandomiser
         {
             // If this object is a boss but the user has disallowed boss randomisation, then don't change anything.
             if (enemiesNoBosses == true && (setObject.Parameters[0].Data.ToString() == "eCerberus" || setObject.Parameters[0].Data.ToString() == "eGenesis" ||
-                setObject.Parameters[0].Data.ToString() == "eWyvern" || setObject.Parameters[0].Data.ToString() == "firstIblis" || setObject.Parameters[0].Data.ToString() == "secondIblis" ||
-                setObject.Parameters[0].Data.ToString() == "thirdIblis" || setObject.Parameters[0].Data.ToString() == "firstmefiress" || setObject.Parameters[0].Data.ToString() == "secondmefiress" ||
+                setObject.Parameters[0].Data.ToString() == "eWyvern" || setObject.Parameters[0].Data.ToString() == "iblis01" || setObject.Parameters[0].Data.ToString() == "iblis02" ||
+                setObject.Parameters[0].Data.ToString() == "iblis03" || setObject.Parameters[0].Data.ToString() == "firstmefiress" || setObject.Parameters[0].Data.ToString() == "secondmefiress" ||
                 setObject.Parameters[0].Data.ToString() == "solaris01" || setObject.Parameters[0].Data.ToString() == "solaris02"))
                 return;
 
@@ -255,7 +255,7 @@ namespace MarathonRandomiser
                     case "cBiter":         setObject.Parameters[2].Data = cBiterParameters[MainWindow.Randomiser.Next(cBiterParameters.Count)];               break;
                     case "cStalker":       setObject.Parameters[2].Data = cStalkerParameters[MainWindow.Randomiser.Next(cStalkerParameters.Count)];           break;
                     case "cTaker":         setObject.Parameters[2].Data = cTakerParameters[MainWindow.Randomiser.Next(cTakerParameters.Count)];               break;
-                    case "cTriker":        setObject.Parameters[2].Data = cTrickerParameters[MainWindow.Randomiser.Next(cTrickerParameters.Count)];           break;
+                    case "cTricker":       setObject.Parameters[2].Data = cTrickerParameters[MainWindow.Randomiser.Next(cTrickerParameters.Count)];           break;
                     case "cCrawler":       setObject.Parameters[2].Data = cCrawlerParameters[MainWindow.Randomiser.Next(cCrawlerParameters.Count)];           break;
                     case "cGazer":         setObject.Parameters[2].Data = cGazerParameters[MainWindow.Randomiser.Next(cGazerParameters.Count)];               break;
                     case "cGolem":         setObject.Parameters[2].Data = cGolemParameters[MainWindow.Randomiser.Next(cGolemParameters.Count)];               break;
