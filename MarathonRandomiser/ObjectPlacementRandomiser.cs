@@ -1,4 +1,5 @@
 ﻿using Marathon.Formats.Placement;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -260,17 +261,18 @@ namespace MarathonRandomiser
                     case "cGazer":         setObject.Parameters[2].Data = cGazerParameters[MainWindow.Randomiser.Next(cGazerParameters.Count)];               break;
                     case "cGolem":         setObject.Parameters[2].Data = cGolemParameters[MainWindow.Randomiser.Next(cGolemParameters.Count)];               break;
                     case "cTitan":         setObject.Parameters[2].Data = cTitanParameters[MainWindow.Randomiser.Next(cTitanParameters.Count)];               break;
-                    case "firstIblis":     setObject.Parameters[2].Data = "firstIblis";                                                                      break;
+                    case "firstIblis":     setObject.Parameters[2].Data = "firstIblis";                                                                       break;
                     case "secondIblis":    setObject.Parameters[2].Data = secondIblisParameters[MainWindow.Randomiser.Next(secondIblisParameters.Count)];     break;
-                    case "thirdIblis":     setObject.Parameters[2].Data = "thirdIblis";                                                                      break;
+                    case "thirdIblis":     setObject.Parameters[2].Data = "thirdIblis";                                                                       break;
                     case "firstmefiress":  setObject.Parameters[2].Data = firstmefiressParameters[MainWindow.Randomiser.Next(firstmefiressParameters.Count)]; break;
-                    case "secondmefiress": setObject.Parameters[2].Data = "secondmefiress_shadow";                                                           break;
-                    case "kyozoress":      setObject.Parameters[2].Data = "kyozoress";                                                                       break;
+                    case "secondmefiress": setObject.Parameters[2].Data = "secondmefiress_shadow";                                                            break;
+                    case "kyozoress":      setObject.Parameters[2].Data = "kyozoress";                                                                        break;
                     case "eCerberus":      setObject.Parameters[2].Data = eCerberusParameters[MainWindow.Randomiser.Next(eCerberusParameters.Count)];         break;
                     case "eGenesis":       setObject.Parameters[2].Data = eGenesisParameters[MainWindow.Randomiser.Next(eGenesisParameters.Count)];           break;
-                    case "eWyvern":        setObject.Parameters[2].Data = "eWyvern";                                                                         break;
-                    case "solaris01":      setObject.Parameters[2].Data = "solaris01";                                                                       break;
-                    case "solaris02":      setObject.Parameters[2].Data = "solaris02";                                                                       break;
+                    case "eWyvern":        setObject.Parameters[2].Data = "eWyvern";                                                                          break;
+                    case "solaris01":      setObject.Parameters[2].Data = "solaris01";                                                                        break;
+                    case "solaris02":      setObject.Parameters[2].Data = "solaris02";                                                                        break;
+                    default:               throw new Exception($"Couldn't find anything for enemy type {setObject.Parameters[0].Data}.");
                 }
             }
 
