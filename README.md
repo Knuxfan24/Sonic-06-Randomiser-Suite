@@ -79,6 +79,12 @@ Randomisation of various values within the game's scene lua binaries (.lub) file
 
 * The skybox a stage map should use
 
+### Animation Randomisation
+
+<img src="https://raw.githubusercontent.com/wiki/Knuxfan24/Sonic-06-Randomiser-Suite/images/tab_animations.png">
+
+Shuffling of both Gameplay and Event Animations, as well as Event Cameras
+
 ### Miscellaneous Randomisation
 
 <img src="https://raw.githubusercontent.com/wiki/Knuxfan24/Sonic-06-Randomiser-Suite/images/tab_miscellaneous.png">
