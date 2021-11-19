@@ -221,6 +221,7 @@
                         <CheckBox x:Name="CheckBox_Anim_Gameplay" Content="Shuffle Gameplay Animations" IsChecked="False"/>
                         <CheckBox x:Name="CheckBox_Anim_Events" Content="Shuffle Event Animations" IsChecked="False"/>
                         <CheckBox x:Name="CheckBox_Anim_Events_Face" Content="Shuffle Event Facial Animations" IsChecked="False"/>
+                        <CheckBox x:Name="CheckBox_Anim_Cameras" Content="Shuffle Event Cameras" IsChecked="False"/>
                     </StackPanel>
                 </Grid>
             </hc:TabItem>

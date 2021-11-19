@@ -985,6 +985,7 @@ namespace MarathonRandomiser
             bool? animGameplay = CheckBox_Anim_Gameplay.IsChecked;
             bool? animEvents = CheckBox_Anim_Events.IsChecked;
             bool? animEventsFace = CheckBox_Anim_Events_Face.IsChecked;
+            bool? animEventsCamera = CheckBox_Anim_Cameras.IsChecked;
 
             // Gameplay.
             if (animGameplay == true)
@@ -999,14 +1000,14 @@ namespace MarathonRandomiser
                         foreach (string pkgFile in pkgFiles)
                         {
                             UpdateLogger($"Randomising animations in '{pkgFile}'.");
-                            await Task.Run(() => MiscellaneousRandomisers.AnimationRandomiser(pkgFile));
+                            await Task.Run(() => AnimationRandomisers.GameplayAnimationRandomiser(pkgFile));
                         }
                     }
                 }
             }
 
             // Events
-            if (animEvents == true || animEventsFace == true)
+            if (animEvents == true || animEventsFace == true || animEventsCamera == true)
             {
                 foreach (string archive in archives)
                 {
@@ -1017,37 +1018,43 @@ namespace MarathonRandomiser
                         if (animEvents == true)
                         {
                             UpdateLogger($"Shuffling event animations.");
-                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "amy", "Root"));
-                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "blaze", "Root"));
-                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "eggman", "Root"));
-                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "knuckles", "Root"));
-                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "mefiress", "Root"));
-                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "omega", "Root"));
-                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "princess", "Root"));
-                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "princess_child", "Root"));
-                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "rouge", "Root"));
-                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "shadow", "Root"));
-                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "silver", "Root"));
-                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "sonic", "Root"));
-                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "tails", "Root"));
+                            await Task.Run(() => AnimationRandomisers.EventAnimationRandomiser(unpackedArchive, "amy", "Root"));
+                            await Task.Run(() => AnimationRandomisers.EventAnimationRandomiser(unpackedArchive, "blaze", "Root"));
+                            await Task.Run(() => AnimationRandomisers.EventAnimationRandomiser(unpackedArchive, "eggman", "Root"));
+                            await Task.Run(() => AnimationRandomisers.EventAnimationRandomiser(unpackedArchive, "knuckles", "Root"));
+                            await Task.Run(() => AnimationRandomisers.EventAnimationRandomiser(unpackedArchive, "mefiress", "Root"));
+                            await Task.Run(() => AnimationRandomisers.EventAnimationRandomiser(unpackedArchive, "omega", "Root"));
+                            await Task.Run(() => AnimationRandomisers.EventAnimationRandomiser(unpackedArchive, "princess", "Root"));
+                            await Task.Run(() => AnimationRandomisers.EventAnimationRandomiser(unpackedArchive, "princess_child", "Root"));
+                            await Task.Run(() => AnimationRandomisers.EventAnimationRandomiser(unpackedArchive, "rouge", "Root"));
+                            await Task.Run(() => AnimationRandomisers.EventAnimationRandomiser(unpackedArchive, "shadow", "Root"));
+                            await Task.Run(() => AnimationRandomisers.EventAnimationRandomiser(unpackedArchive, "silver", "Root"));
+                            await Task.Run(() => AnimationRandomisers.EventAnimationRandomiser(unpackedArchive, "sonic", "Root"));
+                            await Task.Run(() => AnimationRandomisers.EventAnimationRandomiser(unpackedArchive, "tails", "Root"));
                         }
 
                         if (animEventsFace == true)
                         {
                             UpdateLogger($"Shuffling event facial animations.");
-                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "amy", "evf_head"));
-                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "blaze", "evf_head"));
-                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "eggman", "evf_head"));
-                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "knuckles", "evf_head"));
-                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "mefiress", "evf_head"));
-                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "omega", "evf_head"));
-                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "princess", "evf_head"));
-                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "princess_child", "evf_head"));
-                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "rouge", "evf_head"));
-                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "shadow", "evf_head"));
-                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "silver", "evf_head"));
-                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "sonic", "evf_head"));
-                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "tails", "evf_head"));
+                            await Task.Run(() => AnimationRandomisers.EventAnimationRandomiser(unpackedArchive, "amy", "evf_head"));
+                            await Task.Run(() => AnimationRandomisers.EventAnimationRandomiser(unpackedArchive, "blaze", "evf_head"));
+                            await Task.Run(() => AnimationRandomisers.EventAnimationRandomiser(unpackedArchive, "eggman", "evf_head"));
+                            await Task.Run(() => AnimationRandomisers.EventAnimationRandomiser(unpackedArchive, "knuckles", "evf_head"));
+                            await Task.Run(() => AnimationRandomisers.EventAnimationRandomiser(unpackedArchive, "mefiress", "evf_head"));
+                            await Task.Run(() => AnimationRandomisers.EventAnimationRandomiser(unpackedArchive, "omega", "evf_head"));
+                            await Task.Run(() => AnimationRandomisers.EventAnimationRandomiser(unpackedArchive, "princess", "evf_head"));
+                            await Task.Run(() => AnimationRandomisers.EventAnimationRandomiser(unpackedArchive, "princess_child", "evf_head"));
+                            await Task.Run(() => AnimationRandomisers.EventAnimationRandomiser(unpackedArchive, "rouge", "evf_head"));
+                            await Task.Run(() => AnimationRandomisers.EventAnimationRandomiser(unpackedArchive, "shadow", "evf_head"));
+                            await Task.Run(() => AnimationRandomisers.EventAnimationRandomiser(unpackedArchive, "silver", "evf_head"));
+                            await Task.Run(() => AnimationRandomisers.EventAnimationRandomiser(unpackedArchive, "sonic", "evf_head"));
+                            await Task.Run(() => AnimationRandomisers.EventAnimationRandomiser(unpackedArchive, "tails", "evf_head"));
+                        }
+
+                        if (animEventsCamera == true)
+                        {
+                            UpdateLogger($"Shuffling event cameras.");
+                            await Task.Run(() => AnimationRandomisers.EventAnimationRandomiser(unpackedArchive, "", "", true));
                         }
                     }
                 }
