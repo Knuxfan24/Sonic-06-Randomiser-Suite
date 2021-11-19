@@ -207,6 +207,24 @@
                 </Grid>
             </hc:TabItem>
 
+            <!--Animation Tab-->
+            <hc:TabItem Header="Animations" BorderBrush="#B146C2" x:Name="TabItem_Anim" >
+                <Grid Background="#FF181818" Name="Grid_Animations">
+                    <!--Animations Configuration Checkboxes/Controls-->
+                    <StackPanel HorizontalAlignment="Left" Width="210" Name="StackPanel_Animation">
+                        <StackPanel.Resources>
+                            <Style BasedOn="{StaticResource CheckBoxBaseStyle}" TargetType="{x:Type CheckBox}">
+                                <Setter Property="Margin" Value="10,10,0,0" />
+                                <Setter Property="HorizontalAlignment" Value="Left"/>
+                            </Style>
+                        </StackPanel.Resources>
+                        <CheckBox x:Name="CheckBox_Anim_Gameplay" Content="Shuffle Gameplay Animations" IsChecked="False"/>
+                        <CheckBox x:Name="CheckBox_Anim_Events" Content="Shuffle Event Animations" IsChecked="False"/>
+                        <CheckBox x:Name="CheckBox_Anim_Events_Face" Content="Shuffle Event Facial Animations" IsChecked="False"/>
+                    </StackPanel>
+                </Grid>
+            </hc:TabItem>
+
             <!--Miscellaneous Tab-->
             <hc:TabItem Header="Miscellaneous" BorderBrush="#B146C2" >
                 <Grid Background="#FF181818" Name="Grid_Miscellaneous">

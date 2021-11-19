@@ -304,6 +304,7 @@ namespace MarathonRandomiser
                     // Event and Scene Tabs.
                     TabItem_Event.IsEnabled = (bool)!NewCheckedStatus;
                     TabItem_Scene.IsEnabled = (bool)!NewCheckedStatus;
+                    TabItem_Anim.IsEnabled = (bool)!NewCheckedStatus;
 
                     // Misc Tab.
                     CheckBox_Misc_Music.IsEnabled = (bool)!NewCheckedStatus;
@@ -574,6 +575,9 @@ namespace MarathonRandomiser
                 WildcardTabRoll(StackPanel_Scene, (int)NumericUpDown_Wildcard_Weight.Value);
                 WildcardCheckedList(CheckedList_Scene_EnvMaps, (int)NumericUpDown_Wildcard_Weight.Value);
                 WildcardCheckedList(CheckedList_Scene_Skyboxes, (int)NumericUpDown_Wildcard_Weight.Value);
+
+                // Animations Tab.
+                WildcardTabRoll(StackPanel_Animation, (int)NumericUpDown_Wildcard_Weight.Value);
 
                 // Misc Tab.
                 WildcardTabRoll(StackPanel_Misc, (int)NumericUpDown_Wildcard_Weight.Value);
@@ -977,6 +981,78 @@ namespace MarathonRandomiser
                 }
             }
 
+            // Animation Randomisers
+            bool? animGameplay = CheckBox_Anim_Gameplay.IsChecked;
+            bool? animEvents = CheckBox_Anim_Events.IsChecked;
+            bool? animEventsFace = CheckBox_Anim_Events_Face.IsChecked;
+
+            // Gameplay.
+            if (animGameplay == true)
+            {
+                foreach (string archive in archives)
+                {
+                    if (Path.GetFileName(archive).ToLower() == "player.arc")
+                    {
+                        string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+                        string[] pkgFiles = Directory.GetFiles(unpackedArchive, "*.pkg", SearchOption.AllDirectories);
+
+                        foreach (string pkgFile in pkgFiles)
+                        {
+                            UpdateLogger($"Randomising animations in '{pkgFile}'.");
+                            await Task.Run(() => MiscellaneousRandomisers.AnimationRandomiser(pkgFile));
+                        }
+                    }
+                }
+            }
+
+            // Events
+            if (animEvents == true || animEventsFace == true)
+            {
+                foreach (string archive in archives)
+                {
+                    if (Path.GetFileName(archive).ToLower() == "event_data.arc")
+                    {
+                        string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+
+                        if (animEvents == true)
+                        {
+                            UpdateLogger($"Shuffling event animations.");
+                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "amy", "Root"));
+                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "blaze", "Root"));
+                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "eggman", "Root"));
+                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "knuckles", "Root"));
+                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "mefiress", "Root"));
+                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "omega", "Root"));
+                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "princess", "Root"));
+                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "princess_child", "Root"));
+                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "rouge", "Root"));
+                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "shadow", "Root"));
+                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "silver", "Root"));
+                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "sonic", "Root"));
+                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "tails", "Root"));
+                        }
+
+                        if (animEventsFace == true)
+                        {
+                            UpdateLogger($"Shuffling event facial animations.");
+                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "amy", "evf_head"));
+                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "blaze", "evf_head"));
+                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "eggman", "evf_head"));
+                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "knuckles", "evf_head"));
+                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "mefiress", "evf_head"));
+                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "omega", "evf_head"));
+                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "princess", "evf_head"));
+                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "princess_child", "evf_head"));
+                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "rouge", "evf_head"));
+                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "shadow", "evf_head"));
+                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "silver", "evf_head"));
+                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "sonic", "evf_head"));
+                            await Task.Run(() => MiscellaneousRandomisers.EventAnimationRandomiser(unpackedArchive, "tails", "evf_head"));
+                        }
+                    }
+                }
+            }
+
             // Music Randomisation
             bool? miscMusic = CheckBox_Misc_Music.IsChecked;
 
@@ -1092,6 +1168,7 @@ namespace MarathonRandomiser
                 await Task.Run(() => MiscellaneousRandomisers.PatchRandomiser(ModDirectory, MiscPatches, miscPatchesWeight));
             }
 
+            // Auto Unlock Shadow and Silver's Episodes.
             bool? miscUnlock = CheckBox_Misc_AutoUnlock.IsChecked;
 
             if (miscUnlock == true)
@@ -1105,7 +1182,7 @@ namespace MarathonRandomiser
                         await Task.Run(() => MiscellaneousRandomisers.UnlockEpisodes(unpackedArchive, GameExecutable));
                     }
                 }
-            }
+            }            
 
             // Repack all the used archives (kinda don't like how this is done right now).
             foreach (string archive in archives)
@@ -1200,6 +1277,10 @@ namespace MarathonRandomiser
             ConfigTabRead(configInfo, "Scene", StackPanel_Scene);
             ConfigCheckedListBoxRead(configInfo, CheckedList_Scene_EnvMaps);
             ConfigCheckedListBoxRead(configInfo, CheckedList_Scene_Skyboxes);
+            configInfo.WriteLine();
+
+            // Animation Block.
+            ConfigTabRead(configInfo, "Animations", StackPanel_Animation);
             configInfo.WriteLine();
 
             // Misc Block.
