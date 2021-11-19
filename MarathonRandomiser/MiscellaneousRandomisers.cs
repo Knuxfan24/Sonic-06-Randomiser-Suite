@@ -315,7 +315,7 @@ namespace MarathonRandomiser
                 // Search for the opening cutscene's ending event and set the global flags used after Silver's boss and after Crisis City.
                 if (lua[i] == "  elseif _ARG_1_ == \"e0000_end\" then")
                 {
-                    lua[i] += "\n    SetGlobalFlag(_ARG_0_, 4047, 1)\n    SetGlobalFlag(_ARG_0_, 50, 1)\n    SetGlobalFlag(_ARG_0_, 4015, 1)\n    SetGlobalFlag(_ARG_0_, 51, 1)";
+                    lua[i] += "\n    SetGlobalFlag(_ARG_0_, 50, 1)\n    SetGlobalFlag(_ARG_0_, 51, 1)";
                 }
             }
 
