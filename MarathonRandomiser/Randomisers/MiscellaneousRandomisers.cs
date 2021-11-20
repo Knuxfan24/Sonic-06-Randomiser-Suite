@@ -34,11 +34,15 @@ namespace MarathonRandomiser
                     // Split the line controlling the music playback up based on the quote marks around the song name.
                     string[] song = lua[i].Split('"');
 
-                    // Replace the second value in the split array (the one containing the song name) with a song from the list of valid songs.
-                    song[1] = MiscMusic[MainWindow.Randomiser.Next(MiscMusic.Count)];
+                    // Some things apparently have an empty thing, so don't change those, else, ALL THE ACCORDIONS!
+                    if (song[1] != "")
+                    {
+                        // Replace the second value in the split array (the one containing the song name) with a song from the list of valid songs.
+                        song[1] = MiscMusic[MainWindow.Randomiser.Next(MiscMusic.Count)];
 
-                    // Rejoin the split array into one line and add it back to the original lua array.
-                    lua[i] = string.Join("\"", song);
+                        // Rejoin the split array into one line and add it back to the original lua array.
+                        lua[i] = string.Join("\"", song);
+                    }
                 }
             }
 
