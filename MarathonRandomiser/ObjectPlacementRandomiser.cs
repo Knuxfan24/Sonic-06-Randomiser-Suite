@@ -173,7 +173,7 @@ namespace MarathonRandomiser
             }
 
             // If this enemy is an Egg Cerberus, then set the palette to either 0 (Sonic) or 1 (Shadow).
-            if (setObject.Parameters[0].Data.ToString() == "eCerberus")
+            if (enemiesNoBosses == false && setObject.Parameters[0].Data.ToString() == "eCerberus")
                 setObject.Parameters[1].Data = MainWindow.Randomiser.Next(0, 2);
         }
 

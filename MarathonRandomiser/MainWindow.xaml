@@ -178,9 +178,11 @@
                                 <Setter Property="HorizontalAlignment" Value="Left"/>
                             </Style>
                         </StackPanel.Resources>
-                        <CheckBox x:Name="CheckBox_Scene_Light_Ambient" Content="Randomise Ambient Light" IsChecked="True"/>
-                        <CheckBox x:Name="CheckBox_Scene_Light_Main" Content="Randomise Main Light" IsChecked="True"/>
-                        <CheckBox x:Name="CheckBox_Scene_Light_Sub" Content="Randomise Sub Light" IsChecked="True"/>
+                        <CheckBox x:Name="CheckBox_Scene_Light_Ambient" Content="Randomise Ambient Light" IsChecked="True" Click="Dependency_CheckBox_Changed"/>
+                        <CheckBox x:Name="CheckBox_Scene_Light_Main" Content="Randomise Main Light" IsChecked="True" Click="Dependency_CheckBox_Changed"/>
+                        <CheckBox x:Name="CheckBox_Scene_Light_Sub" Content="Randomise Sub Light" IsChecked="True" Click="Dependency_CheckBox_Changed"/>
+                        <Label x:Name="Label_Scene_MinStrength" Content="Minimum Value:" Background="{x:Null}" BorderBrush="{x:Null}"/>
+                        <hc:NumericUpDown x:Name="NumericUpDown_Scene_MinStrength" Margin="10,0,10,0" SelectionBrush="#FFB146C2" Increment="0.01" Minimum="0" Maximum="1" Value="0.5" DecimalPlaces="2"/>
                         <CheckBox x:Name="CheckBox_Scene_Light_Direction" Content="Randomise Light Direction" IsChecked="True" Click="Dependency_CheckBox_Changed"/>
                         <CheckBox x:Name="CheckBox_Scene_Light_Direction_Enforce" Content="Enforce Light Above"/>
                         <CheckBox x:Name="CheckBox_Scene_Fog_Colour" Content="Randomise Fog Colour" IsChecked="True"/>

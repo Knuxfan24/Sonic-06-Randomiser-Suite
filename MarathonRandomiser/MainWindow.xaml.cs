@@ -264,6 +264,20 @@ namespace MarathonRandomiser
                     CheckBox_Event_Voices_Gameplay.IsEnabled = (bool)NewCheckedStatus;
                     break;
 
+                case "CheckBox_Scene_Light_Ambient":
+                case "CheckBox_Scene_Light_Main":
+                case "CheckBox_Scene_Light_Sub":
+                    if(NewCheckedStatus == true)
+                    {
+                        Label_Scene_MinStrength.IsEnabled = true;
+                        NumericUpDown_Scene_MinStrength.IsEnabled = true;
+                    }
+                    else if(CheckBox_Scene_Light_Ambient.IsChecked == false && CheckBox_Scene_Light_Main.IsChecked == false && CheckBox_Scene_Light_Sub.IsChecked == false)
+                    {
+                        Label_Scene_MinStrength.IsEnabled = false;
+                        NumericUpDown_Scene_MinStrength.IsEnabled = false;
+                    }
+                    break;
                 case "CheckBox_Scene_Light_Direction": CheckBox_Scene_Light_Direction_Enforce.IsEnabled = (bool)NewCheckedStatus; break;
 
                 case "CheckBox_Misc_EnemyHealth":
@@ -921,6 +935,7 @@ namespace MarathonRandomiser
             bool? sceneLightAmbient = CheckBox_Scene_Light_Ambient.IsChecked;
             bool? sceneLightMain = CheckBox_Scene_Light_Main.IsChecked;
             bool? sceneLightSub = CheckBox_Scene_Light_Sub.IsChecked;
+            double sceneMinLight = NumericUpDown_Scene_MinStrength.Value;
             bool? sceneLightDirection = CheckBox_Scene_Light_Direction.IsChecked;
             bool? sceneLightDirectionEnforce = CheckBox_Scene_Light_Direction_Enforce.IsChecked;
             bool? sceneFogColour = CheckBox_Scene_Fog_Colour.IsChecked;
@@ -942,7 +957,7 @@ namespace MarathonRandomiser
                         foreach (string luaFile in sceneLuas)
                         {
                             UpdateLogger($"Randomising scene parameters in '{luaFile}'.");
-                            await Task.Run(() => SceneRandomiser.Process(luaFile, sceneLightAmbient, sceneLightMain, sceneLightSub, sceneLightDirection, sceneLightDirectionEnforce, sceneFogColour,
+                            await Task.Run(() => SceneRandomiser.Process(luaFile, sceneLightAmbient, sceneLightMain, sceneLightSub, sceneMinLight, sceneLightDirection, sceneLightDirectionEnforce, sceneFogColour,
                                                                       sceneFogDensity, sceneEnvMaps, SceneEnvMaps));
                         }
                     }

@@ -28,18 +28,14 @@ namespace MarathonRandomiser
 
             // If this song is already an XMA we can just copy it straight over.
             if (Path.GetExtension(CustomSong) == ".xma")
-            {
                 File.Copy(CustomSong, $@"{ModDirectory}\xenon\sound\custom{index}.xma");
-            }
 
             // If not, we need to check for it in the cache if we're using it, or convert it.
             else
             {
                 // Check if this file exists in the XMA Cache and copy it if the cache is enabled.
                 if (File.Exists($@"{Environment.CurrentDirectory}\Cache\XMA\{origName}") && EnableCache == true)
-                {
                     File.Copy($@"{Environment.CurrentDirectory}\Cache\XMA\{origName}", $@"{ModDirectory}\xenon\sound\custom{index}.xma");
-                }
 
                 // If not, then convert it.
                 else
@@ -76,9 +72,7 @@ namespace MarathonRandomiser
 
                         // If we've failed to convert, throw a proper exception.
                         if (output.Length == 1)
-                        {
                             throw new Exception($"Failed to convert '{CustomSong}', this may be due to a character in the filename?");
-                        }
 
                         // Set the path to the song to our wav for the rest of the function.
                         CustomSong = $@"{MainWindow.TemporaryDirectory}\tempWavs\custom{index}.wav";

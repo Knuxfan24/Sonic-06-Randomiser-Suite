@@ -14,6 +14,7 @@ namespace MarathonRandomiser
         /// <param name="ambient">Whether or not to randomise ambient lighting.</param>
         /// <param name="main">Whether or not to randomise main lighting.</param>
         /// <param name="sub">Whether or not to randomise sub lighting.</param>
+        /// <param name="minLight">The minimum value a light colour can be (used to provide a way to prevent "can't see shit" vision.</param>
         /// <param name="direction">Whether or not to randomise light directions.</param>
         /// <param name="enforceDirection">Whether or not to force the main lights to be above the player/horizon in some way.</param>
         /// <param name="fogColour">Whether or not to randomise fog colour.</param>
@@ -21,7 +22,7 @@ namespace MarathonRandomiser
         /// <param name="env">Whether or not to randomise the cubemap.</param>
         /// <param name="SceneEnvMaps">The list of valid cubemap file paths.</param>
         /// <returns></returns>
-        public static async Task Process(string sceneLua, bool? ambient, bool? main, bool? sub, bool? direction, bool? enforceDirection, bool? fogColour, bool? fogDensity, bool? env, List<string> SceneEnvMaps)
+        public static async Task Process(string sceneLua, bool? ambient, bool? main, bool? sub, double minLight, bool? direction, bool? enforceDirection, bool? fogColour, bool? fogDensity, bool? env, List<string> SceneEnvMaps)
         {
             // Decompile this lua file.
             await Task.Run(() => Helpers.LuaDecompile(sceneLua));
@@ -37,9 +38,9 @@ namespace MarathonRandomiser
                 {
                     // Alternate Lighting Setups have another line denoting their type, factor this in.
                     if (!lua[i + 1].Contains("Type"))
-                        await Task.Run(() => RGBA(lua, i + 2, 6, true));
+                        await Task.Run(() => RGBA(lua, i + 2, 6, minLight));
                     else
-                        await Task.Run(() => RGBA(lua, i + 3, 6, true));
+                        await Task.Run(() => RGBA(lua, i + 3, 6, minLight));
                 }
 
                 if (lua[i].Contains("Main = {") && !lua[i].Contains("FarDistance") && !lua[i].Contains("ClipDistance") && main == true)
@@ -50,18 +51,18 @@ namespace MarathonRandomiser
 
                     // Alternate Lighting Setups have another line denoting their type, factor this in.
                     if (!lua[i + 1].Contains("Type"))
-                        await Task.Run(() => RGBA(lua, i + 2, 6, true));
+                        await Task.Run(() => RGBA(lua, i + 2, 6, minLight));
                     else
-                        await Task.Run(() => RGBA(lua, i + 3, 6, true));
+                        await Task.Run(() => RGBA(lua, i + 3, 6, minLight));
                 }
 
                 if (lua[i].Contains("Sub = {") && sub == true)
                 {
                     // Alternate Lighting Setups have another line denoting their type, factor this in.
                     if (!lua[i + 1].Contains("Type"))
-                        await Task.Run(() => RGBA(lua, i + 2, 6, true));
+                        await Task.Run(() => RGBA(lua, i + 2, 6, minLight));
                     else
-                        await Task.Run(() => RGBA(lua, i + 3, 6, true));
+                        await Task.Run(() => RGBA(lua, i + 3, 6, minLight));
                 }
 
                 // Lighting Direction
@@ -73,7 +74,7 @@ namespace MarathonRandomiser
                 {
                     // Colour
                     if (lua[i].Contains("BRay") && fogColour == true)
-                        await Task.Run(() => RGBA(lua, i + 1, 4, false));
+                        await Task.Run(() => RGBA(lua, i + 1, 4));
                     // Density
                     if (lua[i].Contains("BRay") && fogDensity == true)
                     {
@@ -97,13 +98,55 @@ namespace MarathonRandomiser
         }
 
         /// <summary>
+        /// Generates random RGBA values above a certain value.
+        /// </summary>
+        /// <param name="lua">The string array we're using.</param>
+        /// <param name="startPos">Where in the string array we should be.</param>
+        /// <param name="splitLength">How long the split's length is (used by the fog colour).</param>
+        /// <param name="minLight">The value we have to be higher than.</param>
+        static async Task RGBA(string[] lua, int startPos, int splitLength, double minLight)
+        {
+            // Split the RGB values into string arrays.
+            string[] rSplit = lua[startPos].Split(' ');
+            string[] gSplit = lua[startPos + 1].Split(' ');
+            string[] bSplit = lua[startPos + 2].Split(' ');
+            string[] powerSplit = lua[startPos + 3].Split(' ');
+
+            // Replace the value at the specified position with a random floating point number between 0 and 1, checking if it's above the minimum number specified.
+            double value = MainWindow.Randomiser.NextDouble();
+            do { value = MainWindow.Randomiser.NextDouble(); }
+            while (value < minLight);
+            rSplit[splitLength] = $"{value},";
+
+            value = MainWindow.Randomiser.NextDouble();
+            do { value = MainWindow.Randomiser.NextDouble(); }
+            while (value < minLight);
+            gSplit[splitLength] = $"{value},";
+
+            value = MainWindow.Randomiser.NextDouble();
+            do { value = MainWindow.Randomiser.NextDouble(); }
+            while (value < minLight);
+            bSplit[splitLength] = $"{value},";
+
+            value = MainWindow.Randomiser.NextDouble();
+            do { value = MainWindow.Randomiser.NextDouble(); }
+            while (value < minLight);
+            powerSplit[splitLength] = $"{value}";
+
+            // Rejoin the splits into the main string array.
+            lua[startPos] = string.Join(' ', rSplit);
+            lua[startPos + 1] = string.Join(' ', gSplit);
+            lua[startPos + 2] = string.Join(' ', bSplit);
+            lua[startPos + 3] = string.Join(' ', powerSplit);
+        }
+
+        /// <summary>
         /// Generates random RGBA values.
         /// </summary>
         /// <param name="lua">The string array we're using.</param>
         /// <param name="startPos">Where in the string array we should be.</param>
         /// <param name="splitLength">How long the split's length is (used by the fog colour).</param>
-        /// <param name="usePower">Whether the power value should be handled too (used by the fog colour to avoid changing the fog density as well).</param>
-        static async Task RGBA(string[] lua, int startPos, int splitLength, bool usePower)
+        static async Task RGBA(string[] lua, int startPos, int splitLength)
         {
             // Split the RGB values into string arrays.
             string[] rSplit = lua[startPos].Split(' ');
@@ -119,14 +162,6 @@ namespace MarathonRandomiser
             lua[startPos] = string.Join(' ', rSplit);
             lua[startPos + 1] = string.Join(' ', gSplit);
             lua[startPos + 2] = string.Join(' ', bSplit);
-
-            // Repeat the previous three steps for power if required.
-            if (usePower)
-            {
-                string[] powerSplit = lua[startPos + 3].Split(' ');
-                powerSplit[splitLength] = $"{MainWindow.Randomiser.NextDouble()}";
-                lua[startPos + 3] = string.Join(' ', powerSplit);
-            }
         }
 
         /// <summary>
