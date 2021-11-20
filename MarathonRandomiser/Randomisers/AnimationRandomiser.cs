@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MarathonRandomiser
 {
-    internal class AnimationRandomisers
+    internal class AnimationRandomiser
     {
         /// <summary>
         /// Shuffles the XNMs called for character animations in a PKG file.

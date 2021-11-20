@@ -89,15 +89,15 @@ namespace MarathonRandomiser
         public static async Task SurfaceRandomiser(string collisionFile, bool? perFace)
         {
             // Predetermine what each type will be.
-            string concrete  = MainWindow.Randomiser.Next(0, 16).ToString("X");
-            string water     = MainWindow.Randomiser.Next(0, 16).ToString("X");
-            string wood      = MainWindow.Randomiser.Next(0, 16).ToString("X");
-            string metal     = MainWindow.Randomiser.Next(0, 16).ToString("X");
-            string grass     = MainWindow.Randomiser.Next(0, 16).ToString("X");
-            string sand      = MainWindow.Randomiser.Next(0, 16).ToString("X");
-            string snow      = MainWindow.Randomiser.Next(0, 16).ToString("X");
-            string dirt      = MainWindow.Randomiser.Next(0, 16).ToString("X");
-            string glass     = MainWindow.Randomiser.Next(0, 16).ToString("X");
+            string concrete = MainWindow.Randomiser.Next(0, 16).ToString("X");
+            string water = MainWindow.Randomiser.Next(0, 16).ToString("X");
+            string wood = MainWindow.Randomiser.Next(0, 16).ToString("X");
+            string metal = MainWindow.Randomiser.Next(0, 16).ToString("X");
+            string grass = MainWindow.Randomiser.Next(0, 16).ToString("X");
+            string sand = MainWindow.Randomiser.Next(0, 16).ToString("X");
+            string snow = MainWindow.Randomiser.Next(0, 16).ToString("X");
+            string dirt = MainWindow.Randomiser.Next(0, 16).ToString("X");
+            string glass = MainWindow.Randomiser.Next(0, 16).ToString("X");
             string metalEcho = MainWindow.Randomiser.Next(0, 16).ToString("X");
 
             // Load this collision file.
@@ -173,7 +173,7 @@ namespace MarathonRandomiser
             // Save the updated collison.bin.
             collision.Save();
         }
-        
+
         /// <summary>
         /// Shuffles all the text entries in all the game's message table files around.
         /// </summary>
@@ -218,7 +218,7 @@ namespace MarathonRandomiser
                 using MessageTable mst = new(mstFile);
 
                 // Copy every message into our list message table for later referal.
-                foreach(Message message in mst.Data.Messages)
+                foreach (Message message in mst.Data.Messages)
                     list.Data.Messages.Add(message);
             }
 
@@ -267,7 +267,7 @@ namespace MarathonRandomiser
             string patchList = "RequiredPatches=\"";
 
             // Loop through our list of valid patches.
-            foreach(string patch in MiscPatches)
+            foreach (string patch in MiscPatches)
             {
                 // Roll a number between 0 and 100, if it's smaller than or equal to Weight, then add the patch's name to the list to write to mod.ini.
                 if (MainWindow.Randomiser.Next(0, 101) <= Weight)
