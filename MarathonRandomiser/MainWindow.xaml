@@ -228,6 +228,34 @@
                 </Grid>
             </hc:TabItem>
 
+            <!--Textures Tab-->
+            <hc:TabItem Header="Textures" BorderBrush="#B146C2" >
+                <Grid Background="#FF181818" Name="Grid_Textures">
+                    <!--Texture Configuration Checkboxes/Controls-->
+                    <StackPanel HorizontalAlignment="Left" Width="210" Name="StackPanel_Textures">
+                        <StackPanel.Resources>
+                            <Style BasedOn="{StaticResource CheckBoxBaseStyle}" TargetType="{x:Type CheckBox}">
+                                <Setter Property="Margin" Value="10,10,0,0" />
+                                <Setter Property="HorizontalAlignment" Value="Left"/>
+                            </Style>
+                        </StackPanel.Resources>
+                        <CheckBox x:Name="CheckBox_Textures_Textures" Content="Randomise Textures" Foreground="Firebrick" Click="Dependency_CheckBox_Changed"/>
+                        <CheckBox x:Name="CheckBox_Textures_PerArc" Content="Randomise Per Archive" IsEnabled="False"/>
+                    </StackPanel>
+
+                    <!--Texture Configuration Toggles-->
+                    <Button Content="Select All" HorizontalAlignment="Left" Margin="215,0,0,10" VerticalAlignment="Bottom" Height="40" Width="128" Click="CheckedListBox_SelectionToggle"/>
+                    <Button Content="Deselect All" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Height="40" Width="128" Click="CheckedListBox_SelectionToggle"/>
+                    <hc:TabControl Style="{StaticResource TabControlInLine}" Margin="210,0,0,60" HorizontalAlignment="Stretch" Name="TabControl_Textures">
+                        <hc:TabItem Header="Archives" BorderBrush="#B146C2" x:Name="TabItem_Textures_Arcs" >
+                            <Grid>
+                                <local:CheckedListBox x:Name="CheckedList_Textures_Arcs" MultiColumn="True" Margin="0,0,0,0"/>
+                            </Grid>
+                        </hc:TabItem>
+                    </hc:TabControl>
+                </Grid>
+            </hc:TabItem>
+            
             <!--Miscellaneous Tab-->
             <hc:TabItem Header="Miscellaneous" BorderBrush="#B146C2" >
                 <Grid Background="#FF181818" Name="Grid_Miscellaneous">

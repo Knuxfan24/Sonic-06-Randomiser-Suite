@@ -138,7 +138,7 @@ namespace MarathonRandomiser
         /// </summary>
         /// <param name="archive">The path to the archive to unpack.</param>
         /// <returns>The location of the unpacked archive.</returns>
-        public static async Task<string> ArchiveHandler(string archive)
+        public static async Task<string> ArchiveHandler(string archive, bool dontUnpack = false)
         {
             // Determine whether this archive is in a win32, xenon or ps3 directory.
             string archiveLocation = "";
@@ -150,7 +150,7 @@ namespace MarathonRandomiser
                 archiveLocation = archive.Remove(archive.IndexOf("\\ps3"));
 
             // Check if the archive is already extracted to the temporary directory. If not, then unpack it.
-            if (!Directory.Exists($@"{MainWindow.TemporaryDirectory}{archive[0..^4].Replace(archiveLocation, "")}"))
+            if (!Directory.Exists($@"{MainWindow.TemporaryDirectory}{archive[0..^4].Replace(archiveLocation, "")}") && !dontUnpack)
             {
                 U8Archive arc = new(archive, ReadMode.IndexOnly);
                 arc.Extract($@"{MainWindow.TemporaryDirectory}{archive[0..^4].Replace(archiveLocation, "")}");
@@ -229,6 +229,20 @@ namespace MarathonRandomiser
             {
                 client.DownloadFile(pack.Key, $@"{Environment.CurrentDirectory}\VoicePacks\{pack.Value}");
             }
+        }
+
+        /// <summary>
+        /// Cleans up any .rnd files in the specified archive.
+        /// </summary>
+        /// <param name="archivePath">The archive to process.</param>
+        public static async Task CleanUpShuffleLeftovers(string archivePath)
+        {
+            // Find all the files with a .rnd extension.
+            string[] RandomiserFiles = Directory.GetFiles(archivePath, "*.rnd", SearchOption.AllDirectories);
+
+            // Delete each file.
+            foreach (string file in RandomiserFiles)
+                File.Delete(file);
         }
     }
 }
