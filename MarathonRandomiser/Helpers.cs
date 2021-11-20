@@ -1,11 +1,18 @@
 ﻿using Marathon.Formats.Archive;
 using Marathon.Formats.Script.Lua;
 using Marathon.IO;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace MarathonRandomiser
 {
@@ -167,6 +174,61 @@ namespace MarathonRandomiser
         {
             patchInfo.WriteLine($"WriteTextBytes(Executable|0x{offset:X}|\"{hint}\")");
             patchInfo.WriteLine($"WriteNullBytes(Executable|0x{offset + hint.Length:X}|{19 - hint.Length})");
+        }
+
+        /// <summary>
+        /// Fetches my official voice packs from https://github.com/Knuxfan24/Sonic-06-Randomiser-Suite-Voice-Packs.
+        /// Based on code demonstration shown here: https://markheath.net/post/list-and-download-github-repo-cs.
+        /// </summary>
+        /// <returns>A dictionary of the url for each pack and the html decoded filename of each one.</returns>
+        public static async Task<Dictionary<string, string>> FetchOfficalVox()
+        {
+            // Set up our dictionary.
+            Dictionary<string, string> packs = new();
+
+            // Get a JSON of the files on the GitHub repo.
+            var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.UserAgent.Add(
+                new ProductInfoHeaderValue("MyApplication", "1"));
+            var repo = "Knuxfan24/Sonic-06-Randomiser-Suite-Voice-Packs";
+            var contentsUrl = $"https://api.github.com/repos/{repo}/contents";
+            var contentsJson = await httpClient.GetStringAsync(contentsUrl);
+            var contents = (JArray)JsonConvert.DeserializeObject(contentsJson);
+
+            // Loop through each file.
+            foreach (var file in contents)
+            {
+                // Whether this is a file or a directory, as I don't plan to use directories I can ignore those.
+                var fileType = (string)file["type"];
+                if (fileType == "file")
+                {
+                    // Get the actual url.
+                    var downloadUrl = (string)file["download_url"];
+
+                    // Strip the url down to the file name and decode its HTML.
+                    string decodedFilename = Path.GetFileName(HttpUtility.UrlDecode(downloadUrl));
+
+                    // Only add this file to the dictionary if it's a ZIP (so ignore the README basically).
+                    if (decodedFilename.EndsWith(".zip"))
+                        packs.Add(downloadUrl, decodedFilename);
+                }
+            }
+
+            // Return our dictionary.
+            return packs;
+        }
+
+        /// <summary>
+        /// Downloads the specified voice pack.
+        /// </summary>
+        /// <param name="pack">The entry in the dictonary containing the url and file name.</param>
+        /// <returns></returns>
+        public static async Task DownloadVox(KeyValuePair<string, string> pack)
+        {
+            using (WebClient? client = new())
+            {
+                client.DownloadFile(pack.Key, $@"{Environment.CurrentDirectory}\VoicePacks\{pack.Value}");
+            }
         }
     }
 }

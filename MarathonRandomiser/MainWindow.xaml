@@ -303,6 +303,8 @@
                         <local:CheckedListBox x:Name="CheckedList_Custom_Vox" MultiColumn="True" Margin="0,0,0,0"/>
                     </Grid>
                     <Button Content="Select All" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Height="40" Width="128" Click="CheckedListBox_SelectionToggle"/>
+                    <Button Content="Fetch Offical Packs" HorizontalAlignment="Left" Margin="143,0,0,10" VerticalAlignment="Bottom" Height="40" Width="128" Click="Custom_FetchVox"/>
+                    <Button Content="Refresh" HorizontalAlignment="Right" Margin="0,0,143,10" VerticalAlignment="Bottom" Height="40" Width="128" Click="Custom_RefreshVox"/>
                     <Button Content="Deselect All" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Height="40" Width="128" Click="CheckedListBox_SelectionToggle"/>
                 </Grid>
             </hc:TabItem>

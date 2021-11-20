@@ -17,7 +17,7 @@ namespace MarathonRandomiser
     public partial class MainWindow : Window
     {
         // Version Number.
-        public static readonly string GlobalVersionNumber = $"Version 2.1.4";
+        public static readonly string GlobalVersionNumber = $"Version 2.1.5";
 
         #if !DEBUG
         public static readonly string VersionNumber = GlobalVersionNumber;
@@ -94,20 +94,7 @@ namespace MarathonRandomiser
             Helpers.FillCheckedListBox(Properties.Resources.MiscSongs, CheckedList_Misc_Songs);
             Helpers.FillCheckedListBox(Properties.Resources.MiscLanguages, CheckedList_Misc_Languages);
 
-            // Get all the voice pack zip files in the Voice Packs directory.
-            string[] voicePacks = Directory.GetFiles($@"{Environment.CurrentDirectory}\VoicePacks", "*.zip", SearchOption.TopDirectoryOnly);
-
-            // Loop through and add the name of each pack to the CheckedList_Custom_Vox element.
-            foreach (string voicePack in voicePacks)
-            {
-                CheckedListBoxItem item = new()
-                {
-                    DisplayName = Path.GetFileNameWithoutExtension(voicePack),
-                    Tag = Path.GetFileNameWithoutExtension(voicePack),
-                    Checked = false
-                };
-                CheckedList_Custom_Vox.Items.Add(item);
-            }
+            RefreshVoicePacks();
 
             // Get all the patch files in the user's Mod Manager data.
             string[] patches = Directory.GetFiles($"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\\Unify\\Patches\\", "*.mlua", SearchOption.TopDirectoryOnly);
@@ -140,7 +127,7 @@ namespace MarathonRandomiser
             }
         }
 
-        #region Text Box Functions
+        #region Text Box/Button Functions
         /// <summary>
         /// Opens a Folder Browser to select our Mods Directory.
         /// </summary>
@@ -207,8 +194,6 @@ namespace MarathonRandomiser
         /// <summary>
         /// Opens a File Browser to select one or more custom songs.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void CustomMusic_Browse(object sender, EventArgs e)
         {
             VistaOpenFileDialog OpenFileDialog = new()
@@ -232,6 +217,51 @@ namespace MarathonRandomiser
                 // Remove the extra comma added at the end.
                 TextBox_Custom_Music.Text = TextBox_Custom_Music.Text.Remove(TextBox_Custom_Music.Text.LastIndexOf('|'));
             }
+        }
+
+        /// <summary>
+        /// Downloads my voice packs from GitHub.
+        /// </summary>
+        private async void Custom_FetchVox(object sender, RoutedEventArgs e)
+        {
+            // Display the Progress Logger elements and disable bottom buttons that shouldn't be useable during the process.
+            TextBlock_ProgressLogger.Text = "";
+            TabControl_Main.Visibility = Visibility.Hidden;
+            TextBlock_ProgressLogger.Visibility = Visibility.Visible;
+            ScrollViewer_ProgressLogger.Visibility = Visibility.Visible;
+            ProgressBar_ProgressLogger.Visibility = Visibility.Visible;
+            Button_Randomise.IsEnabled = false;
+            Button_LoadConfig.IsEnabled = false;
+            UpdateLogger($"Fetching official voice packs from GitHub.");
+
+            // Get the packs.
+            Dictionary<string, string> packs = await Task.Run(() => Helpers.FetchOfficalVox());
+
+            // Loop through the packs and download them.
+            foreach (KeyValuePair<string, string> pack in packs)
+            {
+                UpdateLogger($"Downloading '{Path.GetFileNameWithoutExtension(pack.Value)}' voice pack.");
+                await Task.Run(() => Helpers.DownloadVox(pack));
+            }
+
+            // Restore Form Visiblity.
+            TabControl_Main.Visibility = Visibility.Visible;
+            ScrollViewer_ProgressLogger.Visibility = Visibility.Hidden;
+            TextBlock_ProgressLogger.Visibility = Visibility.Hidden;
+            ProgressBar_ProgressLogger.Visibility = Visibility.Hidden;
+            Button_Randomise.IsEnabled = true;
+            Button_LoadConfig.IsEnabled = true;
+
+            // Refresh the Voice Packs List.
+            RefreshVoicePacks();
+        }
+
+        /// <summary>
+        /// Simply call the Refresh Voice Packs function.
+        /// </summary>
+        private void Custom_RefreshVox(object sender, RoutedEventArgs e)
+        {
+            RefreshVoicePacks();
         }
         #endregion
 
@@ -413,6 +443,27 @@ namespace MarathonRandomiser
         {
             TextBlock_ProgressLogger.Text += $"{text}\n";
             ScrollViewer_ProgressLogger.ScrollToEnd();
+        }
+        
+        private void RefreshVoicePacks()
+        {
+            // Clear out existing ones to be safe.
+            CheckedList_Custom_Vox.Items.Clear();
+
+            // Get all the voice pack zip files in the Voice Packs directory.
+            string[] voicePacks = Directory.GetFiles($@"{Environment.CurrentDirectory}\VoicePacks", "*.zip", SearchOption.TopDirectoryOnly);
+
+            // Loop through and add the name of each pack to the CheckedList_Custom_Vox element.
+            foreach (string voicePack in voicePacks)
+            {
+                CheckedListBoxItem item = new()
+                {
+                    DisplayName = Path.GetFileNameWithoutExtension(voicePack),
+                    Tag = Path.GetFileNameWithoutExtension(voicePack),
+                    Checked = false
+                };
+                CheckedList_Custom_Vox.Items.Add(item);
+            }
         }
         #endregion
 
