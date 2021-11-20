@@ -127,8 +127,8 @@ namespace MarathonRandomiser
         {
             // If this object is a boss but the user has disallowed boss randomisation, then don't change anything.
             if (enemiesNoBosses == true && (setObject.Parameters[0].Data.ToString() == "eCerberus" || setObject.Parameters[0].Data.ToString() == "eGenesis" ||
-                setObject.Parameters[0].Data.ToString() == "eWyvern" || setObject.Parameters[0].Data.ToString() == "iblis01" || setObject.Parameters[0].Data.ToString() == "iblis02" ||
-                setObject.Parameters[0].Data.ToString() == "iblis03" || setObject.Parameters[0].Data.ToString() == "firstmefiress" || setObject.Parameters[0].Data.ToString() == "secondmefiress" ||
+                setObject.Parameters[0].Data.ToString() == "eWyvern" || setObject.Parameters[0].Data.ToString() == "firstiblis" || setObject.Parameters[0].Data.ToString() == "secondiblis" ||
+                setObject.Parameters[0].Data.ToString() == "thirdiblis" || setObject.Parameters[0].Data.ToString() == "firstmefiress" || setObject.Parameters[0].Data.ToString() == "secondmefiress" ||
                 setObject.Parameters[0].Data.ToString() == "solaris01" || setObject.Parameters[0].Data.ToString() == "solaris02"))
                 return;
 
