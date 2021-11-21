@@ -113,6 +113,6 @@ Randomisation of miscellaneous elements across one off files, these are:
 
 Allows the user to add custom elements to the Randomisation, these being:
 
-* Custom Music, supporting WAV (which is always used as part of the process), MP3 and M4A
+* Custom Music, supporting basically any format that [vgmstream](https://github.com/vgmstream/vgmstream) can convert.
 
 * Voice Packs
