@@ -565,7 +565,7 @@ namespace MarathonRandomiser
                                                   "Sajid: Marathon Lua Decompilation.\n" +
                                                   "ShadowLAG: Original Lua Decompilation Source.\n" +
                                                   "vgmstream: Audio Conversion.\n" +
-                                                  "Microsoft: xmaencode utility.\n" +
+                                                  "Microsoft: xmaencode and texconv utilities.\n" +
                                                   "HandyControl: WPF Form Controls.",
                                                   "Sonic '06 Randomiser Suite",
                                                   MessageBoxButton.OK,
