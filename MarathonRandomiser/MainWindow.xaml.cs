@@ -35,6 +35,7 @@ namespace MarathonRandomiser
         {
             InitializeComponent();
             GenerateDirectories();
+
             SetDefaults();
             
             // Force culture info 'en-GB' to prevent errors with values altered by language-specific differences.
@@ -1578,7 +1579,10 @@ namespace MarathonRandomiser
                     
                     // If it's a check box, check it or uncheck it depending on the key value.
                     if (checkbox != null)
+                    {
                         checkbox.IsChecked = bool.Parse(split[1]);
+                        Dependency_CheckBox_Changed(checkbox, null);
+                    }
 
                     // If it's a numericupdown, set its value depending on the key's.
                     if (numeric != null)
