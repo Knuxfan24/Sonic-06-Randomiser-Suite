@@ -362,6 +362,11 @@ namespace MarathonRandomiser
                     break;
                 case "CheckBox_Scene_Light_Direction": CheckBox_Scene_Light_Direction_Enforce.IsEnabled = (bool)NewCheckedStatus; break;
 
+                case "CheckBox_Anim_Gameplay":
+                    CheckBox_Anim_GameplayUseAll.IsEnabled = (bool)NewCheckedStatus;
+                    CheckBox_Anim_GameplayUseEvents.IsEnabled = (bool)NewCheckedStatus;
+                    break;
+
                 case "CheckBox_Textures_Textures":
                     CheckBox_Textures_PerArc.IsEnabled = (bool)NewCheckedStatus;
                     CheckBox_Textures_AllowDupes.IsEnabled = (bool)NewCheckedStatus;
@@ -1138,6 +1143,8 @@ namespace MarathonRandomiser
 
             #region Animation Randomisers
             bool? animGameplay = CheckBox_Anim_Gameplay.IsChecked;
+            bool? animGameplayUseAll = CheckBox_Anim_GameplayUseAll.IsChecked;
+            bool? animGameplayUseEvents = CheckBox_Anim_GameplayUseEvents.IsChecked;
             bool? animEvents = CheckBox_Anim_Events.IsChecked;
             bool? animEventsFace = CheckBox_Anim_Events_Face.IsChecked;
             bool? animEventsCamera = CheckBox_Anim_Cameras.IsChecked;
@@ -1155,7 +1162,7 @@ namespace MarathonRandomiser
                         foreach (string pkgFile in pkgFiles)
                         {
                             UpdateLogger($"Randomising animations in '{pkgFile}'.");
-                            await Task.Run(() => AnimationRandomiser.GameplayAnimationRandomiser(pkgFile));
+                            await Task.Run(() => AnimationRandomiser.GameplayAnimationRandomiser(pkgFile, GameExecutable, animGameplayUseAll, animGameplayUseEvents));
                         }
                     }
                 }
