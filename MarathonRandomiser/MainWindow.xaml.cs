@@ -244,6 +244,34 @@ namespace MarathonRandomiser
         }
 
         /// <summary>
+        /// Opens a File Browser to select one or more custom songs.
+        /// </summary>
+        private void CustomTextures_Browse(object sender, EventArgs e)
+        {
+            VistaOpenFileDialog OpenFileDialog = new()
+            {
+                Title = "Select Textures",
+                Multiselect = true,
+                Filter = "Supported Types|*.bmp;*.jpg;*.jpeg;*.png;*.dds;*.tga;*.hdr;*.tif;*.tiff;*.wdp;*.hdp;*.jxr;*.ppm;*.pfm|" +
+                "BMP|*.bmp|JPEG|*.jpg;*.jpeg|PNG|*.png|DDS|*.dds|TGA|*.tga|HDR|*.hdr|TIFF|*.tif;*.tiff|WDP|*.wdp|HDP|*.hdp|JXR|*.jxr|PPM|*.ppm|PFM|*.pfm"
+            };
+
+            // If the selections are valid, add them to the list of text in the custom textures textbox.
+            if (OpenFileDialog.ShowDialog() == true)
+            {
+                // Don't erase the box, just add a seperator.
+                if (TextBox_Custom_Textures.Text.Length != 0)
+                    TextBox_Custom_Textures.Text += "|";
+
+                // Add selected files to the text box.
+                for (int i = 0; i < OpenFileDialog.FileNames.Length; i++)
+                    TextBox_Custom_Textures.Text += $"{OpenFileDialog.FileNames[i]}|";
+
+                // Remove the extra comma added at the end.
+                TextBox_Custom_Textures.Text = TextBox_Custom_Textures.Text.Remove(TextBox_Custom_Textures.Text.LastIndexOf('|'));
+            }
+        }
+        /// <summary>
         /// Downloads my voice packs from GitHub.
         /// </summary>
         private async void Custom_FetchVox(object sender, RoutedEventArgs e)
@@ -334,7 +362,11 @@ namespace MarathonRandomiser
                     break;
                 case "CheckBox_Scene_Light_Direction": CheckBox_Scene_Light_Direction_Enforce.IsEnabled = (bool)NewCheckedStatus; break;
 
-                case "CheckBox_Textures_Textures": CheckBox_Textures_PerArc.IsEnabled = (bool)NewCheckedStatus; break;
+                case "CheckBox_Textures_Textures":
+                    CheckBox_Textures_PerArc.IsEnabled = (bool)NewCheckedStatus;
+                    CheckBox_Textures_AllowDupes.IsEnabled = (bool)NewCheckedStatus;
+                    CheckBox_Textures_OnlyCustom.IsEnabled = (bool)NewCheckedStatus;
+                    break;
 
                 case "CheckBox_Misc_EnemyHealth":
                     Label_Misc_EnemyHealth_Min.IsEnabled = (bool)NewCheckedStatus;
@@ -706,9 +738,10 @@ namespace MarathonRandomiser
             List<string> MiscPatches = Helpers.EnumerateCheckedListBox(CheckedList_Misc_Patches);
 
             string[] CustomMusic = TextBox_Custom_Music.Text.Split('|');
+            string[] CustomTextures = TextBox_Custom_Textures.Text.Split('|');
             List<string> CustomVoxPacks = Helpers.EnumerateCheckedListBox(CheckedList_Custom_Vox);
             
-            // Don't do the Custom stuff if we're using a PS3 version
+            // Don't do the Custom Audio stuff if we're using a PS3 version
             if (GameExecutable.ToLower().EndsWith(".xex"))
             {
                 // Wildcard Custom Overrides
@@ -796,6 +829,20 @@ namespace MarathonRandomiser
                 }
             }
 
+            // Custom Textures.
+            List<string> CustomTextureFiles = new();
+            if (TextBox_Custom_Textures.Text.Length != 0)
+            {
+                // Create the temp directory to save converted DDS files into.
+                Directory.CreateDirectory($@"{TemporaryDirectory}\tempDDS");
+
+                for (int i = 0; i < CustomTextures.Length; i++)
+                {
+                    UpdateLogger($"Importing '{CustomTextures[i]}' as a custom texture.");
+                    CustomTextureFiles.Add(await Task.Run(() => Custom.Texture(CustomTextures[i])));
+                }
+            }
+
             // Disable options if they have nothing to pick from.
             if (SetEnemies.Count == 0)
                 CheckBox_SET_Enemies.IsChecked = false;
@@ -821,6 +868,9 @@ namespace MarathonRandomiser
                 CheckBox_Scene_EnvMaps.IsChecked = false;
             if (SceneSkyboxes.Count == 0)
                 CheckBox_Scene_Skyboxes.IsChecked = false;
+
+            if (TexturesArchives.Count == 0)
+                CheckBox_Textures_Textures.IsChecked = false;
 
             if (MiscMusic.Count == 0)
                 CheckBox_Misc_Music.IsChecked = false;
@@ -1169,6 +1219,12 @@ namespace MarathonRandomiser
             #region Texture Randomisation
             bool? texturesTextures = CheckBox_Textures_Textures.IsChecked;
             bool? texturesPerArc = CheckBox_Textures_PerArc.IsChecked;
+            bool? texturesAllowDupes = CheckBox_Textures_AllowDupes.IsChecked;
+            bool? texturesOnlyCustom = CheckBox_Textures_OnlyCustom.IsChecked;
+
+            // Dupes are NEEDED if we're only using custom textures.
+            if (texturesOnlyCustom == true)
+                texturesAllowDupes = true;
 
             if (texturesTextures == true)
             {
@@ -1185,17 +1241,27 @@ namespace MarathonRandomiser
                     }
 
                     List<string> Textures = new();
-                    for (int i = 0; i < archivePaths.Count; i++)
+
+                    // Add our custom textures.
+                    foreach(string custom in CustomTextureFiles)
+                        Textures.Add(custom);
+
+                    // If we're not only using custom textures, then fetch all the other textures.
+                    if (texturesOnlyCustom == false)
                     {
-                        UpdateLogger($"Getting textures in '{Path.GetFileName(archivePaths[i])}.arc'.");
-                        Textures = await Task.Run(() => TextureRandomiser.FetchTextures(Textures, archivePaths[i]));
+                        for (int i = 0; i < archivePaths.Count; i++)
+                        {
+                            UpdateLogger($"Getting textures in '{Path.GetFileName(archivePaths[i])}.arc'.");
+                            Textures = await Task.Run(() => TextureRandomiser.FetchTextures(Textures, archivePaths[i]));
+                        }
                     }
 
+                    // Randomise the textures.
                     List<int> usedNumbers = new();
                     for (int i = 0; i < archivePaths.Count; i++)
                     {
                         UpdateLogger($"Randomising textures in '{Path.GetFileName(archivePaths[i])}.arc'.");
-                        usedNumbers = await Task.Run(() => TextureRandomiser.ShuffleTextures(usedNumbers, archivePaths[i], Textures));
+                        usedNumbers = await Task.Run(() => TextureRandomiser.ShuffleTextures(usedNumbers, archivePaths[i], Textures, texturesAllowDupes));
                     }
                 }
 
@@ -1208,7 +1274,7 @@ namespace MarathonRandomiser
                         {
                             UpdateLogger($"Randomising textures in '{Path.GetFileName(archive)}.arc'.");
                             string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
-                            await Task.Run(() => TextureRandomiser.PerArchive(unpackedArchive));
+                            await Task.Run(() => TextureRandomiser.PerArchive(unpackedArchive, CustomTextureFiles, texturesAllowDupes, texturesOnlyCustom));
                         }
                     }
                 }
@@ -1472,6 +1538,7 @@ namespace MarathonRandomiser
             configInfo.WriteLine($"[Custom]");
             configInfo.WriteLine($"TextBox_Custom_Music={TextBox_Custom_Music.Text}");
             configInfo.WriteLine($"CheckBox_Custom_Music_XMACache={CheckBox_Custom_Music_XMACache.IsChecked}");
+            configInfo.WriteLine($"TextBox_Custom_Textures={TextBox_Custom_Textures.Text}");
             ConfigCheckedListBoxRead(configInfo, CheckedList_Custom_Vox);
 
             // End Write.

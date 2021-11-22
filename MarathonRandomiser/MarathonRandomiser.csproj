@@ -46,6 +46,9 @@
     <None Update="ExternalResources\7z.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ExternalResources\texconv.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ExternalResources\vgmstream\avcodec-vgmstream-58.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

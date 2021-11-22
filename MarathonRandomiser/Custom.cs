@@ -298,5 +298,38 @@ namespace MarathonRandomiser
             // Return true to confirm it succeeded so the Logger doesn't need to report a failure.
             return true;
         }
+    
+        /// <summary>
+        /// Converts a non DDS texture to a DDS using texconv.
+        /// </summary>
+        /// <param name="texture">The filepath to the texture to process.</param>
+        /// <returns>The filepath to the converted texture.</returns>
+        public static async Task<string> Texture(string texture)
+        {
+            // Only actually do the conversion if it's not already a DDS.
+            if (Path.GetExtension(texture).ToLower() != ".dds")
+            {
+                using (Process process = new())
+                {
+                    process.StartInfo.FileName = $"\"{Environment.CurrentDirectory}\\ExternalResources\\texconv.exe\"";
+                    process.StartInfo.Arguments = $"-o \"{MainWindow.TemporaryDirectory}\\tempDDS\" \"{texture}\"";
+                    process.StartInfo.UseShellExecute = false;
+                    process.StartInfo.RedirectStandardOutput = true;
+                    process.StartInfo.CreateNoWindow = true;
+
+                    process.Start();
+                    process.BeginOutputReadLine();
+                    process.WaitForExit();
+                }
+
+                return $"{MainWindow.TemporaryDirectory}\\tempDDS\\{Path.GetFileNameWithoutExtension(texture)}.dds";
+            }
+
+            // Just return the filepath if it is already a DDS.
+            else
+            {
+                return texture;
+            }
+        }
     }
 }
