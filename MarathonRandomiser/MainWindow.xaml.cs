@@ -35,7 +35,6 @@ namespace MarathonRandomiser
         {
             InitializeComponent();
             GenerateDirectories();
-
             SetDefaults();
             
             // Force culture info 'en-GB' to prevent errors with values altered by language-specific differences.
