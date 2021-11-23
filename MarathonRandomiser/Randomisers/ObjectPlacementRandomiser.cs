@@ -61,7 +61,7 @@ namespace MarathonRandomiser
                         if (enemies == true)
                             await Task.Run(() => EnemyTypeRandomiser(setObject, SetEnemies, enemiesNoBosses));
                         if (behaviour == true)
-                            await Task.Run(() => EnemyBehaviourRandomiser(setObject, behaviourNoEnforce));
+                            await Task.Run(() => EnemyBehaviourRandomiser(setObject, behaviourNoEnforce, enemiesNoBosses));
                         break;
 
                     // Randomise character types if we need to.
@@ -182,8 +182,15 @@ namespace MarathonRandomiser
         /// </summary>
         /// <param name="setObject">The object we're editing.</param>
         /// <param name="dontEnforceBehaviours">Whether we should ensure that the chosen behaviour belongs to this enemy type.</param>
-        static async Task EnemyBehaviourRandomiser(SetObject setObject, bool? dontEnforceBehaviours)
+        static async Task EnemyBehaviourRandomiser(SetObject setObject, bool? dontEnforceBehaviours, bool? enemiesNoBosses)
         {
+            // If this object is a boss but the user has disallowed boss randomisation, then don't change anything.
+            if (enemiesNoBosses == true && (setObject.Parameters[0].Data.ToString() == "eCerberus" || setObject.Parameters[0].Data.ToString() == "eGenesis" ||
+                setObject.Parameters[0].Data.ToString() == "eWyvern" || setObject.Parameters[0].Data.ToString() == "firstiblis" || setObject.Parameters[0].Data.ToString() == "secondiblis" ||
+                setObject.Parameters[0].Data.ToString() == "thirdiblis" || setObject.Parameters[0].Data.ToString() == "firstmefiress" || setObject.Parameters[0].Data.ToString() == "secondmefiress" ||
+                setObject.Parameters[0].Data.ToString() == "solaris01" || setObject.Parameters[0].Data.ToString() == "solaris02"))
+                return;
+
             // Setup for if we are enforcing the behaviour type.
             if (dontEnforceBehaviours == false)
             {
