@@ -34,7 +34,7 @@ namespace MarathonRandomiser
                     // Split the line controlling the music playback up based on the quote marks around the song name.
                     string[] song = lua[i].Split('"');
 
-                    // Accordion Song Easter Egg.
+                    // Accordion Song Easter Egg (https://youtu.be/YqjQew7BRRk?t=6016).
                     if (Seed.Contains("Accordion") && lua[i].Contains("mission_bgm"))
                     {
                         // ACCORDIONS.
