@@ -17,7 +17,7 @@ namespace MarathonRandomiser
         /// <param name="luaFile">The lua to process.</param>
         /// <param name="MiscMusic">The list of valid songs.</param>
         /// <returns></returns>
-        public static async Task MusicRandomiser(string luaFile, List<string> MiscMusic)
+        public static async Task MusicRandomiser(string luaFile, List<string> MiscMusic, string Seed)
         {
             // Decompile this lua binary.
             await Task.Run(() => Helpers.LuaDecompile(luaFile));
@@ -34,8 +34,18 @@ namespace MarathonRandomiser
                     // Split the line controlling the music playback up based on the quote marks around the song name.
                     string[] song = lua[i].Split('"');
 
+                    // Accordion Song Easter Egg.
+                    if (Seed.Contains("Accordion") && lua[i].Contains("mission_bgm"))
+                    {
+                        // ACCORDIONS.
+                        song[1] = "twn_accordion";
+
+                        // Rejoin the split array into one line and add it back to the original lua array.
+                        lua[i] = string.Join("\"", song);
+                    }
+
                     // Some things apparently have an empty thing, so don't change those, else, ALL THE ACCORDIONS!
-                    if (song[1] != "")
+                    else if (song[1] != "")
                     {
                         // Replace the second value in the split array (the one containing the song name) with a song from the list of valid songs.
                         song[1] = MiscMusic[MainWindow.Randomiser.Next(MiscMusic.Count)];

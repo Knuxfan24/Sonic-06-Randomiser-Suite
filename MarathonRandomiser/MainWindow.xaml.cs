@@ -633,6 +633,7 @@ namespace MarathonRandomiser
             // Set up our variables for the Mod Directory and Game Executable.
             string ModDirectory = $@"{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({Helpers.UseSafeFormattedCharacters(TextBox_General_Seed.Text)})";
             string GameExecutable = TextBox_General_GameExecutable.Text;
+            string Seed = TextBox_General_Seed.Text;
 
             // Create Mod Directory (prompting the user if they want to delete it first or cancel if it already exists.)
             if (Directory.Exists(ModDirectory))
@@ -1319,7 +1320,7 @@ namespace MarathonRandomiser
                             luaFile.Contains("mission")))
                             {
                                 UpdateLogger($"Randomising music in '{luaFile}'.");
-                                await Task.Run(() => MiscellaneousRandomisers.MusicRandomiser(luaFile, MiscMusic));
+                                await Task.Run(() => MiscellaneousRandomisers.MusicRandomiser(luaFile, MiscMusic, Seed));
                             }
                         }
                     }
