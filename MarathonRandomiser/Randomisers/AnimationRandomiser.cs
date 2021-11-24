@@ -11,8 +11,12 @@ namespace MarathonRandomiser
     {
         /// <summary>
         /// Shuffles the XNMs called for character animations in a PKG file.
+        /// TODO: Consider refactoring this, it's a bit sloppy right now.
         /// </summary>
         /// <param name="pkgFile">The PKG file to process.</param>
+        /// <param name="GameExecutable">Location of the game executable (used to find the player archives).</param>
+        /// <param name="useAll">Whether or not we're using the XNMs rather than the entries in the PKGs.</param>
+        /// <param name="useEvents">Whether or not to include the event animations too.</param>
         public static async Task GameplayAnimationRandomiser(string pkgFile, string GameExecutable, bool? useAll = false, bool? useEvents = false)
         {
             string targetArchive = null;
@@ -43,9 +47,12 @@ namespace MarathonRandomiser
 
             // Special case for the snowboards to use Sonic's archive.
             if (pkgFile.Contains("snow_board"))
-            {
                 targetArchive = $@"{Path.GetDirectoryName(GameExecutable)}\win32\archives\player_sonic.arc";
-            }
+
+            // Exclude Elise for now.
+            if (Path.GetFileName(pkgFile) == "princess.pkg" || Path.GetFileName(pkgFile) == "princess_hair.pkg" || Path.GetFileName(pkgFile) == "princess_princess.pkg")
+                targetArchive = null;
+            
 
             // If we're not using all, then just invalidate targetArchive.
             if (useAll == false)
@@ -81,7 +88,7 @@ namespace MarathonRandomiser
                     }
 
                     // If we are using all the XNMs, then find them from the player's archive.
-                    else
+                    else if (Path.GetFileName(pkgFile) != "princess_hair.pkg")
                     {
                         // Load the archive.
                         U8Archive arc = new(targetArchive, Marathon.IO.ReadMode.IndexOnly);
