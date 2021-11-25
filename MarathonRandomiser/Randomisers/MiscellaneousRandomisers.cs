@@ -1,11 +1,7 @@
 ﻿using Marathon.Formats.Mesh;
 using Marathon.Formats.Package;
 using Marathon.Formats.Text;
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace MarathonRandomiser
 {

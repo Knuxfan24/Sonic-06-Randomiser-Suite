@@ -1,11 +1,12 @@
-﻿using Ookii.Dialogs.Wpf;
-using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿global using System;
+global using System.Collections;
+global using System.Collections.Generic;
+global using System.IO;
+global using System.Threading.Tasks;
+
+using Ookii.Dialogs.Wpf;
 using System.Diagnostics;
 using System.Globalization;
-using System.IO;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -954,41 +955,39 @@ namespace MarathonRandomiser
                             }
 
                             // Write the actual Hybrid Patch
-                            using (Stream patchCreate = File.Open(Path.Combine(ModDirectory, "patch.mlua"), FileMode.Create))
-                            using (StreamWriter patchInfo = new(patchCreate))
-                            {
-                                patchInfo.WriteLine("--[Patch]--");
-                                patchInfo.WriteLine($"Title(\"Sonic '06 Randomised ({TextBox_General_Seed.Text})\")");
-                                patchInfo.WriteLine($"Author(\"Sonic '06 Randomiser Suite\")");
-                                patchInfo.WriteLine($"Platform(\"Xbox 360\")");
+                            using Stream patchCreate = File.Open(Path.Combine(ModDirectory, "patch.mlua"), FileMode.Create);
+                            using StreamWriter patchInfo = new(patchCreate);
+                            patchInfo.WriteLine("--[Patch]--");
+                            patchInfo.WriteLine($"Title(\"Sonic '06 Randomised ({TextBox_General_Seed.Text})\")");
+                            patchInfo.WriteLine($"Author(\"Sonic '06 Randomiser Suite\")");
+                            patchInfo.WriteLine($"Platform(\"Xbox 360\")");
 
-                                patchInfo.WriteLine("\n--[Functions]--");
-                                patchInfo.WriteLine($"DecryptExecutable()");
-                                patchInfo.WriteLine($"--Radical Train Voice Lines--");
-                                Helpers.HybridPatchWriter(patchInfo, 0x1B300, hintsToUse[0]);
-                                Helpers.HybridPatchWriter(patchInfo, 0x1B314, hintsToUse[1]);
-                                Helpers.HybridPatchWriter(patchInfo, 0x1B328, hintsToUse[2]);
-                                Helpers.HybridPatchWriter(patchInfo, 0x1B33C, hintsToUse[3]);
-                                Helpers.HybridPatchWriter(patchInfo, 0x1B350, hintsToUse[4]);
-                                patchInfo.WriteLine($"\n--Egg Cerberus Voice Lines--");
-                                Helpers.HybridPatchWriter(patchInfo, 0x288A4, hintsToUse[5]);
-                                Helpers.HybridPatchWriter(patchInfo, 0x288B8, hintsToUse[6]);
-                                Helpers.HybridPatchWriter(patchInfo, 0x288CC, hintsToUse[7]);
-                                Helpers.HybridPatchWriter(patchInfo, 0x288E0, hintsToUse[8]);
-                                Helpers.HybridPatchWriter(patchInfo, 0x288F4, hintsToUse[9]);
-                                Helpers.HybridPatchWriter(patchInfo, 0x28908, hintsToUse[10]);
-                                Helpers.HybridPatchWriter(patchInfo, 0x2891C, hintsToUse[11]);
-                                Helpers.HybridPatchWriter(patchInfo, 0x28930, hintsToUse[12]);
-                                Helpers.HybridPatchWriter(patchInfo, 0x28944, hintsToUse[13]);
-                                Helpers.HybridPatchWriter(patchInfo, 0x28958, hintsToUse[14]);
-                                Helpers.HybridPatchWriter(patchInfo, 0x2896C, hintsToUse[15]);
-                                Helpers.HybridPatchWriter(patchInfo, 0x28980, hintsToUse[16]);
-                                Helpers.HybridPatchWriter(patchInfo, 0x28994, hintsToUse[17]);
-                                Helpers.HybridPatchWriter(patchInfo, 0x289A8, hintsToUse[18]);
-                                Helpers.HybridPatchWriter(patchInfo, 0x289BC, hintsToUse[19]);
+                            patchInfo.WriteLine("\n--[Functions]--");
+                            patchInfo.WriteLine($"DecryptExecutable()");
+                            patchInfo.WriteLine($"--Radical Train Voice Lines--");
+                            Helpers.HybridPatchWriter(patchInfo, 0x1B300, hintsToUse[0]);
+                            Helpers.HybridPatchWriter(patchInfo, 0x1B314, hintsToUse[1]);
+                            Helpers.HybridPatchWriter(patchInfo, 0x1B328, hintsToUse[2]);
+                            Helpers.HybridPatchWriter(patchInfo, 0x1B33C, hintsToUse[3]);
+                            Helpers.HybridPatchWriter(patchInfo, 0x1B350, hintsToUse[4]);
+                            patchInfo.WriteLine($"\n--Egg Cerberus Voice Lines--");
+                            Helpers.HybridPatchWriter(patchInfo, 0x288A4, hintsToUse[5]);
+                            Helpers.HybridPatchWriter(patchInfo, 0x288B8, hintsToUse[6]);
+                            Helpers.HybridPatchWriter(patchInfo, 0x288CC, hintsToUse[7]);
+                            Helpers.HybridPatchWriter(patchInfo, 0x288E0, hintsToUse[8]);
+                            Helpers.HybridPatchWriter(patchInfo, 0x288F4, hintsToUse[9]);
+                            Helpers.HybridPatchWriter(patchInfo, 0x28908, hintsToUse[10]);
+                            Helpers.HybridPatchWriter(patchInfo, 0x2891C, hintsToUse[11]);
+                            Helpers.HybridPatchWriter(patchInfo, 0x28930, hintsToUse[12]);
+                            Helpers.HybridPatchWriter(patchInfo, 0x28944, hintsToUse[13]);
+                            Helpers.HybridPatchWriter(patchInfo, 0x28958, hintsToUse[14]);
+                            Helpers.HybridPatchWriter(patchInfo, 0x2896C, hintsToUse[15]);
+                            Helpers.HybridPatchWriter(patchInfo, 0x28980, hintsToUse[16]);
+                            Helpers.HybridPatchWriter(patchInfo, 0x28994, hintsToUse[17]);
+                            Helpers.HybridPatchWriter(patchInfo, 0x289A8, hintsToUse[18]);
+                            Helpers.HybridPatchWriter(patchInfo, 0x289BC, hintsToUse[19]);
 
-                                patchInfo.Close();
-                            }
+                            patchInfo.Close();
 
                         }
 
@@ -999,17 +998,17 @@ namespace MarathonRandomiser
                             foreach (string luaFile in luaFiles)
                             {
                                 // Check if we need to actually use this lua file.
-                                if (luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("a_")               || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("b_")               ||
-                                    luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("c_")               || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("d_")               ||
-                                    luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("e_")               || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("f_")               ||
-                                    luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("f1_")              || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("f2_")              ||
-                                    luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("g_")               || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("eCerberus")        ||
-                                    luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("eGenesis")         || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("eWyvern")          ||
-                                    luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("firstmefiress")    || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("iblis01")          ||
-                                    luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("secondiblis")      || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("secondmefiress")   ||
-                                    luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("shadow_vs_silver") || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("silver_vs_shadow") ||
-                                    luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("solaris_super3")   || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("sonic_vs_silver")  ||
-                                    luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("thirdiblis")       || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("silver_vs_sonic"))
+                                if (luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("a_")               || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("b_")               ||
+                                    luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("c_")               || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("d_")               ||
+                                    luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("e_")               || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("f_")               ||
+                                    luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("f1_")              || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("f2_")              ||
+                                    luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("g_")               || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("eCerberus")        ||
+                                    luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("eGenesis")         || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("eWyvern")          ||
+                                    luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("firstmefiress")    || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("iblis01")          ||
+                                    luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("secondiblis")      || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("secondmefiress")   ||
+                                    luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("shadow_vs_silver") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("silver_vs_shadow") ||
+                                    luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("solaris_super3")   || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("sonic_vs_silver")  ||
+                                    luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("thirdiblis")       || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("silver_vs_sonic"))
                                 {
                                     UpdateLogger($"Randomising player_start2 entities in '{luaFile}'.");
                                     await Task.Run(() => ObjectPlacementRandomiser.LuaPlayerStartRandomiser(luaFile, setCharacters, SetCharacters, setEnemies, setEnemiesNoBosses));
@@ -1121,17 +1120,17 @@ namespace MarathonRandomiser
                         foreach (string skyLua in skyLuas)
                         {
                             // Check if we need to actually use this lua file.
-                            if (!skyLua.Contains("enemy") && (skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("a_") || skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("b_") ||
-                            skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("c_") || skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("d_") ||
-                            skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("e_") || skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("f_") ||
-                            skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("f1_") || skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("f2_") ||
-                            skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("g_") || skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("eCerberus") ||
-                            skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("eGenesis") || skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("eWyvern") ||
-                            skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("firstmefiress") || skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("iblis01") ||
-                            skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("secondiblis") || skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("secondmefiress") ||
-                            skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("shadow_vs_silver") || skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("silver_vs_shadow") ||
-                            skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("solaris_super3") || skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("sonic_vs_silver") ||
-                            skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("thirdiblis") || skyLua.Substring(skyLua.LastIndexOf('\\') + 1).StartsWith("silver_vs_sonic")))
+                            if (!skyLua.Contains("enemy") && (skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("a_") || skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("b_") ||
+                            skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("c_") || skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("d_") ||
+                            skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("e_") || skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("f_") ||
+                            skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("f1_") || skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("f2_") ||
+                            skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("g_") || skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("eCerberus") ||
+                            skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("eGenesis") || skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("eWyvern") ||
+                            skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("firstmefiress") || skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("iblis01") ||
+                            skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("secondiblis") || skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("secondmefiress") ||
+                            skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("shadow_vs_silver") || skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("silver_vs_shadow") ||
+                            skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("solaris_super3") || skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("sonic_vs_silver") ||
+                            skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("thirdiblis") || skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("silver_vs_sonic")))
                             {
                                 UpdateLogger($"Randomising skybox in '{skyLua}'.");
                                 await Task.Run(() => SceneRandomiser.SkyboxRandomisation(skyLua, SceneSkyboxes));
@@ -1306,17 +1305,17 @@ namespace MarathonRandomiser
                         foreach (string luaFile in luaFiles)
                         {
                             // Check if we need to actually use this lua file.
-                            if (!luaFile.Contains("enemy") && (luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("a_") || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("b_") ||
-                            luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("c_") || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("d_") ||
-                            luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("e_") || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("f_") ||
-                            luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("f1_") || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("f2_") ||
-                            luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("g_") || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("eCerberus") ||
-                            luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("eGenesis") || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("eWyvern") ||
-                            luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("firstmefiress") || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("iblis01") ||
-                            luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("secondiblis") || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("secondmefiress") ||
-                            luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("shadow_vs_silver") || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("silver_vs_shadow") ||
-                            luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("solaris_super3") || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("sonic_vs_silver") ||
-                            luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("thirdiblis") || luaFile.Substring(luaFile.LastIndexOf('\\') + 1).StartsWith("silver_vs_sonic") ||
+                            if (!luaFile.Contains("enemy") && (luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("a_") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("b_") ||
+                            luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("c_") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("d_") ||
+                            luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("e_") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("f_") ||
+                            luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("f1_") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("f2_") ||
+                            luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("g_") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("eCerberus") ||
+                            luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("eGenesis") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("eWyvern") ||
+                            luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("firstmefiress") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("iblis01") ||
+                            luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("secondiblis") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("secondmefiress") ||
+                            luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("shadow_vs_silver") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("silver_vs_shadow") ||
+                            luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("solaris_super3") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("sonic_vs_silver") ||
+                            luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("thirdiblis") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("silver_vs_sonic") ||
                             luaFile.Contains("mission")))
                             {
                                 UpdateLogger($"Randomising music in '{luaFile}'.");
@@ -1569,17 +1568,13 @@ namespace MarathonRandomiser
 
             // Loop through each item in this StackPanel element.
             foreach (object? item in children)
-            {
-                // Try to get the item as both a Checkbox and an NumericUpDown element.
-                CheckBox? checkbox = item as CheckBox;
-                HandyControl.Controls.NumericUpDown? numeric = item as HandyControl.Controls.NumericUpDown;
-
-                // If it's a Checkbox element, write the name and checked state.
-                if (checkbox != null)
+            { 
+                // If this is a Checkbox element, write the name and checked state.
+                if (item is CheckBox checkbox)
                     configInfo.WriteLine($"{checkbox.Name}={checkbox.IsChecked}");
 
-                // If it's a NumericUpDown element, write the name and value.
-                if (numeric != null)
+                // If this is a NumericUpDown element, write the name and value.
+                if (item is HandyControl.Controls.NumericUpDown numeric)
                     configInfo.WriteLine($"{numeric.Name}={numeric.Value}");
             }
         }
@@ -1715,11 +1710,8 @@ namespace MarathonRandomiser
             // Loop through each item in this StackPanel element.
             foreach (object? item in children)
             {
-                // Try to get the item as a Checkbox element.
-                CheckBox? checkbox = item as CheckBox;
-
                 // If the element is a Checkbox and is not forbidden, then roll a number and check the box based on the outcome.
-                if (checkbox != null)
+                if (item is CheckBox checkbox)
                 {
                     if (!Forbidden.Contains(checkbox.Name))
                     {

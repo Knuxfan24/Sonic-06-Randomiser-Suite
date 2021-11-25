@@ -3,15 +3,11 @@ using Marathon.Formats.Script.Lua;
 using Marathon.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Threading.Tasks;
 using System.Web;
 
 namespace MarathonRandomiser
@@ -187,23 +183,23 @@ namespace MarathonRandomiser
             Dictionary<string, string> packs = new();
 
             // Get a JSON of the files on the GitHub repo.
-            var httpClient = new HttpClient();
+            HttpClient? httpClient = new();
             httpClient.DefaultRequestHeaders.UserAgent.Add(
                 new ProductInfoHeaderValue("MyApplication", "1"));
-            var repo = "Knuxfan24/Sonic-06-Randomiser-Suite-Voice-Packs";
-            var contentsUrl = $"https://api.github.com/repos/{repo}/contents";
-            var contentsJson = await httpClient.GetStringAsync(contentsUrl);
-            var contents = (JArray)JsonConvert.DeserializeObject(contentsJson);
+            string? repo = "Knuxfan24/Sonic-06-Randomiser-Suite-Voice-Packs";
+            string? contentsUrl = $"https://api.github.com/repos/{repo}/contents";
+            string? contentsJson = await httpClient.GetStringAsync(contentsUrl);
+            JArray? contents = (JArray)JsonConvert.DeserializeObject(contentsJson);
 
             // Loop through each file.
-            foreach (var file in contents)
+            foreach (JToken? file in contents)
             {
                 // Whether this is a file or a directory, as I don't plan to use directories I can ignore those.
-                var fileType = (string)file["type"];
+                string? fileType = (string)file["type"];
                 if (fileType == "file")
                 {
                     // Get the actual url.
-                    var downloadUrl = (string)file["download_url"];
+                    string? downloadUrl = (string)file["download_url"];
 
                     // Strip the url down to the file name and decode its HTML.
                     string decodedFilename = Path.GetFileName(HttpUtility.UrlDecode(downloadUrl));
@@ -225,10 +221,8 @@ namespace MarathonRandomiser
         /// <returns></returns>
         public static async Task DownloadVox(KeyValuePair<string, string> pack)
         {
-            using (WebClient? client = new())
-            {
-                client.DownloadFile(pack.Key, $@"{Environment.CurrentDirectory}\VoicePacks\{pack.Value}");
-            }
+            using WebClient? client = new();
+            client.DownloadFile(pack.Key, $@"{Environment.CurrentDirectory}\VoicePacks\{pack.Value}");
         }
 
         /// <summary>

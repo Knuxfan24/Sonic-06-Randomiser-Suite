@@ -1,9 +1,6 @@
 ﻿using Marathon.Formats.Archive;
 using Marathon.Formats.Package;
 using Marathon.Helpers;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace MarathonRandomiser
 {
@@ -26,7 +23,7 @@ namespace MarathonRandomiser
             string[] win32Arcs = Directory.GetFiles(Path.GetDirectoryName(GameExecutable), "player_*.arc", SearchOption.AllDirectories);
 
             // Get the name of this PKG (surely this way is me having a brainfart?)
-            string pkgName = pkgFile.Substring(pkgFile.LastIndexOf('\\') + 1);
+            string pkgName = pkgFile[(pkgFile.LastIndexOf('\\') + 1)..];
             pkgName = Path.GetFileNameWithoutExtension(pkgName);
 
             // Split the name of this PKG to figure out what we're looking for.
