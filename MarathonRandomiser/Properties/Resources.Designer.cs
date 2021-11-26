@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MarathonRandomiser.Properties {
+namespace MarathonRandomiser.Properties {    
     
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
@@ -298,6 +298,31 @@ namespace MarathonRandomiser.Properties {
         internal static string SceneSkyboxes {
             get {
                 return ResourceManager.GetString("SceneSkyboxes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Aquatic Base,map_aqa,true
+        ///Common,map_common,true
+        ///Crisis City Arena,map_iblis01,true
+        ///Crisis City,map_csc,true
+        ///Dusty Desert,map_dtd,true
+        ///End of the World,map_end,true
+        ///Flame Core Inside Arena,map_iblis02,true
+        ///Flame Core Outside Arena,map_iblis03,true
+        ///Flame Core,map_flc,true
+        ///Kingdom Valley (Scaffolding),kdv_scaffold01,true
+        ///Kingdom Valley,map_kdv,true
+        ///Radical Train,map_rct,true
+        ///Soleanna,map_twn,true
+        ///Tropical Jungle,map_tpj,true
+        ///Wave Ocean,map_wvo,true
+        ///White Acropolis,map_wap,true
+        ///Common Enemy,ene [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string SETParticles {
+            get {
+                return ResourceManager.GetString("SETParticles", resourceCulture);
             }
         }
         

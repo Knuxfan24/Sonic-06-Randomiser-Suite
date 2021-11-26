@@ -88,6 +88,7 @@ namespace MarathonRandomiser
             Helpers.FillCheckedListBox(Properties.Resources.PathPropTypes, CheckedList_SET_PathProps);
             Helpers.FillCheckedListBox(Properties.Resources.VoiceTypes, CheckedList_SET_Hints);
             Helpers.FillCheckedListBox(Properties.Resources.DoorTypes, CheckedList_SET_Doors);
+            Helpers.FillCheckedListBox(Properties.Resources.SETParticles, CheckedList_SET_Particles);
             Helpers.FillCheckedListBox(Properties.Resources.EventLighting, CheckedList_Event_Lighting);
             Helpers.FillCheckedListBox(Properties.Resources.EventTerrain, CheckedList_Event_Terrain);
             Helpers.FillCheckedListBox(Properties.Resources.EnvMaps, CheckedList_Scene_EnvMaps);
@@ -460,6 +461,7 @@ namespace MarathonRandomiser
                         case 4: Helpers.InvalidateCheckedListBox(CheckedList_SET_PathProps, true, selectAll); break;
                         case 5: Helpers.InvalidateCheckedListBox(CheckedList_SET_Hints, true, selectAll); break;
                         case 6: Helpers.InvalidateCheckedListBox(CheckedList_SET_Doors, true, selectAll); break;
+                        case 7: Helpers.InvalidateCheckedListBox(CheckedList_SET_Particles, true, selectAll); break;
                         default: throw new NotImplementedException();
                     }
                     break;
@@ -699,6 +701,7 @@ namespace MarathonRandomiser
                 WildcardCheckedList(CheckedList_SET_PathProps, (int)NumericUpDown_Wildcard_Weight.Value);
                 WildcardCheckedList(CheckedList_SET_Hints, (int)NumericUpDown_Wildcard_Weight.Value);
                 WildcardCheckedList(CheckedList_SET_Doors, (int)NumericUpDown_Wildcard_Weight.Value);
+                WildcardCheckedList(CheckedList_SET_Particles, (int)NumericUpDown_Wildcard_Weight.Value);
 
                 // Event Tab.
                 WildcardTabRoll(StackPanel_Event, (int)NumericUpDown_Wildcard_Weight.Value);
@@ -731,6 +734,7 @@ namespace MarathonRandomiser
             List<string> SetPathProps = Helpers.EnumerateCheckedListBox(CheckedList_SET_PathProps);
             List<string> SetHints = Helpers.EnumerateCheckedListBox(CheckedList_SET_Hints);
             List<string> SetDoors = Helpers.EnumerateCheckedListBox(CheckedList_SET_Doors);
+            List<string> SetParticleBanks = Helpers.EnumerateCheckedListBox(CheckedList_SET_Particles);
 
             List<string> EventLighting = Helpers.EnumerateCheckedListBox(CheckedList_Event_Lighting);
             List<string> EventTerrain = Helpers.EnumerateCheckedListBox(CheckedList_Event_Terrain);
@@ -865,6 +869,8 @@ namespace MarathonRandomiser
                 CheckBox_SET_Hints.IsChecked = false;
             if (SetDoors.Count == 0)
                 CheckBox_SET_Doors.IsChecked = false;
+            if (SetParticleBanks.Count == 0)
+                CheckBox_SET_Particles.IsChecked = false;
 
             if (EventLighting.Count == 0)
                 CheckBox_Event_Lighting.IsChecked = false;
@@ -899,12 +905,13 @@ namespace MarathonRandomiser
             bool? setDoors = CheckBox_SET_Doors.IsChecked;
             bool? setDrawDistance = CheckBox_SET_DrawDistance.IsChecked;
             bool? setCosmetic = CheckBox_SET_Cosmetic.IsChecked;
+            bool? setParticles = CheckBox_SET_Particles.IsChecked;
             int setMinDrawDistance = (int)NumericUpDown_SET_DrawDistance_Min.Value;
             int setMaxDrawDistance = (int)NumericUpDown_SET_DrawDistance_Max.Value;
 
             // Check if we actually need to do SET stuff.
             if (setEnemies == true || setBehaviour == true || setCharacters == true || setItemCapsules == true || setCommonProps == true || setPathProps == true || setHints == true || setDoors == true ||
-                setDrawDistance == true || setCosmetic == true)
+                setDrawDistance == true || setCosmetic == true || setParticles == true)
             {
                 foreach (string archive in archives)
                 {
@@ -920,8 +927,8 @@ namespace MarathonRandomiser
                         {
                             UpdateLogger($"Randomising: '{setFile}'.");
                             await Task.Run(() => ObjectPlacementRandomiser.Process(setFile, setEnemies, setEnemiesNoBosses, setBehaviour, setBehaviourNoEnforce, setCharacters, setItemCapsules, setCommonProps, setPathProps,
-                                                                                     setHints, setDoors, setDrawDistance, setCosmetic, SetEnemies, SetCharacters, SetItemCapsules, SetCommonProps, SetPathProps,
-                                                                                     SetHints, SetDoors, setMinDrawDistance, setMaxDrawDistance));
+                                                                                     setHints, setDoors, setDrawDistance, setCosmetic, setParticles, SetEnemies, SetCharacters, SetItemCapsules, SetCommonProps, SetPathProps,
+                                                                                     SetHints, SetDoors, SetParticleBanks, setMinDrawDistance, setMaxDrawDistance));
                         }
 
                         // Patch enemy luas if they need patching.
@@ -998,20 +1005,44 @@ namespace MarathonRandomiser
                             foreach (string luaFile in luaFiles)
                             {
                                 // Check if we need to actually use this lua file.
-                                if (luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("a_")               || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("b_")               ||
-                                    luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("c_")               || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("d_")               ||
-                                    luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("e_")               || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("f_")               ||
-                                    luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("f1_")              || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("f2_")              ||
-                                    luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("g_")               || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("eCerberus")        ||
-                                    luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("eGenesis")         || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("eWyvern")          ||
-                                    luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("firstmefiress")    || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("iblis01")          ||
-                                    luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("secondiblis")      || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("secondmefiress")   ||
+                                if (!luaFile.Contains("enemy") && (luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("a_") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("b_") ||
+                                    luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("c_") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("d_") ||
+                                    luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("e_") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("f_") ||
+                                    luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("f1_") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("f2_") ||
+                                    luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("g_") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("eCerberus") ||
+                                    luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("eGenesis") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("eWyvern") ||
+                                    luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("firstmefiress") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("iblis01") ||
+                                    luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("secondiblis") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("secondmefiress") ||
                                     luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("shadow_vs_silver") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("silver_vs_shadow") ||
                                     luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("solaris_super3")   || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("sonic_vs_silver")  ||
-                                    luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("thirdiblis")       || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("silver_vs_sonic"))
+                                    luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("thirdiblis")       || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("silver_vs_sonic")))
                                 {
                                     UpdateLogger($"Randomising player_start2 entities in '{luaFile}'.");
                                     await Task.Run(() => ObjectPlacementRandomiser.LuaPlayerStartRandomiser(luaFile, setCharacters, SetCharacters, setEnemies, setEnemiesNoBosses));
+                                }
+                            }
+                        }
+
+                        if (setParticles == true)
+                        {
+                            string[] luaFiles = Directory.GetFiles(unpackedArchive, "*.lub", SearchOption.AllDirectories);
+                            foreach (string luaFile in luaFiles)
+                            {
+                                // Check if we need to actually use this lua file.
+                                if (!luaFile.Contains("enemy") && (luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("a_") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("b_") ||
+                                luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("c_") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("d_") ||
+                                luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("e_") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("f_") ||
+                                luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("f1_") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("f2_") ||
+                                luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("g_") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("eCerberus") ||
+                                luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("eGenesis") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("eWyvern") ||
+                                luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("firstmefiress") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("iblis01") ||
+                                luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("secondiblis") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("secondmefiress") ||
+                                luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("shadow_vs_silver") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("silver_vs_shadow") ||
+                                luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("solaris_super3") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("sonic_vs_silver") ||
+                                luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("thirdiblis") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("silver_vs_sonic")))
+                                {
+                                    UpdateLogger($"Patching particle bank loading in '{luaFile}'.");
+                                    await Task.Run(() => ObjectPlacementRandomiser.ParticlePatch(luaFile));
                                 }
                             }
                         }
@@ -1513,6 +1544,7 @@ namespace MarathonRandomiser
             ConfigCheckedListBoxRead(configInfo, CheckedList_SET_PathProps);
             ConfigCheckedListBoxRead(configInfo, CheckedList_SET_Hints);
             ConfigCheckedListBoxRead(configInfo, CheckedList_SET_Doors);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_SET_Particles);
             configInfo.WriteLine();
 
             // Event Block.

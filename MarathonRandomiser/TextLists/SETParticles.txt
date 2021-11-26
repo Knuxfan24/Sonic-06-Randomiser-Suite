@@ -1,0 +1,41 @@
+﻿Aquatic Base,map_aqa,true
+Common,map_common,true
+Crisis City Arena,map_iblis01,true
+Crisis City,map_csc,true
+Dusty Desert,map_dtd,true
+End of the World,map_end,true
+Flame Core Inside Arena,map_iblis02,true
+Flame Core Outside Arena,map_iblis03,true
+Flame Core,map_flc,true
+Kingdom Valley (Scaffolding),kdv_scaffold01,true
+Kingdom Valley,map_kdv,true
+Radical Train,map_rct,true
+Soleanna,map_twn,true
+Tropical Jungle,map_tpj,true
+Wave Ocean,map_wvo,true
+White Acropolis,map_wap,true
+Common Enemy,enemy_common,true
+Egg Gunner,egunner,true
+Egg Cannon,ecannon,true
+Egg Cerberus,ecerberus,true
+Egg Genesis,egenesis,true
+Egg Wyvern,ewyvern,true
+Iblis (Phase 1),iblis01,true
+Iblis (Phase 2),iblis02,true
+Iblis (Phase 3),iblis03,true
+Mephiles,mefiress,true
+Solaris,solaris,true
+Sonic the Hedgehog,player_sonic,true
+Sonic the Hedgehog (Elise),player_himesonic,true
+Shadow the Hedgehog,player_shadow,true
+Silver the Hedgehog,player_silver,true
+Miles "Tails" Prower,player_tails,true
+Knuckles the Echidna,player_knuckles,true
+Rouge the Bat,player_rouge,true
+E-123 Omega,player_omega,true
+Blaze the Cat,player_blaze,true
+Amy Rose,player_amy,true
+Buggy,vehicle_jeep,true
+Glider,vehicle_jetgrider,true
+Hovercraft,vehicle_hover,true
+Bike,vehicle_bike,true

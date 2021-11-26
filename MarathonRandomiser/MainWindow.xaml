@@ -79,6 +79,7 @@
                         <Label x:Name="Label_SET_DrawDistance_Max" Content="Maximum:" Background="{x:Null}" BorderBrush="{x:Null}" IsEnabled="False"/>
                         <hc:NumericUpDown x:Name="NumericUpDown_SET_DrawDistance_Max" Value="10000" Margin="10,0,10,0" SelectionBrush="#FFB146C2" IsEnabled="False"/>
                         <CheckBox x:Name="CheckBox_SET_Cosmetic" Content="Randomise Cosmetic Details" IsChecked="True"/>
+                        <CheckBox x:Name="CheckBox_SET_Particles" Content="Randomise Particles" IsChecked="True"/>
                     </StackPanel>
 
                     <!--Object Placement Configuration Toggles-->
@@ -118,6 +119,11 @@
                         <hc:TabItem Header="Door Types" BorderBrush="#B146C2">
                             <Grid>
                                 <local:CheckedListBox x:Name="CheckedList_SET_Doors" MultiColumn="True" Margin="0,0,0,0"/>
+                            </Grid>
+                        </hc:TabItem>
+                        <hc:TabItem Header="Particle Banks" BorderBrush="#B146C2">
+                            <Grid>
+                                <local:CheckedListBox x:Name="CheckedList_SET_Particles" MultiColumn="True" Margin="0,0,0,0"/>
                             </Grid>
                         </hc:TabItem>
                     </hc:TabControl>
