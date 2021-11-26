@@ -925,8 +925,8 @@ namespace MarathonRandomiser
                         }
 
                         // Patch enemy luas if they need patching.
-                        if (setEnemies == true && (SetEnemies.Contains("eCerberus") || SetEnemies.Contains("eGenesis") || SetEnemies.Contains("eWyvern") || SetEnemies.Contains("firstIblis") ||
-                            SetEnemies.Contains("secondIblis") || SetEnemies.Contains("thirdIblis") || SetEnemies.Contains("firstmefiress") || SetEnemies.Contains("secondmefiress") ||
+                        if (setEnemies == true && (SetEnemies.Contains("eCerberus") || SetEnemies.Contains("eGenesis") || SetEnemies.Contains("eWyvern") || SetEnemies.Contains("firstiblis") ||
+                            SetEnemies.Contains("secondiblis") || SetEnemies.Contains("thirdiblis") || SetEnemies.Contains("firstmefiress") || SetEnemies.Contains("secondmefiress") ||
                             SetEnemies.Contains("solaris01") || SetEnemies.Contains("solaris02")) || setHints == true)
                         {
                             string[] luaFiles = Directory.GetFiles($"{unpackedArchive}\\xenon\\scripts\\enemy", "*.lub", SearchOption.TopDirectoryOnly);
@@ -1017,8 +1017,10 @@ namespace MarathonRandomiser
                         }
                     }
 
-                    // Patch voice_all_e.sbk if we aren't using any voice packs.
-                    if (CustomVoxPacks.Count == 0)
+                    // Patch voice_all_e.sbk if we aren't using any voice packs and we've done something to need it.
+                    if (CustomVoxPacks.Count == 0 && (setHints == true) || (setEnemies == true && (SetEnemies.Contains("eCerberus") || SetEnemies.Contains("eGenesis") || SetEnemies.Contains("eWyvern") || SetEnemies.Contains("firstiblis") ||
+                            SetEnemies.Contains("secondiblis") || SetEnemies.Contains("thirdiblis") || SetEnemies.Contains("firstmefiress") || SetEnemies.Contains("secondmefiress") ||
+                            SetEnemies.Contains("solaris01") || SetEnemies.Contains("solaris02")) || setHints == true))
                     {
                         if (Path.GetFileName(archive).ToLower() == "sound.arc")
                         {

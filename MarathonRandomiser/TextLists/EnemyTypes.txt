@@ -33,9 +33,9 @@ Egg Walker,eWalker,true
 Egg Cerberus,eCerberus,false
 Egg Genesis,eGenesis,false
 Egg Wyvern,eWyvern,false
-Iblis (Phase 1),firstIblis,false
-Iblis (Phase 2),secondIblis,false
-Iblis (Phase 3),thirdIblis,false
+Iblis (Phase 1),firstiblis,false
+Iblis (Phase 2),secondiblis,false
+Iblis (Phase 3),thirdiblis,false
 Mephiles (Phase 1),firstmefiress,false
 Mephiles (Phase 2),secondmefiress,false
 Mephiles Kyozoress,kyozoress,false

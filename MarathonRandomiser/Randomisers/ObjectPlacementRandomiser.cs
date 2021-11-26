@@ -264,9 +264,9 @@ namespace MarathonRandomiser
                     case "cGazer":         setObject.Parameters[2].Data = cGazerParameters[MainWindow.Randomiser.Next(cGazerParameters.Count)];               break;
                     case "cGolem":         setObject.Parameters[2].Data = cGolemParameters[MainWindow.Randomiser.Next(cGolemParameters.Count)];               break;
                     case "cTitan":         setObject.Parameters[2].Data = cTitanParameters[MainWindow.Randomiser.Next(cTitanParameters.Count)];               break;
-                    case "firstIblis":     setObject.Parameters[2].Data = "firstIblis";                                                                       break;
-                    case "secondIblis":    setObject.Parameters[2].Data = secondIblisParameters[MainWindow.Randomiser.Next(secondIblisParameters.Count)];     break;
-                    case "thirdIblis":     setObject.Parameters[2].Data = "thirdIblis";                                                                       break;
+                    case "firstiblis":     setObject.Parameters[2].Data = "firstIblis";                                                                       break;
+                    case "secondiblis":    setObject.Parameters[2].Data = secondIblisParameters[MainWindow.Randomiser.Next(secondIblisParameters.Count)];     break;
+                    case "thirdiblis":     setObject.Parameters[2].Data = "thirdIblis";                                                                       break;
                     case "firstmefiress":  setObject.Parameters[2].Data = firstmefiressParameters[MainWindow.Randomiser.Next(firstmefiressParameters.Count)]; break;
                     case "secondmefiress": setObject.Parameters[2].Data = "secondmefiress_shadow";                                                            break;
                     case "kyozoress":      setObject.Parameters[2].Data = "kyozoress";                                                                        break;
@@ -448,7 +448,8 @@ namespace MarathonRandomiser
         /// <param name="luaFile">The lua binary we're processing.</param>
         /// <param name="enemies">Whether enemy randomisation is on.</param>
         /// <param name="hints">Whether hint randomisation is on.</param>
-        /// <param name="SetHints">The list of valid hint voice lines</param>
+        /// <param name="SetHints">The list of valid hint voice lines.</param>
+        /// <param name="SetEnemies">The list of valid enemy types (used to prevent unneeded commenting on enemies that aren't part of the randomisation).</param>
         public static async Task BossPatch(string luaFile, bool? enemies, bool? hints, List<string> SetHints, List<string> SetEnemies)
         {
             // Decompile this luaFile.
@@ -461,7 +462,13 @@ namespace MarathonRandomiser
             for (int i = 0; i < lua.Length; i++)
             {
                 // If enemy randomisation is on, then comment out the lines that control the camera forcing, player movement forcing and Mephiles' random teleportations.
-                if ((lua[i].Contains("CallSetCamera") || lua[i].Contains("CallMoveTargetPos") || lua[i].Contains("FirstMefiress_RandomWarp")) && enemies == true && SetEnemies.Contains(Path.GetFileNameWithoutExtension(luaFile)))
+                // Iblis and Mephiles are stupid and have their Luas named different to the enemy type, so I have to check for those specifically *grumble grumble*.
+                if ((lua[i].Contains("CallSetCamera") || lua[i].Contains("CallMoveTargetPos") || lua[i].Contains("FirstMefiress_RandomWarp")) && enemies == true &&
+                     (SetEnemies.Contains(Path.GetFileNameWithoutExtension(luaFile)) || (Path.GetFileNameWithoutExtension(luaFile) == "Iblis01" && SetEnemies.Contains("firstiblis")) ||
+                     (Path.GetFileNameWithoutExtension(luaFile) == "Iblis02" && SetEnemies.Contains("secondiblis")) ||
+                     (Path.GetFileNameWithoutExtension(luaFile) == "Iblis03" && SetEnemies.Contains("thirdiblis")) ||
+                     (Path.GetFileNameWithoutExtension(luaFile) == "firstmefiress_omega" && SetEnemies.Contains("firstmefiress")) ||
+                     (Path.GetFileNameWithoutExtension(luaFile) == "firstmefiress_shadow" && SetEnemies.Contains("firstmefiress"))))
                     lua[i] = $"--{lua[i]}";
 
                 // If voice randomisation is on, then randomise the lua hint messages.
