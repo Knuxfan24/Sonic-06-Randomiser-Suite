@@ -1066,15 +1066,18 @@ namespace MarathonRandomiser
                     }
 
                     // Patch voice_all_e.sbk if we aren't using any voice packs and we've done something to need it.
-                    if (CustomVoxPacks.Count == 0 && (setHints == true) || (setEnemies == true && (SetEnemies.Contains("eCerberus") || SetEnemies.Contains("eGenesis") || SetEnemies.Contains("eWyvern") || SetEnemies.Contains("firstiblis") ||
+                    if (setHints == true || (setEnemies == true && (SetEnemies.Contains("eCerberus") || SetEnemies.Contains("eGenesis") || SetEnemies.Contains("eWyvern") || SetEnemies.Contains("firstiblis") ||
                             SetEnemies.Contains("secondiblis") || SetEnemies.Contains("thirdiblis") || SetEnemies.Contains("firstmefiress") || SetEnemies.Contains("secondmefiress") ||
-                            SetEnemies.Contains("solaris01") || SetEnemies.Contains("solaris02")) || setHints == true))
+                            SetEnemies.Contains("solaris01") || SetEnemies.Contains("solaris02"))))
                     {
-                        if (Path.GetFileName(archive).ToLower() == "sound.arc")
+                        if (CustomVoxPacks.Count == 0)
                         {
-                            UpdateLogger($"Patching 'voice_all_e.sbk'.");
-                            string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
-                            File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\voice_all_e.sbk", $@"{unpackedArchive}\xenon\sound\voice_all_e.sbk", true);
+                            if (Path.GetFileName(archive).ToLower() == "sound.arc")
+                            {
+                                UpdateLogger($"Patching 'voice_all_e.sbk'.");
+                                string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+                                File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\voice_all_e.sbk", $@"{unpackedArchive}\xenon\sound\voice_all_e.sbk", true);
+                            }
                         }
                     }
                 }
