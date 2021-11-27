@@ -7,7 +7,7 @@
         xmlns:hc="https://handyorg.github.io/handycontrol"
         x:Class="MarathonRandomiser.MainWindow"
         mc:Ignorable="d"
-        Title="Sonic '06 Randomiser Suite" Height="640" Width="1100" MinHeight="640" MinWidth="1100">
+        Title="Sonic '06 Randomiser Suite" Height="640" Width="1200" MinHeight="640" MinWidth="1200">
     <Grid Background="#FF181818">
         <hc:TabControl Style="{StaticResource TabControlInLine}" Margin="0,0,0,50" x:Name="TabControl_Main">
             <!--General Tab-->
@@ -265,6 +265,39 @@
                     </hc:TabControl>
                 </Grid>
             </hc:TabItem>
+
+            <!--Audio Tab-->
+            <hc:TabItem Header="Audio" BorderBrush="#B146C2" >
+                <Grid Background="#FF181818" Name="Grid_Audio">
+                    <!--Texture Configuration Checkboxes/Controls-->
+                    <StackPanel HorizontalAlignment="Left" Width="210" Name="StackPanel_Audio">
+                        <StackPanel.Resources>
+                            <Style BasedOn="{StaticResource CheckBoxBaseStyle}" TargetType="{x:Type CheckBox}">
+                                <Setter Property="Margin" Value="10,10,0,0" />
+                                <Setter Property="HorizontalAlignment" Value="Left"/>
+                            </Style>
+                        </StackPanel.Resources>
+                        <CheckBox x:Name="CheckBox_Audio_Music" Content="Randomise Stage Music" IsChecked="True"/>
+                        <CheckBox x:Name="CheckBox_Audio_SFX" Content="Randomise Sound Effects" Foreground="Firebrick"/>
+                    </StackPanel>
+
+                    <!--Texture Configuration Toggles-->
+                    <Button Content="Select All" HorizontalAlignment="Left" Margin="215,0,0,10" VerticalAlignment="Bottom" Height="40" Width="128" Click="CheckedListBox_SelectionToggle"/>
+                    <Button Content="Deselect All" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Height="40" Width="128" Click="CheckedListBox_SelectionToggle"/>
+                    <hc:TabControl Style="{StaticResource TabControlInLine}" Margin="210,0,0,60" HorizontalAlignment="Stretch" Name="TabControl_Audio">
+                        <hc:TabItem Header="Songs" BorderBrush="#B146C2" x:Name="TabItem_Audio_Songs" >
+                            <Grid>
+                                <local:CheckedListBox x:Name="CheckedList_Audio_Songs" MultiColumn="True" Margin="0,0,0,0"/>
+                            </Grid>
+                        </hc:TabItem>
+                        <hc:TabItem Header="Sound Effect Banks" BorderBrush="#B146C2" x:Name="TabItem_Audio_SFX" >
+                            <Grid>
+                                <local:CheckedListBox x:Name="CheckedList_Audio_SFX" MultiColumn="True" Margin="0,0,0,0"/>
+                            </Grid>
+                        </hc:TabItem>
+                    </hc:TabControl>
+                </Grid>
+            </hc:TabItem>
             
             <!--Miscellaneous Tab-->
             <hc:TabItem Header="Miscellaneous" BorderBrush="#B146C2" >
@@ -277,7 +310,7 @@
                                 <Setter Property="HorizontalAlignment" Value="Left"/>
                             </Style>
                         </StackPanel.Resources>
-                        <CheckBox x:Name="CheckBox_Misc_Music" Content="Randomise Stage Music" IsChecked="True"/>
+                        <!--<CheckBox x:Name="CheckBox_Misc_Music" Content="Randomise Stage Music" IsChecked="True"/>-->
                         <CheckBox x:Name="CheckBox_Misc_EnemyHealth" Content="Randomise Enemy Health" Foreground="Firebrick" Click="Dependency_CheckBox_Changed"/>
                         <Label x:Name="Label_Misc_EnemyHealth_Min" Content="Minimum:" Background="{x:Null}" BorderBrush="{x:Null}" IsEnabled="False"/>
                         <hc:NumericUpDown x:Name="NumericUpDown_Misc_EnemyHealth_Min" Value="1" Margin="10,0,10,0" SelectionBrush="#FFB146C2" IsEnabled="False"/>
@@ -297,11 +330,11 @@
                     <Button Content="Select All" HorizontalAlignment="Left" Margin="215,0,0,10" VerticalAlignment="Bottom" Height="40" Width="128" Click="CheckedListBox_SelectionToggle"/>
                     <Button Content="Deselect All" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Height="40" Width="128" Click="CheckedListBox_SelectionToggle"/>
                     <hc:TabControl Style="{StaticResource TabControlInLine}" Margin="210,0,0,60" HorizontalAlignment="Stretch" Name="TabControl_Miscellaneous">
-                        <hc:TabItem Header="Songs" BorderBrush="#B146C2" x:Name="TabItem_Misc_Songs" >
+                        <!--<hc:TabItem Header="Songs" BorderBrush="#B146C2" x:Name="TabItem_Misc_Songs" >
                             <Grid>
                                 <local:CheckedListBox x:Name="CheckedList_Misc_Songs" MultiColumn="True" Margin="0,0,0,0"/>
                             </Grid>
-                        </hc:TabItem>
+                        </hc:TabItem>-->
                         <hc:TabItem Header="Text Languages" BorderBrush="#B146C2" x:Name="TabItem_Misc_Languages" >
                             <Grid>
                                 <local:CheckedListBox x:Name="CheckedList_Misc_Languages" MultiColumn="True" Margin="0,0,0,0"/>

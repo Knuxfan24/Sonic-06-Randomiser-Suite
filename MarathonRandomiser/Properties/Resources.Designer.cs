@@ -8,7 +8,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MarathonRandomiser.Properties {    
+namespace MarathonRandomiser.Properties {
+    using System;
+    
     
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
@@ -55,6 +57,29 @@ namespace MarathonRandomiser.Properties {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to battle,battle.csb,true
+        ///boss_cerberus,boss_cerberus.csb,true
+        ///boss_genesis,boss_genesis.csb,true
+        ///boss_iblis,boss_iblis.csb,true
+        ///boss_iblis2,boss_iblis2.csb,true
+        ///boss_iblis3,boss_iblis3.csb,true
+        ///boss_mefiress,boss_mefiress.csb,true
+        ///boss_shadow_e,boss_shadow_e.csb,true
+        ///boss_shadow_j,boss_shadow_j.csb,true
+        ///boss_silver_e,boss_silver_e.csb,true
+        ///boss_silver_j,boss_silver_j.csb,true
+        ///boss_solaris,boss_solaris.csb,true
+        ///boss_sonic_e,boss_sonic_e.csb,true
+        ///boss_sonic_j,boss_sonic_j.csb,true
+        ///boss_wyvern,boss [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string AudioCSBs {
+            get {
+                return ResourceManager.GetString("AudioCSBs", resourceCulture);
             }
         }
         

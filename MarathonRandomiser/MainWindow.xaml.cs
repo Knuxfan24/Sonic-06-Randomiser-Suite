@@ -18,7 +18,7 @@ namespace MarathonRandomiser
     public partial class MainWindow : Window
     {
         // Version Number.
-        public static readonly string GlobalVersionNumber = $"Version 2.1.7";
+        public static readonly string GlobalVersionNumber = $"Version 2.1.8";
 
         #if !DEBUG
         public static readonly string VersionNumber = GlobalVersionNumber;
@@ -93,7 +93,8 @@ namespace MarathonRandomiser
             Helpers.FillCheckedListBox(Properties.Resources.EventTerrain, CheckedList_Event_Terrain);
             Helpers.FillCheckedListBox(Properties.Resources.EnvMaps, CheckedList_Scene_EnvMaps);
             Helpers.FillCheckedListBox(Properties.Resources.SceneSkyboxes, CheckedList_Scene_Skyboxes);
-            Helpers.FillCheckedListBox(Properties.Resources.MiscSongs, CheckedList_Misc_Songs);
+            Helpers.FillCheckedListBox(Properties.Resources.MiscSongs, CheckedList_Audio_Songs);
+            Helpers.FillCheckedListBox(Properties.Resources.AudioCSBs, CheckedList_Audio_SFX);
             Helpers.FillCheckedListBox(Properties.Resources.MiscLanguages, CheckedList_Misc_Languages);
 
             RefreshVoicePacks();
@@ -415,8 +416,11 @@ namespace MarathonRandomiser
                     TabItem_Scene.IsEnabled = (bool)!NewCheckedStatus;
                     TabItem_Anim.IsEnabled = (bool)!NewCheckedStatus;
 
+                    // Audio Tab.
+                    CheckBox_Audio_Music.IsEnabled = (bool)!NewCheckedStatus;
+                    CheckedList_Audio_Songs.IsEnabled = (bool)!NewCheckedStatus;
+
                     // Misc Tab.
-                    CheckBox_Misc_Music.IsEnabled = (bool)!NewCheckedStatus;
                     CheckBox_Misc_Collision.IsEnabled = (bool)!NewCheckedStatus;
                     CheckBox_Misc_Collision_PerFace.IsEnabled = (bool)!NewCheckedStatus;
                     if (NewCheckedStatus == false)
@@ -428,7 +432,6 @@ namespace MarathonRandomiser
                             CheckBox_Misc_Collision_PerFace.IsEnabled = false;
                     }
                     CheckBox_Misc_Text.IsEnabled = (bool)!NewCheckedStatus;
-                    TabItem_Misc_Songs.IsEnabled = (bool)!NewCheckedStatus;
                     TabItem_Misc_Languages.IsEnabled = (bool)!NewCheckedStatus;
                     TabControl_Miscellaneous.SelectedIndex = 2;
                     break;
@@ -488,12 +491,20 @@ namespace MarathonRandomiser
                     Helpers.InvalidateCheckedListBox(CheckedList_Textures_Arcs, true, selectAll);
                     break;
 
+                case "Grid_Audio":
+                    switch (TabControl_Audio.SelectedIndex)
+                    {
+                        case 0: Helpers.InvalidateCheckedListBox(CheckedList_Audio_Songs, true, selectAll); break;
+                        case 1: Helpers.InvalidateCheckedListBox(CheckedList_Audio_SFX, true, selectAll); break;
+                        default: throw new NotImplementedException();
+                    }
+                    break;
+
                 case "Grid_Miscellaneous":
                     switch (TabControl_Miscellaneous.SelectedIndex)
                     {
-                        case 0: Helpers.InvalidateCheckedListBox(CheckedList_Misc_Songs, true, selectAll); break;
-                        case 1: Helpers.InvalidateCheckedListBox(CheckedList_Misc_Languages, true, selectAll); break;
-                        case 2: Helpers.InvalidateCheckedListBox(CheckedList_Misc_Patches, true, selectAll); break;
+                        case 0: Helpers.InvalidateCheckedListBox(CheckedList_Misc_Languages, true, selectAll); break;
+                        case 1: Helpers.InvalidateCheckedListBox(CheckedList_Misc_Patches, true, selectAll); break;
                         default: throw new NotImplementedException();
                     }
                     break;
@@ -574,7 +585,8 @@ namespace MarathonRandomiser
                                                   "ShadowLAG: Original Lua Decompilation Source.\n" +
                                                   "vgmstream: Audio Conversion.\n" +
                                                   "Microsoft: xmaencode and texconv utilities.\n" +
-                                                  "HandyControl: WPF Form Controls.",
+                                                  "HandyControl: WPF Form Controls.\n" +
+                                                  "Skyth: Sonic Audio Tools.",
                                                   "Sonic '06 Randomiser Suite",
                                                   MessageBoxButton.OK,
                                                   MessageBoxImage.Information);
@@ -722,7 +734,7 @@ namespace MarathonRandomiser
 
                 // Misc Tab.
                 WildcardTabRoll(StackPanel_Misc, (int)NumericUpDown_Wildcard_Weight.Value);
-                WildcardCheckedList(CheckedList_Misc_Songs, (int)NumericUpDown_Wildcard_Weight.Value);
+                WildcardCheckedList(CheckedList_Audio_Songs, (int)NumericUpDown_Wildcard_Weight.Value);
                 WildcardCheckedList(CheckedList_Misc_Languages, (int)NumericUpDown_Wildcard_Weight.Value);
             }
 
@@ -744,7 +756,9 @@ namespace MarathonRandomiser
 
             List<string> TexturesArchives = Helpers.EnumerateCheckedListBox(CheckedList_Textures_Arcs);
 
-            List<string> MiscMusic = Helpers.EnumerateCheckedListBox(CheckedList_Misc_Songs);
+            List<string> AudioMusic = Helpers.EnumerateCheckedListBox(CheckedList_Audio_Songs);
+            List<string> AudioCSBs = Helpers.EnumerateCheckedListBox(CheckedList_Audio_SFX);
+
             List<string> MiscLanguages = Helpers.EnumerateCheckedListBox(CheckedList_Misc_Languages);
             List<string> MiscPatches = Helpers.EnumerateCheckedListBox(CheckedList_Misc_Patches);
 
@@ -759,7 +773,7 @@ namespace MarathonRandomiser
                 if (CheckBox_General_Wildcard.IsChecked == true)
                 {
                     if (TextBox_Custom_Music.Text.Length != 0)
-                        CheckBox_Misc_Music.IsChecked = true;
+                        CheckBox_Audio_Music.IsChecked = true;
 
                     if (CustomVoxPacks.Count > 0)
                         CheckBox_SET_Hints.IsChecked = true;
@@ -784,7 +798,7 @@ namespace MarathonRandomiser
                         UpdateLogger($"Importing: '{CustomMusic[i]}' as custom music.");
                         await Task.Run(() => Custom.Music(CustomMusic[i], ModDirectory, i, EnableCache));
                         songs += $"custom{i}.xma,";
-                        MiscMusic.Add($"custom{i}");
+                        AudioMusic.Add($"custom{i}");
                     }
 
                     // Add all the songs to the mod configuration ini.
@@ -885,8 +899,11 @@ namespace MarathonRandomiser
             if (TexturesArchives.Count == 0)
                 CheckBox_Textures_Textures.IsChecked = false;
 
-            if (MiscMusic.Count == 0)
-                CheckBox_Misc_Music.IsChecked = false;
+            if (AudioMusic.Count == 0)
+                CheckBox_Audio_Music.IsChecked = false;
+            if (AudioCSBs.Count == 0)
+                CheckBox_Audio_SFX.IsChecked = false;
+
             if (MiscLanguages.Count == 0)
                 CheckBox_Misc_Text.IsChecked = false;
             if (MiscPatches.Count == 0)
@@ -1321,12 +1338,12 @@ namespace MarathonRandomiser
             }
             #endregion
 
-            #region Misc. Randomisers
+            #region Audio Randomisers
             // Music Randomisation
-            bool? miscMusic = CheckBox_Misc_Music.IsChecked;
+            bool? audioMusic = CheckBox_Audio_Music.IsChecked;
 
             // Check if we actually need to do music randomisation.
-            if (miscMusic == true)
+            if (audioMusic == true)
             {
                 foreach (string archive in archives)
                 {
@@ -1352,13 +1369,98 @@ namespace MarathonRandomiser
                             luaFile.Contains("mission")))
                             {
                                 UpdateLogger($"Randomising music in '{luaFile}'.");
-                                await Task.Run(() => MiscellaneousRandomisers.MusicRandomiser(luaFile, MiscMusic, Seed));
+                                await Task.Run(() => AudioRandomisers.MusicRandomiser(luaFile, AudioMusic, Seed));
                             }
                         }
                     }
                 }
             }
 
+            // Sound Effect Randomisation
+            bool? audioSFX = CheckBox_Audio_SFX.IsChecked;
+
+            // Check if we actually need to do sound effect randomisation.
+            if (audioSFX == true)
+            {
+                foreach (string archive in archives)
+                {
+                    if (Path.GetFileName(archive).ToLower() == "sound.arc")
+                    {
+                        string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+
+                        // Find the CSBs and unpack the ones the user has chosen to randomise.
+                        string[] csbFiles = Directory.GetFiles($"{unpackedArchive}\\common\\sound", "*.csb", SearchOption.TopDirectoryOnly);
+                        foreach(string csbFile in csbFiles)
+                        {
+                            if (AudioCSBs.Contains(Path.GetFileName(csbFile)))
+                            {
+                                UpdateLogger($"Getting sounds in '{Path.GetFileName(csbFile)}'.");
+                                await Task.Run(() => AudioRandomisers.CSBUnpack(csbFile));
+                            }
+                        }
+
+                        // Get all the ADXs
+                        string[] introADXFilesProcess = Directory.GetFiles($"{unpackedArchive}\\common\\sound", "Intro.adx", SearchOption.AllDirectories);
+                        string[] loopADXFilesProcess = Directory.GetFiles($"{unpackedArchive}\\common\\sound", "Loop.adx", SearchOption.AllDirectories);
+                        List<string> introADXFilesStereo = new();
+                        List<string> introADXFilesMono = new();
+                        List<string> loopADXFilesStereo = new();
+                        List<string> loopADXFilesMono = new();
+
+                        // Sort the ADX files based on whether they're stereo or mono.
+                        foreach (string introADXFile in introADXFilesProcess)
+                        {
+                            using(BinaryReader reader = new(File.OpenRead(introADXFile)))
+                            {
+                                reader.BaseStream.Position = 0x07;
+
+                                if (reader.ReadByte() == 1)
+                                    introADXFilesMono.Add(introADXFile);
+
+                                else
+                                    introADXFilesStereo.Add(introADXFile);
+                            }
+                            File.Move(introADXFile, $"{introADXFile}.rnd");
+                        }
+
+                        foreach (string loopADXFile in loopADXFilesProcess)
+                        {
+                            using (BinaryReader reader = new(File.OpenRead(loopADXFile)))
+                            {
+                                reader.BaseStream.Position = 0x07;
+
+                                if (reader.ReadByte() == 1)
+                                    loopADXFilesMono.Add(loopADXFile);
+
+                                else
+                                    loopADXFilesStereo.Add(loopADXFile);
+                            }
+                            File.Move(loopADXFile, $"{loopADXFile}.rnd");
+                        }
+
+                        // Shuffle the ADX files.
+                        UpdateLogger($"Shuffling sounds.");
+                        await Task.Run(() => AudioRandomisers.ShuffleSoundEffects(introADXFilesStereo));
+                        await Task.Run(() => AudioRandomisers.ShuffleSoundEffects(introADXFilesMono));
+                        await Task.Run(() => AudioRandomisers.ShuffleSoundEffects(loopADXFilesStereo));
+                        await Task.Run(() => AudioRandomisers.ShuffleSoundEffects(loopADXFilesMono));
+
+                        // Repack the CSB
+                        foreach (string csbFile in csbFiles)
+                        {
+                            if (AudioCSBs.Contains(Path.GetFileName(csbFile)))
+                            {
+                                UpdateLogger($"Repacking '{Path.GetFileName(csbFile)}'.");
+                                await Task.Run(() => AudioRandomisers.CSBRepack($"{Path.GetDirectoryName(csbFile)}\\{Path.GetFileNameWithoutExtension(csbFile)}"));
+                                Directory.Delete($"{Path.GetDirectoryName(csbFile)}\\{Path.GetFileNameWithoutExtension(csbFile)}", true);
+                            }
+                        }
+                    }
+                }
+            }
+            #endregion
+
+            #region Misc. Randomisers
             // Enemy Health Randomisation
             bool? miscEnemyHealth = CheckBox_Misc_EnemyHealth.IsChecked;
             bool? miscEnemyHealthBosses = CheckBox_Misc_EnemyHealth_Bosses.IsChecked;
@@ -1568,9 +1670,14 @@ namespace MarathonRandomiser
             ConfigCheckedListBoxRead(configInfo, CheckedList_Textures_Arcs);
             configInfo.WriteLine();
 
+            // Audio Block
+            ConfigTabRead(configInfo, "Audio", StackPanel_Audio);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_Audio_Songs);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_Audio_SFX);
+            configInfo.WriteLine();
+
             // Misc Block.
             ConfigTabRead(configInfo, "Misc", StackPanel_Misc);
-            ConfigCheckedListBoxRead(configInfo, CheckedList_Misc_Songs);
             ConfigCheckedListBoxRead(configInfo, CheckedList_Misc_Languages);
             ConfigCheckedListBoxRead(configInfo, CheckedList_Misc_Patches);
             configInfo.WriteLine();
