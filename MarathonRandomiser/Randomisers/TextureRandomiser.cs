@@ -124,5 +124,19 @@
                 File.Copy(validDDSFiles[index], $"{validDDSFilesReadOnly[i].Remove(validDDSFilesReadOnly[i].LastIndexOf('.'))}");
             }
         }
+
+        /// <summary>
+        /// Deletes the textures in the archive.
+        /// </summary>
+        /// <param name="archivePath">The archive to delete textures in.</param>
+        public static async Task DeleteTextures(string archivePath)
+        {
+            // Find all the DDS texture files in this archive.
+            string[] ddsFiles = Directory.GetFiles(archivePath, "*.dds", SearchOption.AllDirectories);
+
+            // Freaking yeet 'em.
+            foreach(string ddsFile in ddsFiles)
+                File.Delete(ddsFile);
+        }
     }
 }

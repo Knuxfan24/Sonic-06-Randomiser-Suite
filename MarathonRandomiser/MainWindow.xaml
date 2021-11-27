@@ -251,6 +251,7 @@
                         <CheckBox x:Name="CheckBox_Textures_PerArc" Content="Randomise Per Archive" IsEnabled="False"/>
                         <CheckBox x:Name="CheckBox_Textures_AllowDupes" Content="Allow Duplicates" IsEnabled="False"/>
                         <CheckBox x:Name="CheckBox_Textures_OnlyCustom" Content="Only Use Custom Textures" IsEnabled="False"/>
+                        <CheckBox x:Name="CheckBox_Textures_DeleteStages" Content="Delete Stage Textures" Foreground="Firebrick"/>
                     </StackPanel>
 
                     <!--Texture Configuration Toggles-->
@@ -281,7 +282,7 @@
                         <CheckBox x:Name="CheckBox_Audio_SFX" Content="Randomise Sound Effects" Foreground="Firebrick"/>
                     </StackPanel>
 
-                    <!--Texture Configuration Toggles-->
+                    <!--Audio Configuration Toggles-->
                     <Button Content="Select All" HorizontalAlignment="Left" Margin="215,0,0,10" VerticalAlignment="Bottom" Height="40" Width="128" Click="CheckedListBox_SelectionToggle"/>
                     <Button Content="Deselect All" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Height="40" Width="128" Click="CheckedListBox_SelectionToggle"/>
                     <hc:TabControl Style="{StaticResource TabControlInLine}" Margin="210,0,0,60" HorizontalAlignment="Stretch" Name="TabControl_Audio">

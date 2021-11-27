@@ -1281,6 +1281,7 @@ namespace MarathonRandomiser
             bool? texturesPerArc = CheckBox_Textures_PerArc.IsChecked;
             bool? texturesAllowDupes = CheckBox_Textures_AllowDupes.IsChecked;
             bool? texturesOnlyCustom = CheckBox_Textures_OnlyCustom.IsChecked;
+            bool? texturesDelete = CheckBox_Textures_DeleteStages.IsChecked;
 
             // Dupes are NEEDED if we're only using custom textures.
             if (texturesOnlyCustom == true)
@@ -1336,6 +1337,19 @@ namespace MarathonRandomiser
                             string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
                             await Task.Run(() => TextureRandomiser.PerArchive(unpackedArchive, CustomTextureFiles, texturesAllowDupes, texturesOnlyCustom));
                         }
+                    }
+                }
+            }
+
+            // Delete stage textures if we need to.
+            if (texturesDelete == true)
+            {
+                foreach (string archive in archives)
+                {
+                    if (archive.Contains("stage_"))
+                    {
+                        string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+                        await Task.Run(() => TextureRandomiser.DeleteTextures(unpackedArchive));
                     }
                 }
             }
