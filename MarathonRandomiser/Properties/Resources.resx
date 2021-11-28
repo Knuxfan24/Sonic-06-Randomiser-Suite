@@ -121,20 +121,8 @@
   <data name="AudioCSBs" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\TextLists\AudioCSBs.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="CharacterTypes" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\TextLists\CharacterTypes.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="CommonPropTypes" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\TextLists\CommonPropTypes.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="DoorTypes" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\TextLists\DoorTypes.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="EnemyTypes" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\TextLists\EnemyTypes.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="EnvMaps" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\TextLists\EnvMaps.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="AudioSongs" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\TextLists\AudioSongs.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="EventLighting" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\TextLists\EventLighting.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
@@ -142,25 +130,37 @@
   <data name="EventTerrain" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\TextLists\EventTerrain.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="ItemTypes" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\TextLists\ItemTypes.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
   <data name="MiscLanguages" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\TextLists\MiscLanguages.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="MiscSongs" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\TextLists\MiscSongs.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="PathPropTypes" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\TextLists\PathPropTypes.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="SceneEnvMaps" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\TextLists\SceneEnvMaps.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="SceneSkyboxes" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\TextLists\SceneSkyboxes.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="SETCharacters" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\TextLists\SETCharacters.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SETCommonProps" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\TextLists\SETCommonProps.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SETDoors" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\TextLists\SETDoors.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SETEnemies" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\TextLists\SETEnemies.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SETHints" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\TextLists\SETHints.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="SETItemCapsules" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\TextLists\SETItemCapsules.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="SETParticles" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\TextLists\SETParticles.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="VoiceTypes" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\TextLists\VoiceTypes.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="SETPathProps" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\TextLists\SETPathProps.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
 </root>

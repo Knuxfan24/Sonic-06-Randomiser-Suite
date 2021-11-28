@@ -166,6 +166,12 @@ namespace MarathonRandomiser
             arc.Save(savePath);
         }
 
+        /// <summary>
+        /// Writes a hint name at an offset and figure out how many nulls need to be written to pad it to 19 characters.
+        /// </summary>
+        /// <param name="patchInfo">The streamwriter for our hyrbid patch file.</param>
+        /// <param name="offset">Where we're writing to.</param>
+        /// <param name="hint">The name of the hint to write here.</param>
         public static void HybridPatchWriter(StreamWriter patchInfo, int offset, string hint)
         {
             patchInfo.WriteLine($"WriteTextBytes(Executable|0x{offset:X}|\"{hint}\")");
@@ -237,6 +243,39 @@ namespace MarathonRandomiser
             // Delete each file.
             foreach (string file in RandomiserFiles)
                 File.Delete(file);
+        }
+    
+        /// <summary>
+        /// Checks if a Lua needs to be processed for a function.
+        /// </summary>
+        /// <param name="luaPath">The Lua Binary to check.</param>
+        /// <param name="neededParameters">The parameter this file needs to contain at least one of.</param>
+        /// <returns>Whether or not this file needs processing.</returns>
+        public static async Task<bool> NeededLua(string luaPath, List<string> neededParameters)
+        {
+            // Set up a list of forbidden luas (as I think some cause problems if decompiled).
+            List<string> Forbidden = new()
+            {
+                "actionarea.lub",
+                "actionstage.lub",
+                "game.lub",
+                "standard.lub",
+                "sonic.lub",
+                "shadow.lub",
+                "silver.lub",
+                "gameshow_sonic.lub",
+                "gameshow_shadow.lub",
+                "gameshow_silver.lub",
+            };
+
+            // If this lua is a forbidden one, ignore it.
+            if (Forbidden.Contains(Path.GetFileName(luaPath)))
+                return false;
+
+            // If it's not forbidden, then read it and check for any of the needed parameters.
+            string lua = File.ReadAllText(luaPath);
+            bool b = neededParameters.Any(lua.Contains);
+            return b;
         }
     }
 }

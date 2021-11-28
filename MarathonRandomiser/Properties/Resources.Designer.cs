@@ -69,13 +69,13 @@ namespace MarathonRandomiser.Properties {
         ///boss_iblis3,boss_iblis3.csb,true
         ///boss_mefiress,boss_mefiress.csb,true
         ///boss_shadow_e,boss_shadow_e.csb,true
-        ///boss_shadow_j,boss_shadow_j.csb,true
+        ///boss_shadow_j,boss_shadow_j.csb,false
         ///boss_silver_e,boss_silver_e.csb,true
-        ///boss_silver_j,boss_silver_j.csb,true
+        ///boss_silver_j,boss_silver_j.csb,false
         ///boss_solaris,boss_solaris.csb,true
         ///boss_sonic_e,boss_sonic_e.csb,true
-        ///boss_sonic_j,boss_sonic_j.csb,true
-        ///boss_wyvern,boss [rest of string was truncated]&quot;;.
+        ///boss_sonic_j,boss_sonic_j.csb,false
+        ///boss_wyvern,b [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string AudioCSBs {
             get {
@@ -84,108 +84,23 @@ namespace MarathonRandomiser.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sonic the Hedgehog,sonic_new,true
-        ///Sonic the Hedgehog (Mach Speed),sonic_fast,false
-        ///Sonic the Hedgehog (Elise),princess,false
-        ///Sonic the Hedgehog (White Acropolis Snowboard),snow_board_wap,false
-        ///Sonic the Hedgehog (Crisis City Snowboard),snow_board,false
-        ///Shadow the Hedgehog,shadow,true
-        ///Silver the Hedgehog,silver,true
-        ///Miles &quot;Tails&quot; Prower,tails,true
-        ///Knuckles the Echidna,knuckles,true
-        ///Rouge the Bat,rouge,true
-        ///E-123 Omega,omega,true
-        ///Blaze the Cat,blaze,true
-        ///Amy Rose,amy,true.
+        ///   Looks up a localized string similar to Wave Ocean - The Water&apos;s Edge,stg_wvo_a,True
+        ///Wave Ocean - The Inlet,stg_wvo_b,True
+        ///Dusty Desert - Quicksand,stg_dtd_a,True
+        ///Dusty Desert - The Ruins,stg_dtd_b,True
+        ///White Acropolis - Snowy Peak,stg_wap_a,True
+        ///White Acropolis - The Base,stg_wap_b,True
+        ///Crisis City - The Flames,stg_csc_a,True
+        ///Crisis City - Skyscraper,stg_csc_b,True
+        ///Crisis City - Whirlwind,stage_csc_e,True
+        ///Crisis City - Tornado,stg_csc_f,True
+        ///Flame Core - Volcano,stg_flc_a,True
+        ///Flame Core - The Cavern,stg_flc_b,True
+        ///Radical Train - Th [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string CharacterTypes {
+        internal static string AudioSongs {
             get {
-                return ResourceManager.GetString("CharacterTypes", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to WoodBox,WoodBox,true
-        ///WoodBox_Prime,WoodBox_Prime,true
-        ///WoodBox_Vs,WoodBox_Vs,true
-        ///WoodBoxBrk,WoodBoxBrk,false
-        ///ReinforcedWoodBox,ReinforcedWoodBox,true
-        ///IronBox,IronBox,true
-        ///IronBox_Prime,IronBox_Prime,true
-        ///IronBox_Vs,IronBox_Vs,true
-        ///IronBoxBrk,IronBoxBrk,false
-        ///BrickWall,BrickWall,true
-        ///BombBox,BombBox,true
-        ///BombBox_Prime,BombBox_Prime,true
-        ///BombBox_Vs,BombBox_Vs,true
-        ///BombBoxBrk,BombBoxBrk,false
-        ///FlashBox,FlashBox,true
-        ///FlashBox_Prime,FlashBox_Prime,true
-        ///FlashBox_Vs,FlashBox_Vs,true
-        ///FlashBoxBrk,Fla [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string CommonPropTypes {
-            get {
-                return ResourceManager.GetString("CommonPropTypes", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Aquatic Base,aqa_door,True
-        ///Dusty Desert,dtd_door,True
-        ///Flame Core,flc_door,True
-        ///Kingdom Valley,kdv_door,True
-        ///Radical Train,rct_door,True
-        ///White Acropolis,wap_door,True
-        ///Wave Ocean (Small),wvo_doorA,True
-        ///Wave Ocean (Large),wvo_doorB,True.
-        /// </summary>
-        internal static string DoorTypes {
-            get {
-                return ResourceManager.GetString("DoorTypes", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Iblis Biter,cBiter,true
-        ///Iblis Golem,cGolem,true
-        ///Iblis Taker,cTaker,true
-        ///Iblis Worm,cCrawler,true
-        ///Mephiles Gazer,cGazer,true
-        ///Mephiles Stalker,cStalker,true
-        ///Mephiles Titan,cTitan,true
-        ///Mephiles Tricker,cTricker,true
-        ///Egg Armour,eArmor,true
-        ///Egg Buster,eBluster,true
-        ///Egg Buster (Egg Gunner),eBuster,true
-        ///Egg Buster (Egg Gunner) (Fly),eBuster(Fly),true
-        ///Egg Bomber,eBomber,true
-        ///Egg Cannon,eCannon,true
-        ///Egg Cannon (Fly),eCannon(Fly),true
-        ///Egg Chaser,eChaser,true
-        ///Egg Commander,eCommander,true
-        ///Egg Flyer,eF [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string EnemyTypes {
-            get {
-                return ResourceManager.GetString("EnemyTypes", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Aquatic Base,stage/aqa/a/aqa_envmap.dds,true
-        ///Crisis City (Original),stage/csc/a/csc_envmap.dds,true
-        ///Crisis City (Filtered),stage/csc/b/csc_envmap.dds,true
-        ///Crisis City (End of the World),stage/end/a/endA_envmap.dds,true
-        ///Dusty Desert (Outside),stage/dtd/a/suna_cube.dds,true
-        ///Dusty Desert (Inside),stage/dtd/b/suna_cube.dds,true
-        ///Dusty Desert (Mephiles),stage/boss/secondmefiress_dtd/suna_cube.dds,true
-        ///Dusty Desert (End of the World),stage/end/d/endD_envmap.dds,true
-        ///End of the World,stage/boss/solaris_last [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string EnvMaps {
-            get {
-                return ResourceManager.GetString("EnvMaps", resourceCulture);
+                return ResourceManager.GetString("AudioSongs", resourceCulture);
             }
         }
         
@@ -228,22 +143,6 @@ namespace MarathonRandomiser.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 5 Rings,1,true
-        ///10 Rings,2,true
-        ///20 Rings,3,true
-        ///Extra Life,4,true
-        ///Power Sneakers,5,true
-        ///Gauge Refill,6,true
-        ///Invincibility,7,true
-        ///Shield,8,true.
-        /// </summary>
-        internal static string ItemTypes {
-            get {
-                return ResourceManager.GetString("ItemTypes", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to English,e,True
         ///French,f,False
         ///German,g,False
@@ -258,50 +157,19 @@ namespace MarathonRandomiser.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Wave Ocean - The Water&apos;s Edge,stg_wvo_a,True
-        ///Wave Ocean - The Inlet,stg_wvo_b,True
-        ///Dusty Desert - Quicksand,stg_dtd_a,True
-        ///Dusty Desert - The Ruins,stg_dtd_b,True
-        ///White Acropolis - Snowy Peak,stg_wap_a,True
-        ///White Acropolis - The Base,stg_wap_b,True
-        ///Crisis City - The Flames,stg_csc_a,True
-        ///Crisis City - Skyscraper,stg_csc_b,True
-        ///Crisis City - Whirlwind,stage_csc_e,True
-        ///Crisis City - Tornado,stg_csc_f,True
-        ///Flame Core - Volcano,stg_flc_a,True
-        ///Flame Core - The Cavern,stg_flc_b,True
-        ///Radical Train - Th [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to Aquatic Base,stage/aqa/a/aqa_envmap.dds,true
+        ///Crisis City (Original),stage/csc/a/csc_envmap.dds,true
+        ///Crisis City (Filtered),stage/csc/b/csc_envmap.dds,true
+        ///Crisis City (End of the World),stage/end/a/endA_envmap.dds,true
+        ///Dusty Desert (Outside),stage/dtd/a/suna_cube.dds,true
+        ///Dusty Desert (Inside),stage/dtd/b/suna_cube.dds,true
+        ///Dusty Desert (Mephiles),stage/boss/secondmefiress_dtd/suna_cube.dds,true
+        ///Dusty Desert (End of the World),stage/end/d/endD_envmap.dds,true
+        ///End of the World,stage/boss/solaris_last [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string MiscSongs {
+        internal static string SceneEnvMaps {
             get {
-                return ResourceManager.GetString("MiscSongs", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to DtdBat1,DtdBat1,True
-        ///DtdBat2,DtdBat2,True
-        ///DtdBat3,DtdBat3,True
-        ///AqaDolphin1,AqaDolphin1,True
-        ///AqaDolphin2,AqaDolphin2,True
-        ///AqaTurtle,AqaTurtle,True
-        ///AqaFishA01,AqaFishA01,True
-        ///AqaFishA02,AqaFishA02,True
-        ///AqaManta,AqaManta,True
-        ///AqaManta02,AqaManta02,True
-        ///WvoSeagull1,WvoSeagull1,True
-        ///WvoDolphin1,WvoDolphin1,True
-        ///WvoDolphin2,WvoDolphin2,True
-        ///TwnWell,TwnWell,True
-        ///TwnTreeA,TwnTreeA,True
-        ///TwnPillar_red,TwnPillar_red,True
-        ///TwnPillar_blue,TwnPillar_blue,True
-        ///TwnPillar_blue_s,TwnPillar_blue_s,True
-        ///TwnFlo [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string PathPropTypes {
-            get {
-                return ResourceManager.GetString("PathPropTypes", resourceCulture);
+                return ResourceManager.GetString("SceneEnvMaps", resourceCulture);
             }
         }
         
@@ -323,6 +191,132 @@ namespace MarathonRandomiser.Properties {
         internal static string SceneSkyboxes {
             get {
                 return ResourceManager.GetString("SceneSkyboxes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sonic the Hedgehog,sonic_new,true
+        ///Sonic the Hedgehog (Mach Speed),sonic_fast,false
+        ///Sonic the Hedgehog (Elise),princess,false
+        ///Sonic the Hedgehog (White Acropolis Snowboard),snow_board_wap,false
+        ///Sonic the Hedgehog (Crisis City Snowboard),snow_board,false
+        ///Shadow the Hedgehog,shadow,true
+        ///Silver the Hedgehog,silver,true
+        ///Miles &quot;Tails&quot; Prower,tails,true
+        ///Knuckles the Echidna,knuckles,true
+        ///Rouge the Bat,rouge,true
+        ///E-123 Omega,omega,true
+        ///Blaze the Cat,blaze,true
+        ///Amy Rose,amy,true.
+        /// </summary>
+        internal static string SETCharacters {
+            get {
+                return ResourceManager.GetString("SETCharacters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to WoodBox,WoodBox,true
+        ///WoodBox_Prime,WoodBox_Prime,true
+        ///WoodBox_Vs,WoodBox_Vs,true
+        ///WoodBoxBrk,WoodBoxBrk,false
+        ///ReinforcedWoodBox,ReinforcedWoodBox,true
+        ///IronBox,IronBox,true
+        ///IronBox_Prime,IronBox_Prime,true
+        ///IronBox_Vs,IronBox_Vs,true
+        ///IronBoxBrk,IronBoxBrk,false
+        ///BrickWall,BrickWall,true
+        ///BombBox,BombBox,true
+        ///BombBox_Prime,BombBox_Prime,true
+        ///BombBox_Vs,BombBox_Vs,true
+        ///BombBoxBrk,BombBoxBrk,false
+        ///FlashBox,FlashBox,true
+        ///FlashBox_Prime,FlashBox_Prime,true
+        ///FlashBox_Vs,FlashBox_Vs,true
+        ///FlashBoxBrk,Fla [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string SETCommonProps {
+            get {
+                return ResourceManager.GetString("SETCommonProps", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Aquatic Base,aqa_door,True
+        ///Dusty Desert,dtd_door,True
+        ///Flame Core,flc_door,True
+        ///Kingdom Valley,kdv_door,True
+        ///Radical Train,rct_door,True
+        ///White Acropolis,wap_door,True
+        ///Wave Ocean (Small),wvo_doorA,True
+        ///Wave Ocean (Large),wvo_doorB,True.
+        /// </summary>
+        internal static string SETDoors {
+            get {
+                return ResourceManager.GetString("SETDoors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Iblis Biter,cBiter,true
+        ///Iblis Golem,cGolem,true
+        ///Iblis Taker,cTaker,true
+        ///Iblis Worm,cCrawler,true
+        ///Mephiles Gazer,cGazer,true
+        ///Mephiles Stalker,cStalker,true
+        ///Mephiles Titan,cTitan,true
+        ///Mephiles Tricker,cTricker,true
+        ///Egg Armour,eArmor,true
+        ///Egg Buster,eBluster,true
+        ///Egg Buster (Egg Gunner),eBuster,true
+        ///Egg Buster (Egg Gunner) (Fly),eBuster(Fly),true
+        ///Egg Bomber,eBomber,true
+        ///Egg Cannon,eCannon,true
+        ///Egg Cannon (Fly),eCannon(Fly),true
+        ///Egg Chaser,eChaser,true
+        ///Egg Commander,eCommander,true
+        ///Egg Flyer,eF [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string SETEnemies {
+            get {
+                return ResourceManager.GetString("SETEnemies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to hint_all01_a00_sn,hint_all01_a00_sn,True
+        ///hint_all01_a00_tl,hint_all01_a00_tl,True
+        ///hint_all01_a00_kn,hint_all01_a00_kn,True
+        ///hint_all01_a00_sd,hint_all01_a00_sd,True
+        ///hint_all01_a00_rg,hint_all01_a00_rg,True
+        ///hint_all01_a00_om,hint_all01_a00_om,True
+        ///hint_all01_a00_am,hint_all01_a00_am,True
+        ///hint_all01_a00_bz,hint_all01_a00_bz,True
+        ///hint_all01_a00_sv,hint_all01_a00_sv,True
+        ///hint_all01_a00_pr,hint_all01_a00_pr,True
+        ///hint_all01_a01_sn,hint_all01_a01_sn,True
+        ///hint_all01_a01_tl,hint_all01_a01_tl,True
+        ///hint_all [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string SETHints {
+            get {
+                return ResourceManager.GetString("SETHints", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 5 Rings,1,true
+        ///10 Rings,2,true
+        ///20 Rings,3,true
+        ///Extra Life,4,true
+        ///Power Sneakers,5,true
+        ///Gauge Refill,6,true
+        ///Invincibility,7,true
+        ///Shield,8,true.
+        /// </summary>
+        internal static string SETItemCapsules {
+            get {
+                return ResourceManager.GetString("SETItemCapsules", resourceCulture);
             }
         }
         
@@ -352,23 +346,29 @@ namespace MarathonRandomiser.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to hint_all01_a00_sn,hint_all01_a00_sn,True
-        ///hint_all01_a00_tl,hint_all01_a00_tl,True
-        ///hint_all01_a00_kn,hint_all01_a00_kn,True
-        ///hint_all01_a00_sd,hint_all01_a00_sd,True
-        ///hint_all01_a00_rg,hint_all01_a00_rg,True
-        ///hint_all01_a00_om,hint_all01_a00_om,True
-        ///hint_all01_a00_am,hint_all01_a00_am,True
-        ///hint_all01_a00_bz,hint_all01_a00_bz,True
-        ///hint_all01_a00_sv,hint_all01_a00_sv,True
-        ///hint_all01_a00_pr,hint_all01_a00_pr,True
-        ///hint_all01_a01_sn,hint_all01_a01_sn,True
-        ///hint_all01_a01_tl,hint_all01_a01_tl,True
-        ///hint_all [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to DtdBat1,DtdBat1,True
+        ///DtdBat2,DtdBat2,True
+        ///DtdBat3,DtdBat3,True
+        ///AqaDolphin1,AqaDolphin1,True
+        ///AqaDolphin2,AqaDolphin2,True
+        ///AqaTurtle,AqaTurtle,True
+        ///AqaFishA01,AqaFishA01,True
+        ///AqaFishA02,AqaFishA02,True
+        ///AqaManta,AqaManta,True
+        ///AqaManta02,AqaManta02,True
+        ///WvoSeagull1,WvoSeagull1,True
+        ///WvoDolphin1,WvoDolphin1,True
+        ///WvoDolphin2,WvoDolphin2,True
+        ///TwnWell,TwnWell,True
+        ///TwnTreeA,TwnTreeA,True
+        ///TwnPillar_red,TwnPillar_red,True
+        ///TwnPillar_blue,TwnPillar_blue,True
+        ///TwnPillar_blue_s,TwnPillar_blue_s,True
+        ///TwnFlo [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string VoiceTypes {
+        internal static string SETPathProps {
             get {
-                return ResourceManager.GetString("VoiceTypes", resourceCulture);
+                return ResourceManager.GetString("SETPathProps", resourceCulture);
             }
         }
     }

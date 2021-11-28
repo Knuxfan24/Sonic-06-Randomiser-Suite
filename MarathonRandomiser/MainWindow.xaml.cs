@@ -32,6 +32,9 @@ namespace MarathonRandomiser
         // Set up the Randomiser.
         public static Random Randomiser = new();
 
+        /// <summary>
+        /// Main logic for the Application.
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
@@ -41,13 +44,10 @@ namespace MarathonRandomiser
             // Force culture info 'en-GB' to prevent errors with values altered by language-specific differences.
             CultureInfo.DefaultThreadCurrentCulture = CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("en-GB");
 
-            // If this is a debug build, set the seed to WPF Test for the sake of consistent testing.
-            // If not, hide the Debug Tab, Release Builds don't need it.
+            // If this is a debug build, set the seed to WPF Test for the sake of consistent testing and list the Temporary Directory path.
             #if DEBUG
             TextBox_General_Seed.Text = "WPF Test";
             Debug.WriteLine($"Current temporary path is: {TemporaryDirectory}.");
-            #else
-            TabItem_Debug.Visibility = System.Windows.Visibility.Collapsed;
             #endif
         }
 
@@ -81,26 +81,49 @@ namespace MarathonRandomiser
             TextBox_General_Seed.Text = Randomiser.Next().ToString();
             
             // Fill in the configuration CheckListBox elements.
-            Helpers.FillCheckedListBox(Properties.Resources.EnemyTypes, CheckedList_SET_EnemyTypes);
-            Helpers.FillCheckedListBox(Properties.Resources.CharacterTypes, CheckedList_SET_Characters);
-            Helpers.FillCheckedListBox(Properties.Resources.ItemTypes, CheckedList_SET_ItemCapsules);
-            Helpers.FillCheckedListBox(Properties.Resources.CommonPropTypes, CheckedList_SET_CommonProps);
-            Helpers.FillCheckedListBox(Properties.Resources.PathPropTypes, CheckedList_SET_PathProps);
-            Helpers.FillCheckedListBox(Properties.Resources.VoiceTypes, CheckedList_SET_Hints);
-            Helpers.FillCheckedListBox(Properties.Resources.DoorTypes, CheckedList_SET_Doors);
+            Helpers.FillCheckedListBox(Properties.Resources.SETEnemies, CheckedList_SET_EnemyTypes);
+            Helpers.FillCheckedListBox(Properties.Resources.SETCharacters, CheckedList_SET_Characters);
+            Helpers.FillCheckedListBox(Properties.Resources.SETItemCapsules, CheckedList_SET_ItemCapsules);
+            Helpers.FillCheckedListBox(Properties.Resources.SETCommonProps, CheckedList_SET_CommonProps);
+            Helpers.FillCheckedListBox(Properties.Resources.SETPathProps, CheckedList_SET_PathProps);
+            Helpers.FillCheckedListBox(Properties.Resources.SETHints, CheckedList_SET_Hints);
+            Helpers.FillCheckedListBox(Properties.Resources.SETDoors, CheckedList_SET_Doors);
             Helpers.FillCheckedListBox(Properties.Resources.SETParticles, CheckedList_SET_Particles);
+
             Helpers.FillCheckedListBox(Properties.Resources.EventLighting, CheckedList_Event_Lighting);
             Helpers.FillCheckedListBox(Properties.Resources.EventTerrain, CheckedList_Event_Terrain);
-            Helpers.FillCheckedListBox(Properties.Resources.EnvMaps, CheckedList_Scene_EnvMaps);
+
+            Helpers.FillCheckedListBox(Properties.Resources.SceneEnvMaps, CheckedList_Scene_EnvMaps);
             Helpers.FillCheckedListBox(Properties.Resources.SceneSkyboxes, CheckedList_Scene_Skyboxes);
-            Helpers.FillCheckedListBox(Properties.Resources.MiscSongs, CheckedList_Audio_Songs);
+
+            Helpers.FillCheckedListBox(Properties.Resources.AudioSongs, CheckedList_Audio_Songs);
             Helpers.FillCheckedListBox(Properties.Resources.AudioCSBs, CheckedList_Audio_SFX);
+
             Helpers.FillCheckedListBox(Properties.Resources.MiscLanguages, CheckedList_Misc_Languages);
 
             RefreshVoicePacks();
 
             // Get all the patch files in the user's Mod Manager data.
             string[] patches = Directory.GetFiles($"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\\Unify\\Patches\\", "*.mlua", SearchOption.TopDirectoryOnly);
+
+            // Set up a list of patches that don't fit too well with the Randomiser.
+            List<string> Forbidden = new() {
+                "Disable2xMSAA.mlua",
+                "Disable4xMSAA.mlua",
+                "DisableCharacterDialogue.mlua",
+                "DisableCharacterUpgrades.mlua",
+                "DisableHUD.mlua",
+                "DisableHintRings.mlua",
+                "DisableMusic.mlua",
+                "DisableShadows.mlua",
+                "DisableTalkWindowInStages.mlua",
+                "DoNotCarryElise.mlua",
+                "DoNotEnterMachSpeed.mlua",
+                "DoNotUseTheSnowboard.mlua",
+                "EnableDebugMode.mlua",
+                "OmegaBlurFix.mlua",
+                "TGS2006Menu.mlua"
+            };
 
             // Loop through and add the patches to the CheckedList_Misc_Patches element
             foreach (string patch in patches)
@@ -116,15 +139,9 @@ namespace MarathonRandomiser
                     Checked = true
                 };
 
-                // Auto uncheck patches which don't fit too well with the Randomiser.
-                if (Path.GetFileName(patch) == "EnableDebugMode.mlua" || Path.GetFileName(patch) == "Disable2xMSAA.mlua" || Path.GetFileName(patch) == "Disable4xMSAA.mlua" ||
-                    Path.GetFileName(patch) == "DisableCharacterDialogue.mlua" || Path.GetFileName(patch) == "DisableCharacterUpgrades.mlua" || Path.GetFileName(patch) == "DisableHintRings.mlua" ||
-                    Path.GetFileName(patch) == "DisableHUD.mlua" || Path.GetFileName(patch) == "DisableMusic.mlua" || Path.GetFileName(patch) == "DisableShadows.mlua" ||
-                    Path.GetFileName(patch) == "DisableTalkWindowInStages.mlua" || Path.GetFileName(patch) == "DoNotCarryElise.mlua" || Path.GetFileName(patch) == "DoNotEnterMachSpeed.mlua" ||
-                    Path.GetFileName(patch) == "DoNotUseTheSnowboard.mlua" || Path.GetFileName(patch) == "OmegaBlurFix.mlua" || Path.GetFileName(patch) == "TGS2006Menu.mlua")
-                {
+                // Check if this patch is a forbidden one, if so, uncheck it by default.
+                if (Forbidden.Contains(Path.GetFileName(patch)))
                     item.Checked = false;
-                }
 
                 CheckedList_Misc_Patches.Items.Add(item);
             }
@@ -526,6 +543,9 @@ namespace MarathonRandomiser
             ScrollViewer_ProgressLogger.ScrollToEnd();
         }
         
+        /// <summary>
+        /// Updates the list of found Voice Packs.
+        /// </summary>
         private void RefreshVoicePacks()
         {
             // Clear out existing ones to be safe.
@@ -546,17 +566,6 @@ namespace MarathonRandomiser
                 CheckedList_Custom_Vox.Items.Add(item);
             }
         }
-        #endregion
-
-        #region Debug Functions
-        /// <summary>
-        /// Opens the temporary directory. Will open the documents folder if the temporary directory does not exist.
-        /// </summary>
-        private async void Debug_OpenTempDir(object sender, RoutedEventArgs e)
-        {
-            Process.Start(Environment.GetEnvironmentVariable("WINDIR") + @"\explorer.exe", TemporaryDirectory);
-        }
-
         #endregion
 
         #region Bottom Buttons
@@ -623,6 +632,266 @@ namespace MarathonRandomiser
             if (OpenFileDialog.ShowDialog() == true)
                 LoadConfig(OpenFileDialog.FileName);
         }
+        #endregion
+
+        #region Config Saving/Loading
+        /// <summary>
+        /// Saves a configuration ini.
+        /// </summary>
+        /// <param name="location">The filepath we're saving to.</param>
+        private void SaveConfig(string location)
+        {
+            // Set up our StreamWriter.
+            StreamWriter configInfo = new(File.Open(location, FileMode.Create));
+
+            // Basic Header, used to identify in the loading process.
+            configInfo.WriteLine($"[Sonic '06 Randomiser Suite Configuration File]");
+            configInfo.WriteLine();
+
+            // General Block.
+            configInfo.WriteLine($"[General]");
+            configInfo.WriteLine($"TextBox_General_ModsDirectory={TextBox_General_ModsDirectory.Text}");
+            configInfo.WriteLine($"TextBox_General_GameExecutable={TextBox_General_GameExecutable.Text}");
+            configInfo.WriteLine($"TextBox_General_Seed={TextBox_General_Seed.Text}");
+            configInfo.WriteLine();
+
+            // Object Placement Block.
+            ConfigTabRead(configInfo, "Object Placement", StackPanel_ObjectPlacement);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_SET_EnemyTypes);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_SET_Characters);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_SET_ItemCapsules);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_SET_CommonProps);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_SET_PathProps);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_SET_Hints);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_SET_Doors);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_SET_Particles);
+            configInfo.WriteLine();
+
+            // Event Block.
+            ConfigTabRead(configInfo, "Event", StackPanel_Event);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_Event_Lighting);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_Event_Terrain);
+            configInfo.WriteLine();
+
+            // Scene Block.
+            ConfigTabRead(configInfo, "Scene", StackPanel_Scene);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_Scene_EnvMaps);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_Scene_Skyboxes);
+            configInfo.WriteLine();
+
+            // Animation Block.
+            ConfigTabRead(configInfo, "Animations", StackPanel_Animation);
+            configInfo.WriteLine();
+
+            // Textures Block.
+            ConfigTabRead(configInfo, "Textures", StackPanel_Textures);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_Textures_Arcs);
+            configInfo.WriteLine();
+
+            // Audio Block.
+            ConfigTabRead(configInfo, "Audio", StackPanel_Audio);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_Audio_Songs);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_Audio_SFX);
+            configInfo.WriteLine();
+
+            // Misc Block.
+            ConfigTabRead(configInfo, "Misc", StackPanel_Misc);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_Misc_Languages);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_Misc_Patches);
+            configInfo.WriteLine();
+
+            // Custom Block.
+            configInfo.WriteLine($"[Custom]");
+            configInfo.WriteLine($"TextBox_Custom_Music={TextBox_Custom_Music.Text}");
+            configInfo.WriteLine($"CheckBox_Custom_Music_XMACache={CheckBox_Custom_Music_XMACache.IsChecked}");
+            configInfo.WriteLine($"TextBox_Custom_Textures={TextBox_Custom_Textures.Text}");
+            ConfigCheckedListBoxRead(configInfo, CheckedList_Custom_Vox);
+
+            // End Write.
+            configInfo.Close();
+        }
+
+        /// <summary>
+        /// Reads all the check box states and numeric up down reels from a tab and adds them to the config writer.
+        /// </summary>
+        /// <param name="configInfo">The StreamWriter from the main save function.</param>
+        /// <param name="sectionHeader">The section header to write.</param>
+        /// <param name="element">The StackPanel we're looking through.</param>
+        private static void ConfigTabRead(StreamWriter configInfo, string sectionHeader, DependencyObject element)
+        {
+            // Write the header for this section of the ini.
+            configInfo.WriteLine($"[{sectionHeader}]");
+
+            // Get all the children of this StackPanel element.
+            IEnumerable? children = LogicalTreeHelper.GetChildren(element);
+
+            // Loop through each item in this StackPanel element.
+            foreach (object? item in children)
+            { 
+                // If this is a Checkbox element, write the name and checked state.
+                if (item is CheckBox checkbox)
+                    configInfo.WriteLine($"{checkbox.Name}={checkbox.IsChecked}");
+
+                // If this is a NumericUpDown element, write the name and value.
+                if (item is HandyControl.Controls.NumericUpDown numeric)
+                    configInfo.WriteLine($"{numeric.Name}={numeric.Value}");
+            }
+        }
+
+        /// <summary>
+        /// Reads data from a CheckedListBox element to add to the configuration ini.
+        /// </summary>
+        /// <param name="configInfo">The StreamWriter from the main save function.</param>
+        /// <param name="listBox">The CheckedListBox to parse.</param>
+        private static void ConfigCheckedListBoxRead(StreamWriter configInfo, CheckedListBox listBox)
+        {
+            // Set up the key.
+            string typeList = $"{listBox.Name}=";
+
+            // Loop through the CheckedListBox element.
+            for (int i = 0; i < listBox.Items.Count; i++)
+            {
+                // If this element is checked, add its tag to the list.
+                if (listBox.Items[i].Checked)
+                    typeList += $"{listBox.Items[i].Tag},";
+            }
+
+            // Remove the last comma.
+            if (typeList.Contains(','))
+                typeList = typeList.Remove(typeList.LastIndexOf(','));
+
+            // Write this list to the ini.
+            configInfo.WriteLine(typeList);
+        }
+
+        /// <summary>
+        /// Loads and updates settings from a configuration ini.
+        /// </summary>
+        /// <param name="location">The config ini to load.</param>
+        /// <exception cref="NotImplementedException">Thrown if we just cannot find element or its type.</exception>
+        private void LoadConfig(string location)
+        {
+            // Read the config file into a string array.
+            string[] config = File.ReadAllLines(location);
+
+            // Check that the first thing in the config file is our header. If not, abort.
+            if (config[0] != "[Sonic '06 Randomiser Suite Configuration File]")
+            {
+                HandyControl.Controls.MessageBox.Show($"'{location}' does not appear to be a valid configuration file.",
+                                                      "Sonic '06 Randomiser Suite",
+                                                      MessageBoxButton.OK,
+                                                      MessageBoxImage.Error);
+                return;
+            }
+
+            // Loop through each line in the string array.
+            foreach (string setting in config)
+            {
+                // Ignore comment values (currently don't write any, but could do), empty lines and section tags.
+                if (setting.StartsWith(';') || setting == "" || setting.StartsWith('[') || setting.EndsWith(']'))
+                    continue;
+
+                // Split this line so we can get the key and the value(s).
+                var split = setting.Split('=');
+
+                // Search for this key's name.
+                object element = Grid_General.FindName(split[0]);
+
+                // If we find this key's name, continue on.
+                if (element != null)
+                {                    
+                    // If this element is a check box, check it or uncheck it depending on the key value.
+                    if (element is CheckBox checkbox)
+                    {
+                        checkbox.IsChecked = bool.Parse(split[1]);
+                        Dependency_CheckBox_Changed(checkbox, null);
+                    }
+
+                    // If this element is a numericupdown, set its value depending on the key's.
+                    if (element is HandyControl.Controls.NumericUpDown numeric)
+                        numeric.Value = double.Parse(split[1]);
+
+                    // If this element is a text box, fill it in with the key's value.
+                    if (element is TextBox textbox)
+                        textbox.Text = split[1];
+
+                    // If this element is a checkedlistbox, invalidate the existing list, loop through and check ones that have the tags specified in the list.
+                    if (element is CheckedListBox checkedlist)
+                    {
+                        string[] checkedlistValues = split[1].Split(',');
+                        Helpers.InvalidateCheckedListBox(checkedlist, true, false);
+
+                        foreach(string value in checkedlistValues)
+                        {
+                            foreach (var item in checkedlist.Items)
+                            {
+                                if (item.Tag == value)
+                                    item.Checked = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        #endregion
+
+        #region Wildcard
+        /// <summary>
+        /// Goes through a StackPanel can chooses whether to check or uncheck CheckBox elements within it.
+        /// </summary>
+        /// <param name="element">The StackPanel to search.</param>
+        /// <param name="wildcardWeight">The likelyhood the Wildcard will toggle an option on.</param>
+        private static void WildcardTabRoll(DependencyObject element, int wildcardWeight)
+        {
+            // List of Checkboxes the Wildcard is forbidden from changing.
+            List<string> Forbidden = new() {
+                "CheckBox_SET_Enemies_Behaviour",
+                "CheckBox_SET_Enemies_Behaviour_NoEnforce",
+                "CheckBox_SET_DrawDistance",
+                "CheckBox_Textures_OnlyCustom",
+                "CheckBox_Misc_EnemyHealth",
+                "CheckBox_Misc_Patches",
+                "CheckBox_Misc_AutoUnlock"
+            };
+            
+            // Get all the children of this StackPanel element.
+            IEnumerable? children = LogicalTreeHelper.GetChildren(element);
+
+            // Loop through each item in this StackPanel element.
+            foreach (object? item in children)
+            {
+                // If the element is a Checkbox and is not forbidden, then roll a number and check the box based on the outcome.
+                if (item is CheckBox checkbox)
+                {
+                    if (!Forbidden.Contains(checkbox.Name))
+                    {
+                        if (Randomiser.Next(0, 101) <= wildcardWeight)
+                            checkbox.IsChecked = true;
+                        else
+                            checkbox.IsChecked = false;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Loops through a CheckedListBox element and enables or disables the values within it.
+        /// </summary>
+        /// <param name="listbox">The CheckedListBox element to process.</param>
+        /// <param name="wildcardWeight">The likelyhood the Wildcard will toggle an option on.</param>
+        private static void WildcardCheckedList(CheckedListBox listbox, int wildcardWeight)
+        {
+            // Uncheck everything in the CheckedListBox.
+            Helpers.InvalidateCheckedListBox(listbox, true, false);
+
+            // Loop through each item in the CheckedListBox, roll a number to determine what to do with it.
+            foreach (CheckedListBoxItem? item in listbox.Items)
+            {
+                if (Randomiser.Next(0, 101) <= wildcardWeight)
+                    item.Checked = true;
+            }
+        }
+        #endregion
 
         /// <summary>
         /// Actual main Randomisation process.
@@ -732,9 +1001,13 @@ namespace MarathonRandomiser
                 WildcardTabRoll(StackPanel_Textures, (int)NumericUpDown_Wildcard_Weight.Value);
                 WildcardCheckedList(CheckedList_Textures_Arcs, (int)NumericUpDown_Wildcard_Weight.Value);
 
+                // Audio Tab.
+                WildcardTabRoll(StackPanel_Audio, (int)NumericUpDown_Wildcard_Weight.Value);
+                WildcardCheckedList(CheckedList_Audio_Songs, (int)NumericUpDown_Wildcard_Weight.Value);
+                WildcardCheckedList(CheckedList_Audio_SFX, (int)NumericUpDown_Wildcard_Weight.Value);
+
                 // Misc Tab.
                 WildcardTabRoll(StackPanel_Misc, (int)NumericUpDown_Wildcard_Weight.Value);
-                WildcardCheckedList(CheckedList_Audio_Songs, (int)NumericUpDown_Wildcard_Weight.Value);
                 WildcardCheckedList(CheckedList_Misc_Languages, (int)NumericUpDown_Wildcard_Weight.Value);
             }
 
@@ -765,7 +1038,7 @@ namespace MarathonRandomiser
             string[] CustomMusic = TextBox_Custom_Music.Text.Split('|');
             string[] CustomTextures = TextBox_Custom_Textures.Text.Split('|');
             List<string> CustomVoxPacks = Helpers.EnumerateCheckedListBox(CheckedList_Custom_Vox);
-            
+
             // Don't do the Custom Audio stuff if we're using a PS3 version
             if (GameExecutable.ToLower().EndsWith(".xex"))
             {
@@ -910,6 +1183,7 @@ namespace MarathonRandomiser
                 CheckBox_Misc_Patches.IsChecked = false;
 
             #region Object Placement
+            // Set up values.
             bool? setEnemies = CheckBox_SET_Enemies.IsChecked;
             bool? setEnemiesNoBosses = CheckBox_SET_Enemies_NoBosses.IsChecked;
             bool? setBehaviour = CheckBox_SET_Enemies_Behaviour.IsChecked;
@@ -927,7 +1201,7 @@ namespace MarathonRandomiser
             int setMaxDrawDistance = (int)NumericUpDown_SET_DrawDistance_Max.Value;
 
             // Check if we actually need to do SET stuff.
-            if (setEnemies == true || setBehaviour == true || setCharacters == true || setItemCapsules == true || setCommonProps == true || setPathProps == true || setHints == true || setDoors == true ||
+            if (setEnemies == true || setBehaviour == true || setCharacters == true || setItemCapsules == true || setCommonProps == true || setPathProps == true || setHints == true || setDoors == true||
                 setDrawDistance == true || setCosmetic == true || setParticles == true)
             {
                 foreach (string archive in archives)
@@ -943,9 +1217,10 @@ namespace MarathonRandomiser
                         foreach (string setFile in setFiles)
                         {
                             UpdateLogger($"Randomising: '{setFile}'.");
-                            await Task.Run(() => ObjectPlacementRandomiser.Process(setFile, setEnemies, setEnemiesNoBosses, setBehaviour, setBehaviourNoEnforce, setCharacters, setItemCapsules, setCommonProps, setPathProps,
-                                                                                     setHints, setDoors, setDrawDistance, setCosmetic, setParticles, SetEnemies, SetCharacters, SetItemCapsules, SetCommonProps, SetPathProps,
-                                                                                     SetHints, SetDoors, SetParticleBanks, setMinDrawDistance, setMaxDrawDistance));
+                            await Task.Run(() => ObjectPlacementRandomiser.Process(setFile, setEnemies, setEnemiesNoBosses, setBehaviour, setBehaviourNoEnforce, setCharacters, setItemCapsules,
+                                                                                   setCommonProps, setPathProps, setHints, setDoors, setDrawDistance, setCosmetic, setParticles, SetEnemies,
+                                                                                   SetCharacters, SetItemCapsules, SetCommonProps, SetPathProps, SetHints, SetDoors, SetParticleBanks, setMinDrawDistance,
+                                                                                   setMaxDrawDistance));
                         }
 
                         // Patch enemy luas if they need patching.
@@ -1021,18 +1296,7 @@ namespace MarathonRandomiser
                             string[] luaFiles = Directory.GetFiles(unpackedArchive, "*.lub", SearchOption.AllDirectories);
                             foreach (string luaFile in luaFiles)
                             {
-                                // Check if we need to actually use this lua file.
-                                if (!luaFile.Contains("enemy") && (luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("a_") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("b_") ||
-                                    luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("c_") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("d_") ||
-                                    luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("e_") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("f_") ||
-                                    luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("f1_") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("f2_") ||
-                                    luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("g_") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("eCerberus") ||
-                                    luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("eGenesis") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("eWyvern") ||
-                                    luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("firstmefiress") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("iblis01") ||
-                                    luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("secondiblis") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("secondmefiress") ||
-                                    luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("shadow_vs_silver") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("silver_vs_shadow") ||
-                                    luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("solaris_super3")   || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("sonic_vs_silver")  ||
-                                    luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("thirdiblis")       || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("silver_vs_sonic")))
+                                if (await Task.Run(() => Helpers.NeededLua(luaFile, new List<string>() { "SetPlayer" })))
                                 {
                                     UpdateLogger($"Randomising player_start2 entities in '{luaFile}'.");
                                     await Task.Run(() => ObjectPlacementRandomiser.LuaPlayerStartRandomiser(luaFile, setCharacters, SetCharacters, setEnemies, setEnemiesNoBosses));
@@ -1040,23 +1304,13 @@ namespace MarathonRandomiser
                             }
                         }
 
+                        // Patch stage luas to load all the particle banks.
                         if (setParticles == true)
                         {
                             string[] luaFiles = Directory.GetFiles(unpackedArchive, "*.lub", SearchOption.AllDirectories);
                             foreach (string luaFile in luaFiles)
                             {
-                                // Check if we need to actually use this lua file.
-                                if (!luaFile.Contains("enemy") && (luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("a_") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("b_") ||
-                                luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("c_") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("d_") ||
-                                luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("e_") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("f_") ||
-                                luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("f1_") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("f2_") ||
-                                luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("g_") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("eCerberus") ||
-                                luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("eGenesis") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("eWyvern") ||
-                                luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("firstmefiress") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("iblis01") ||
-                                luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("secondiblis") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("secondmefiress") ||
-                                luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("shadow_vs_silver") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("silver_vs_shadow") ||
-                                luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("solaris_super3") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("sonic_vs_silver") ||
-                                luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("thirdiblis") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("silver_vs_sonic")))
+                                if (await Task.Run(() => Helpers.NeededLua(luaFile, new List<string>() { "AddComponent" })))
                                 {
                                     UpdateLogger($"Patching particle bank loading in '{luaFile}'.");
                                     await Task.Run(() => ObjectPlacementRandomiser.ParticlePatch(luaFile));
@@ -1066,9 +1320,9 @@ namespace MarathonRandomiser
                     }
 
                     // Patch voice_all_e.sbk if we aren't using any voice packs and we've done something to need it.
-                    if (setHints == true || (setEnemies == true && (SetEnemies.Contains("eCerberus") || SetEnemies.Contains("eGenesis") || SetEnemies.Contains("eWyvern") || SetEnemies.Contains("firstiblis") ||
-                            SetEnemies.Contains("secondiblis") || SetEnemies.Contains("thirdiblis") || SetEnemies.Contains("firstmefiress") || SetEnemies.Contains("secondmefiress") ||
-                            SetEnemies.Contains("solaris01") || SetEnemies.Contains("solaris02"))))
+                    if (setHints == true || (setEnemies == true && (SetEnemies.Contains("eCerberus") || SetEnemies.Contains("eGenesis") || SetEnemies.Contains("eWyvern") ||
+                        SetEnemies.Contains("firstiblis") || SetEnemies.Contains("secondiblis") || SetEnemies.Contains("thirdiblis") || SetEnemies.Contains("firstmefiress") ||
+                        SetEnemies.Contains("secondmefiress") || SetEnemies.Contains("solaris01") || SetEnemies.Contains("solaris02"))))
                     {
                         if (CustomVoxPacks.Count == 0)
                         {
@@ -1085,6 +1339,7 @@ namespace MarathonRandomiser
             #endregion
 
             #region Event Randomisation
+            // Set up values.
             bool? eventLighting = CheckBox_Event_Lighting.IsChecked;
             bool? eventRotX = CheckBox_Event_XRotation.IsChecked;
             bool? eventRotY = CheckBox_Event_YRotation.IsChecked;
@@ -1099,25 +1354,31 @@ namespace MarathonRandomiser
             bool? eventOrder = CheckBox_Event_Order.IsChecked;
 
             // Check if we actually need to do event stuff.
-            if (eventLighting == true || eventRotX == true || eventRotY == true || eventRotZ == true || eventPosX == true || eventPosY == true || eventPosZ == true || eventTerrain == true || eventOrder == true)
+            if (eventLighting == true || eventRotX == true || eventRotY == true || eventRotZ == true || eventPosX == true || eventPosY == true || eventPosZ == true || eventTerrain == true ||
+                eventOrder == true)
             {
                 foreach (string archive in archives)
                 {
                     if (Path.GetFileName(archive).ToLower() == "cache.arc")
                     {
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+
+                        // Main eventplaybook parameter randomisation.
                         if (eventLighting == true || eventRotX == true || eventRotY == true || eventRotZ == true || eventPosX == true || eventPosY == true || eventPosZ == true || eventTerrain == true)
                         {
                             UpdateLogger($"Randomising 'eventplaybook.epb' parameters.");
-                            await Task.Run(() => EventRandomiser.Process(unpackedArchive, eventLighting, EventLighting, eventTerrain, EventTerrain, eventRotX, eventRotY, eventRotZ, eventPosX, eventPosY, eventPosZ));
+                            await Task.Run(() => EventRandomiser.Process(unpackedArchive, eventLighting, EventLighting, eventTerrain, EventTerrain, eventRotX, eventRotY, eventRotZ, eventPosX, eventPosY,
+                                                                         eventPosZ));
                         }
 
+                        // Event Order Shuffling.
                         if (eventOrder == true)
                         {
                             UpdateLogger($"Shuffling event order.");
                             await Task.Run(() => EventRandomiser.EventShuffler(unpackedArchive, ModDirectory, GameExecutable));
                         }
 
+                        // Event Voice Line Shuffling.
                         if (eventVoice == true)
                         {
                             UpdateLogger($"Shuffling event voice files.");
@@ -1129,6 +1390,7 @@ namespace MarathonRandomiser
             #endregion
 
             #region Scene Randomisation
+            // Set up values.
             bool? sceneLightAmbient = CheckBox_Scene_Light_Ambient.IsChecked;
             bool? sceneLightMain = CheckBox_Scene_Light_Main.IsChecked;
             bool? sceneLightSub = CheckBox_Scene_Light_Sub.IsChecked;
@@ -1141,8 +1403,7 @@ namespace MarathonRandomiser
             bool? sceneSkyboxes = CheckBox_Scene_Skyboxes.IsChecked;
 
             // Check if we actually need to do scene randomisation.
-            if (sceneLightAmbient == true || sceneLightMain == true || sceneLightSub == true || sceneLightDirection == true || sceneFogColour == true ||
-                sceneFogDensity == true || sceneEnvMaps == true)
+            if (sceneLightAmbient == true || sceneLightMain == true || sceneLightSub == true || sceneLightDirection == true || sceneFogColour == true || sceneFogDensity == true || sceneEnvMaps == true)
             {
                 foreach (string archive in archives)
                 {
@@ -1154,8 +1415,8 @@ namespace MarathonRandomiser
                         foreach (string luaFile in sceneLuas)
                         {
                             UpdateLogger($"Randomising scene parameters in '{luaFile}'.");
-                            await Task.Run(() => SceneRandomiser.Process(luaFile, sceneLightAmbient, sceneLightMain, sceneLightSub, sceneMinLight, sceneLightDirection, sceneLightDirectionEnforce, sceneFogColour,
-                                                                      sceneFogDensity, sceneEnvMaps, SceneEnvMaps));
+                            await Task.Run(() => SceneRandomiser.Process(luaFile, sceneLightAmbient, sceneLightMain, sceneLightSub, sceneMinLight, sceneLightDirection, sceneLightDirectionEnforce,
+                                                                         sceneFogColour, sceneFogDensity, sceneEnvMaps, SceneEnvMaps));
                         }
                     }
                 }
@@ -1172,18 +1433,7 @@ namespace MarathonRandomiser
                         string[] skyLuas = Directory.GetFiles(unpackedArchive, "*.lub", SearchOption.AllDirectories);
                         foreach (string skyLua in skyLuas)
                         {
-                            // Check if we need to actually use this lua file.
-                            if (!skyLua.Contains("enemy") && (skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("a_") || skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("b_") ||
-                            skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("c_") || skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("d_") ||
-                            skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("e_") || skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("f_") ||
-                            skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("f1_") || skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("f2_") ||
-                            skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("g_") || skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("eCerberus") ||
-                            skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("eGenesis") || skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("eWyvern") ||
-                            skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("firstmefiress") || skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("iblis01") ||
-                            skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("secondiblis") || skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("secondmefiress") ||
-                            skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("shadow_vs_silver") || skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("silver_vs_shadow") ||
-                            skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("solaris_super3") || skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("sonic_vs_silver") ||
-                            skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("thirdiblis") || skyLua[(skyLua.LastIndexOf('\\') + 1)..].StartsWith("silver_vs_sonic")))
+                            if (await Task.Run(() => Helpers.NeededLua(skyLua, new List<string>() { "AddComponent" })))
                             {
                                 UpdateLogger($"Randomising skybox in '{skyLua}'.");
                                 await Task.Run(() => SceneRandomiser.SkyboxRandomisation(skyLua, SceneSkyboxes));
@@ -1195,6 +1445,7 @@ namespace MarathonRandomiser
             #endregion
 
             #region Animation Randomisers
+            // Set up values.
             bool? animGameplay = CheckBox_Anim_Gameplay.IsChecked;
             bool? animGameplayUseAll = CheckBox_Anim_GameplayUseAll.IsChecked;
             bool? animGameplayUseEvents = CheckBox_Anim_GameplayUseEvents.IsChecked;
@@ -1230,6 +1481,7 @@ namespace MarathonRandomiser
                     {
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
 
+                        // Main Event Animations.
                         if (animEvents == true)
                         {
                             UpdateLogger($"Shuffling event animations.");
@@ -1248,6 +1500,7 @@ namespace MarathonRandomiser
                             await Task.Run(() => AnimationRandomiser.EventAnimationRandomiser(unpackedArchive, "tails", "Root"));
                         }
 
+                        // Facial Animations.
                         if (animEventsFace == true)
                         {
                             UpdateLogger($"Shuffling event facial animations.");
@@ -1277,6 +1530,7 @@ namespace MarathonRandomiser
             #endregion
 
             #region Texture Randomisation
+            // Set up values.
             bool? texturesTextures = CheckBox_Textures_Textures.IsChecked;
             bool? texturesPerArc = CheckBox_Textures_PerArc.IsChecked;
             bool? texturesAllowDupes = CheckBox_Textures_AllowDupes.IsChecked;
@@ -1287,6 +1541,7 @@ namespace MarathonRandomiser
             if (texturesOnlyCustom == true)
                 texturesAllowDupes = true;
 
+            // Check if we're actually doing texture randomisation.
             if (texturesTextures == true)
             {
                 // If we're not doing it per arc, then process every single one of valid ones.
@@ -1303,8 +1558,8 @@ namespace MarathonRandomiser
 
                     List<string> Textures = new();
 
-                    // Add our custom textures.
-                    foreach(string custom in CustomTextureFiles)
+                    // Add our custom textures if we have any.
+                    foreach (string custom in CustomTextureFiles)
                         Textures.Add(custom);
 
                     // If we're not only using custom textures, then fetch all the other textures.
@@ -1356,8 +1611,9 @@ namespace MarathonRandomiser
             #endregion
 
             #region Audio Randomisers
-            // Music Randomisation
+            // Set up values.
             bool? audioMusic = CheckBox_Audio_Music.IsChecked;
+            bool? audioSFX = CheckBox_Audio_SFX.IsChecked;
 
             // Check if we actually need to do music randomisation.
             if (audioMusic == true)
@@ -1371,19 +1627,7 @@ namespace MarathonRandomiser
                         string[] luaFiles = Directory.GetFiles(unpackedArchive, "*.lub", SearchOption.AllDirectories);
                         foreach (string luaFile in luaFiles)
                         {
-                            // Check if we need to actually use this lua file.
-                            if (!luaFile.Contains("enemy") && (luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("a_") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("b_") ||
-                            luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("c_") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("d_") ||
-                            luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("e_") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("f_") ||
-                            luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("f1_") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("f2_") ||
-                            luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("g_") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("eCerberus") ||
-                            luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("eGenesis") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("eWyvern") ||
-                            luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("firstmefiress") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("iblis01") ||
-                            luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("secondiblis") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("secondmefiress") ||
-                            luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("shadow_vs_silver") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("silver_vs_shadow") ||
-                            luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("solaris_super3") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("sonic_vs_silver") ||
-                            luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("thirdiblis") || luaFile[(luaFile.LastIndexOf('\\') + 1)..].StartsWith("silver_vs_sonic") ||
-                            luaFile.Contains("mission")))
+                            if (await Task.Run(() => Helpers.NeededLua(luaFile, new List<string>() { "PlayBGM", "mission_bgm" })))
                             {
                                 UpdateLogger($"Randomising music in '{luaFile}'.");
                                 await Task.Run(() => AudioRandomisers.MusicRandomiser(luaFile, AudioMusic, Seed));
@@ -1392,9 +1636,6 @@ namespace MarathonRandomiser
                     }
                 }
             }
-
-            // Sound Effect Randomisation
-            bool? audioSFX = CheckBox_Audio_SFX.IsChecked;
 
             // Check if we actually need to do sound effect randomisation.
             if (audioSFX == true)
@@ -1407,7 +1648,7 @@ namespace MarathonRandomiser
 
                         // Find the CSBs and unpack the ones the user has chosen to randomise.
                         string[] csbFiles = Directory.GetFiles($"{unpackedArchive}\\common\\sound", "*.csb", SearchOption.TopDirectoryOnly);
-                        foreach(string csbFile in csbFiles)
+                        foreach (string csbFile in csbFiles)
                         {
                             if (AudioCSBs.Contains(Path.GetFileName(csbFile)))
                             {
@@ -1427,7 +1668,7 @@ namespace MarathonRandomiser
                         // Sort the ADX files based on whether they're stereo or mono.
                         foreach (string introADXFile in introADXFilesProcess)
                         {
-                            using(BinaryReader reader = new(File.OpenRead(introADXFile)))
+                            using (BinaryReader reader = new(File.OpenRead(introADXFile)))
                             {
                                 reader.BaseStream.Position = 0x07;
 
@@ -1478,11 +1719,17 @@ namespace MarathonRandomiser
             #endregion
 
             #region Misc. Randomisers
-            // Enemy Health Randomisation
+            // Set up values.
             bool? miscEnemyHealth = CheckBox_Misc_EnemyHealth.IsChecked;
             bool? miscEnemyHealthBosses = CheckBox_Misc_EnemyHealth_Bosses.IsChecked;
             int miscEnemyHealthMin = (int)NumericUpDown_Misc_EnemyHealth_Min.Value;
             int miscEnemyHealthMax = (int)NumericUpDown_Misc_EnemyHealth_Max.Value;
+            bool? miscCollision = CheckBox_Misc_Collision.IsChecked;
+            bool? miscCollisionPerFace = CheckBox_Misc_Collision_PerFace.IsChecked;
+            bool? miscText = CheckBox_Misc_Text.IsChecked;
+            bool? miscPatches = CheckBox_Misc_Patches.IsChecked;
+            int miscPatchesWeight = (int)NumericUpDown_Misc_Patches_Weight.Value;
+            bool? miscUnlock = CheckBox_Misc_AutoUnlock.IsChecked;
 
             // Check if we need to actually do enemy health randomisation.
             if (miscEnemyHealth == true)
@@ -1497,10 +1744,6 @@ namespace MarathonRandomiser
                     }
                 }
             }
-
-            // Collision Randomisation
-            bool? miscCollision = CheckBox_Misc_Collision.IsChecked;
-            bool? miscCollisionPerFace = CheckBox_Misc_Collision_PerFace.IsChecked;
 
             // Check if we need to actually to do collision randomisation.
             if (miscCollision == true)
@@ -1520,9 +1763,6 @@ namespace MarathonRandomiser
                     }
                 }
             }
-
-            // Text Randomisation
-            bool? miscText = CheckBox_Misc_Text.IsChecked;
 
             // Check if we need to actually do text randomisation.
             if (miscText == true)
@@ -1545,10 +1785,6 @@ namespace MarathonRandomiser
                 await Task.Run(() => MiscellaneousRandomisers.TextRandomiser(eventArc, textArc, MiscLanguages));
             }
 
-            // Patch Randomisation
-            bool? miscPatches = CheckBox_Misc_Patches.IsChecked;
-            int miscPatchesWeight = (int)NumericUpDown_Misc_Patches_Weight.Value;
-
             // Check if we need to actually do patch randomisation.
             if (miscPatches == true)
             {
@@ -1556,9 +1792,7 @@ namespace MarathonRandomiser
                 await Task.Run(() => MiscellaneousRandomisers.PatchRandomiser(ModDirectory, MiscPatches, miscPatchesWeight));
             }
 
-            // Auto Unlock Shadow and Silver's Episodes.
-            bool? miscUnlock = CheckBox_Misc_AutoUnlock.IsChecked;
-
+            // Check if we need to modify Sonic's first mission lua.
             if (miscUnlock == true)
             {
                 foreach (string archive in archives)
@@ -1578,7 +1812,7 @@ namespace MarathonRandomiser
             foreach (string archive in archives)
             {
                 string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive, true));
-                if(Directory.Exists(unpackedArchive))
+                if (Directory.Exists(unpackedArchive))
                     await Task.Run(() => Helpers.CleanUpShuffleLeftovers(unpackedArchive));
             }
 
@@ -1631,274 +1865,5 @@ namespace MarathonRandomiser
                                                       MessageBoxImage.Information);
             }
         }
-        #endregion
-
-        #region Config Saving/Loading
-        /// <summary>
-        /// Saves a configuration ini.
-        /// </summary>
-        /// <param name="location">The filepath we're saving to.</param>
-        private void SaveConfig(string location)
-        {
-            // Set up our StreamWriter.
-            StreamWriter configInfo = new(File.Open(location, FileMode.Create));
-
-            // Basic Header, used to identify in the loading process.
-            configInfo.WriteLine($"[Sonic '06 Randomiser Suite Configuration File]");
-            configInfo.WriteLine();
-
-            // General Block.
-            configInfo.WriteLine($"[General]");
-            configInfo.WriteLine($"TextBox_General_ModsDirectory={TextBox_General_ModsDirectory.Text}");
-            configInfo.WriteLine($"TextBox_General_GameExecutable={TextBox_General_GameExecutable.Text}");
-            configInfo.WriteLine($"TextBox_General_Seed={TextBox_General_Seed.Text}");
-            configInfo.WriteLine();
-
-            // Object Placement Block.
-            ConfigTabRead(configInfo, "Object Placement", StackPanel_ObjectPlacement);
-            ConfigCheckedListBoxRead(configInfo, CheckedList_SET_EnemyTypes);
-            ConfigCheckedListBoxRead(configInfo, CheckedList_SET_Characters);
-            ConfigCheckedListBoxRead(configInfo, CheckedList_SET_ItemCapsules);
-            ConfigCheckedListBoxRead(configInfo, CheckedList_SET_CommonProps);
-            ConfigCheckedListBoxRead(configInfo, CheckedList_SET_PathProps);
-            ConfigCheckedListBoxRead(configInfo, CheckedList_SET_Hints);
-            ConfigCheckedListBoxRead(configInfo, CheckedList_SET_Doors);
-            ConfigCheckedListBoxRead(configInfo, CheckedList_SET_Particles);
-            configInfo.WriteLine();
-
-            // Event Block.
-            ConfigTabRead(configInfo, "Event", StackPanel_Event);
-            ConfigCheckedListBoxRead(configInfo, CheckedList_Event_Lighting);
-            ConfigCheckedListBoxRead(configInfo, CheckedList_Event_Terrain);
-            configInfo.WriteLine();
-
-            // Scene Block.
-            ConfigTabRead(configInfo, "Scene", StackPanel_Scene);
-            ConfigCheckedListBoxRead(configInfo, CheckedList_Scene_EnvMaps);
-            ConfigCheckedListBoxRead(configInfo, CheckedList_Scene_Skyboxes);
-            configInfo.WriteLine();
-
-            // Animation Block.
-            ConfigTabRead(configInfo, "Animations", StackPanel_Animation);
-            configInfo.WriteLine();
-
-            // Textures Block.
-            ConfigTabRead(configInfo, "Textures", StackPanel_Textures);
-            ConfigCheckedListBoxRead(configInfo, CheckedList_Textures_Arcs);
-            configInfo.WriteLine();
-
-            // Audio Block
-            ConfigTabRead(configInfo, "Audio", StackPanel_Audio);
-            ConfigCheckedListBoxRead(configInfo, CheckedList_Audio_Songs);
-            ConfigCheckedListBoxRead(configInfo, CheckedList_Audio_SFX);
-            configInfo.WriteLine();
-
-            // Misc Block.
-            ConfigTabRead(configInfo, "Misc", StackPanel_Misc);
-            ConfigCheckedListBoxRead(configInfo, CheckedList_Misc_Languages);
-            ConfigCheckedListBoxRead(configInfo, CheckedList_Misc_Patches);
-            configInfo.WriteLine();
-
-            // Custom Block.
-            configInfo.WriteLine($"[Custom]");
-            configInfo.WriteLine($"TextBox_Custom_Music={TextBox_Custom_Music.Text}");
-            configInfo.WriteLine($"CheckBox_Custom_Music_XMACache={CheckBox_Custom_Music_XMACache.IsChecked}");
-            configInfo.WriteLine($"TextBox_Custom_Textures={TextBox_Custom_Textures.Text}");
-            ConfigCheckedListBoxRead(configInfo, CheckedList_Custom_Vox);
-
-            // End Write.
-            configInfo.Close();
-        }
-
-        /// <summary>
-        /// Reads all the check box states and numeric up down reels from a tab and adds them to the config writer.
-        /// </summary>
-        /// <param name="configInfo">The StreamWriter from the main save function.</param>
-        /// <param name="sectionHeader">The section header to write.</param>
-        /// <param name="element">The StackPanel we're looking through.</param>
-        private static void ConfigTabRead(StreamWriter configInfo, string sectionHeader, DependencyObject element)
-        {
-            // Write the header for this section of the ini.
-            configInfo.WriteLine($"[{sectionHeader}]");
-
-            // Get all the children of this StackPanel element.
-            IEnumerable? children = LogicalTreeHelper.GetChildren(element);
-
-            // Loop through each item in this StackPanel element.
-            foreach (object? item in children)
-            { 
-                // If this is a Checkbox element, write the name and checked state.
-                if (item is CheckBox checkbox)
-                    configInfo.WriteLine($"{checkbox.Name}={checkbox.IsChecked}");
-
-                // If this is a NumericUpDown element, write the name and value.
-                if (item is HandyControl.Controls.NumericUpDown numeric)
-                    configInfo.WriteLine($"{numeric.Name}={numeric.Value}");
-            }
-        }
-
-        /// <summary>
-        /// Reads data from a CheckedListBox element to add to the configuration ini.
-        /// </summary>
-        /// <param name="configInfo">The StreamWriter from the main save function.</param>
-        /// <param name="listBox">The CheckedListBox to parse.</param>
-        private static void ConfigCheckedListBoxRead(StreamWriter configInfo, CheckedListBox listBox)
-        {
-            // Set up the key.
-            string typeList = $"{listBox.Name}=";
-
-            // Loop through the CheckedListBox element.
-            for (int i = 0; i < listBox.Items.Count; i++)
-            {
-                // If this element is checked, add its tag to the list.
-                if (listBox.Items[i].Checked)
-                    typeList += $"{listBox.Items[i].Tag},";
-            }
-
-            // Remove the last comma.
-            if (typeList.Contains(','))
-                typeList = typeList.Remove(typeList.LastIndexOf(','));
-
-            // Write this list to the ini.
-            configInfo.WriteLine(typeList);
-        }
-
-        /// <summary>
-        /// Loads and updates settings from a configuration ini.
-        /// </summary>
-        /// <param name="location">The config ini to load.</param>
-        /// <exception cref="NotImplementedException">Thrown if we just cannot find element or its type.</exception>
-        private void LoadConfig(string location)
-        {
-            // Read the config file into a string array.
-            string[] config = File.ReadAllLines(location);
-
-            // Check that the first thing in the config file is our header. If not, abort.
-            if (config[0] != "[Sonic '06 Randomiser Suite Configuration File]")
-                return;
-
-            // Loop through each line in the string array.
-            foreach (string setting in config)
-            {
-                // Ignore comment values (currently don't write any, but could do), empty lines and section tags.
-                if (setting.StartsWith(';') || setting == "" || setting.StartsWith('[') || setting.EndsWith(']'))
-                    continue;
-
-                // Split this line so we can get the key and the value(s).
-                var split = setting.Split('=');
-
-                // Search for this key's name.
-                object element = Grid_General.FindName(split[0]);
-                element = Grid_ObjectPlacement.FindName(split[0]);
-                element = Grid_Event.FindName(split[0]);
-                element = Grid_Scene.FindName(split[0]);
-                element = Grid_Miscellaneous.FindName(split[0]);
-                element = Grid_Custom.FindName(split[0]);
-
-                // If we find this key's name, continue on.
-                if (element != null)
-                {
-                    // Determine this element type.
-                    CheckBox? checkbox = element as CheckBox;
-                    HandyControl.Controls.NumericUpDown? numeric = element as HandyControl.Controls.NumericUpDown;
-                    TextBox? textbox = element as TextBox;
-                    CheckedListBox? checkedlist = element as CheckedListBox;
-                    
-                    // If it's a check box, check it or uncheck it depending on the key value.
-                    if (checkbox != null)
-                    {
-                        checkbox.IsChecked = bool.Parse(split[1]);
-                        Dependency_CheckBox_Changed(checkbox, null);
-                    }
-
-                    // If it's a numericupdown, set its value depending on the key's.
-                    if (numeric != null)
-                        numeric.Value = double.Parse(split[1]);
-
-                    // If it's a text box, fill it in with the key's value.
-                    if (textbox != null)
-                        textbox.Text = split[1];
-
-                    // If it's a checkedlistbox, invalidate the existing list, loop through and check ones that have the tags specified in the list.
-                    if (checkedlist != null)
-                    {
-                        string[] checkedlistValues = split[1].Split(',');
-                        Helpers.InvalidateCheckedListBox(checkedlist, true, false);
-
-                        foreach(string value in checkedlistValues)
-                        {
-                            foreach (var item in checkedlist.Items)
-                            {
-                                if (item.Tag == value)
-                                    item.Checked = true;
-                            }
-                        }
-                    }
-
-                    // If we've failed to find this element, we've buggered something up, throw an exception.
-                    if (checkbox == null && numeric == null && textbox == null && checkedlist == null)
-                    {
-                        throw new NotImplementedException();
-                    }
-                }
-
-                // If not, we've buggered something up, throw an exception.
-                else
-                {
-                    throw new NotImplementedException();
-                }
-            }
-        }
-        #endregion
-
-        #region Wildcard
-        /// <summary>
-        /// Goes through a StackPanel can chooses whether to check or uncheck CheckBox elements within it.
-        /// </summary>
-        /// <param name="element">The StackPanel to search.</param>
-        /// <param name="wildcardWeight">The likelyhood the Wildcard will toggle an option on.</param>
-        private static void WildcardTabRoll(DependencyObject element, int wildcardWeight)
-        {
-            // List of Checkboxes the Wildcard is forbidden from changing.
-            List<string> Forbidden = new() { "CheckBox_SET_Enemies_Behaviour", "CheckBox_SET_Enemies_Behaviour_NoEnforce", "CheckBox_SET_DrawDistance", "CheckBox_Misc_EnemyHealth", "CheckBox_Misc_Patches", "CheckBox_Misc_AutoUnlock" };
-            
-            // Get all the children of this StackPanel element.
-            IEnumerable? children = LogicalTreeHelper.GetChildren(element);
-
-            // Loop through each item in this StackPanel element.
-            foreach (object? item in children)
-            {
-                // If the element is a Checkbox and is not forbidden, then roll a number and check the box based on the outcome.
-                if (item is CheckBox checkbox)
-                {
-                    if (!Forbidden.Contains(checkbox.Name))
-                    {
-                        if (Randomiser.Next(0, 101) <= wildcardWeight)
-                            checkbox.IsChecked = true;
-                        else
-                            checkbox.IsChecked = false;
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Loops through a CheckedListBox element and enables or disables the values within it.
-        /// </summary>
-        /// <param name="listbox">The CheckedListBox element to process.</param>
-        /// <param name="wildcardWeight">The likelyhood the Wildcard will toggle an option on.</param>
-        private static void WildcardCheckedList(CheckedListBox listbox, int wildcardWeight)
-        {
-            // Uncheck everything in the CheckedListBox.
-            Helpers.InvalidateCheckedListBox(listbox, true, false);
-
-            // Loop through each item in the CheckedListBox, roll a number to determine what to do with it.
-            foreach (CheckedListBoxItem? item in listbox.Items)
-            {
-                if (Randomiser.Next(0, 101) <= wildcardWeight)
-                    item.Checked = true;
-            }
-        }
-        #endregion
     }
 }

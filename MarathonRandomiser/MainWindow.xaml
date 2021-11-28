@@ -384,13 +384,6 @@
                     <Button Content="Deselect All" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Height="40" Width="128" Click="CheckedListBox_SelectionToggle"/>
                 </Grid>
             </hc:TabItem>
-
-            <!--Debug Tab-->
-            <hc:TabItem Header="Debug" BorderBrush="#B146C2" Name="TabItem_Debug">
-                <Grid Background="#FF181818" Name="Grid_Debug">
-                    <Button Content="Open Temporary Directory" Margin="10,10,10,0" VerticalAlignment="Top" HorizontalAlignment="Stretch" Click="Debug_OpenTempDir"/>
-                </Grid>
-            </hc:TabItem>
         </hc:TabControl>
 
         <!--Bottom Buttons-->
