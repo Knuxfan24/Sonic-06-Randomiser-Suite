@@ -1,4 +1,4 @@
-﻿<Window
+﻿<Window x:Name="MainForm"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -299,7 +299,7 @@
                     </hc:TabControl>
                 </Grid>
             </hc:TabItem>
-            
+
             <!--Miscellaneous Tab-->
             <hc:TabItem Header="Miscellaneous" BorderBrush="#B146C2" >
                 <Grid Background="#FF181818" Name="Grid_Miscellaneous">
@@ -399,8 +399,6 @@
         <Button x:Name ="Button_Randomise" Content="Randomise" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="128" Click="Randomise"/>
 
         <!--Progress Logger-->
-        <ScrollViewer x:Name="ScrollViewer_ProgressLogger" Visibility="Hidden" VerticalScrollBarVisibility="Hidden" Margin="0,0,0,50" >
-            <TextBlock x:Name="TextBlock_ProgressLogger" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Width="1080" Visibility="Hidden" Foreground="#FFFFFFFF" />
-        </ScrollViewer>
+        <ListView x:Name="ListView_ProgressLogger" Margin="0,0,0,50" ItemsSource="{Binding ProgressLogger}" Style="{StaticResource ListBox.Small}" Visibility="Hidden" />
     </Grid>
 </Window>

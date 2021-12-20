@@ -13,9 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="BE32.Marathon" Version="1.0.31" />
-    <PackageReference Include="HandyControls" Version="3.3.8.1" />
-    <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.0" />
+    <PackageReference Include="BE32.Marathon" Version="1.0.40" />
+    <PackageReference Include="HandyControls" Version="3.3.9" />
+    <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
   </ItemGroup>
 
   <ItemGroup>

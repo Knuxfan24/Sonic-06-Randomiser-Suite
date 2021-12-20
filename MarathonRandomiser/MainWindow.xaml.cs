@@ -5,6 +5,7 @@ global using System.IO;
 global using System.Threading.Tasks;
 
 using Ookii.Dialogs.Wpf;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Windows;
@@ -18,7 +19,7 @@ namespace MarathonRandomiser
     public partial class MainWindow : Window
     {
         // Version Number.
-        public static readonly string GlobalVersionNumber = $"Version 2.1.8";
+        public static readonly string GlobalVersionNumber = $"Version 2.1.9";
 
         #if !DEBUG
         public static readonly string VersionNumber = GlobalVersionNumber;
@@ -31,6 +32,20 @@ namespace MarathonRandomiser
 
         // Set up the Randomiser.
         public static Random Randomiser = new();
+
+        // Binding data for the Progress Logger.
+        public static readonly DependencyProperty ProgressLoggerProperty = DependencyProperty.Register
+        (
+            nameof(ProgressLogger),
+            typeof(ObservableCollection<string>),
+            typeof(MainWindow),
+            new PropertyMetadata(new ObservableCollection<string>())
+        );
+        public ObservableCollection<string> ProgressLogger
+        {
+            get => (ObservableCollection<string>)GetValue(ProgressLoggerProperty);
+            set => SetValue(ProgressLoggerProperty, value);
+        }
 
         /// <summary>
         /// Main logic for the Application.
@@ -49,6 +64,8 @@ namespace MarathonRandomiser
             TextBox_General_Seed.Text = "WPF Test";
             Debug.WriteLine($"Current temporary path is: {TemporaryDirectory}.");
             #endif
+
+            DataContext = this;
         }
 
         /// <summary>
@@ -297,11 +314,10 @@ namespace MarathonRandomiser
         private async void Custom_FetchVox(object sender, RoutedEventArgs e)
         {
             // Display the Progress Logger elements and disable bottom buttons that shouldn't be useable during the process.
-            TextBlock_ProgressLogger.Text = "";
+            ProgressLogger.Clear();
             TabControl_Main.Visibility = Visibility.Hidden;
-            TextBlock_ProgressLogger.Visibility = Visibility.Visible;
-            ScrollViewer_ProgressLogger.Visibility = Visibility.Visible;
             ProgressBar_ProgressLogger.Visibility = Visibility.Visible;
+            ListView_ProgressLogger.Visibility = Visibility.Visible;
             Button_Randomise.IsEnabled = false;
             Button_LoadConfig.IsEnabled = false;
             UpdateLogger($"Fetching official voice packs from GitHub.");
@@ -318,9 +334,8 @@ namespace MarathonRandomiser
 
             // Restore Form Visiblity.
             TabControl_Main.Visibility = Visibility.Visible;
-            ScrollViewer_ProgressLogger.Visibility = Visibility.Hidden;
-            TextBlock_ProgressLogger.Visibility = Visibility.Hidden;
             ProgressBar_ProgressLogger.Visibility = Visibility.Hidden;
+            ListView_ProgressLogger.Visibility = Visibility.Hidden;
             Button_Randomise.IsEnabled = true;
             Button_LoadConfig.IsEnabled = true;
 
@@ -532,15 +547,15 @@ namespace MarathonRandomiser
                     throw new NotImplementedException();
             }
         }
-        
+
         /// <summary>
-        /// Add text to the TextBlock_ProgressLogger element and snap the scroll bar to the bottom.
+        /// Add text as an item to the ListView_ProgressLogger element and ensure it's in view.
         /// </summary>
         /// <param name="text">The text to add to the element.</param>
         private void UpdateLogger(string text)
         {
-            TextBlock_ProgressLogger.Text += $"{text}\n";
-            ScrollViewer_ProgressLogger.ScrollToEnd();
+            ProgressLogger.Add(text);
+            ListView_ProgressLogger.ScrollIntoView(ListView_ProgressLogger.Items[ListView_ProgressLogger.Items.Count - 1]);
         }
         
         /// <summary>
@@ -959,10 +974,9 @@ namespace MarathonRandomiser
             }
 
             // Display the Progress Logger elements and disable bottom buttons that shouldn't be useable during the process.
-            TextBlock_ProgressLogger.Text = "";
+            ProgressLogger.Clear();
             TabControl_Main.Visibility = Visibility.Hidden;
-            TextBlock_ProgressLogger.Visibility = Visibility.Visible;
-            ScrollViewer_ProgressLogger.Visibility = Visibility.Visible;
+            ListView_ProgressLogger.Visibility = Visibility.Visible;
             ProgressBar_ProgressLogger.Visibility = Visibility.Visible;
             Button_Randomise.IsEnabled = false;
             Button_LoadConfig.IsEnabled = false;
@@ -1844,8 +1858,7 @@ namespace MarathonRandomiser
 
             // Restore Form Visiblity.
             TabControl_Main.Visibility = Visibility.Visible;
-            ScrollViewer_ProgressLogger.Visibility = Visibility.Hidden;
-            TextBlock_ProgressLogger.Visibility = Visibility.Hidden;
+            ListView_ProgressLogger.Visibility = Visibility.Hidden;
             ProgressBar_ProgressLogger.Visibility = Visibility.Hidden;
             Button_Randomise.IsEnabled = true;
             Button_LoadConfig.IsEnabled = true;
