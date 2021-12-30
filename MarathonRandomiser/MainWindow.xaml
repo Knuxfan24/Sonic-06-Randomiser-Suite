@@ -270,7 +270,7 @@
             <!--Audio Tab-->
             <hc:TabItem Header="Audio" BorderBrush="#B146C2" >
                 <Grid Background="#FF181818" Name="Grid_Audio">
-                    <!--Texture Configuration Checkboxes/Controls-->
+                    <!--Audio Configuration Checkboxes/Controls-->
                     <StackPanel HorizontalAlignment="Left" Width="210" Name="StackPanel_Audio">
                         <StackPanel.Resources>
                             <Style BasedOn="{StaticResource CheckBoxBaseStyle}" TargetType="{x:Type CheckBox}">
@@ -300,6 +300,41 @@
                 </Grid>
             </hc:TabItem>
 
+            <!--Text Tab-->
+            <hc:TabItem Header="Text" BorderBrush="#B146C2" >
+                <Grid Background="#FF181818" Name="Grid_Text">
+                    <!--Text Configuration Checkboxes/Controls-->
+                    <StackPanel HorizontalAlignment="Left" Width="210" Name="StackPanel_Text">
+                        <StackPanel.Resources>
+                            <Style BasedOn="{StaticResource CheckBoxBaseStyle}" TargetType="{x:Type CheckBox}">
+                                <Setter Property="Margin" Value="10,10,0,0" />
+                                <Setter Property="HorizontalAlignment" Value="Left"/>
+                            </Style>
+                        </StackPanel.Resources>
+                        <CheckBox x:Name="CheckBox_Text_Buttons" Content="Randomise Button Icons" IsChecked="true"/>
+                        <CheckBox x:Name="CheckBox_Text_Generate" Content="Generate Random Text" Click="Dependency_CheckBox_Changed"/>
+                        <CheckBox x:Name="CheckBox_Text_Generate_Enforce" Content="Enforce Word Length" IsEnabled="false" IsChecked="true"/>
+                        <CheckBox x:Name="CheckBox_Text_Shuffle" Content="Shuffle Text"/>
+                    </StackPanel>
+
+                    <!--Text Configuration Toggles-->
+                    <Button Content="Select All" HorizontalAlignment="Left" Margin="215,0,0,10" VerticalAlignment="Bottom" Height="40" Width="128" Click="CheckedListBox_SelectionToggle"/>
+                    <Button Content="Deselect All" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Height="40" Width="128" Click="CheckedListBox_SelectionToggle"/>
+                    <hc:TabControl Style="{StaticResource TabControlInLine}" Margin="210,0,0,60" HorizontalAlignment="Stretch" Name="TabControl_Text">
+                        <hc:TabItem Header="Languages" BorderBrush="#B146C2">
+                            <Grid>
+                                <local:CheckedListBox x:Name="CheckedList_Text_Languages" MultiColumn="True" Margin="0,0,0,0"/>
+                            </Grid>
+                        </hc:TabItem>
+                        <hc:TabItem Header="Button Icons" BorderBrush="#B146C2">
+                            <Grid>
+                                <local:CheckedListBox x:Name="CheckedList_Text_Buttons" MultiColumn="True" Margin="0,0,0,0"/>
+                            </Grid>
+                        </hc:TabItem>
+                    </hc:TabControl>
+                </Grid>
+            </hc:TabItem>
+
             <!--Miscellaneous Tab-->
             <hc:TabItem Header="Miscellaneous" BorderBrush="#B146C2" >
                 <Grid Background="#FF181818" Name="Grid_Miscellaneous">
@@ -319,8 +354,6 @@
                         <CheckBox x:Name="CheckBox_Misc_EnemyHealth_Bosses" Content="Include Bosses" Foreground="Firebrick" IsEnabled="False"/>
                         <CheckBox x:Name="CheckBox_Misc_Collision" Content="Randomise Surface Types" IsChecked="True" Click="Dependency_CheckBox_Changed"/>
                         <CheckBox x:Name="CheckBox_Misc_Collision_PerFace" Content="Randomise Per Face" IsChecked="True"/>
-                        <CheckBox x:Name="CheckBox_Misc_Text" Content="Shuffle Text"/>
-                        <CheckBox x:Name="CheckBox_Misc_TextGenerate" Content="Generate Random Text"/>
                         <CheckBox x:Name="CheckBox_Misc_Patches" Content="Use Random Patches" Foreground="Firebrick" Click="Dependency_CheckBox_Changed"/>
                         <Label x:Name="Label_Misc_Patches_Weight" Content="Weight:" Background="{x:Null}" BorderBrush="{x:Null}" IsEnabled="False"/>
                         <hc:NumericUpDown x:Name="NumericUpDown_Misc_Patches_Weight" Minimum="1" Maximum="100" Value="50" Margin="10,0,10,0" SelectionBrush="#FFB146C2" IsEnabled="False"/>
@@ -331,11 +364,6 @@
                     <Button Content="Select All" HorizontalAlignment="Left" Margin="215,0,0,10" VerticalAlignment="Bottom" Height="40" Width="128" Click="CheckedListBox_SelectionToggle"/>
                     <Button Content="Deselect All" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Height="40" Width="128" Click="CheckedListBox_SelectionToggle"/>
                     <hc:TabControl Style="{StaticResource TabControlInLine}" Margin="210,0,0,60" HorizontalAlignment="Stretch" Name="TabControl_Miscellaneous">
-                        <hc:TabItem Header="Text Languages" BorderBrush="#B146C2" x:Name="TabItem_Misc_Languages" >
-                            <Grid>
-                                <local:CheckedListBox x:Name="CheckedList_Misc_Languages" MultiColumn="True" Margin="0,0,0,0"/>
-                            </Grid>
-                        </hc:TabItem>
                         <hc:TabItem Header="Patches" BorderBrush="#B146C2">
                             <Grid>
                                 <local:CheckedListBox x:Name="CheckedList_Misc_Patches" MultiColumn="True" Margin="0,0,0,0"/>

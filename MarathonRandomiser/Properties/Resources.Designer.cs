@@ -143,90 +143,6 @@ namespace MarathonRandomiser.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to a
-        ///aa
-        ///aaa
-        ///aah
-        ///aahed
-        ///aahing
-        ///aahs
-        ///aal
-        ///aalii
-        ///aaliis
-        ///aals
-        ///aam
-        ///aani
-        ///aardvark
-        ///aardvarks
-        ///aardwolf
-        ///aardwolves
-        ///aargh
-        ///aaron
-        ///aaronic
-        ///aaronical
-        ///aaronite
-        ///aaronitic
-        ///aarrgh
-        ///aarrghh
-        ///aaru
-        ///aas
-        ///aasvogel
-        ///aasvogels
-        ///ab
-        ///aba
-        ///ababdeh
-        ///ababua
-        ///abac
-        ///abaca
-        ///abacay
-        ///abacas
-        ///abacate
-        ///abacaxi
-        ///abaci
-        ///abacinate
-        ///abacination
-        ///abacisci
-        ///abaciscus
-        ///abacist
-        ///aback
-        ///abacli
-        ///abacot
-        ///abacterial
-        ///abactinal
-        ///abactinally
-        ///abaction
-        ///abactor
-        ///abaculi
-        ///abaculus
-        ///abacus
-        ///abacuses
-        ///abada
-        ///abaddon
-        ///abadejo
-        ///abadengo
-        ///abadia [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string MiscEnglishWords {
-            get {
-                return ResourceManager.GetString("MiscEnglishWords", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to English,e,True
-        ///French,f,False
-        ///German,g,False
-        ///Italian,i,False
-        ///Japanese,j,False
-        ///Spanish,s,False.
-        /// </summary>
-        internal static string MiscLanguages {
-            get {
-                return ResourceManager.GetString("MiscLanguages", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Aquatic Base,stage/aqa/a/aqa_envmap.dds,true
         ///Crisis City (Original),stage/csc/a/csc_envmap.dds,true
         ///Crisis City (Filtered),stage/csc/b/csc_envmap.dds,true
@@ -439,6 +355,108 @@ namespace MarathonRandomiser.Properties {
         internal static string SETPathProps {
             get {
                 return ResourceManager.GetString("SETPathProps", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A,picture(button_a),true
+        ///B,picture(button_b),true
+        ///X,picture(button_x),true
+        ///Y,picture(button_y),true
+        ///Left Bumper,picture(button_lb),true
+        ///Left Trigger,picture(button_lt),true
+        ///Right Bumper,picture(button_rb),true
+        ///Right Trigger,picture(button_rt),true
+        ///Start,picture(button_start),true
+        ///Back,picture(button_back),true.
+        /// </summary>
+        internal static string TextButtonIcons {
+            get {
+                return ResourceManager.GetString("TextButtonIcons", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to a
+        ///aa
+        ///aaa
+        ///aah
+        ///aahed
+        ///aahing
+        ///aahs
+        ///aal
+        ///aalii
+        ///aaliis
+        ///aals
+        ///aam
+        ///aani
+        ///aardvark
+        ///aardvarks
+        ///aardwolf
+        ///aardwolves
+        ///aargh
+        ///aaron
+        ///aaronic
+        ///aaronical
+        ///aaronite
+        ///aaronitic
+        ///aarrgh
+        ///aarrghh
+        ///aaru
+        ///aas
+        ///aasvogel
+        ///aasvogels
+        ///ab
+        ///aba
+        ///ababdeh
+        ///ababua
+        ///abac
+        ///abaca
+        ///abacay
+        ///abacas
+        ///abacate
+        ///abacaxi
+        ///abaci
+        ///abacinate
+        ///abacination
+        ///abacisci
+        ///abaciscus
+        ///abacist
+        ///aback
+        ///abacli
+        ///abacot
+        ///abacterial
+        ///abactinal
+        ///abactinally
+        ///abaction
+        ///abactor
+        ///abaculi
+        ///abaculus
+        ///abacus
+        ///abacuses
+        ///abada
+        ///abaddon
+        ///abadejo
+        ///abadengo
+        ///abadia [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string TextEnglishWords {
+            get {
+                return ResourceManager.GetString("TextEnglishWords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to English,e,True
+        ///French,f,False
+        ///German,g,False
+        ///Italian,i,False
+        ///Japanese,j,False
+        ///Spanish,s,False.
+        /// </summary>
+        internal static string TextLanguages {
+            get {
+                return ResourceManager.GetString("TextLanguages", resourceCulture);
             }
         }
     }

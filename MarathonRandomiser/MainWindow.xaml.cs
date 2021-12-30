@@ -116,8 +116,9 @@ namespace MarathonRandomiser
 
             Helpers.FillCheckedListBox(Properties.Resources.AudioSongs, CheckedList_Audio_Songs);
             Helpers.FillCheckedListBox(Properties.Resources.AudioCSBs, CheckedList_Audio_SFX);
-
-            Helpers.FillCheckedListBox(Properties.Resources.MiscLanguages, CheckedList_Misc_Languages);
+            
+            Helpers.FillCheckedListBox(Properties.Resources.TextLanguages, CheckedList_Text_Languages);
+            Helpers.FillCheckedListBox(Properties.Resources.TextButtonIcons, CheckedList_Text_Buttons);
 
             RefreshVoicePacks();
 
@@ -409,6 +410,8 @@ namespace MarathonRandomiser
                     CheckBox_Textures_OnlyCustom.IsEnabled = (bool)NewCheckedStatus;
                     break;
 
+                case "CheckBox_Text_Generate": CheckBox_Text_Generate_Enforce.IsEnabled = (bool)NewCheckedStatus; break;
+
                 case "CheckBox_Misc_EnemyHealth":
                     Label_Misc_EnemyHealth_Min.IsEnabled = (bool)NewCheckedStatus;
                     NumericUpDown_Misc_EnemyHealth_Min.IsEnabled = (bool)NewCheckedStatus;
@@ -464,8 +467,6 @@ namespace MarathonRandomiser
                         if (CheckBox_Misc_Collision.IsChecked == false)
                             CheckBox_Misc_Collision_PerFace.IsEnabled = false;
                     }
-                    CheckBox_Misc_Text.IsEnabled = (bool)!NewCheckedStatus;
-                    TabItem_Misc_Languages.IsEnabled = (bool)!NewCheckedStatus;
                     TabControl_Miscellaneous.SelectedIndex = 2;
                     break;
             }
@@ -533,13 +534,17 @@ namespace MarathonRandomiser
                     }
                     break;
 
-                case "Grid_Miscellaneous":
-                    switch (TabControl_Miscellaneous.SelectedIndex)
+                case "Grid_Text":
+                    switch (TabControl_Text.SelectedIndex)
                     {
-                        case 0: Helpers.InvalidateCheckedListBox(CheckedList_Misc_Languages, true, selectAll); break;
-                        case 1: Helpers.InvalidateCheckedListBox(CheckedList_Misc_Patches, true, selectAll); break;
+                        case 0: Helpers.InvalidateCheckedListBox(CheckedList_Text_Languages, true, selectAll); break;
+                        case 1: Helpers.InvalidateCheckedListBox(CheckedList_Text_Buttons, true, selectAll); break;
                         default: throw new NotImplementedException();
                     }
+                    break;
+
+                case "Grid_Miscellaneous":
+                    Helpers.InvalidateCheckedListBox(CheckedList_Misc_Patches, true, selectAll);
                     break;
 
                 case "Grid_Custom": Helpers.InvalidateCheckedListBox(CheckedList_Custom_Vox, true, selectAll); break;
@@ -711,9 +716,15 @@ namespace MarathonRandomiser
             ConfigCheckedListBoxRead(configInfo, CheckedList_Audio_SFX);
             configInfo.WriteLine();
 
+            // Text Block.
+            ConfigTabRead(configInfo, "Text", StackPanel_Text);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_Text_Languages);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_Text_Buttons);
+            configInfo.WriteLine();
+
             // Misc Block.
             ConfigTabRead(configInfo, "Misc", StackPanel_Misc);
-            ConfigCheckedListBoxRead(configInfo, CheckedList_Misc_Languages);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_Text_Languages);
             ConfigCheckedListBoxRead(configInfo, CheckedList_Misc_Patches);
             configInfo.WriteLine();
 
@@ -1024,7 +1035,7 @@ namespace MarathonRandomiser
 
                 // Misc Tab.
                 WildcardTabRoll(StackPanel_Misc, (int)NumericUpDown_Wildcard_Weight.Value);
-                WildcardCheckedList(CheckedList_Misc_Languages, (int)NumericUpDown_Wildcard_Weight.Value);
+                WildcardCheckedList(CheckedList_Text_Languages, (int)NumericUpDown_Wildcard_Weight.Value);
             }
 
             // Enumerate the Checked List Boxes for the user's settings on lists.
@@ -1048,7 +1059,9 @@ namespace MarathonRandomiser
             List<string> AudioMusic = Helpers.EnumerateCheckedListBox(CheckedList_Audio_Songs);
             List<string> AudioCSBs = Helpers.EnumerateCheckedListBox(CheckedList_Audio_SFX);
 
-            List<string> MiscLanguages = Helpers.EnumerateCheckedListBox(CheckedList_Misc_Languages);
+            List<string> TextLanguages = Helpers.EnumerateCheckedListBox(CheckedList_Text_Languages);
+            List<string> TextButtons = Helpers.EnumerateCheckedListBox(CheckedList_Text_Buttons);
+
             List<string> MiscPatches = Helpers.EnumerateCheckedListBox(CheckedList_Misc_Patches);
 
             string[] CustomMusic = TextBox_Custom_Music.Text.Split('|');
@@ -1193,8 +1206,15 @@ namespace MarathonRandomiser
             if (AudioCSBs.Count == 0)
                 CheckBox_Audio_SFX.IsChecked = false;
 
-            if (MiscLanguages.Count == 0)
-                CheckBox_Misc_Text.IsChecked = false;
+            if (TextLanguages.Count == 0)
+            {
+                CheckBox_Text_Shuffle.IsChecked = false;
+                CheckBox_Text_Generate.IsChecked = false;
+                CheckBox_Text_Buttons.IsChecked = false;
+            }
+            if (TextButtons.Count == 0)
+                CheckBox_Text_Buttons.IsChecked = false;
+
             if (MiscPatches.Count == 0)
                 CheckBox_Misc_Patches.IsChecked = false;
 
@@ -1734,6 +1754,102 @@ namespace MarathonRandomiser
             }
             #endregion
 
+            #region Text Randomisers
+            bool? textButtons = CheckBox_Text_Buttons.IsChecked;
+            bool? textGenerate = CheckBox_Text_Generate.IsChecked;
+            bool? textGenerateEnforce = CheckBox_Text_Generate_Enforce.IsChecked;
+            bool? textShuffle = CheckBox_Text_Shuffle.IsChecked;
+
+            // Check if we need to actually do text randomisation.
+            if (textShuffle == true || textGenerate == true || textButtons == true)
+            {
+                // Set up placeholder strings for the locations of event.arc and text.arc
+                string eventArc = "";
+                string textArc = "";
+
+                // Get event.arc and text.arc, as we need both for Text Randomisation.
+                foreach (string archive in archives)
+                {
+                    if (Path.GetFileName(archive).ToLower() == "event.arc")
+                        eventArc = await Task.Run(() => Helpers.ArchiveHandler(archive));
+
+                    if (Path.GetFileName(archive).ToLower() == "text.arc")
+                        textArc = await Task.Run(() => Helpers.ArchiveHandler(archive));
+
+                    // Patch voice_all_e.sbk if we're shuffling text.
+                    if (CustomVoxPacks.Count == 0 && textShuffle == true)
+                    {
+                        if (Path.GetFileName(archive).ToLower() == "sound.arc")
+                        {
+                            UpdateLogger($"Patching 'voice_all_e.sbk'.");
+                            string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+                            File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\voice_all_e.sbk", $@"{unpackedArchive}\xenon\sound\voice_all_e.sbk", true);
+                        }
+                    }
+                }
+
+                // Determine which MSTs we need to edit based on language settings.
+                string[] mstFiles = Array.Empty<string>();
+                foreach (string language in TextLanguages)
+                {
+                    if (language == "e")
+                        mstFiles = mstFiles.Concat(Directory.GetFiles(eventArc, "*.e.mst", SearchOption.AllDirectories).Concat(Directory.GetFiles(textArc, "*.e.mst", SearchOption.AllDirectories)).ToArray()).ToArray();
+
+                    if (language == "f")
+                        mstFiles = mstFiles.Concat(Directory.GetFiles(eventArc, "*.f.mst", SearchOption.AllDirectories).Concat(Directory.GetFiles(textArc, "*.f.mst", SearchOption.AllDirectories)).ToArray()).ToArray();
+
+                    if (language == "g")
+                        mstFiles = mstFiles.Concat(Directory.GetFiles(eventArc, "*.g.mst", SearchOption.AllDirectories).Concat(Directory.GetFiles(textArc, "*.g.mst", SearchOption.AllDirectories)).ToArray()).ToArray();
+
+                    if (language == "i")
+                        mstFiles = mstFiles.Concat(Directory.GetFiles(eventArc, "*.i.mst", SearchOption.AllDirectories).Concat(Directory.GetFiles(textArc, "*.i.mst", SearchOption.AllDirectories)).ToArray()).ToArray();
+
+                    if (language == "j")
+                        mstFiles = mstFiles.Concat(Directory.GetFiles(eventArc, "*.j.mst", SearchOption.AllDirectories).Concat(Directory.GetFiles(textArc, "*.j.mst", SearchOption.AllDirectories)).ToArray()).ToArray();
+
+                    if (language == "s")
+                        mstFiles = mstFiles.Concat(Directory.GetFiles(eventArc, "*.s.mst", SearchOption.AllDirectories).Concat(Directory.GetFiles(textArc, "*.s.mst", SearchOption.AllDirectories)).ToArray()).ToArray();
+                }
+
+                // Randomise Button Icons if we need to.
+                // We do this first so we don't need to go through event.arc's MSTs.
+                if (textButtons == true)
+                {
+                    // Loop through and process each MST.
+                    foreach (string mstFile in mstFiles)
+                    {
+                        // Ignore this MST if it's in event.arc, as they never have placeholders.
+                        if (!mstFile.Contains(eventArc))
+                        {
+                            UpdateLogger($"Randomising button icons in '{mstFile}'.");
+                            await Task.Run(() => TextRandomiser.RandomiseButtonIcons(mstFile, TextButtons));
+                        }
+                    }
+                }
+
+                // Generate new random strings if we need to.
+                if (textGenerate == true)
+                {
+                    // Parse the list of English Words from https://github.com/dwyl/english-words into an array.
+                    string[] wordList = Properties.Resources.TextEnglishWords.Split("\r\n");
+
+                    // Loop through and process each MST.
+                    foreach (string mstFile in mstFiles)
+                    {
+                        UpdateLogger($"Generating random text for '{mstFile}'.");
+                        await Task.Run(() => TextRandomiser.TextGenerator(mstFile, wordList, textGenerateEnforce));
+                    }
+                }
+
+                // Shuffle all the text in the MSTs if we need to.
+                if (textShuffle == true)
+                {
+                    UpdateLogger($"Shuffling text.");
+                    await Task.Run(() => TextRandomiser.ShuffleText(mstFiles, eventArc, textArc, TextLanguages));
+                }
+            }
+            #endregion
+
             #region Misc. Randomisers
             // Set up values.
             bool? miscEnemyHealth = CheckBox_Misc_EnemyHealth.IsChecked;
@@ -1742,8 +1858,6 @@ namespace MarathonRandomiser
             int miscEnemyHealthMax = (int)NumericUpDown_Misc_EnemyHealth_Max.Value;
             bool? miscCollision = CheckBox_Misc_Collision.IsChecked;
             bool? miscCollisionPerFace = CheckBox_Misc_Collision_PerFace.IsChecked;
-            bool? miscText = CheckBox_Misc_Text.IsChecked;
-            bool? miscTextGenerate = CheckBox_Misc_TextGenerate.IsChecked;
             bool? miscPatches = CheckBox_Misc_Patches.IsChecked;
             int miscPatchesWeight = (int)NumericUpDown_Misc_Patches_Weight.Value;
             bool? miscUnlock = CheckBox_Misc_AutoUnlock.IsChecked;
@@ -1777,68 +1891,6 @@ namespace MarathonRandomiser
                             UpdateLogger($"Randomising collision surface tags in '{collisionFile}'.");
                             await Task.Run(() => MiscellaneousRandomisers.SurfaceRandomiser(collisionFile, miscCollisionPerFace));
                         }
-                    }
-                }
-            }
-
-            // Check if we need to actually do text randomisation.
-            if (miscText == true || miscTextGenerate == true)
-            {
-                // Set up placeholder strings for the locations of event.arc and text.arc
-                string eventArc = "";
-                string textArc = "";
-
-                // Get event.arc and text.arc, as we need both for Text Randomisation.
-                foreach (string archive in archives)
-                {
-                    if (Path.GetFileName(archive).ToLower() == "event.arc")
-                        eventArc = await Task.Run(() => Helpers.ArchiveHandler(archive));
-
-                    if (Path.GetFileName(archive).ToLower() == "text.arc")
-                        textArc = await Task.Run(() => Helpers.ArchiveHandler(archive));
-                }
-
-                // Shuffle all the text in the MSTs if we need to.
-                if (miscText == true)
-                {
-                    UpdateLogger($"Shuffling text.");
-                    await Task.Run(() => MiscellaneousRandomisers.TextRandomiser(eventArc, textArc, MiscLanguages));
-                }
-
-                // Generate new random strings if we need to.
-                if (miscTextGenerate == true)
-                {
-                    // Parse the list of English Words from https://github.com/dwyl/english-words into an array.
-                    string[] wordList = Properties.Resources.MiscEnglishWords.Split("\r\n");
-
-                    // Determine which MSTs we need to edit based on language settings.
-                    string[] mstFiles = Array.Empty<string>();
-                    foreach (string language in MiscLanguages)
-                    {
-                        if (language == "e")
-                            mstFiles = mstFiles.Concat(Directory.GetFiles(eventArc, "*.e.mst", SearchOption.AllDirectories).Concat(Directory.GetFiles(textArc, "*.e.mst", SearchOption.AllDirectories)).ToArray()).ToArray();
-
-                        if (language == "f")
-                            mstFiles = mstFiles.Concat(Directory.GetFiles(eventArc, "*.f.mst", SearchOption.AllDirectories).Concat(Directory.GetFiles(textArc, "*.f.mst", SearchOption.AllDirectories)).ToArray()).ToArray();
-
-                        if (language == "g")
-                            mstFiles = mstFiles.Concat(Directory.GetFiles(eventArc, "*.g.mst", SearchOption.AllDirectories).Concat(Directory.GetFiles(textArc, "*.g.mst", SearchOption.AllDirectories)).ToArray()).ToArray();
-
-                        if (language == "i")
-                            mstFiles = mstFiles.Concat(Directory.GetFiles(eventArc, "*.i.mst", SearchOption.AllDirectories).Concat(Directory.GetFiles(textArc, "*.i.mst", SearchOption.AllDirectories)).ToArray()).ToArray();
-
-                        if (language == "j")
-                            mstFiles = mstFiles.Concat(Directory.GetFiles(eventArc, "*.j.mst", SearchOption.AllDirectories).Concat(Directory.GetFiles(textArc, "*.j.mst", SearchOption.AllDirectories)).ToArray()).ToArray();
-
-                        if (language == "s")
-                            mstFiles = mstFiles.Concat(Directory.GetFiles(eventArc, "*.s.mst", SearchOption.AllDirectories).Concat(Directory.GetFiles(textArc, "*.s.mst", SearchOption.AllDirectories)).ToArray()).ToArray();
-                    }
-
-                    // Loop through and process each MST.
-                    foreach (string mstFile in mstFiles)
-                    {
-                        UpdateLogger($"Generating random text for '{mstFile}'.");
-                        await Task.Run(() => MiscellaneousRandomisers.TextGenerator(mstFile, wordList));
                     }
                 }
             }

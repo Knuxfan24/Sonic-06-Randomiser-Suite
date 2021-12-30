@@ -130,11 +130,11 @@
   <data name="EventTerrain" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\TextLists\EventTerrain.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="MiscEnglishWords" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\TextLists\MiscEnglishWords.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="TextEnglishWords" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\TextLists\TextEnglishWords.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="MiscLanguages" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\TextLists\MiscLanguages.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="TextLanguages" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\TextLists\TextLanguages.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="SceneEnvMaps" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\TextLists\SceneEnvMaps.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
@@ -165,5 +165,8 @@
   </data>
   <data name="SETPathProps" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\TextLists\SETPathProps.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="TextButtonIcons" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\TextLists\TextButtonIcons.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
 </root>

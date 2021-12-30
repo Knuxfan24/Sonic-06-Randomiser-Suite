@@ -1,0 +1,10 @@
+﻿A,picture(button_a),true
+B,picture(button_b),true
+X,picture(button_x),true
+Y,picture(button_y),true
+Left Bumper,picture(button_lb),true
+Left Trigger,picture(button_lt),true
+Right Bumper,picture(button_rb),true
+Right Trigger,picture(button_rt),true
+Start,picture(button_start),true
+Back,picture(button_back),true
