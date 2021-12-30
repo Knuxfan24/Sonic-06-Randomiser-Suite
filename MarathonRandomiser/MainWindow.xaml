@@ -314,6 +314,9 @@
                         <CheckBox x:Name="CheckBox_Text_Buttons" Content="Randomise Button Icons" IsChecked="true"/>
                         <CheckBox x:Name="CheckBox_Text_Generate" Content="Generate Random Text" Click="Dependency_CheckBox_Changed"/>
                         <CheckBox x:Name="CheckBox_Text_Generate_Enforce" Content="Enforce Word Length" IsEnabled="false" IsChecked="true"/>
+                        <CheckBox x:Name="CheckBox_Text_Colour" Content="Randomly Colour Text" Click="Dependency_CheckBox_Changed"/>
+                        <Label x:Name="Label_Text_Colour_Weight" Content="Weight:" Background="{x:Null}" BorderBrush="{x:Null}" IsEnabled="False"/>
+                        <hc:NumericUpDown x:Name="NumericUpDown_Text_Colour_Weight" Minimum="1" Maximum="100" Value="10" Margin="10,0,10,0" SelectionBrush="#FFB146C2" IsEnabled="False"/>
                         <CheckBox x:Name="CheckBox_Text_Shuffle" Content="Shuffle Text"/>
                     </StackPanel>
 

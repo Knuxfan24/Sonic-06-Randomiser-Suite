@@ -161,5 +161,82 @@ namespace MarathonRandomiser
             // Save the MST.
             mst.Save();
         }
+
+        /// <summary>
+        /// Randomly colours characters in the messages within an MST.
+        /// </summary>
+        /// <param name="mstFile">The path to the MST to process.</param>
+        /// <param name="textColourWeight">The likelyhood for a character to be coloured.</param>
+        public static async Task RandomColours(string mstFile, int textColourWeight)
+        {
+            // Load the MST.
+            MessageTable mst = new(mstFile);
+
+            // Loop through each Message Entry in this MST.
+            foreach (Message? message in mst.Data.Messages)
+            {
+                // Set up a system to handle placeholders.
+                List<string> Placeholders = new();
+                List<string>? oldPlaceholders = null;
+                if (message.Placeholders != null)
+                    oldPlaceholders = message.Placeholders.ToList();
+
+                // Set up a string to store our edited message.
+                string newMessage = string.Empty;
+
+                // Set up a system to determine whether this enables or disables colours.
+                bool isColoured = false;
+
+                // Figure out existing placeholders.
+                int placeholderCount = 0;
+
+                // Loop through each character in this message.
+                for (int i = 0; i < message.Text.Length; i++)
+                {
+                    // If this character is a $ and placeholders already exist, then add the approriate placeholder to our new list.
+                    if (message.Text[i] == '$')
+                    {
+                        if (oldPlaceholders != null)
+                        {
+                            Placeholders.Add(oldPlaceholders[placeholderCount]);
+                            placeholderCount++;
+                        }
+                    }
+
+                    // If not, then roll a number between 0 and 100, if it's smaller than or equal to textColourWeight, then proceed.
+                    else if (MainWindow.Randomiser.Next(0, 101) <= textColourWeight)
+                    {
+                        // Add a new $ placeholder.
+                        newMessage += '$';
+
+                        // Add an rgba entry or a color entry depending on whether or not we're starting or stopping the colouration.
+                        if (!isColoured)
+                            Placeholders.Add($"rgba({MainWindow.Randomiser.Next(0, 256)}, {MainWindow.Randomiser.Next(0, 256)}, {MainWindow.Randomiser.Next(0, 256)})");
+                        if (isColoured)
+                            Placeholders.Add("color");
+
+                        // Invert our colour status.
+                        isColoured = !isColoured;
+                    }
+
+                    // Add this character to the new string.
+                    newMessage += message.Text[i];
+                }
+
+                // If we haven't added a final colour entry, then add it manually.
+                if (isColoured)
+                {
+                    Placeholders.Add("color");
+                    newMessage += '$';
+                }
+
+                // Save our new message and placeholders over the original ones.
+                message.Text = newMessage;
+                message.Placeholders = Placeholders.ToArray();
+            }
+
+            // Save the MST.
+            mst.Save();
+        }
     }
 }

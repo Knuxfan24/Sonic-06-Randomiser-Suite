@@ -412,6 +412,11 @@ namespace MarathonRandomiser
 
                 case "CheckBox_Text_Generate": CheckBox_Text_Generate_Enforce.IsEnabled = (bool)NewCheckedStatus; break;
 
+                case "CheckBox_Text_Colour":
+                    Label_Text_Colour_Weight.IsEnabled = (bool)NewCheckedStatus;
+                    NumericUpDown_Text_Colour_Weight.IsEnabled = (bool)NewCheckedStatus;
+                    break;
+
                 case "CheckBox_Misc_EnemyHealth":
                     Label_Misc_EnemyHealth_Min.IsEnabled = (bool)NewCheckedStatus;
                     NumericUpDown_Misc_EnemyHealth_Min.IsEnabled = (bool)NewCheckedStatus;
@@ -419,6 +424,7 @@ namespace MarathonRandomiser
                     NumericUpDown_Misc_EnemyHealth_Max.IsEnabled = (bool)NewCheckedStatus;
                     CheckBox_Misc_EnemyHealth_Bosses.IsEnabled = (bool)NewCheckedStatus;
                     break;
+
                 case "CheckBox_Misc_Collision": CheckBox_Misc_Collision_PerFace.IsEnabled = (bool)NewCheckedStatus; break;
 
                 case "CheckBox_Misc_Patches":
@@ -1758,10 +1764,12 @@ namespace MarathonRandomiser
             bool? textButtons = CheckBox_Text_Buttons.IsChecked;
             bool? textGenerate = CheckBox_Text_Generate.IsChecked;
             bool? textGenerateEnforce = CheckBox_Text_Generate_Enforce.IsChecked;
+            bool? textColour = CheckBox_Text_Colour.IsChecked;
+            int textColourWeight = (int)NumericUpDown_Text_Colour_Weight.Value;
             bool? textShuffle = CheckBox_Text_Shuffle.IsChecked;
 
             // Check if we need to actually do text randomisation.
-            if (textShuffle == true || textGenerate == true || textButtons == true)
+            if (textShuffle == true || textGenerate == true || textButtons == true || textColour == true)
             {
                 // Set up placeholder strings for the locations of event.arc and text.arc
                 string eventArc = "";
@@ -1838,6 +1846,17 @@ namespace MarathonRandomiser
                     {
                         UpdateLogger($"Generating random text for '{mstFile}'.");
                         await Task.Run(() => TextRandomiser.TextGenerator(mstFile, wordList, textGenerateEnforce));
+                    }
+                }
+
+                // Randomly colour parts of the text.
+                if (textColour == true)
+                {
+                    // Loop through and process each MST.
+                    foreach (string mstFile in mstFiles)
+                    {
+                        UpdateLogger($"Randomly colouring text in '{mstFile}'.");
+                        await Task.Run(() => TextRandomiser.RandomColours(mstFile, textColourWeight));
                     }
                 }
 
