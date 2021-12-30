@@ -8,6 +8,7 @@ using Ookii.Dialogs.Wpf;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -19,7 +20,7 @@ namespace MarathonRandomiser
     public partial class MainWindow : Window
     {
         // Version Number.
-        public static readonly string GlobalVersionNumber = $"Version 2.1.9";
+        public static readonly string GlobalVersionNumber = $"Version 2.1.10";
 
         #if !DEBUG
         public static readonly string VersionNumber = GlobalVersionNumber;
@@ -610,7 +611,8 @@ namespace MarathonRandomiser
                                                   "vgmstream: Audio Conversion.\n" +
                                                   "Microsoft: xmaencode and texconv utilities.\n" +
                                                   "HandyControl: WPF Form Controls.\n" +
-                                                  "Skyth: Sonic Audio Tools.",
+                                                  "Skyth: Sonic Audio Tools.\n" +
+                                                  "dwyl: Plain Text List of English Words.",
                                                   "Sonic '06 Randomiser Suite",
                                                   MessageBoxButton.OK,
                                                   MessageBoxImage.Information);
@@ -1741,6 +1743,7 @@ namespace MarathonRandomiser
             bool? miscCollision = CheckBox_Misc_Collision.IsChecked;
             bool? miscCollisionPerFace = CheckBox_Misc_Collision_PerFace.IsChecked;
             bool? miscText = CheckBox_Misc_Text.IsChecked;
+            bool? miscTextGenerate = CheckBox_Misc_TextGenerate.IsChecked;
             bool? miscPatches = CheckBox_Misc_Patches.IsChecked;
             int miscPatchesWeight = (int)NumericUpDown_Misc_Patches_Weight.Value;
             bool? miscUnlock = CheckBox_Misc_AutoUnlock.IsChecked;
@@ -1779,7 +1782,7 @@ namespace MarathonRandomiser
             }
 
             // Check if we need to actually do text randomisation.
-            if (miscText == true)
+            if (miscText == true || miscTextGenerate == true)
             {
                 // Set up placeholder strings for the locations of event.arc and text.arc
                 string eventArc = "";
@@ -1795,8 +1798,49 @@ namespace MarathonRandomiser
                         textArc = await Task.Run(() => Helpers.ArchiveHandler(archive));
                 }
 
-                UpdateLogger($"Shuffling text.");
-                await Task.Run(() => MiscellaneousRandomisers.TextRandomiser(eventArc, textArc, MiscLanguages));
+                // Shuffle all the text in the MSTs if we need to.
+                if (miscText == true)
+                {
+                    UpdateLogger($"Shuffling text.");
+                    await Task.Run(() => MiscellaneousRandomisers.TextRandomiser(eventArc, textArc, MiscLanguages));
+                }
+
+                // Generate new random strings if we need to.
+                if (miscTextGenerate == true)
+                {
+                    // Parse the list of English Words from https://github.com/dwyl/english-words into an array.
+                    string[] wordList = Properties.Resources.MiscEnglishWords.Split("\r\n");
+
+                    // Determine which MSTs we need to edit based on language settings.
+                    string[] mstFiles = Array.Empty<string>();
+                    foreach (string language in MiscLanguages)
+                    {
+                        if (language == "e")
+                            mstFiles = mstFiles.Concat(Directory.GetFiles(eventArc, "*.e.mst", SearchOption.AllDirectories).Concat(Directory.GetFiles(textArc, "*.e.mst", SearchOption.AllDirectories)).ToArray()).ToArray();
+
+                        if (language == "f")
+                            mstFiles = mstFiles.Concat(Directory.GetFiles(eventArc, "*.f.mst", SearchOption.AllDirectories).Concat(Directory.GetFiles(textArc, "*.f.mst", SearchOption.AllDirectories)).ToArray()).ToArray();
+
+                        if (language == "g")
+                            mstFiles = mstFiles.Concat(Directory.GetFiles(eventArc, "*.g.mst", SearchOption.AllDirectories).Concat(Directory.GetFiles(textArc, "*.g.mst", SearchOption.AllDirectories)).ToArray()).ToArray();
+
+                        if (language == "i")
+                            mstFiles = mstFiles.Concat(Directory.GetFiles(eventArc, "*.i.mst", SearchOption.AllDirectories).Concat(Directory.GetFiles(textArc, "*.i.mst", SearchOption.AllDirectories)).ToArray()).ToArray();
+
+                        if (language == "j")
+                            mstFiles = mstFiles.Concat(Directory.GetFiles(eventArc, "*.j.mst", SearchOption.AllDirectories).Concat(Directory.GetFiles(textArc, "*.j.mst", SearchOption.AllDirectories)).ToArray()).ToArray();
+
+                        if (language == "s")
+                            mstFiles = mstFiles.Concat(Directory.GetFiles(eventArc, "*.s.mst", SearchOption.AllDirectories).Concat(Directory.GetFiles(textArc, "*.s.mst", SearchOption.AllDirectories)).ToArray()).ToArray();
+                    }
+
+                    // Loop through and process each MST.
+                    foreach (string mstFile in mstFiles)
+                    {
+                        UpdateLogger($"Generating random text for '{mstFile}'.");
+                        await Task.Run(() => MiscellaneousRandomisers.TextGenerator(mstFile, wordList));
+                    }
+                }
             }
 
             // Check if we need to actually do patch randomisation.

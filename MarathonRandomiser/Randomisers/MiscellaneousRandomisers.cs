@@ -216,6 +216,44 @@ namespace MarathonRandomiser
         }
 
         /// <summary>
+        /// Replaces the text entries in an MST with a random word.
+        /// </summary>
+        /// <param name="mstFile">The path to the MST to process.</param>
+        /// <param name="wordList">The list of English words.</param>
+        public static async Task TextGenerator(string mstFile, string[] wordList)
+        {
+            // Load the MST.
+            MessageTable mst = new(mstFile);
+
+            // Loop through each Message Entry in this MST.
+            foreach (Message? message in mst.Data.Messages)
+            {
+                // Edit the New Lines, New Text Boxes and Placeholder Calls so they can be preserved.
+                message.Text = message.Text.Replace("\n", " \n ");
+                message.Text = message.Text.Replace("\f", " \f ");
+                message.Text = message.Text.Replace("$", " $ ");
+
+                // Split this string into an array.
+                string[] split = message.Text.Split(' ');
+
+                // Loop through and pick a random word for each array entry.
+                // TODO: Option to perserve word length?
+                for (int i = 0; i < split.Length; i++)
+                    if (split[i] != "\n" && split[i] != "\f" && split[i] != "$")
+                        split[i] = wordList[MainWindow.Randomiser.Next(wordList.Length)].ToUpper();
+
+                // Rejoin the string and reverse the earlier edits to avoid redudant spaces.
+                message.Text = String.Join(" ", split);
+                message.Text = message.Text.Replace(" \n ", "\n");
+                message.Text = message.Text.Replace(" \f ", "\f");
+                message.Text = message.Text.Replace(" $ ", "$");
+            }
+
+            // Save the MST.
+            mst.Save();
+        }
+
+        /// <summary>
         /// Sets random patches to be required so the Mod Manager will auto install them with the randomisation.
         /// </summary>
         /// <param name="ModDirectory">The path to the randomisation's mod directory.</param>

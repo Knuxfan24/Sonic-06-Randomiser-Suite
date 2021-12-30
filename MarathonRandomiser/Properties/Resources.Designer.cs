@@ -143,6 +143,76 @@ namespace MarathonRandomiser.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to a
+        ///aa
+        ///aaa
+        ///aah
+        ///aahed
+        ///aahing
+        ///aahs
+        ///aal
+        ///aalii
+        ///aaliis
+        ///aals
+        ///aam
+        ///aani
+        ///aardvark
+        ///aardvarks
+        ///aardwolf
+        ///aardwolves
+        ///aargh
+        ///aaron
+        ///aaronic
+        ///aaronical
+        ///aaronite
+        ///aaronitic
+        ///aarrgh
+        ///aarrghh
+        ///aaru
+        ///aas
+        ///aasvogel
+        ///aasvogels
+        ///ab
+        ///aba
+        ///ababdeh
+        ///ababua
+        ///abac
+        ///abaca
+        ///abacay
+        ///abacas
+        ///abacate
+        ///abacaxi
+        ///abaci
+        ///abacinate
+        ///abacination
+        ///abacisci
+        ///abaciscus
+        ///abacist
+        ///aback
+        ///abacli
+        ///abacot
+        ///abacterial
+        ///abactinal
+        ///abactinally
+        ///abaction
+        ///abactor
+        ///abaculi
+        ///abaculus
+        ///abacus
+        ///abacuses
+        ///abada
+        ///abaddon
+        ///abadejo
+        ///abadengo
+        ///abadia [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string MiscEnglishWords {
+            get {
+                return ResourceManager.GetString("MiscEnglishWords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to English,e,True
         ///French,f,False
         ///German,g,False
