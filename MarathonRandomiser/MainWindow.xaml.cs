@@ -878,7 +878,8 @@ namespace MarathonRandomiser
         /// <param name="element">The element (usually a Grid) to process.</param>
         /// <param name="wildcardWeight">The weight value of the Wildcard.</param>
         /// <param name="listBox">The Wildcard CheckedListBox for this tab.</param>
-        private static void WildcardTabCheckboxes(DependencyObject element, int wildcardWeight, CheckedListBox listBox)
+        /// <param name="disabled">Whether this option is enabled at all.</param>
+        private static void WildcardTabCheckboxes(DependencyObject element, int wildcardWeight, CheckedListBox listBox, bool disabled = false)
         {
             // Loop through all the CheckBoxes in our element.
             foreach (var checkbox in Helpers.Descendants<CheckBox>(element))
@@ -886,14 +887,17 @@ namespace MarathonRandomiser
                 // Set it to false by default.
                 checkbox.IsChecked = false;
 
-                // Scan through the Wildcard Elements to see if we need to try enable this element.
-                foreach (var item in listBox.Items)
+                if (!disabled)
                 {
-                    if (item.Tag == checkbox.Name && item.Checked == true)
+                    // Scan through the Wildcard Elements to see if we need to try enable this element.
+                    foreach (var item in listBox.Items)
                     {
-                        // Roll a number, if it's less than or equal to the Wildcard's weight then enable it.
-                        if (Randomiser.Next(0, 101) <= wildcardWeight)
-                            checkbox.IsChecked = true;
+                        if (item.Tag == checkbox.Name && item.Checked == true)
+                        {
+                            // Roll a number, if it's less than or equal to the Wildcard's weight then enable it.
+                            if (Randomiser.Next(0, 101) <= wildcardWeight)
+                                checkbox.IsChecked = true;
+                        }
                     }
                 }
             }
@@ -1013,6 +1017,17 @@ namespace MarathonRandomiser
                 // Save user's config so we can make it seemlessTM.
                 SaveConfig(Path.Combine(ModDirectory, "wildcard.bak"));
 
+                // Disable all values first.
+                WildcardTabCheckboxes(Grid_ObjectPlacement, (int)NumericUpDown_Wildcard_Weight.Value, CheckedList_Wildcard_SET, true);
+                WildcardTabCheckboxes(Grid_Event, (int)NumericUpDown_Wildcard_Weight.Value, CheckedList_Wildcard_Event, true);
+                WildcardTabCheckboxes(Grid_Scene, (int)NumericUpDown_Wildcard_Weight.Value, CheckedList_Wildcard_Scene, true);
+                WildcardTabCheckboxes(Grid_Animations, (int)NumericUpDown_Wildcard_Weight.Value, CheckedList_Wildcard_Animations, true);
+                WildcardTabCheckboxes(Grid_Textures, (int)NumericUpDown_Wildcard_Weight.Value, CheckedList_Wildcard_Textures, true);
+                WildcardTabCheckboxes(Grid_Audio, (int)NumericUpDown_Wildcard_Weight.Value, CheckedList_Wildcard_Audio, true);
+                WildcardTabCheckboxes(Grid_Text, (int)NumericUpDown_Wildcard_Weight.Value, CheckedList_Wildcard_Text, true);
+                WildcardTabCheckboxes(Grid_Miscellaneous, (int)NumericUpDown_Wildcard_Weight.Value, CheckedList_Wildcard_Miscellaneous, true);
+
+                // Go through and configure elements based on the Wildcard.
                 if (CheckBox_Wildcard_SET.IsChecked == true)
                 {
                     WildcardTabCheckboxes(Grid_ObjectPlacement, (int)NumericUpDown_Wildcard_Weight.Value, CheckedList_Wildcard_SET);
