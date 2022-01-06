@@ -10,11 +10,9 @@
 <img src="https://raw.githubusercontent.com/wiki/Knuxfan24/Sonic-06-Randomiser-Suite/images/tab_general.png">
 
 # Building
-To build the Randomiser Suite, simply clone the project and open the `MarathonRandomiser.sln` file in a recent version of Visual Studio (anything supporting .NET 6 should work fine, all the development was done on preview builds of Visual Studio 2022) and then compile it as normal, if the build fails it may be due to missing Nuget Packages, as the project uses [Marathon](https://github.com/Big-Endian-32/Marathon) for interfacing with Sonic '06's file formats and [HandyControl](https://github.com/HandyOrg/HandyControl) for much nicer looking UI controls; ensuring that both of those are present and accounted for should resolve any compile errors.
+To build the Randomiser Suite, simply clone the project and open the `MarathonRandomiser.sln` file in a recent version of Visual Studio (anything supporting .NET 6 should work fine, all the development was done on preview builds of Visual Studio 2022) and then compile it as normal, if the build fails it may be due to missing Nuget Packages, as the project uses [Marathon](https://github.com/Big-Endian-32/Marathon) for interfacing with Sonic '06's file formats, [HandyControl](https://github.com/HandyOrg/HandyControl) for much nicer looking UI controls and [Ookii Dialogs](https://github.com/ookii-dialogs/ookii-dialogs-wpf) for better file and folder browsing; ensuring that all three of those are present and accounted for should resolve any compile errors.
 
 Compile warnings will be thrown regarding `Possible null reference argument`s and `Dereferences of a possibly null reference` but both of those have never caused any problem for me.
-
-Manually building is the recommended way to get a build of the Randomiser, as it is very likely that the builds available on the [releases](https://github.com/Knuxfan24/Sonic-06-Randomiser-Suite/releases) page will be out of date in some way.
 
 # Usage
 For a proper run down on the features and information on configuring and using the Randomiser Suite, check out the [Wiki](https://github.com/Knuxfan24/Sonic-06-Randomiser-Suite/wiki). For the basic functionality, see below.
@@ -41,7 +39,9 @@ Randomisation of various elements within '06's Object Placement (.set) files, th
 
 * Object draw/activation distance
 
-* Miscellaneous cosmetic details.
+* Miscellaneous cosmetic details
+
+* Types of particles
 
 A lot of the Object Placement features can be further randomised, see the Wiki for more information.
 
@@ -91,21 +91,39 @@ Shuffling of both Gameplay and Event Animations, as well as Event Cameras
 
 Shuffling of textures, with options for cross archive randomisation.
 
+### Audio Randomisation
+
+<img src="https://raw.githubusercontent.com/wiki/Knuxfan24/Sonic-06-Randomiser-Suite/images/tab_audio.png">
+
+Shuffling of ingame stage music and sound effects.
+
+### Text Randomisation
+
+<img src="https://raw.githubusercontent.com/wiki/Knuxfan24/Sonic-06-Randomiser-Suite/images/tab_audio.png">
+
+Modification of various attributes relating to the game's text within the message tabe (.mst) files. These are:
+
+* Randomisation of Button Icons
+
+* Random text generation, with optional word length enforcement
+
+* Random text colouration, with configurable chance
+
+* Shuffling text between different message tables
+
 ### Miscellaneous Randomisation
 
 <img src="https://raw.githubusercontent.com/wiki/Knuxfan24/Sonic-06-Randomiser-Suite/images/tab_miscellaneous.png">
 
 Randomisation of miscellaneous elements across one off files, these are:
 
-* Change the music used in stages and missions
-
 * The minimum and maximum health that enemies and bosses can have
 
 * The surface type for stage collision
 
-* Shuffling all of the game's text around
-
 * Enabling random patches from the user's Mod Manager Patches Directory
+
+* Optionally automatically unlocking Shadow and Silver's episodes from the start
 
 ### Custom Elements
 
@@ -114,5 +132,7 @@ Randomisation of miscellaneous elements across one off files, these are:
 Allows the user to add custom elements to the Randomisation, these being:
 
 * Custom Music, supporting basically any format that [vgmstream](https://github.com/vgmstream/vgmstream) can convert.
+
+* Textures
 
 * Voice Packs
