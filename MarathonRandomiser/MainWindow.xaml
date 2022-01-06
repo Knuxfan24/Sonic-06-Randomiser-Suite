@@ -7,7 +7,7 @@
         xmlns:hc="https://handyorg.github.io/handycontrol"
         x:Class="MarathonRandomiser.MainWindow"
         mc:Ignorable="d"
-        Title="Sonic '06 Randomiser Suite" Height="640" Width="1200" MinHeight="640" MinWidth="1200">
+        Title="Sonic '06 Randomiser Suite" Height="640" Width="1280" MinHeight="640" MinWidth="1280">
     <Grid Background="#FF181818">
         <hc:TabControl Style="{StaticResource TabControlInLine}" Margin="0,0,0,50" x:Name="TabControl_Main">
             <!--General Tab-->
@@ -42,18 +42,11 @@
                     </Label>
                     <hc:TextBox x:Name="TextBox_General_Seed" Margin="10,185,53,0" TextWrapping="NoWrap" VerticalAlignment="Top" SelectionBrush="#FFB146C2"/>
                     <Button HorizontalAlignment="Right" Margin="0,185,10,0" VerticalAlignment="Top" hc:IconElement.Geometry="{StaticResource AskGeometry}" Grid.RowSpan="2" Width="38" Click="Seed_Reroll"/>
-
-                    <hc:Divider Margin="0,233,0,0" VerticalAlignment="Top" Height="8" Width="Auto"/>
-
-                    <!--Wildcard-->
-                    <CheckBox x:Name="CheckBox_General_Wildcard" Content="Wildcard" HorizontalAlignment="Left" Margin="10,246,0,0" VerticalAlignment="Top" Click="Dependency_CheckBox_Changed"/>
-                    <Label Content="Weight" HorizontalAlignment="Left" Margin="21,269,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" Width="65"/>
-                    <hc:NumericUpDown x:Name="NumericUpDown_Wildcard_Weight" HorizontalAlignment="Left" Margin="86,269,0,0" VerticalAlignment="Top" Minimum="1" Maximum="100" Value="75" Width="69" SelectionBrush="#FFB146C2"/>
                 </Grid>
             </hc:TabItem>
 
             <!--Object Placement Tab-->
-            <hc:TabItem Header="Object Placement" BorderBrush="#B146C2" >
+            <hc:TabItem Header="Object Placement" BorderBrush="#B146C2" x:Name="TabItem_SET">
                 <Grid Background="#FF181818" Name="Grid_ObjectPlacement">
                     <!--Object Placement Configuration Checkboxes/Controls-->
                     <StackPanel HorizontalAlignment="Left" Width="210" Name="StackPanel_ObjectPlacement">
@@ -237,7 +230,7 @@
             </hc:TabItem>
 
             <!--Textures Tab-->
-            <hc:TabItem Header="Textures" BorderBrush="#B146C2" >
+            <hc:TabItem Header="Textures" BorderBrush="#B146C2" x:Name="TabItem_Textures" >
                 <Grid Background="#FF181818" Name="Grid_Textures">
                     <!--Texture Configuration Checkboxes/Controls-->
                     <StackPanel HorizontalAlignment="Left" Width="210" Name="StackPanel_Textures">
@@ -268,7 +261,7 @@
             </hc:TabItem>
 
             <!--Audio Tab-->
-            <hc:TabItem Header="Audio" BorderBrush="#B146C2" >
+            <hc:TabItem Header="Audio" BorderBrush="#B146C2" x:Name="TabItem_Audio" >
                 <Grid Background="#FF181818" Name="Grid_Audio">
                     <!--Audio Configuration Checkboxes/Controls-->
                     <StackPanel HorizontalAlignment="Left" Width="210" Name="StackPanel_Audio">
@@ -301,7 +294,7 @@
             </hc:TabItem>
 
             <!--Text Tab-->
-            <hc:TabItem Header="Text" BorderBrush="#B146C2" >
+            <hc:TabItem Header="Text" BorderBrush="#B146C2" x:Name="TabItem_Text" >
                 <Grid Background="#FF181818" Name="Grid_Text">
                     <!--Text Configuration Checkboxes/Controls-->
                     <StackPanel HorizontalAlignment="Left" Width="210" Name="StackPanel_Text">
@@ -339,7 +332,7 @@
             </hc:TabItem>
 
             <!--Miscellaneous Tab-->
-            <hc:TabItem Header="Miscellaneous" BorderBrush="#B146C2" >
+            <hc:TabItem Header="Miscellaneous" BorderBrush="#B146C2" x:Name="TabItem_Misc" >
                 <Grid Background="#FF181818" Name="Grid_Miscellaneous">
                     <!--Miscellaneous Configuration Checkboxes/Controls-->
                     <StackPanel HorizontalAlignment="Left" Width="210" Name="StackPanel_Misc">
@@ -414,6 +407,78 @@
                     <Button Content="Fetch Offical Packs" HorizontalAlignment="Left" Margin="143,0,0,10" VerticalAlignment="Bottom" Height="40" Width="128" Click="Custom_FetchVox"/>
                     <Button Content="Refresh" HorizontalAlignment="Right" Margin="0,0,143,10" VerticalAlignment="Bottom" Height="40" Width="128" Click="Custom_RefreshVox"/>
                     <Button Content="Deselect All" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Height="40" Width="128" Click="CheckedListBox_SelectionToggle"/>
+                </Grid>
+            </hc:TabItem>
+
+            <!--Wildcard Tab-->
+            <hc:TabItem Header="Wildcard" BorderBrush="#B146C2" >
+                <Grid Background="#FF181818" Name="Grid_Wildcard">
+                    <!--Text Configuration Checkboxes/Controls-->
+                    <StackPanel HorizontalAlignment="Left" Width="210" Name="StackPanel_Wildcard">
+                        <StackPanel.Resources>
+                            <Style BasedOn="{StaticResource CheckBoxBaseStyle}" TargetType="{x:Type CheckBox}">
+                                <Setter Property="Margin" Value="10,10,0,0" />
+                                <Setter Property="HorizontalAlignment" Value="Left"/>
+                            </Style>
+                        </StackPanel.Resources>
+                        <CheckBox x:Name="CheckBox_Wildcard_Enable" Content="Enable Wildcard" Click="Dependency_CheckBox_Changed"/>
+                        <Label x:Name="Label_Wildcard_Weight" Content="Weight:" Background="{x:Null}" BorderBrush="{x:Null}" IsEnabled="False"/>
+                        <hc:NumericUpDown x:Name="NumericUpDown_Wildcard_Weight" Minimum="1" Maximum="100" Value="75" Margin="10,0,10,0" SelectionBrush="#FFB146C2" IsEnabled="False"/>
+                        <CheckBox x:Name="CheckBox_Wildcard_SET" Content="Object Placement" IsEnabled="False" IsChecked="True"/>
+                        <CheckBox x:Name="CheckBox_Wildcard_Event" Content="Event" IsEnabled="False" IsChecked="True"/>
+                        <CheckBox x:Name="CheckBox_Wildcard_Scene" Content="Scene" IsEnabled="False" IsChecked="True"/>
+                        <CheckBox x:Name="CheckBox_Wildcard_Animations" Content="Animations" IsEnabled="False" IsChecked="True"/>
+                        <CheckBox x:Name="CheckBox_Wildcard_Textures" Content="Textures" IsEnabled="False" IsChecked="True"/>
+                        <CheckBox x:Name="CheckBox_Wildcard_Audio" Content="Audio" IsEnabled="False" IsChecked="True"/>
+                        <CheckBox x:Name="CheckBox_Wildcard_Text" Content="Text" IsEnabled="False" IsChecked="True"/>
+                        <CheckBox x:Name="CheckBox_Wildcard_Miscellaneous" Content="Miscellaneous" IsEnabled="False" IsChecked="True"/>
+                    </StackPanel>
+
+                    <!--Miscellaneous Configuration Toggles-->
+                    <Button Content="Select All" HorizontalAlignment="Left" Margin="215,0,0,10" VerticalAlignment="Bottom" Height="40" Width="128" Click="CheckedListBox_SelectionToggle"/>
+                    <Button Content="Deselect All" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Height="40" Width="128" Click="CheckedListBox_SelectionToggle"/>
+                    <hc:TabControl Style="{StaticResource TabControlInLine}" Margin="210,0,0,60" HorizontalAlignment="Stretch" Name="TabControl_Wildcard">
+                        <hc:TabItem Header="Object Placement" BorderBrush="#B146C2">
+                            <Grid>
+                                <local:CheckedListBox x:Name="CheckedList_Wildcard_SET" MultiColumn="True" Margin="0,0,0,0"/>
+                            </Grid>
+                        </hc:TabItem>
+                        <hc:TabItem Header="Event" BorderBrush="#B146C2">
+                            <Grid>
+                                <local:CheckedListBox x:Name="CheckedList_Wildcard_Event" MultiColumn="True" Margin="0,0,0,0"/>
+                            </Grid>
+                        </hc:TabItem>
+                        <hc:TabItem Header="Scene" BorderBrush="#B146C2">
+                            <Grid>
+                                <local:CheckedListBox x:Name="CheckedList_Wildcard_Scene" MultiColumn="True" Margin="0,0,0,0"/>
+                            </Grid>
+                        </hc:TabItem>
+                        <hc:TabItem Header="Animations" BorderBrush="#B146C2">
+                            <Grid>
+                                <local:CheckedListBox x:Name="CheckedList_Wildcard_Animations" MultiColumn="True" Margin="0,0,0,0"/>
+                            </Grid>
+                        </hc:TabItem>
+                        <hc:TabItem Header="Textures" BorderBrush="#B146C2">
+                            <Grid>
+                                <local:CheckedListBox x:Name="CheckedList_Wildcard_Textures" MultiColumn="True" Margin="0,0,0,0"/>
+                            </Grid>
+                        </hc:TabItem>
+                        <hc:TabItem Header="Audio" BorderBrush="#B146C2">
+                            <Grid>
+                                <local:CheckedListBox x:Name="CheckedList_Wildcard_Audio" MultiColumn="True" Margin="0,0,0,0"/>
+                            </Grid>
+                        </hc:TabItem>
+                        <hc:TabItem Header="Text" BorderBrush="#B146C2">
+                            <Grid>
+                                <local:CheckedListBox x:Name="CheckedList_Wildcard_Text" MultiColumn="True" Margin="0,0,0,0"/>
+                            </Grid>
+                        </hc:TabItem>
+                        <hc:TabItem Header="Miscellaneous" BorderBrush="#B146C2">
+                            <Grid>
+                                <local:CheckedListBox x:Name="CheckedList_Wildcard_Miscellaneous" MultiColumn="True" Margin="0,0,0,0"/>
+                            </Grid>
+                        </hc:TabItem>
+                    </hc:TabControl>
                 </Grid>
             </hc:TabItem>
         </hc:TabControl>

@@ -9,6 +9,9 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace MarathonRandomiser
 {
@@ -42,7 +45,58 @@ namespace MarathonRandomiser
                 listBox.Items.Add(item);
             }
         }
-        
+
+        /// <summary>
+        /// Automatically fills in a custom CheckedListBox element based on the Checkboxes in a tab.
+        /// </summary>
+        /// <param name="element">The element to check through.</param>
+        /// <param name="listBox">The CheckedListBox element to populate.</param>
+        public static void FillWildcardCheckedListBox(DependencyObject element, CheckedListBox listBox)
+        {
+            // Loop through each Checkbox in the Tab Grid.
+            foreach (var checkbox in Descendants<CheckBox>(element))
+            {
+                // Create an item for each.
+                CheckedListBoxItem item = new()
+                {
+                    DisplayName = (string)checkbox.Content,
+                    Tag = checkbox.Name,
+                    Checked = true
+                };
+
+                // If this Checkbox is red (my not recommended colour) don't check it by default.
+                if (checkbox.Foreground == Brushes.Firebrick)
+                    item.Checked = false;
+
+                // Add this parsed entry into the CheckedListBox.
+                listBox.Items.Add(item);
+            }
+        }
+
+        /// <summary>
+        /// Finds matching elements in a WPF Control.
+        /// https://social.technet.microsoft.com/wiki/contents/articles/53438.wpf-get-all-controls-of-a-specific-type-using-c.aspx#Base_extension_method
+        /// </summary>
+        public static IEnumerable<T> Descendants<T>(DependencyObject dependencyItem) where T : DependencyObject
+        {
+            if (dependencyItem != null)
+            {
+                for (var index = 0; index < VisualTreeHelper.GetChildrenCount(dependencyItem); index++)
+                {
+                    var child = VisualTreeHelper.GetChild(dependencyItem, index);
+                    if (child is T dependencyObject)
+                    {
+                        yield return dependencyObject;
+                    }
+
+                    foreach (var childOfChild in Descendants<T>(child))
+                    {
+                        yield return childOfChild;
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// Hacky workaround to fix the custom CheckedListBox element not visually updating if addressed in code.
         /// </summary>
