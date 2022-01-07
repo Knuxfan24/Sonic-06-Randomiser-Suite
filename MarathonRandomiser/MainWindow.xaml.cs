@@ -20,7 +20,7 @@ namespace MarathonRandomiser
     public partial class MainWindow : Window
     {
         // Version Number.
-        public static readonly string GlobalVersionNumber = $"Version 2.1.11";
+        public static readonly string GlobalVersionNumber = $"Version 2.1.12";
 
         #if !DEBUG
         public static readonly string VersionNumber = GlobalVersionNumber;
@@ -95,6 +95,12 @@ namespace MarathonRandomiser
             TextBox_General_ModsDirectory.Text = Properties.Settings.Default.ModsDirectory;
             TextBox_General_GameExecutable.Text = Properties.Settings.Default.GameExecutable;
 
+            if (TextBox_General_Patches.Text != $"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\\Unify\\Patches\\" && !Directory.Exists(Properties.Settings.Default.PatchDirectory))
+                TextBox_General_Patches.Text = $"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\\Unify\\Patches\\";
+            else
+                Debug.WriteLine("Patch Directory was invalid, restored default localappdata path.");
+            TextBox_General_Patches.Text = Properties.Settings.Default.PatchDirectory;
+
             // Generate a seed to use.
             TextBox_General_Seed.Text = Randomiser.Next().ToString();
             
@@ -120,50 +126,9 @@ namespace MarathonRandomiser
             Helpers.FillCheckedListBox(Properties.Resources.TextLanguages, CheckedList_Text_Languages);
             Helpers.FillCheckedListBox(Properties.Resources.TextButtonIcons, CheckedList_Text_Buttons);
 
+            Helpers.FetchPatches(TextBox_General_Patches.Text, CheckedList_Misc_Patches);
+
             RefreshVoicePacks();
-
-            // Get all the patch files in the user's Mod Manager data.
-            string[] patches = Directory.GetFiles($"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\\Unify\\Patches\\", "*.mlua", SearchOption.TopDirectoryOnly);
-
-            // Set up a list of patches that don't fit too well with the Randomiser.
-            List<string> Forbidden = new() {
-                "Disable2xMSAA.mlua",
-                "Disable4xMSAA.mlua",
-                "DisableCharacterDialogue.mlua",
-                "DisableCharacterUpgrades.mlua",
-                "DisableHUD.mlua",
-                "DisableHintRings.mlua",
-                "DisableMusic.mlua",
-                "DisableShadows.mlua",
-                "DisableTalkWindowInStages.mlua",
-                "DoNotCarryElise.mlua",
-                "DoNotEnterMachSpeed.mlua",
-                "DoNotUseTheSnowboard.mlua",
-                "EnableDebugMode.mlua",
-                "OmegaBlurFix.mlua",
-                "TGS2006Menu.mlua"
-            };
-
-            // Loop through and add the patches to the CheckedList_Misc_Patches element
-            foreach (string patch in patches)
-            {
-                // Read the mlua and split it's second line (contains the title) into a seperate array we can use.
-                string[] mlua = File.ReadAllLines(patch);
-                string[] split = mlua[1].Split('\"');
-
-                CheckedListBoxItem item = new()
-                {
-                    DisplayName = split[1],
-                    Tag = Path.GetFileName(patch),
-                    Checked = true
-                };
-
-                // Check if this patch is a forbidden one, if so, uncheck it by default.
-                if (Forbidden.Contains(Path.GetFileName(patch)))
-                    item.Checked = false;
-
-                CheckedList_Misc_Patches.Items.Add(item);
-            }
 
             // Fill out the CheckedListBoxes for the Wildcard.
             Helpers.FillWildcardCheckedListBox(Grid_ObjectPlacement, CheckedList_Wildcard_SET);
@@ -262,6 +227,33 @@ namespace MarathonRandomiser
         private void Seed_Reroll(object sender, RoutedEventArgs e)
         {
             TextBox_General_Seed.Text = Randomiser.Next().ToString();
+        }
+
+        /// <summary>
+        /// Opens a Folder Browser to select our Patches Directory.
+        /// </summary>
+        private void PatchDirectory_Browse(object sender, RoutedEventArgs e)
+        {
+            VistaFolderBrowserDialog FolderBrowser = new()
+            {
+                Description = "Select Patches Directory",
+                UseDescriptionForTitle = true
+            };
+
+            if (FolderBrowser.ShowDialog() == true)
+                TextBox_General_Patches.Text = FolderBrowser.SelectedPath;
+        }
+
+        /// <summary>
+        /// Saves the Patches Directory setting when the value changes.
+        /// </summary>
+        private void PatchDirectory_Update(object sender, TextChangedEventArgs e)
+        {
+            if (Directory.Exists(TextBox_General_Patches.Text))
+                Helpers.FetchPatches(TextBox_General_Patches.Text, CheckedList_Misc_Patches);
+
+            Properties.Settings.Default.PatchDirectory = TextBox_General_Patches.Text;
+            Properties.Settings.Default.Save();
         }
 
         /// <summary>

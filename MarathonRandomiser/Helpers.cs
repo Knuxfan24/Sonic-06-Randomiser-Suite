@@ -47,6 +47,61 @@ namespace MarathonRandomiser
         }
 
         /// <summary>
+        /// Takes the user's specified patches directory and gets the mlua files from it.
+        /// </summary>
+        /// <param name="directory">The provided path.</param>
+        /// <param name="listBox">The CheckedListBox to fill in.</param>
+        public static void FetchPatches(string directory, CheckedListBox listBox)
+        {
+            // Clear out the list.
+            listBox.Items.Clear();
+
+            // Fetch the mlua files.
+            string[] patches = Directory.GetFiles(directory, "*.mlua", SearchOption.TopDirectoryOnly);
+
+            // Set up a list of patches that don't fit too well with the Randomiser.
+            List<string> Forbidden = new()
+            {
+                "Disable2xMSAA.mlua",
+                "Disable4xMSAA.mlua",
+                "DisableCharacterDialogue.mlua",
+                "DisableCharacterUpgrades.mlua",
+                "DisableHUD.mlua",
+                "DisableHintRings.mlua",
+                "DisableMusic.mlua",
+                "DisableShadows.mlua",
+                "DisableTalkWindowInStages.mlua",
+                "DoNotCarryElise.mlua",
+                "DoNotEnterMachSpeed.mlua",
+                "DoNotUseTheSnowboard.mlua",
+                "EnableDebugMode.mlua",
+                "OmegaBlurFix.mlua",
+                "TGS2006Menu.mlua"
+            };
+
+            // Loop through and add the patches to the CheckedList_Misc_Patches element
+            foreach (string patch in patches)
+            {
+                // Read the mlua and split it's second line (contains the title) into a seperate array we can use.
+                string[] mlua = File.ReadAllLines(patch);
+                string[] split = mlua[1].Split('\"');
+
+                CheckedListBoxItem item = new()
+                {
+                    DisplayName = split[1],
+                    Tag = Path.GetFileName(patch),
+                    Checked = true
+                };
+
+                // Check if this patch is a forbidden one, if so, uncheck it by default.
+                if (Forbidden.Contains(Path.GetFileName(patch)))
+                    item.Checked = false;
+
+                listBox.Items.Add(item);
+            }
+        }
+
+        /// <summary>
         /// Automatically fills in a custom CheckedListBox element based on the Checkboxes in a tab.
         /// </summary>
         /// <param name="element">The element to check through.</param>

@@ -42,6 +42,16 @@
                     </Label>
                     <hc:TextBox x:Name="TextBox_General_Seed" Margin="10,185,53,0" TextWrapping="NoWrap" VerticalAlignment="Top" SelectionBrush="#FFB146C2"/>
                     <Button HorizontalAlignment="Right" Margin="0,185,10,0" VerticalAlignment="Top" hc:IconElement.Geometry="{StaticResource AskGeometry}" Grid.RowSpan="2" Width="38" Click="Seed_Reroll"/>
+
+                    <!--Patch Directory-->
+                    <Label Content="Patch Directory" HorizontalAlignment="Left" Margin="10,220,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}"/>
+                    <Label Content="Directory containing Mod Manager mlua patch files (used for the Patch Randomiser in Miscellaneous)." HorizontalAlignment="Right" Margin="0,220,10,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" FontStyle="Italic">
+                        <Label.Foreground>
+                            <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlDarkColorKey}}"/>
+                        </Label.Foreground>
+                    </Label>
+                    <hc:TextBox x:Name="TextBox_General_Patches" Margin="10,255,53,0" TextWrapping="NoWrap" VerticalAlignment="Top" SelectionBrush="#FFB146C2" TextChanged="PatchDirectory_Update"/>
+                    <Button HorizontalAlignment="Right" Margin="0,255,10,0" VerticalAlignment="Top" hc:IconElement.Geometry="{StaticResource DragHorizontalGeometry}" Grid.RowSpan="2" Width="38" Click="PatchDirectory_Browse"/>
                 </Grid>
             </hc:TabItem>
 
