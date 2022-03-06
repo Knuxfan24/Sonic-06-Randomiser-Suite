@@ -379,6 +379,10 @@ namespace MarathonRandomiser
                     Label_SET_DrawDistance_Max.IsEnabled = NewCheckedStatus;
                     NumericUpDown_SET_DrawDistance_Max.IsEnabled = NewCheckedStatus;
                     break;
+                case "CheckBox_SET_Jumpboards":
+                    Label_SET_Jumpboards_Chance.IsEnabled = NewCheckedStatus;
+                    NumericUpDown_SET_Jumpboards_Chance.IsEnabled = NewCheckedStatus;
+                    break;
 
                 case "CheckBox_Event_Voices":
                     CheckBox_Event_Voices_Japanese.IsEnabled = NewCheckedStatus;
@@ -1284,12 +1288,14 @@ namespace MarathonRandomiser
             bool? setDrawDistance = CheckBox_SET_DrawDistance.IsChecked;
             bool? setCosmetic = CheckBox_SET_Cosmetic.IsChecked;
             bool? setParticles = CheckBox_SET_Particles.IsChecked;
+            bool? setJumpboards = CheckBox_SET_Jumpboards.IsChecked;
             int setMinDrawDistance = (int)NumericUpDown_SET_DrawDistance_Min.Value;
             int setMaxDrawDistance = (int)NumericUpDown_SET_DrawDistance_Max.Value;
+            int setJumpboardsChance = (int)NumericUpDown_SET_Jumpboards_Chance.Value;
 
             // Check if we actually need to do SET stuff.
             if (setEnemies == true || setBehaviour == true || setCharacters == true || setItemCapsules == true || setCommonProps == true || setPathProps == true || setHints == true || setDoors == true||
-                setDrawDistance == true || setCosmetic == true || setParticles == true)
+                setDrawDistance == true || setCosmetic == true || setParticles == true || setJumpboards == true)
             {
                 foreach (string archive in archives)
                 {
@@ -1305,9 +1311,9 @@ namespace MarathonRandomiser
                         {
                             UpdateLogger($"Randomising: '{setFile}'.");
                             await Task.Run(() => ObjectPlacementRandomiser.Process(setFile, setEnemies, setEnemiesNoBosses, setBehaviour, setBehaviourNoEnforce, setCharacters, setItemCapsules,
-                                                                                   setCommonProps, setPathProps, setHints, setDoors, setDrawDistance, setCosmetic, setParticles, SetEnemies,
+                                                                                   setCommonProps, setPathProps, setHints, setDoors, setDrawDistance, setCosmetic, setParticles, setJumpboards, SetEnemies,
                                                                                    SetCharacters, SetItemCapsules, SetCommonProps, SetPathProps, SetHints, SetDoors, SetParticleBanks, setMinDrawDistance,
-                                                                                   setMaxDrawDistance));
+                                                                                   setMaxDrawDistance, setJumpboardsChance));
                         }
 
                         // Patch enemy luas if they need patching.
@@ -1654,7 +1660,7 @@ namespace MarathonRandomiser
                     {
                         for (int i = 0; i < archivePaths.Count; i++)
                         {
-                            UpdateLogger($"Getting textures in '{Path.GetFileName(archivePaths[i])}.arc'.");
+                            UpdateLogger($"Getting textures in '{Path.GetFileName(archivePaths[i])}'.");
                             Textures = await Task.Run(() => TextureRandomiser.FetchTextures(Textures, archivePaths[i]));
                         }
                     }
@@ -1663,7 +1669,7 @@ namespace MarathonRandomiser
                     List<int> usedNumbers = new();
                     for (int i = 0; i < archivePaths.Count; i++)
                     {
-                        UpdateLogger($"Randomising textures in '{Path.GetFileName(archivePaths[i])}.arc'.");
+                        UpdateLogger($"Randomising textures in '{Path.GetFileName(archivePaths[i])}'.");
                         usedNumbers = await Task.Run(() => TextureRandomiser.ShuffleTextures(usedNumbers, archivePaths[i], Textures, texturesAllowDupes));
                     }
                 }
@@ -1675,7 +1681,7 @@ namespace MarathonRandomiser
                     {
                         if (TexturesArchives.Contains(Path.GetFileName(archive)))
                         {
-                            UpdateLogger($"Randomising textures in '{Path.GetFileName(archive)}.arc'.");
+                            UpdateLogger($"Randomising textures in '{Path.GetFileName(archive)}'.");
                             string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
                             await Task.Run(() => TextureRandomiser.PerArchive(unpackedArchive, CustomTextureFiles, texturesAllowDupes, texturesOnlyCustom));
                         }

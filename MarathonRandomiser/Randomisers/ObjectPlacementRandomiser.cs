@@ -31,8 +31,8 @@ namespace MarathonRandomiser
         /// <param name="maxDrawDistance">The maximum allowed draw distance.</param>
         /// <returns></returns>
         public static async Task Process(string setFile, bool? enemies, bool? enemiesNoBosses, bool? behaviour, bool? behaviourNoEnforce, bool? characters, bool? itemCapsules, bool? commonProps,
-                                      bool? pathProps, bool? hints, bool? doors, bool? drawDistance, bool? cosmetic, bool? particle, List<string> SetEnemies, List<string> SetCharacters, List<string> SetItemCapsules,
-                                      List<string> SetCommonProps, List<string> SetPathProps, List<string> SetHints, List<string> SetDoors, List<string> SetParticleBanks, int minDrawDistance, int maxDrawDistance)
+                                      bool? pathProps, bool? hints, bool? doors, bool? drawDistance, bool? cosmetic, bool? particle, bool? jumpboards, List<string> SetEnemies, List<string> SetCharacters, List<string> SetItemCapsules,
+                                      List<string> SetCommonProps, List<string> SetPathProps, List<string> SetHints, List<string> SetDoors, List<string> SetParticleBanks, int minDrawDistance, int maxDrawDistance, int jumpboardChance)
         {
             // Load this set file.
             using ObjectPlacement set = new(setFile);
@@ -111,6 +111,12 @@ namespace MarathonRandomiser
                         if (particle == true)
                             await Task.Run(() => ParticleRandomiser(setObject, SetParticleBanks));
                         break;
+
+                    case "jumppanel":
+                        if (jumpboards == true)
+                            await Task.Run(() => JumpboardSwitcher(setObject, jumpboardChance));
+                        break;
+
                 }
 
             }
@@ -544,6 +550,39 @@ namespace MarathonRandomiser
                 case "vehicle_hover": setObject.Parameters[1].Data = vehicle_hoverParticles[MainWindow.Randomiser.Next(vehicle_hoverParticles.Count)]; break;
                 case "vehicle_jeep": setObject.Parameters[1].Data = vehicle_jeepParticles[MainWindow.Randomiser.Next(vehicle_jeepParticles.Count)]; break;
                 case "vehicle_jetgrider": setObject.Parameters[1].Data = vehicle_jetgriderParticles[MainWindow.Randomiser.Next(vehicle_jetgriderParticles.Count)]; break;
+            }
+        }
+
+        /// <summary>
+        /// Switches out Jump Panels with the unused (and infinitely less useful) Jump Boards.
+        /// </summary>
+        /// <param name="setObject">The object we're editing.</param>
+        /// <param name="jumpboardChance">The chance for a Jump Panel to be switched.</param>
+        /// <returns></returns>
+        static async Task JumpboardSwitcher(SetObject setObject, int jumpboardChance)
+        {
+            if (MainWindow.Randomiser.Next(0, 101) <= jumpboardChance)
+            {
+                // Change the Jump Panel's object type.
+                setObject.Type = "common_jumpboard";
+
+                // Remove the Jump Panel's target parameter.
+                setObject.Parameters.RemoveAt(3);
+
+                // Add the speed_max and speed_mid values.
+                SetParameter param = new()
+                {
+                    Data = 1000f,
+                    Type = ObjectDataType.Single
+                };
+                setObject.Parameters.Add(param);
+
+                param = new()
+                {
+                    Data = 250f,
+                    Type = ObjectDataType.Single
+                };
+                setObject.Parameters.Add(param);
             }
         }
 
