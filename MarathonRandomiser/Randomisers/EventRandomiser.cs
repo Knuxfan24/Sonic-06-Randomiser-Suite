@@ -108,7 +108,6 @@ namespace MarathonRandomiser
         /// <param name="archivePath">The path to the extracted cache.arc.</param>
         /// <param name="ModDirectory">The path to the randomisation's mod directory.</param>
         /// <param name="GameExecutable">The path to the game executable (so we know what platform we're working on).</param>
-        /// <returns></returns>
         public static async Task EventShuffler(string archivePath, string ModDirectory, string GameExecutable)
         {
             // Load eventplaybook.epb.
@@ -233,7 +232,6 @@ namespace MarathonRandomiser
         /// <param name="includeGameplay">Whether or not we include voice lines used in gameplay in the shuffle.</param>
         /// <param name="hasVox">Whether we have an voice packs to take into account.</param>
         /// <param name="ModDirectory">The path to the randomisation's mod directory.</param>
-        /// <returns></returns>
         public static async Task ShuffleVoiceLines(string GameExecutable, bool? includeJapanese, bool? includeGameplay, bool hasVox, string ModDirectory)
         {
             // Figure out if we're working with a 360 (default) or PS3 version of the game).

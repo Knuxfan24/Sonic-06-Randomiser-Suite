@@ -238,6 +238,12 @@
                         <CheckBox x:Name="CheckBox_Anim_Events" Content="Shuffle Event Animations" IsChecked="False"/>
                         <CheckBox x:Name="CheckBox_Anim_Events_Face" Content="Shuffle Event Facial Animations" IsChecked="False"/>
                         <CheckBox x:Name="CheckBox_Anim_Cameras" Content="Shuffle Event Cameras" IsChecked="False"/>
+                        <CheckBox x:Name="CheckBox_Anim_Framerate" Content="Randomise Animation Framerate" IsChecked="False" Click="Dependency_CheckBox_Changed"/>
+                        <Label x:Name="Label_Anim_Framerate_Min" Content="Minimum:" Background="{x:Null}" BorderBrush="{x:Null}" IsEnabled="False"/>
+                        <hc:NumericUpDown x:Name="NumericUpDown_Anim_Framerate_Min" SelectionBrush="#FFB146C2" IsEnabled="False" Minimum="1" Value="15"/>
+                        <Label x:Name="Label_Anim_Framerate_Max" Content="Maximum:" Background="{x:Null}" BorderBrush="{x:Null}" IsEnabled="False"/>
+                        <hc:NumericUpDown x:Name="NumericUpDown_Anim_Framerate_Max" Value="300" SelectionBrush="#FFB146C2" IsEnabled="False" Minimum="1"/>
+                        <CheckBox x:Name="CheckBox_Anim_Framerate_NoLights" Content="Exclude Lights" IsChecked="True" IsEnabled="False" Click="Dependency_CheckBox_Changed"/>
                     </StackPanel>
                 </Grid>
             </hc:TabItem>

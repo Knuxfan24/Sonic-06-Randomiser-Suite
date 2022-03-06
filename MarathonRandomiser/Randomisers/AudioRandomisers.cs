@@ -253,7 +253,7 @@ namespace MarathonRandomiser
         /// </summary>
         /// <param name="luaFile">The lua to process.</param>
         /// <param name="MiscMusic">The list of valid songs.</param>
-        /// <returns></returns>
+        /// <param name="Seed">The current Randomisation Seed (used for the Accordian Easter Egg).</param>
         public static async Task MusicRandomiser(string luaFile, List<string> MiscMusic, string Seed)
         {
             // Decompile this lua binary.

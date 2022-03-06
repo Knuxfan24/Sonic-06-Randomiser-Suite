@@ -3,7 +3,9 @@ global using System.Collections;
 global using System.Collections.Generic;
 global using System.IO;
 global using System.Threading.Tasks;
-
+using Marathon.Formats.Archive;
+using Marathon.Helpers;
+using Marathon.IO;
 using Ookii.Dialogs.Wpf;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -408,6 +410,13 @@ namespace MarathonRandomiser
                 case "CheckBox_Anim_Gameplay":
                     CheckBox_Anim_GameplayUseAll.IsEnabled = NewCheckedStatus;
                     CheckBox_Anim_GameplayUseEvents.IsEnabled = NewCheckedStatus;
+                    break;
+                case "CheckBox_Anim_Framerate":
+                    Label_Anim_Framerate_Min.IsEnabled = NewCheckedStatus;
+                    NumericUpDown_Anim_Framerate_Min.IsEnabled = NewCheckedStatus;
+                    Label_Anim_Framerate_Max.IsEnabled = NewCheckedStatus;
+                    NumericUpDown_Anim_Framerate_Max.IsEnabled = NewCheckedStatus;
+                    CheckBox_Anim_Framerate_NoLights.IsEnabled = NewCheckedStatus;
                     break;
 
                 case "CheckBox_Textures_Textures":
@@ -1545,6 +1554,10 @@ namespace MarathonRandomiser
             bool? animEvents = CheckBox_Anim_Events.IsChecked;
             bool? animEventsFace = CheckBox_Anim_Events_Face.IsChecked;
             bool? animEventsCamera = CheckBox_Anim_Cameras.IsChecked;
+            bool? animFramerate = CheckBox_Anim_Framerate.IsChecked;
+            int animMinFramerate = (int)NumericUpDown_Anim_Framerate_Min.Value;
+            int animMaxFramerate = (int)NumericUpDown_Anim_Framerate_Max.Value;
+            bool? animFramerateNoLights = CheckBox_Anim_Framerate_NoLights.IsChecked;
 
             // Gameplay.
             if (animGameplay == true)
@@ -1616,6 +1629,34 @@ namespace MarathonRandomiser
                         {
                             UpdateLogger($"Shuffling event cameras.");
                             await Task.Run(() => AnimationRandomiser.EventAnimationRandomiser(unpackedArchive, "", "", true));
+                        }
+                    }
+                }
+            }
+
+            // Framerate
+            if (animFramerate == true)
+            {
+                foreach (string archive in archives)
+                {
+                    U8Archive arc = new(archive, ReadMode.IndexOnly);
+                    IEnumerable<Marathon.IO.Interfaces.IArchiveFile>? arcFiles = arc.Root.GetFiles();
+                    foreach (var file in arcFiles)
+                    {
+                        if (Path.GetExtension(file.Name) == ".xnm" || Path.GetExtension(file.Name) == ".xnv" || Path.GetExtension(file.Name) == ".xnd" || Path.GetExtension(file.Name) == ".xni" || Path.GetExtension(file.Name) == ".xnf")
+                        {
+                            string archivePath = await Task.Run(() => Helpers.ArchiveHandler(archive));
+                            string[] motionFiles = Directory.GetFiles(archivePath, "*.xnm", SearchOption.AllDirectories);
+                            motionFiles = motionFiles.Concat(Directory.GetFiles(archivePath, "*.xnv", SearchOption.AllDirectories)).ToArray();
+                            motionFiles = motionFiles.Concat(Directory.GetFiles(archivePath, "*.xnd", SearchOption.AllDirectories)).ToArray();
+                            if (animFramerateNoLights == false) { motionFiles = motionFiles.Concat(Directory.GetFiles(archivePath, "*.xni", SearchOption.AllDirectories)).ToArray(); }
+                            motionFiles = motionFiles.Concat(Directory.GetFiles(archivePath, "*.xnf", SearchOption.AllDirectories)).ToArray();
+                            foreach (string motionFile in motionFiles)
+                            {
+                                UpdateLogger($"Randomising framerate in '{motionFile}'.");
+                                await Task.Run(() => AnimationRandomiser.AnimationFramerateRandomiser(motionFile, animMinFramerate, animMaxFramerate));
+                            }
+                            break;
                         }
                     }
                 }

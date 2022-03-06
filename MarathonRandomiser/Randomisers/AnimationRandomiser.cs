@@ -1,4 +1,5 @@
 ﻿using Marathon.Formats.Archive;
+using Marathon.Formats.Mesh.Ninja;
 using Marathon.Formats.Package;
 using Marathon.Helpers;
 
@@ -167,7 +168,6 @@ namespace MarathonRandomiser
         /// <param name="character">The character to shuffle the animations of.</param>
         /// <param name="type">The type of animation to shuffle (Root or evf_head).</param>
         /// <param name="camera">Whether or not we're randomising cameras instead.</param>
-        /// <returns></returns>
         public static async Task EventAnimationRandomiser(string archivePath, string character, string type, bool camera = false)
         {
             // Set up a list of numbers.
@@ -208,6 +208,25 @@ namespace MarathonRandomiser
                 // Delete the .rnd version.
                 File.Delete(XNMFiles[i]);
             }
+        }
+    
+
+        /// <summary>
+        /// Randomises the Framerate a Ninja Motion runs at.
+        /// </summary>
+        /// <param name="motionFile">The Ninja Motion file to edit.</param>
+        /// <param name="minFPS">How low the FPS value can be.</param>
+        /// <param name="maxFPS">How high the FPS value can be.</param>
+        public static async Task AnimationFramerateRandomiser(string motionFile, int minFPS, int maxFPS)
+        {
+            // Load the Ninja Motion File.
+            NinjaNext motion = new(motionFile);
+
+            // Generate a new framerate value between our two numbers.
+            motion.Data.Motion.Framerate = MainWindow.Randomiser.Next(minFPS, maxFPS);
+
+            // Resave the Ninja Motion File.
+            motion.Save();
         }
     }
 }

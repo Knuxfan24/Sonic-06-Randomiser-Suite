@@ -139,7 +139,6 @@ namespace MarathonRandomiser
         /// <param name="ModDirectory">The path to the randomisation's mod directory.</param>
         /// <param name="MiscPatches">The list of valid patch files.</param>
         /// <param name="Weight">The likelyhood for a patch to be enabled.</param>
-        /// <returns></returns>
         public static async Task PatchRandomiser(string ModDirectory, List<string> MiscPatches, int Weight)
         {
             // Create the template list of patches to add to the mod configuration ini.
@@ -174,7 +173,6 @@ namespace MarathonRandomiser
         /// </summary>
         /// <param name="archivePath">The path to the extracted scripts.arc.</param>
         /// <param name="GameExecutable">The filepath of the game executable (used to determine the path).</param>
-        /// <returns></returns>
         public static async Task UnlockEpisodes(string archivePath, string GameExecutable)
         {
             // Determine if we need a xenon folder or a ps3 folder.

@@ -333,7 +333,6 @@ namespace MarathonRandomiser
         /// Downloads the specified voice pack.
         /// </summary>
         /// <param name="pack">The entry in the dictonary containing the url and file name.</param>
-        /// <returns></returns>
         public static async Task DownloadVox(KeyValuePair<string, string> pack)
         {
             using WebClient? client = new();

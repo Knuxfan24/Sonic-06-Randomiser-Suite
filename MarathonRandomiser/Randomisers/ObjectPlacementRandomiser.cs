@@ -20,6 +20,8 @@ namespace MarathonRandomiser
         /// <param name="doors">Whether or not door types should be randomised.</param>
         /// <param name="drawDistance">Whether or not object draw distances should be randomised.</param>
         /// <param name="cosmetic">Whether or not various small cosmetic elements should be randomised.</param>
+        /// <param name="particle">Whether or not particles will be randomised.</param>
+        /// <param name="jumpboards">Whether or not Jump Panels have a chance to be switched for a Jump Board.</param>
         /// <param name="SetEnemies">The list of valid enemies.</param>
         /// <param name="SetCharacters">The list of valid characters.</param>
         /// <param name="SetItemCapsules">The list of valid item types.</param>
@@ -27,9 +29,10 @@ namespace MarathonRandomiser
         /// <param name="SetPathProps">The list of valid PathObj.bin based props.</param>
         /// <param name="SetHints">The list of valid hint voice lines.</param>
         /// <param name="SetDoors">The list of valid door types.</param>
+        /// <param name="SetParticleBanks">The list of valid particle banks to draw from.</param>
         /// <param name="minDrawDistance">The minimum allowed draw distance.</param>
         /// <param name="maxDrawDistance">The maximum allowed draw distance.</param>
-        /// <returns></returns>
+        /// <param name="jumpboardChance">The chance that a Jump Panel will be switched for a Jump Board.</param>
         public static async Task Process(string setFile, bool? enemies, bool? enemiesNoBosses, bool? behaviour, bool? behaviourNoEnforce, bool? characters, bool? itemCapsules, bool? commonProps,
                                       bool? pathProps, bool? hints, bool? doors, bool? drawDistance, bool? cosmetic, bool? particle, bool? jumpboards, List<string> SetEnemies, List<string> SetCharacters, List<string> SetItemCapsules,
                                       List<string> SetCommonProps, List<string> SetPathProps, List<string> SetHints, List<string> SetDoors, List<string> SetParticleBanks, int minDrawDistance, int maxDrawDistance, int jumpboardChance)
@@ -457,7 +460,6 @@ namespace MarathonRandomiser
         /// </summary>
         /// <param name="setObject">The object we're editing.</param>
         /// <param name="SetParticleBanks">The list of valid particle banks.</param>
-        /// <returns></returns>
         static async Task ParticleRandomiser(SetObject setObject, List<string> SetParticleBanks)
         {
             // Set up list of particles by bank.
@@ -558,7 +560,6 @@ namespace MarathonRandomiser
         /// </summary>
         /// <param name="setObject">The object we're editing.</param>
         /// <param name="jumpboardChance">The chance for a Jump Panel to be switched.</param>
-        /// <returns></returns>
         static async Task JumpboardSwitcher(SetObject setObject, int jumpboardChance)
         {
             if (MainWindow.Randomiser.Next(0, 101) <= jumpboardChance)
@@ -642,7 +643,6 @@ namespace MarathonRandomiser
         /// <param name="SetCharacters">The list of valid characters.</param>
         /// <param name="enemies">Whether enemy randomisation is on.</param>
         /// <param name="enemiesNoBosses">Whether we're randomising bosses or not.</param>
-        /// <returns></returns>
         public static async Task LuaPlayerStartRandomiser(string luaFile, bool? characters, List<string> SetCharacters, bool? enemies, bool? enemiesNoBosses)
         {
             // Make a list of the three boss player luas to pick from.

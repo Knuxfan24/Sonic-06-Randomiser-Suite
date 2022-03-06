@@ -16,7 +16,6 @@
         /// <param name="fogDensity">Whether or not to randomise how thick the fog is.</param>
         /// <param name="env">Whether or not to randomise the cubemap.</param>
         /// <param name="SceneEnvMaps">The list of valid cubemap file paths.</param>
-        /// <returns></returns>
         public static async Task Process(string sceneLua, bool? ambient, bool? main, bool? sub, double minLight, bool? direction, bool? enforceDirection, bool? fogColour, bool? fogDensity, bool? env, List<string> SceneEnvMaps)
         {
             // Decompile this lua file.
@@ -165,7 +164,6 @@
         /// <param name="lua">The string array we're using.</param>
         /// <param name="startPos">Where in the string array we should be.</param>
         /// <param name="enforce">Whether the direction should be enforced.</param>
-        /// <returns></returns>
         static async Task Direction(string[] lua, int startPos, bool? enforce)
         {
             // Split the XYZ values into string arrays.

@@ -136,7 +136,6 @@ namespace MarathonRandomiser
         /// </summary>
         /// <param name="mstFile">The path to the MST to process.</param>
         /// <param name="TextButtons">The list of valid button icons to pick from.</param>
-        /// <returns></returns>
         public static async Task RandomiseButtonIcons(string mstFile, List<string> TextButtons)
         {
             // Load the MST.
