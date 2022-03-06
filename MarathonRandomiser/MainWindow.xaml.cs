@@ -1643,12 +1643,11 @@ namespace MarathonRandomiser
                     IEnumerable<Marathon.IO.Interfaces.IArchiveFile>? arcFiles = arc.Root.GetFiles();
                     foreach (var file in arcFiles)
                     {
-                        if (Path.GetExtension(file.Name) == ".xnm" || Path.GetExtension(file.Name) == ".xnv" || Path.GetExtension(file.Name) == ".xnd" || Path.GetExtension(file.Name) == ".xni" || Path.GetExtension(file.Name) == ".xnf")
+                        if (Path.GetExtension(file.Name) == ".xnm" || Path.GetExtension(file.Name) == ".xnv" || Path.GetExtension(file.Name) == ".xni" || Path.GetExtension(file.Name) == ".xnf")
                         {
                             string archivePath = await Task.Run(() => Helpers.ArchiveHandler(archive));
                             string[] motionFiles = Directory.GetFiles(archivePath, "*.xnm", SearchOption.AllDirectories);
                             motionFiles = motionFiles.Concat(Directory.GetFiles(archivePath, "*.xnv", SearchOption.AllDirectories)).ToArray();
-                            motionFiles = motionFiles.Concat(Directory.GetFiles(archivePath, "*.xnd", SearchOption.AllDirectories)).ToArray();
                             if (animFramerateNoLights == false) { motionFiles = motionFiles.Concat(Directory.GetFiles(archivePath, "*.xni", SearchOption.AllDirectories)).ToArray(); }
                             motionFiles = motionFiles.Concat(Directory.GetFiles(archivePath, "*.xnf", SearchOption.AllDirectories)).ToArray();
                             foreach (string motionFile in motionFiles)
