@@ -86,6 +86,7 @@
                         <CheckBox x:Name="CheckBox_SET_Jumpboards" Content="Use Unused Jump Boards" Foreground="Firebrick" Click="Dependency_CheckBox_Changed"/>
                         <Label x:Name="Label_SET_Jumpboards_Chance" Content="Chance:" Background="{x:Null}" BorderBrush="{x:Null}" IsEnabled="False"/>
                         <hc:NumericUpDown x:Name="NumericUpDown_SET_Jumpboards_Chance" Value="50" SelectionBrush="#FFB146C2" IsEnabled="False" Minimum="0"/>
+                        <CheckBox x:Name="CheckBox_SET_PlacementShuffle" Content="Shuffle Object Positions" Foreground="Firebrick" Click="Dependency_CheckBox_Changed"/>
                     </StackPanel>
 
                     <!--Object Placement Configuration Toggles-->

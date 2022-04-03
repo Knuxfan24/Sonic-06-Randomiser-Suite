@@ -1301,10 +1301,11 @@ namespace MarathonRandomiser
             int setMinDrawDistance = (int)NumericUpDown_SET_DrawDistance_Min.Value;
             int setMaxDrawDistance = (int)NumericUpDown_SET_DrawDistance_Max.Value;
             int setJumpboardsChance = (int)NumericUpDown_SET_Jumpboards_Chance.Value;
+            bool? setTransform = CheckBox_SET_PlacementShuffle.IsChecked;
 
             // Check if we actually need to do SET stuff.
             if (setEnemies == true || setBehaviour == true || setCharacters == true || setItemCapsules == true || setCommonProps == true || setPathProps == true || setHints == true || setDoors == true||
-                setDrawDistance == true || setCosmetic == true || setParticles == true || setJumpboards == true)
+                setDrawDistance == true || setCosmetic == true || setParticles == true || setJumpboards == true || setTransform == true)
             {
                 foreach (string archive in archives)
                 {
@@ -1322,7 +1323,7 @@ namespace MarathonRandomiser
                             await Task.Run(() => ObjectPlacementRandomiser.Process(setFile, setEnemies, setEnemiesNoBosses, setBehaviour, setBehaviourNoEnforce, setCharacters, setItemCapsules,
                                                                                    setCommonProps, setPathProps, setHints, setDoors, setDrawDistance, setCosmetic, setParticles, setJumpboards, SetEnemies,
                                                                                    SetCharacters, SetItemCapsules, SetCommonProps, SetPathProps, SetHints, SetDoors, SetParticleBanks, setMinDrawDistance,
-                                                                                   setMaxDrawDistance, setJumpboardsChance));
+                                                                                   setMaxDrawDistance, setJumpboardsChance, setTransform));
                         }
 
                         // Patch enemy luas if they need patching.

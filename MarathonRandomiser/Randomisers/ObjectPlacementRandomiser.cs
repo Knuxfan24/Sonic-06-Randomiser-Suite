@@ -1,4 +1,5 @@
 ﻿using Marathon.Formats.Placement;
+using System.Numerics;
 
 namespace MarathonRandomiser
 {
@@ -35,14 +36,33 @@ namespace MarathonRandomiser
         /// <param name="jumpboardChance">The chance that a Jump Panel will be switched for a Jump Board.</param>
         public static async Task Process(string setFile, bool? enemies, bool? enemiesNoBosses, bool? behaviour, bool? behaviourNoEnforce, bool? characters, bool? itemCapsules, bool? commonProps,
                                       bool? pathProps, bool? hints, bool? doors, bool? drawDistance, bool? cosmetic, bool? particle, bool? jumpboards, List<string> SetEnemies, List<string> SetCharacters, List<string> SetItemCapsules,
-                                      List<string> SetCommonProps, List<string> SetPathProps, List<string> SetHints, List<string> SetDoors, List<string> SetParticleBanks, int minDrawDistance, int maxDrawDistance, int jumpboardChance)
+                                      List<string> SetCommonProps, List<string> SetPathProps, List<string> SetHints, List<string> SetDoors, List<string> SetParticleBanks, int minDrawDistance, int maxDrawDistance, int jumpboardChance,
+                                      bool? shuffleTransform)
         {
+            List<Vector3> Positions = new();
+            List<Quaternion> Rotations = new();
+            List<string> blacklist = new()
+            {
+                "cameraeventbox",
+                "cameraeventcylinder",
+                "cameraeventsphere",
+                "eventbox",
+                "eventcylinder",
+                "eventsphere"
+            };
+
             // Load this set file.
             using ObjectPlacement set = new(setFile);
 
             // Loop through all the objects in this set file.
             foreach (SetObject setObject in set.Data.Objects)
             {
+                if (!blacklist.Contains(setObject.Type))
+                {
+                    Positions.Add(new(setObject.Position.X, setObject.Position.Y, setObject.Position.Z));
+                    Rotations.Add(new(setObject.Rotation.X, setObject.Rotation.Y, setObject.Rotation.Z, setObject.Rotation.W));
+                }
+
                 // If we're randomising the object's draw distance, then pick a number for it between the specified values
                 if (drawDistance == true)
                     setObject.DrawDistance = MainWindow.Randomiser.Next(minDrawDistance, maxDrawDistance + 1);
@@ -122,6 +142,37 @@ namespace MarathonRandomiser
 
                 }
 
+            }
+
+            // If we're using this cursed option, then shuffle positions and rotations around.
+            if (shuffleTransform == true)
+            {
+                // Set up a list of numbers.
+                List<int> usedNumbers = new();
+
+                // Loop through all the objects in this set file again.
+                foreach (SetObject setObject in set.Data.Objects)
+                {
+                    if (!blacklist.Contains(setObject.Type))
+                    {
+                        // Pick a number to use.
+                        int index = MainWindow.Randomiser.Next(Positions.Count);
+
+                        // If the selected number is already used, pick another until it isn't.
+                        if (usedNumbers.Contains(index))
+                        {
+                            do { index = MainWindow.Randomiser.Next(Positions.Count); }
+                            while (usedNumbers.Contains(index));
+                        }
+
+                        // Set the rotation and position to the selected ones.
+                        setObject.Position = Positions[index];
+                        setObject.Rotation = Rotations[index];
+
+                        // Mark this index as already being used.
+                        usedNumbers.Add(index);
+                    }
+                }
             }
 
             // Save the updated set file.
@@ -696,7 +747,7 @@ namespace MarathonRandomiser
         /// Patches the stage lua binaries to load all the particle containers at once.
         /// </summary>
         /// <param name="luaFile">The lua file we're processing.</param>
-        public static async Task ParticlePatch (string luaFile)
+        public static async Task ParticlePatch(string luaFile)
         {
             // Decompile this lua file.
             await Task.Run(() => Helpers.LuaDecompile(luaFile));
