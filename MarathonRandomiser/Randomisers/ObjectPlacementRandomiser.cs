@@ -37,19 +37,10 @@ namespace MarathonRandomiser
         public static async Task Process(string setFile, bool? enemies, bool? enemiesNoBosses, bool? behaviour, bool? behaviourNoEnforce, bool? characters, bool? itemCapsules, bool? commonProps,
                                       bool? pathProps, bool? hints, bool? doors, bool? drawDistance, bool? cosmetic, bool? particle, bool? jumpboards, List<string> SetEnemies, List<string> SetCharacters, List<string> SetItemCapsules,
                                       List<string> SetCommonProps, List<string> SetPathProps, List<string> SetHints, List<string> SetDoors, List<string> SetParticleBanks, int minDrawDistance, int maxDrawDistance, int jumpboardChance,
-                                      bool? shuffleTransform)
+                                      bool? shuffleTransform, List<string> shuffleBlacklist)
         {
             List<Vector3> Positions = new();
             List<Quaternion> Rotations = new();
-            List<string> blacklist = new()
-            {
-                "cameraeventbox",
-                "cameraeventcylinder",
-                "cameraeventsphere",
-                "eventbox",
-                "eventcylinder",
-                "eventsphere"
-            };
 
             // Load this set file.
             using ObjectPlacement set = new(setFile);
@@ -57,7 +48,7 @@ namespace MarathonRandomiser
             // Loop through all the objects in this set file.
             foreach (SetObject setObject in set.Data.Objects)
             {
-                if (!blacklist.Contains(setObject.Type))
+                if (!shuffleBlacklist.Contains(setObject.Type))
                 {
                     Positions.Add(new(setObject.Position.X, setObject.Position.Y, setObject.Position.Z));
                     Rotations.Add(new(setObject.Rotation.X, setObject.Rotation.Y, setObject.Rotation.Z, setObject.Rotation.W));
@@ -153,7 +144,7 @@ namespace MarathonRandomiser
                 // Loop through all the objects in this set file again.
                 foreach (SetObject setObject in set.Data.Objects)
                 {
-                    if (!blacklist.Contains(setObject.Type))
+                    if (!shuffleBlacklist.Contains(setObject.Type))
                     {
                         // Pick a number to use.
                         int index = MainWindow.Randomiser.Next(Positions.Count);

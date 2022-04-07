@@ -133,6 +133,11 @@
                                 <local:CheckedListBox x:Name="CheckedList_SET_Particles" MultiColumn="True" Margin="0,0,0,0"/>
                             </Grid>
                         </hc:TabItem>
+                        <hc:TabItem Header="Shuffle Blacklist" BorderBrush="#B146C2">
+                            <Grid>
+                                <local:CheckedListBox x:Name="CheckedList_SET_ObjectShuffle" MultiColumn="True" Margin="0,0,0,0"/>
+                            </Grid>
+                        </hc:TabItem>
                     </hc:TabControl>
                 </Grid>
             </hc:TabItem>

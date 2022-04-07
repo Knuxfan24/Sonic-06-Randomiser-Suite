@@ -307,6 +307,30 @@ namespace MarathonRandomiser.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ambience,ambience,false
+        ///ambience_collision,ambience_collision,false
+        ///amigo_collision,amigo_collision,false
+        ///aqa_balancer,aqa_balancer,false
+        ///aqa_door,aqa_door,false
+        ///aqa_glass_blue,aqa_glass_blue,false
+        ///aqa_glass_red,aqa_glass_red,false
+        ///aqa_lamp,aqa_lamp,false
+        ///aqa_launcher,aqa_launcher,false
+        ///aqa_magnet,aqa_magnet,false
+        ///aqa_mercury_small,aqa_mercury_small,false
+        ///aqa_pond,aqa_pond,false
+        ///aqa_wyvern_fall,aqa_wyvern_fall,false
+        ///aqa_wyvern_fall_dust,aqa_wyvern_fall_dust,false
+        ///bell,bell,false
+        ///bldgexplode,b [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string SETObjectTypes {
+            get {
+                return ResourceManager.GetString("SETObjectTypes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Aquatic Base,map_aqa,true
         ///Common,map_common,true
         ///Crisis City Arena,map_iblis01,true

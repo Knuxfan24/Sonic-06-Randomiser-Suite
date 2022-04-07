@@ -115,6 +115,7 @@ namespace MarathonRandomiser
             Helpers.FillCheckedListBox(Properties.Resources.SETHints, CheckedList_SET_Hints);
             Helpers.FillCheckedListBox(Properties.Resources.SETDoors, CheckedList_SET_Doors);
             Helpers.FillCheckedListBox(Properties.Resources.SETParticles, CheckedList_SET_Particles);
+            Helpers.FillCheckedListBox(Properties.Resources.SETObjectTypes, CheckedList_SET_ObjectShuffle);
 
             Helpers.FillCheckedListBox(Properties.Resources.EventLighting, CheckedList_Event_Lighting);
             Helpers.FillCheckedListBox(Properties.Resources.EventTerrain, CheckedList_Event_Terrain);
@@ -1108,6 +1109,7 @@ namespace MarathonRandomiser
             List<string> SetHints = Helpers.EnumerateCheckedListBox(CheckedList_SET_Hints);
             List<string> SetDoors = Helpers.EnumerateCheckedListBox(CheckedList_SET_Doors);
             List<string> SetParticleBanks = Helpers.EnumerateCheckedListBox(CheckedList_SET_Particles);
+            List<string> SetShuffleBlacklist = Helpers.EnumerateCheckedListBox(CheckedList_SET_ObjectShuffle);
 
             List<string> EventLighting = Helpers.EnumerateCheckedListBox(CheckedList_Event_Lighting);
             List<string> EventTerrain = Helpers.EnumerateCheckedListBox(CheckedList_Event_Terrain);
@@ -1323,7 +1325,7 @@ namespace MarathonRandomiser
                             await Task.Run(() => ObjectPlacementRandomiser.Process(setFile, setEnemies, setEnemiesNoBosses, setBehaviour, setBehaviourNoEnforce, setCharacters, setItemCapsules,
                                                                                    setCommonProps, setPathProps, setHints, setDoors, setDrawDistance, setCosmetic, setParticles, setJumpboards, SetEnemies,
                                                                                    SetCharacters, SetItemCapsules, SetCommonProps, SetPathProps, SetHints, SetDoors, SetParticleBanks, setMinDrawDistance,
-                                                                                   setMaxDrawDistance, setJumpboardsChance, setTransform));
+                                                                                   setMaxDrawDistance, setJumpboardsChance, setTransform, SetShuffleBlacklist));
                         }
 
                         // Patch enemy luas if they need patching.
