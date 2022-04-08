@@ -499,6 +499,7 @@ namespace MarathonRandomiser
                         case 5: Helpers.InvalidateCheckedListBox(CheckedList_SET_Hints, true, selectAll); break;
                         case 6: Helpers.InvalidateCheckedListBox(CheckedList_SET_Doors, true, selectAll); break;
                         case 7: Helpers.InvalidateCheckedListBox(CheckedList_SET_Particles, true, selectAll); break;
+                        case 8: Helpers.InvalidateCheckedListBox(CheckedList_SET_ObjectShuffle, true, selectAll); break;
                         default: throw new NotImplementedException();
                     }
                     break;
@@ -701,6 +702,7 @@ namespace MarathonRandomiser
             ConfigCheckedListBoxRead(configInfo, CheckedList_SET_Hints);
             ConfigCheckedListBoxRead(configInfo, CheckedList_SET_Doors);
             ConfigCheckedListBoxRead(configInfo, CheckedList_SET_Particles);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_SET_ObjectShuffle);
             configInfo.WriteLine();
 
             // Event Block.
@@ -1047,6 +1049,7 @@ namespace MarathonRandomiser
                     WildcardCheckedList(CheckedList_SET_Particles, (int)NumericUpDown_Wildcard_Weight.Value);
                     WildcardNumericUpDown(NumericUpDown_SET_DrawDistance_Min, 0, 10000);
                     WildcardNumericUpDown(NumericUpDown_SET_DrawDistance_Max, (int)NumericUpDown_SET_DrawDistance_Min.Value, 10000);
+                    WildcardCheckedList(CheckedList_SET_ObjectShuffle, (int)NumericUpDown_Wildcard_Weight.Value);
                 }
 
                 if (CheckBox_Wildcard_Event.IsChecked == true)
@@ -1421,6 +1424,16 @@ namespace MarathonRandomiser
                                     await Task.Run(() => ObjectPlacementRandomiser.ParticlePatch(luaFile));
                                 }
                             }
+                        }
+                    }
+
+                    if (setTransform == true && (!SetShuffleBlacklist.Contains("eventbox") || !SetShuffleBlacklist.Contains("eventcylinder") || !SetShuffleBlacklist.Contains("eventsphere")))
+                    {
+                        if (Path.GetFileName(archive).ToLower() == "object.arc")
+                        {
+                            UpdateLogger($"Adding Event Box Indicator Files.");
+                            string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+                            await Task.Run(() => ObjectPlacementRandomiser.PathObjPatcher(unpackedArchive));
                         }
                     }
 

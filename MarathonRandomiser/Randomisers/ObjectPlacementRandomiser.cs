@@ -1,4 +1,5 @@
-﻿using Marathon.Formats.Placement;
+﻿using Marathon.Formats.Package;
+using Marathon.Formats.Placement;
 using System.Numerics;
 
 namespace MarathonRandomiser
@@ -140,11 +141,12 @@ namespace MarathonRandomiser
             {
                 // Set up a list of numbers.
                 List<int> usedNumbers = new();
+                List<int> eventVolumeIndices = new();
 
                 // Loop through all the objects in this set file again.
-                foreach (SetObject setObject in set.Data.Objects)
+                for (int i = 0; i < set.Data.Objects.Count; i++)
                 {
-                    if (!shuffleBlacklist.Contains(setObject.Type))
+                    if (!shuffleBlacklist.Contains(set.Data.Objects[i].Type))
                     {
                         // Pick a number to use.
                         int index = MainWindow.Randomiser.Next(Positions.Count);
@@ -157,11 +159,41 @@ namespace MarathonRandomiser
                         }
 
                         // Set the rotation and position to the selected ones.
-                        setObject.Position = Positions[index];
-                        setObject.Rotation = Rotations[index];
+                        set.Data.Objects[i].Position = Positions[index];
+                        set.Data.Objects[i].Rotation = Rotations[index];
 
                         // Mark this index as already being used.
                         usedNumbers.Add(index);
+
+                        // Log this object's index as an event volume, so we don't have to loop through them all again.
+                        if (set.Data.Objects[i].Type is "eventbox" or "eventcylinder" or "eventsphere")
+                            eventVolumeIndices.Add(i);
+                    }
+                }
+
+                // Add extra objects to indicate the positions of event volumes.
+                if (eventVolumeIndices.Count != 0)
+                {
+                    for (int i = 0; i < eventVolumeIndices.Count; i++)
+                    {
+                        // Create the basic object.
+                        SetObject eventIndicator = new()
+                        {
+                            Name = $"eventboxindicator{i}",
+                            Type = "common_path_obj",
+                            Position = set.Data.Objects[eventVolumeIndices[i]].Position,
+                            Rotation = set.Data.Objects[eventVolumeIndices[i]].Rotation,
+                            DrawDistance = set.Data.Objects[eventVolumeIndices[i]].DrawDistance
+                        };
+
+                        // Set the parameters.
+                        eventIndicator.Parameters.Add(ParameterCreate("EventIndicator", ObjectDataType.String));
+                        eventIndicator.Parameters.Add(ParameterCreate("", ObjectDataType.String));
+                        eventIndicator.Parameters.Add(ParameterCreate(0f, ObjectDataType.Single));
+                        eventIndicator.Parameters.Add(ParameterCreate(0f, ObjectDataType.Single));
+
+                        // Add the object to the set file.
+                        set.Data.Objects.Add(eventIndicator);
                     }
                 }
             }
@@ -776,6 +808,39 @@ namespace MarathonRandomiser
 
             // Save the updated lua binary.
             File.WriteAllLines(luaFile, lua);
+        }
+
+        /// <summary>
+        /// Creates and returns a '06 SET Object Parameter.
+        /// </summary>
+        /// <param name="value">The value of this parameter.</param>
+        /// <param name="type">The type of this parameter.</param>
+        private static SetParameter ParameterCreate(object value, ObjectDataType type)
+        {
+            SetParameter parameter = new SetParameter()
+            {
+                Data = value,
+                Type = type
+            };
+            return parameter;
+        }
+    
+        public static async Task PathObjPatcher(string archivePath)
+        {
+            PathPackage PathObj = new($@"{archivePath}\xenon\object\PathObj.bin");
+            PathObject obj = new()
+            {
+                Model = "object/rando/eventindicator/rando_obj_indicator.xno",
+                Name = "EventIndicator",
+                Text = "meshes/object/rando/sonicindicator.TXT"
+            };
+            PathObj.PathObjects.Add(obj);
+            PathObj.Save();
+
+            Directory.CreateDirectory($@"{archivePath}\win32\object\rando\eventindicator");
+            File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\crate_iron_normal.dds", $@"{archivePath}\win32\object\rando\eventindicator\crate_iron_normal.dds", true);
+            File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\crate_iron_switch.dds", $@"{archivePath}\win32\object\rando\eventindicator\crate_iron_switch.dds", true);
+            File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\rando_obj_indicator.xno", $@"{archivePath}\win32\object\rando\eventindicator\rando_obj_indicator.xno", true);
         }
     }
 }

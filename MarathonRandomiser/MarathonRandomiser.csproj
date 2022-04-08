@@ -52,6 +52,15 @@
     <None Update="ExternalResources\7z.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ExternalResources\crate_iron_normal.dds">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\crate_iron_switch.dds">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\rando_obj_indicator.xno">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ExternalResources\texconv.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
