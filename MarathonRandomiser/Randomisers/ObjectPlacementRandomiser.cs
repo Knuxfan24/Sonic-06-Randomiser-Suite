@@ -49,10 +49,14 @@ namespace MarathonRandomiser
             // Loop through all the objects in this set file.
             foreach (SetObject setObject in set.Data.Objects)
             {
-                if (!shuffleBlacklist.Contains(setObject.Type))
+                if (shuffleTransform == true && !shuffleBlacklist.Contains(setObject.Type))
                 {
                     Positions.Add(new(setObject.Position.X, setObject.Position.Y, setObject.Position.Z));
                     Rotations.Add(new(setObject.Rotation.X, setObject.Rotation.Y, setObject.Rotation.Z, setObject.Rotation.W));
+
+                    // Kill the light dash paths from Rings so an accidental X button press doesn't warp you to fuck knows where.
+                    if (setObject.Type == "ring")
+                        setObject.Parameters[2].Data = "";
                 }
 
                 // If we're randomising the object's draw distance, then pick a number for it between the specified values
