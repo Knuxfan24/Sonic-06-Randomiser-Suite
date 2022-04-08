@@ -166,8 +166,22 @@ namespace MarathonRandomiser
                         usedNumbers.Add(index);
 
                         // Log this object's index as an event volume, so we don't have to loop through them all again.
-                        if (set.Data.Objects[i].Type is "eventbox" or "eventcylinder" or "eventsphere")
-                            eventVolumeIndices.Add(i);
+                        // Only add ones that actually do something in their onintersect function.
+                        switch (set.Data.Objects[i].Type)
+                        {
+                            case "eventbox":
+                                if ((string)set.Data.Objects[i].Parameters[3].Data != "")
+                                    eventVolumeIndices.Add(i);
+                                break;
+                            case "eventcylinder":
+                                if ((string)set.Data.Objects[i].Parameters[2].Data != "")
+                                    eventVolumeIndices.Add(i);
+                                break;
+                            case "eventsphere":
+                                if ((string)set.Data.Objects[i].Parameters[1].Data != "")
+                                    eventVolumeIndices.Add(i);
+                                break;
+                        }
                     }
                 }
 
