@@ -25,7 +25,7 @@ cameraeventcylinder,cameraeventcylinder,true
 cameraeventsphere,cameraeventsphere,true
 candlestick,candlestick,false
 carcoli,carcoli,false
-chainjump,chainjump,false
+chainjump,chainjump,true
 changelight,changelight,false
 common_cage,common_cage,false
 common_chaosemerald,common_chaosemerald,false
