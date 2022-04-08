@@ -678,6 +678,10 @@ namespace MarathonRandomiser
         /// <param name="location">The filepath we're saving to.</param>
         private void SaveConfig(string location)
         {
+            // Append a .ini if that or .log isn't present. Thanks Winderps.
+            if (!location.EndsWith(".ini") || !location.EndsWith(".log"))
+                location += ".ini";
+
             // Set up our StreamWriter.
             StreamWriter configInfo = new(File.Open(location, FileMode.Create));
 
@@ -2095,6 +2099,15 @@ namespace MarathonRandomiser
             if (miscUnlock == true)
             {
                 HandyControl.Controls.MessageBox.Show("To enable access to Shadow and Silver's episodes, load Sonic's and save the game from the pause menu.",
+                                                      "Sonic '06 Randomiser Suite",
+                                                      MessageBoxButton.OK,
+                                                      MessageBoxImage.Information);
+            }
+
+            // Give a note about the Disable Camera Events patch if using the object shuffler.
+            if (setTransform == true)
+            {
+                HandyControl.Controls.MessageBox.Show("While not required, using the Disable Camera Events patch may make object shuffling more enjoyable.",
                                                       "Sonic '06 Randomiser Suite",
                                                       MessageBoxButton.OK,
                                                       MessageBoxImage.Information);
