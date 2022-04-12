@@ -679,7 +679,7 @@ namespace MarathonRandomiser
         private void SaveConfig(string location)
         {
             // Append a .ini if that or .log isn't present. Thanks Winderps.
-            if (!location.EndsWith(".ini") || !location.EndsWith(".log"))
+            if (!location.EndsWith(".ini") && !location.EndsWith(".log"))
                 location += ".ini";
 
             // Set up our StreamWriter.
