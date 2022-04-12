@@ -1272,7 +1272,10 @@ namespace MarathonRandomiser
                 CheckBox_Scene_Skyboxes.IsChecked = false;
 
             if (TexturesArchives.Count == 0)
+            {
                 CheckBox_Textures_Textures.IsChecked = false;
+                CheckBox_Textures_VertexColour.IsChecked = false;
+            }
 
             if (AudioMusic.Count == 0)
                 CheckBox_Audio_Music.IsChecked = false;
@@ -1689,6 +1692,7 @@ namespace MarathonRandomiser
             bool? texturesAllowDupes = CheckBox_Textures_AllowDupes.IsChecked;
             bool? texturesOnlyCustom = CheckBox_Textures_OnlyCustom.IsChecked;
             bool? texturesDelete = CheckBox_Textures_DeleteStages.IsChecked;
+            bool? texturesVertexColours = CheckBox_Textures_VertexColour.IsChecked;
 
             // Dupes are NEEDED if we're only using custom textures.
             if (texturesOnlyCustom == true)
@@ -1757,7 +1761,25 @@ namespace MarathonRandomiser
                     if (archive.Contains("stage_"))
                     {
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+                        UpdateLogger($"Deleting textures from '{Path.GetFileName(archive)}'.");
                         await Task.Run(() => TextureRandomiser.DeleteTextures(unpackedArchive));
+                    }
+                }
+            }
+
+            if (texturesVertexColours == true)
+            {
+                foreach (string archive in archives)
+                {
+                    if (TexturesArchives.Contains(Path.GetFileName(archive)))
+                    {
+                        string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+                        string[] xnoFiles = Directory.GetFiles(unpackedArchive, "*.xno", SearchOption.AllDirectories);
+                        foreach (string xnoFile in xnoFiles)
+                        {
+                            UpdateLogger($"Randomising vertex colours in '{xnoFile}'.");
+                            await Task.Run(() => TextureRandomiser.RandomiseVertexColours(xnoFile));
+                        }
                     }
                 }
             }

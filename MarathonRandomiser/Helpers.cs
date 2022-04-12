@@ -211,14 +211,8 @@ namespace MarathonRandomiser
         public static async Task LuaDecompile(string path)
         {
             // Marathon throws an exception if a Lua is already decompiled, so catch any to prevent a program crash.
-            try
-            {
-                LuaBinary lub = new(path, true);
-            }
-            catch
-            {
-
-            }
+            try { LuaBinary lub = new(path, true); }
+            catch { }
         }
 
         /// <summary>

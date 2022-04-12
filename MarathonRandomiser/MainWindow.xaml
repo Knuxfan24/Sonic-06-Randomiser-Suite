@@ -270,6 +270,7 @@
                         <CheckBox x:Name="CheckBox_Textures_AllowDupes" Content="Allow Duplicates" IsEnabled="False"/>
                         <CheckBox x:Name="CheckBox_Textures_OnlyCustom" Content="Only Use Custom Textures" IsEnabled="False"/>
                         <CheckBox x:Name="CheckBox_Textures_DeleteStages" Content="Delete Stage Textures" Foreground="Firebrick"/>
+                        <CheckBox x:Name="CheckBox_Textures_VertexColour" Content="Randomise Vertex Colours" Foreground="Firebrick" VerticalAlignment="Top"/>
                     </StackPanel>
 
                     <!--Texture Configuration Toggles-->
