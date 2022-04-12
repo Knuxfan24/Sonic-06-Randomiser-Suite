@@ -18,7 +18,6 @@
     </UserControl.Resources>
 
     <hc:ScrollViewer Name="ScrollViewer" Margin="5,5,0,5"
-                     Orientation="{Binding ElementName=Root, Path=MultiColumn, Converter={StaticResource Boolean2MultiColumnOrientationConverter}}"
                      HorizontalScrollBarVisibility="{Binding ElementName=Root, Path=MultiColumn, Converter={StaticResource Boolean2MultiColumnHorizontalScrollBarVisibilityConverter}}"
                      VerticalScrollBarVisibility="{Binding ElementName=Root, Path=MultiColumn, Converter={StaticResource Boolean2MultiColumnVerticalScrollBarVisibilityConverter}}">
         <ItemsControl ItemsSource="{Binding Items}">

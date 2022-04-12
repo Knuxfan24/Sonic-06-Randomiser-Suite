@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="BE32.Marathon" Version="1.0.55" />
-    <PackageReference Include="HandyControls" Version="3.3.9" />
+    <PackageReference Include="BE32.Marathon" Version="1.0.64" />
+    <PackageReference Include="HandyControls" Version="3.3.11" />
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
   </ItemGroup>
 

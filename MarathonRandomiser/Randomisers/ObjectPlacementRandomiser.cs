@@ -35,10 +35,12 @@ namespace MarathonRandomiser
         /// <param name="minDrawDistance">The minimum allowed draw distance.</param>
         /// <param name="maxDrawDistance">The maximum allowed draw distance.</param>
         /// <param name="jumpboardChance">The chance that a Jump Panel will be switched for a Jump Board.</param>
+        /// <param name="shuffleTransform">Whether or not objects will have their positions shuffled around.</param>
+        /// <param name="shuffleBlacklist">The list of objects we should ignore for the position shuffling process.</param>
         public static async Task Process(string setFile, bool? enemies, bool? enemiesNoBosses, bool? behaviour, bool? behaviourNoEnforce, bool? characters, bool? itemCapsules, bool? commonProps,
-                                      bool? pathProps, bool? hints, bool? doors, bool? drawDistance, bool? cosmetic, bool? particle, bool? jumpboards, List<string> SetEnemies, List<string> SetCharacters, List<string> SetItemCapsules,
-                                      List<string> SetCommonProps, List<string> SetPathProps, List<string> SetHints, List<string> SetDoors, List<string> SetParticleBanks, int minDrawDistance, int maxDrawDistance, int jumpboardChance,
-                                      bool? shuffleTransform, List<string> shuffleBlacklist)
+                                      bool? pathProps, bool? hints, bool? doors, bool? drawDistance, bool? cosmetic, bool? particle, bool? jumpboards, List<string> SetEnemies,
+                                      List<string> SetCharacters, List<string> SetItemCapsules, List<string> SetCommonProps, List<string> SetPathProps, List<string> SetHints, List<string> SetDoors,
+                                      List<string> SetParticleBanks, int minDrawDistance, int maxDrawDistance, int jumpboardChance, bool? shuffleTransform, List<string> shuffleBlacklist)
         {
             List<Vector3> Positions = new();
             List<Quaternion> Rotations = new();
@@ -49,6 +51,7 @@ namespace MarathonRandomiser
             // Loop through all the objects in this set file.
             foreach (SetObject setObject in set.Data.Objects)
             {
+                // If we're shuffling objects and this type isn't in the blacklist, then store it's position and rotation.
                 if (shuffleTransform == true && !shuffleBlacklist.Contains(setObject.Type))
                 {
                     Positions.Add(new(setObject.Position.X, setObject.Position.Y, setObject.Position.Z));
@@ -143,7 +146,7 @@ namespace MarathonRandomiser
             // If we're using this cursed option, then shuffle positions and rotations around.
             if (shuffleTransform == true)
             {
-                // Set up a list of numbers.
+                // Set up a couple of lists of numbers.
                 List<int> usedNumbers = new();
                 List<int> eventVolumeIndices = new();
 
@@ -843,19 +846,34 @@ namespace MarathonRandomiser
             return parameter;
         }
     
+        /// <summary>
+        /// Patches the PathObj.bin file to add the stuff needed for the event volume position model.
+        /// Also copies the resources for the model to their positions in object.arc.
+        /// </summary>
+        /// <param name="archivePath">The path to the already extracted object.arc.</param>
         public static async Task PathObjPatcher(string archivePath)
         {
+            // Load PathObj.bin.
             PathPackage PathObj = new($@"{archivePath}\xenon\object\PathObj.bin");
+
+            // Create our new PathObj.bin entry.
             PathObject obj = new()
             {
                 Model = "object/rando/eventindicator/rando_obj_indicator.xno",
                 Name = "EventIndicator",
                 Text = "meshes/object/rando/sonicindicator.TXT"
             };
+
+            // Add our new PathObj.bin entry to the file.
             PathObj.PathObjects.Add(obj);
+
+            // Save the updates PathObj.bin.
             PathObj.Save();
 
+            // Create the directory for the model's assets.
             Directory.CreateDirectory($@"{archivePath}\win32\object\rando\eventindicator");
+
+            // Copy the assets to the created directroy.
             File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\crate_iron_normal.dds", $@"{archivePath}\win32\object\rando\eventindicator\crate_iron_normal.dds", true);
             File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\crate_iron_switch.dds", $@"{archivePath}\win32\object\rando\eventindicator\crate_iron_switch.dds", true);
             File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\rando_obj_indicator.xno", $@"{archivePath}\win32\object\rando\eventindicator\rando_obj_indicator.xno", true);
