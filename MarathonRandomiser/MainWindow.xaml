@@ -52,6 +52,9 @@
                     </Label>
                     <hc:TextBox x:Name="TextBox_General_Patches" Margin="10,255,53,0" TextWrapping="NoWrap" VerticalAlignment="Top" SelectionBrush="#FFB146C2" TextChanged="PatchDirectory_Update"/>
                     <Button HorizontalAlignment="Right" Margin="0,255,10,0" VerticalAlignment="Top" hc:IconElement.Geometry="{StaticResource DragHorizontalGeometry}" Grid.RowSpan="2" Width="38" Click="PatchDirectory_Browse"/>
+                    
+                    <!--Easter Eggs Checkbox-->
+                    <CheckBox x:Name="CheckBox_General_NoFun" Content="Disable Easter Egg Seeds" Margin="10,290,10,0" VerticalAlignment="Top" Height="30"/>
                 </Grid>
             </hc:TabItem>
 
@@ -418,7 +421,7 @@
                     </Label>
                     <hc:TextBox x:Name="TextBox_Custom_Textures" Margin="10,138,53,0" TextWrapping="NoWrap" VerticalAlignment="Top" SelectionBrush="#FFB146C2"/>
                     <Button HorizontalAlignment="Right" Margin="0,138,10,0" VerticalAlignment="Top" hc:IconElement.Geometry="{StaticResource DragHorizontalGeometry}" Width="38" Click="CustomTextures_Browse"/>
-                    
+
                     <!--Voice Packs-->
                     <Label Content="Voice Packs" HorizontalAlignment="Left" Margin="10,173,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}"/>
                     <Label Content="Voice packs to include in voice randomisation." HorizontalAlignment="Right" Margin="0,173,10,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" FontStyle="Italic">

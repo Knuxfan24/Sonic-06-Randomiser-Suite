@@ -575,6 +575,30 @@ namespace MarathonRandomiser
         /// <param name="text">The text to add to the element.</param>
         private void UpdateLogger(string text)
         {
+            // Silly Maxis Joke Checker, only allowed if Easter Egg Seeds are on.
+            if (CheckBox_General_NoFun.IsChecked == false)
+            {
+                // Setup a boolean to check if we've already dumped the Reticulating splines message in.
+                bool alreadyMadeTheJoke = false;
+
+                // Loop through to check for the Reticulating splines message, if we find it, then flag the boolean.
+                foreach (string entry in ProgressLogger)
+                    if (entry == "Reticulating splines")
+                        alreadyMadeTheJoke = true;
+
+                // If we haven't already made the joke, then proceed.
+                if (!alreadyMadeTheJoke)
+                {
+                    // Roll a number, if it's 24, then add Reticulating splines instead of the intended message.
+                    if (Randomiser.Next(0, 101) == 24)
+                    {
+                        ProgressLogger.Add("Reticulating splines");
+                        ListView_ProgressLogger.ScrollIntoView(ListView_ProgressLogger.Items[ListView_ProgressLogger.Items.Count - 1]);
+                        return;
+                    }
+                }
+            }
+
             ProgressLogger.Add(text);
             ListView_ProgressLogger.ScrollIntoView(ListView_ProgressLogger.Items[ListView_ProgressLogger.Items.Count - 1]);
         }
@@ -975,6 +999,7 @@ namespace MarathonRandomiser
             string ModDirectory = $@"{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({Helpers.UseSafeFormattedCharacters(TextBox_General_Seed.Text)})";
             string GameExecutable = TextBox_General_GameExecutable.Text;
             string Seed = TextBox_General_Seed.Text;
+            bool? DisableEasterEggs = CheckBox_General_NoFun.IsChecked;
 
             // Create Mod Directory (prompting the user if they want to delete it first or cancel if it already exists.)
             if (Directory.Exists(ModDirectory))
@@ -1805,7 +1830,7 @@ namespace MarathonRandomiser
                             if (await Task.Run(() => Helpers.NeededLua(luaFile, new List<string>() { "PlayBGM", "mission_bgm" })))
                             {
                                 UpdateLogger($"Randomising music in '{luaFile}'.");
-                                await Task.Run(() => AudioRandomisers.MusicRandomiser(luaFile, AudioMusic, Seed));
+                                await Task.Run(() => AudioRandomisers.MusicRandomiser(luaFile, AudioMusic, Seed, DisableEasterEggs));
                             }
                         }
                     }
@@ -2133,6 +2158,26 @@ namespace MarathonRandomiser
                                                       "Sonic '06 Randomiser Suite",
                                                       MessageBoxButton.OK,
                                                       MessageBoxImage.Information);
+            }
+
+            // Easter Egg seed message boxes.
+            if (DisableEasterEggs == false)
+            {
+                if (Seed.Contains('π'))
+                {
+                    HandyControl.Controls.MessageBox.Show("I don't like pies...",
+                                                          "Sonic '06 Randomiser Suite",
+                                                          MessageBoxButton.OK,
+                                                          MessageBoxImage.Question);
+                }
+
+                if (Seed.Contains("Accordion"))
+                {
+                    HandyControl.Controls.MessageBox.Show("That's a great stuff there, accordion man.\nNow play me the Polkamon!",
+                                                          "Sonic '06 Randomiser Suite",
+                                                          MessageBoxButton.OK,
+                                                          MessageBoxImage.Question);
+                }
             }
         }
     }

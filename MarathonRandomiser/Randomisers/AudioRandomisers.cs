@@ -254,7 +254,8 @@ namespace MarathonRandomiser
         /// <param name="luaFile">The lua to process.</param>
         /// <param name="MiscMusic">The list of valid songs.</param>
         /// <param name="Seed">The current Randomisation Seed (used for the Accordian Easter Egg).</param>
-        public static async Task MusicRandomiser(string luaFile, List<string> MiscMusic, string Seed)
+        /// <param name="DisableEasterEggs">Whether or not the Accordion Easter Egg should be used.</param>
+        public static async Task MusicRandomiser(string luaFile, List<string> MiscMusic, string Seed, bool? DisableEasterEggs)
         {
             // Decompile this lua binary.
             await Task.Run(() => Helpers.LuaDecompile(luaFile));
@@ -272,7 +273,7 @@ namespace MarathonRandomiser
                     string[] song = lua[i].Split('"');
 
                     // Accordion Song Easter Egg (https://youtu.be/YqjQew7BRRk?t=6016).
-                    if (Seed.Contains("Accordion") && lua[i].Contains("mission_bgm"))
+                    if (Seed.Contains("Accordion") && lua[i].Contains("mission_bgm") && DisableEasterEggs == false)
                     {
                         // ACCORDIONS.
                         song[1] = "twn_accordion";
