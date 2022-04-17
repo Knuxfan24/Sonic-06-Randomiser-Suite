@@ -590,7 +590,7 @@ namespace MarathonRandomiser
                 if (!alreadyMadeTheJoke)
                 {
                     // Roll a number, if it's 24, then add Reticulating splines instead of the intended message.
-                    if (Randomiser.Next(0, 101) == 24)
+                    if (Randomiser.Next(0, 1001) == 24)
                     {
                         ProgressLogger.Add("Reticulating splines");
                         ListView_ProgressLogger.ScrollIntoView(ListView_ProgressLogger.Items[ListView_ProgressLogger.Items.Count - 1]);
@@ -1916,6 +1916,28 @@ namespace MarathonRandomiser
                     }
                 }
             }
+
+            // Amogus Easter Egg Seed
+            if (Seed.Contains("Amogus") && DisableEasterEggs == false)
+            {
+                foreach (string archive in archives)
+                {
+                    if (Path.GetFileName(archive).ToLower() == "sound.arc")
+                    {
+                        UpdateLogger($"Making sound effects sus.");
+                        string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+                        await Task.Run(() => AudioRandomisers.CSBUnpack($@"{unpackedArchive}\common\sound\enemy_monster_common.csb"));
+                        File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\susIblis.adx", $@"{unpackedArchive}\common\sound\enemy_monster_common\04_monster_transfer.aif\Intro.adx", true);
+                        await Task.Run(() => AudioRandomisers.CSBRepack($"{Path.GetDirectoryName($@"{unpackedArchive}\common\sound\enemy_monster_common.csb")}\\{Path.GetFileNameWithoutExtension($@"{unpackedArchive}\common\sound\enemy_monster_common.csb")}"));
+                        Directory.Delete($"{Path.GetDirectoryName($@"{unpackedArchive}\common\sound\enemy_monster_common.csb")}\\{Path.GetFileNameWithoutExtension($@"{unpackedArchive}\common\sound\enemy_monster_common.csb")}", true);
+
+                        await Task.Run(() => AudioRandomisers.CSBUnpack($@"{unpackedArchive}\common\sound\enemy_robot_common.csb"));
+                        File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\susRobot.adx", $@"{unpackedArchive}\common\sound\enemy_robot_common\04_robot_transfer.aif.aif\Intro.adx", true);
+                        await Task.Run(() => AudioRandomisers.CSBRepack($"{Path.GetDirectoryName($@"{unpackedArchive}\common\sound\enemy_robot_common.csb")}\\{Path.GetFileNameWithoutExtension($@"{unpackedArchive}\common\sound\enemy_robot_common.csb")}"));
+                        Directory.Delete($"{Path.GetDirectoryName($@"{unpackedArchive}\common\sound\enemy_robot_common.csb")}\\{Path.GetFileNameWithoutExtension($@"{unpackedArchive}\common\sound\enemy_robot_common.csb")}", true);
+                    }
+                }
+            }
             #endregion
 
             #region Text Randomisers
@@ -2174,6 +2196,14 @@ namespace MarathonRandomiser
                 if (Seed.Contains("Accordion"))
                 {
                     HandyControl.Controls.MessageBox.Show("That's a great stuff there, accordion man.\nNow play me the Polkamon!",
+                                                          "Sonic '06 Randomiser Suite",
+                                                          MessageBoxButton.OK,
+                                                          MessageBoxImage.Question);
+                }
+
+                if (Seed.Contains("Amogus"))
+                {
+                    HandyControl.Controls.MessageBox.Show("When the imposter is sus...",
                                                           "Sonic '06 Randomiser Suite",
                                                           MessageBoxButton.OK,
                                                           MessageBoxImage.Question);
