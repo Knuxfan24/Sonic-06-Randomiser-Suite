@@ -43,6 +43,10 @@ Randomisation of various elements within '06's Object Placement (.set) files, th
 
 * Types of particles
 
+* Use of an unused jump board
+
+* Shuffling object positions
+
 A lot of the Object Placement features can be further randomised, see the Wiki for more information.
 
 ### Event Randomisation
@@ -83,13 +87,13 @@ Randomisation of various values within the game's scene lua binaries (.lub) file
 
 <img src="https://raw.githubusercontent.com/wiki/Knuxfan24/Sonic-06-Randomiser-Suite/images/tab_animations.png">
 
-Shuffling of both Gameplay and Event Animations, as well as Event Cameras
+Shuffling of both Gameplay and Event Animations, as well as Event Cameras; alongside being able to change the framerate of all Ninja Animations.
 
 ### Texture Randomisation
 
 <img src="https://raw.githubusercontent.com/wiki/Knuxfan24/Sonic-06-Randomiser-Suite/images/tab_textures.png">
 
-Shuffling of textures, with options for cross archive randomisation.
+Shuffling of textures, with options for cross archive randomisation; alongside model vertex colour randomisation.
 
 ### Audio Randomisation
 
@@ -99,7 +103,7 @@ Shuffling of ingame stage music and sound effects.
 
 ### Text Randomisation
 
-<img src="https://raw.githubusercontent.com/wiki/Knuxfan24/Sonic-06-Randomiser-Suite/images/tab_audio.png">
+<img src="https://raw.githubusercontent.com/wiki/Knuxfan24/Sonic-06-Randomiser-Suite/images/tab_text.png">
 
 Modification of various attributes relating to the game's text within the message tabe (.mst) files. These are:
 
