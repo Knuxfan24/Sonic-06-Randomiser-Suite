@@ -124,9 +124,6 @@
     <None Update="ExternalResources\vgmstream\xmp-vgmstream.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ExternalResources\voice_all_e.sbk">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="ExternalResources\xmaencode.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

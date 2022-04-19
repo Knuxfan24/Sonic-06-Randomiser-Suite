@@ -1232,17 +1232,6 @@ namespace MarathonRandomiser
                     // Create voice directory.
                     Directory.CreateDirectory($@"{ModDirectory}\xenon\sound\voice\e\");
 
-                    // Insert the patched voice_all_e.sbk file into sound.arc first.
-                    foreach (string archive in archives)
-                    {
-                        if (Path.GetFileName(archive).ToLower() == "sound.arc")
-                        {
-                            UpdateLogger($"Patching 'voice_all_e.sbk'.");
-                            string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
-                            File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\voice_all_e.sbk", $@"{unpackedArchive}\xenon\sound\voice_all_e.sbk", true);
-                        }
-                    }
-
                     // Process the selected voice packs.
                     for (int i = 0; i < CustomVoxPacks.Count; i++)
                     {
@@ -1466,22 +1455,6 @@ namespace MarathonRandomiser
                             UpdateLogger($"Adding Event Box Indicator Files.");
                             string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
                             await Task.Run(() => ObjectPlacementRandomiser.PathObjPatcher(unpackedArchive));
-                        }
-                    }
-
-                    // Patch voice_all_e.sbk if we aren't using any voice packs and we've done something to need it.
-                    if (setHints == true || (setEnemies == true && (SetEnemies.Contains("eCerberus") || SetEnemies.Contains("eGenesis") || SetEnemies.Contains("eWyvern") ||
-                        SetEnemies.Contains("firstiblis") || SetEnemies.Contains("secondiblis") || SetEnemies.Contains("thirdiblis") || SetEnemies.Contains("firstmefiress") ||
-                        SetEnemies.Contains("secondmefiress") || SetEnemies.Contains("solaris01") || SetEnemies.Contains("solaris02"))))
-                    {
-                        if (CustomVoxPacks.Count == 0)
-                        {
-                            if (Path.GetFileName(archive).ToLower() == "sound.arc")
-                            {
-                                UpdateLogger($"Patching 'voice_all_e.sbk'.");
-                                string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
-                                File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\voice_all_e.sbk", $@"{unpackedArchive}\xenon\sound\voice_all_e.sbk", true);
-                            }
                         }
                     }
                 }
@@ -1963,17 +1936,6 @@ namespace MarathonRandomiser
 
                     if (Path.GetFileName(archive).ToLower() == "text.arc")
                         textArc = await Task.Run(() => Helpers.ArchiveHandler(archive));
-
-                    // Patch voice_all_e.sbk if we're shuffling text.
-                    if (CustomVoxPacks.Count == 0 && textShuffle == true)
-                    {
-                        if (Path.GetFileName(archive).ToLower() == "sound.arc")
-                        {
-                            UpdateLogger($"Patching 'voice_all_e.sbk'.");
-                            string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
-                            File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\voice_all_e.sbk", $@"{unpackedArchive}\xenon\sound\voice_all_e.sbk", true);
-                        }
-                    }
                 }
 
                 // Determine which MSTs we need to edit based on language settings.
@@ -2115,6 +2077,22 @@ namespace MarathonRandomiser
                 }
             }
             #endregion
+
+            // Patch voice_all_e.sbk if we've done something to need it.
+            foreach (string archive in archives)
+            {
+                if (setHints == true || (setEnemies == true && (SetEnemies.Contains("eCerberus") || SetEnemies.Contains("eGenesis") || SetEnemies.Contains("eWyvern") ||
+                    SetEnemies.Contains("firstiblis") || SetEnemies.Contains("secondiblis") || SetEnemies.Contains("thirdiblis") || SetEnemies.Contains("firstmefiress") ||
+                    SetEnemies.Contains("secondmefiress") || SetEnemies.Contains("solaris01") || SetEnemies.Contains("solaris02"))) || textShuffle == true)
+                {
+                    if (Path.GetFileName(archive).ToLower() == "sound.arc")
+                    {
+                        UpdateLogger($"Patching 'voice_all_e.sbk' to allow all voice lines to play in any stage.");
+                        string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+                        await Task.Run(() => Helpers.VoiceBankPatcher(unpackedArchive));
+                    }
+                }
+            }
 
             // Delete any temp files in the archives themselves.
             UpdateLogger($"Cleaning up leftover files.");
