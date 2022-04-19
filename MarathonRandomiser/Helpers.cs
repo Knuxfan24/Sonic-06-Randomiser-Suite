@@ -54,6 +54,10 @@ namespace MarathonRandomiser
         /// <param name="listBox">The CheckedListBox to fill in.</param>
         public static void FetchPatches(string directory, CheckedListBox listBox)
         {
+            // This crashes if the directory doesn't exist, so check that first.
+            if (!Directory.Exists(directory))
+                return;
+
             // Clear out the list.
             listBox.Items.Clear();
 

@@ -22,7 +22,7 @@ namespace MarathonRandomiser
     public partial class MainWindow : Window
     {
         // Version Number.
-        public static readonly string GlobalVersionNumber = $"Version 2.1.13";
+        public static readonly string GlobalVersionNumber = $"Version 2.1.14";
 
         #if !DEBUG
         public static readonly string VersionNumber = GlobalVersionNumber;
