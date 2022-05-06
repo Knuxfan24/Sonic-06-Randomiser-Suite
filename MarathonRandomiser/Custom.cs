@@ -41,7 +41,7 @@ namespace MarathonRandomiser
                     {
                         Process process = new();
                         process.StartInfo.FileName = $"\"{Environment.CurrentDirectory}\\ExternalResources\\vgmstream\\vgmstream-cli.exe\"";
-                        process.StartInfo.Arguments = $"-i -o \"{MainWindow.TemporaryDirectory}\\tempWavs\\custom{index}.wav\" \"{CustomSong}\"";
+                        process.StartInfo.Arguments = $"-o \"{MainWindow.TemporaryDirectory}\\tempWavs\\custom{index}.wav\" -L \"{CustomSong}\"";
                         process.StartInfo.UseShellExecute = false;
                         process.StartInfo.CreateNoWindow = true;
                         process.StartInfo.RedirectStandardOutput = true;
@@ -88,15 +88,14 @@ namespace MarathonRandomiser
                         process.WaitForExit();
                     }
 
-                    // Patch the XMA to actually loop from start to end.
-                    byte[] xma = File.ReadAllBytes($@"{ModDirectory}\xenon\sound\custom{index}.xma");
-                    for (int x = 0; x < xma.Length; x += 4)
+                    // If vgmstream didn't find any loop points, then patch in a start to end loop.
+                    if (startLoop == 0 && endLoop == 0)
                     {
-                        // Find the XMA2 Chunk Header
-                        if (xma[x] == 0x58 && xma[x + 1] == 0x4D && xma[x + 2] == 0x41 && xma[x + 3] == 0x32)
+                        byte[] xma = File.ReadAllBytes($@"{ModDirectory}\xenon\sound\custom{index}.xma");
+                        for (int x = 0; x < xma.Length; x += 4)
                         {
-                            // If we haven't fetched any loop points, then just add a start to end loop.
-                            if (startLoop == 0 && endLoop == 0)
+                            // Find the XMA2 Chunk Header
+                            if (xma[x] == 0x58 && xma[x + 1] == 0x4D && xma[x + 2] == 0x41 && xma[x + 3] == 0x32)
                             {
                                 // Set the part of the file that controls the end loop (0x10 ahead of the XMA2 Chunk Header) to the sample count (0x20 ahead of the XMA2 Chunk Header).
                                 xma[x + 0x10] = xma[x + 0x20];
@@ -104,33 +103,11 @@ namespace MarathonRandomiser
                                 xma[(x + 2) + 0x10] = xma[(x + 2) + 0x20];
                                 xma[(x + 3) + 0x10] = xma[(x + 3) + 0x20];
                             }
-
-                            // If we DO have loop points, then add them.
-                            else
-                            {
-                                // Make a byte array out of the values.
-                                byte[] startBytes = BitConverter.GetBytes(startLoop);
-                                Array.Reverse(startBytes);
-                                byte[] endBytes = BitConverter.GetBytes(endLoop);
-                                Array.Reverse(endBytes);
-
-                                // Start Loop Bytes
-                                xma[x + 0xC] = startBytes[0];
-                                xma[(x + 1) + 0xC] = startBytes[1];
-                                xma[(x + 2) + 0xC] = startBytes[2];
-                                xma[(x + 3) + 0xC] = startBytes[3];
-
-                                // End Loop Bytes
-                                xma[x + 0x10] = endBytes[0];
-                                xma[(x + 1) + 0x10] = endBytes[1];
-                                xma[(x + 2) + 0x10] = endBytes[2];
-                                xma[(x + 3) + 0x10] = endBytes[3];
-
-                            }
                         }
+
+                        // Save the updated XMA.
+                        File.WriteAllBytes($@"{ModDirectory}\xenon\sound\custom{index}.xma", xma);
                     }
-                    // Save the updated XMA.
-                    File.WriteAllBytes($@"{ModDirectory}\xenon\sound\custom{index}.xma", xma);
 
                     // If the cache is enabled, copy the newly converted file to the XMA cache folder.
                     if (EnableCache == true)
