@@ -10,7 +10,7 @@
 <img src="https://raw.githubusercontent.com/wiki/Knuxfan24/Sonic-06-Randomiser-Suite/images/tab_general.png">
 
 # Building
-To build the Randomiser Suite, simply clone the project and open the `MarathonRandomiser.sln` file in a recent version of Visual Studio (anything supporting .NET 6 should work fine, all the development was done on preview builds of Visual Studio 2022) and then compile it as normal, if the build fails it may be due to missing Nuget Packages, as the project uses [Marathon](https://github.com/Big-Endian-32/Marathon) for interfacing with Sonic '06's file formats, [HandyControl](https://github.com/HandyOrg/HandyControl) for much nicer looking UI controls and [Ookii Dialogs](https://github.com/ookii-dialogs/ookii-dialogs-wpf) for better file and folder browsing; ensuring that all three of those are present and accounted for should resolve any compile errors.
+To build the Randomiser Suite, simply clone the project and its submodules using a git based solution (such as GitHub Desktop) and open the `MarathonRandomiser.sln` file in a recent version of Visual Studio (anything supporting .NET 6 should work fine, all the development was done using versions of Visual Studio 2022) and then compile it as normal, if the build fails it may be due to missing Nuget Packages, as the project uses [Marathon](https://github.com/Big-Endian-32/Marathon) for interfacing with Sonic '06's file formats, [HandyControl](https://github.com/HandyOrg/HandyControl) for much nicer looking UI controls and [Ookii Dialogs](https://github.com/ookii-dialogs/ookii-dialogs-wpf) for better file and folder browsing; ensuring that all three of those are present and accounted for should resolve any compile errors. Also check that [XNCPLib and Amicitia.IO](https://github.com/crash5band/Shuriken) are both building as well, as they are needed for the User Interface Randomisation.
 
 Compile warnings will be thrown regarding `Possible null reference argument`s and `Dereferences of a possibly null reference` but both of those have never caused any problem for me.
 
@@ -114,6 +114,20 @@ Modification of various attributes relating to the game's text within the messag
 * Random text colouration, with configurable chance
 
 * Shuffling text between different message tables
+
+### User Interface Randomisation
+
+<img src="https://raw.githubusercontent.com/wiki/Knuxfan24/Sonic-06-Randomiser-Suite/images/tab_xncp.png">
+
+Randomisation of various bits of data within the game's User Interface (.xncp) files. These are:
+
+* Randomisation of the UI Element Colours.
+
+* Randomisation of the UI Element's Scale.
+
+* Shuffling of the UI Element's Depth.
+
+* Randomisation of the texture coordinates used by elements on the UI.
 
 ### Miscellaneous Randomisation
 
