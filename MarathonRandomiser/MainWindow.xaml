@@ -361,6 +361,29 @@
                 </Grid>
             </hc:TabItem>
 
+            <!--User Interface Tab-->
+            <hc:TabItem Header="UI" BorderBrush="#B146C2" x:Name="TabItem_XNCP" >
+                <Grid Background="#FF181818" Name="Grid_XNCP">
+                    <!--User Interface Configuration Checkboxes/Controls-->
+                    <StackPanel HorizontalAlignment="Left" Width="210" Name="StackPanel_XNCP">
+                        <StackPanel.Resources>
+                            <Style BasedOn="{StaticResource CheckBoxBaseStyle}" TargetType="{x:Type CheckBox}">
+                                <Setter Property="Margin" Value="10,10,0,0" />
+                                <Setter Property="HorizontalAlignment" Value="Left"/>
+                            </Style>
+                        </StackPanel.Resources>
+                        <CheckBox x:Name="CheckBox_XNCP_Colours" Content="Randomise UI Colours" IsChecked="False" Click="Dependency_CheckBox_Changed"/>
+                        <CheckBox x:Name="CheckBox_XNCP_Colours_Same" Content="Use Same Colour For All Points" IsEnabled="False"/>
+                        <CheckBox x:Name="CheckBox_XNCP_Colours_Alpha" Content="Randomise UI Opacity" Foreground="Firebrick" IsEnabled="False"/>
+                        <CheckBox x:Name="CheckBox_XNCP_Scale" Content="Randomise UI Scale" Foreground="Firebrick" Click="Dependency_CheckBox_Changed"/>
+                        <Label x:Name="Label_XNCP_Scale_Min" Content="Minimum:" Background="{x:Null}" BorderBrush="{x:Null}" IsEnabled="False"/>
+                        <hc:NumericUpDown x:Name="NumericUpDown_XNCP_Scale_Min" Value="0.5" Margin="10,0,10,0" SelectionBrush="#FFB146C2" IsEnabled="False" Increment="0.1"/>
+                        <Label x:Name="Label_XNCP_Scale_Max" Content="Maximum:" Background="{x:Null}" BorderBrush="{x:Null}" IsEnabled="False"/>
+                        <hc:NumericUpDown x:Name="NumericUpDown_XNCP_Scale_Max" Value="2" Margin="10,0,10,0" SelectionBrush="#FFB146C2" IsEnabled="False" Increment="0.1"/>
+                    </StackPanel>
+                </Grid>
+            </hc:TabItem>
+
             <!--Miscellaneous Tab-->
             <hc:TabItem Header="Miscellaneous" BorderBrush="#B146C2" x:Name="TabItem_Misc" >
                 <Grid Background="#FF181818" Name="Grid_Miscellaneous">
@@ -461,6 +484,7 @@
                         <CheckBox x:Name="CheckBox_Wildcard_Textures" Content="Textures" IsEnabled="False" IsChecked="True"/>
                         <CheckBox x:Name="CheckBox_Wildcard_Audio" Content="Audio" IsEnabled="False" IsChecked="True"/>
                         <CheckBox x:Name="CheckBox_Wildcard_Text" Content="Text" IsEnabled="False" IsChecked="True"/>
+                        <CheckBox x:Name="CheckBox_Wildcard_XNCP" Content="UI" IsEnabled="False" IsChecked="True"/>
                         <CheckBox x:Name="CheckBox_Wildcard_Miscellaneous" Content="Miscellaneous" IsEnabled="False" IsChecked="True"/>
                     </StackPanel>
 
@@ -501,6 +525,11 @@
                         <hc:TabItem Header="Text" BorderBrush="#B146C2">
                             <Grid>
                                 <local:CheckedListBox x:Name="CheckedList_Wildcard_Text" MultiColumn="True" Margin="0,0,0,0"/>
+                            </Grid>
+                        </hc:TabItem>
+                        <hc:TabItem Header="UI" BorderBrush="#B146C2">
+                            <Grid>
+                                <local:CheckedListBox x:Name="CheckedList_Wildcard_XNCP" MultiColumn="True" Margin="0,0,0,0"/>
                             </Grid>
                         </hc:TabItem>
                         <hc:TabItem Header="Miscellaneous" BorderBrush="#B146C2">

@@ -141,6 +141,7 @@ namespace MarathonRandomiser
             Helpers.FillWildcardCheckedListBox(Grid_Textures, CheckedList_Wildcard_Textures);
             Helpers.FillWildcardCheckedListBox(Grid_Audio, CheckedList_Wildcard_Audio);
             Helpers.FillWildcardCheckedListBox(Grid_Text, CheckedList_Wildcard_Text);
+            Helpers.FillWildcardCheckedListBox(Grid_XNCP, CheckedList_Wildcard_XNCP);
             Helpers.FillWildcardCheckedListBox(Grid_Miscellaneous, CheckedList_Wildcard_Miscellaneous);
         }
 
@@ -432,6 +433,17 @@ namespace MarathonRandomiser
 
                 case "CheckBox_Text_Generate": CheckBox_Text_Generate_Enforce.IsEnabled = NewCheckedStatus; break;
 
+                case "CheckBox_XNCP_Colours":
+                    CheckBox_XNCP_Colours_Same.IsEnabled = NewCheckedStatus;
+                    CheckBox_XNCP_Colours_Alpha.IsEnabled = NewCheckedStatus;
+                    break;
+                case "CheckBox_XNCP_Scale":
+                    Label_XNCP_Scale_Min.IsEnabled = NewCheckedStatus;
+                    NumericUpDown_XNCP_Scale_Min.IsEnabled = NewCheckedStatus;
+                    Label_XNCP_Scale_Max.IsEnabled = NewCheckedStatus;
+                    NumericUpDown_XNCP_Scale_Max.IsEnabled = NewCheckedStatus;
+                    break;
+
                 case "CheckBox_Text_Colour":
                     Label_Text_Colour_Weight.IsEnabled = NewCheckedStatus;
                     NumericUpDown_Text_Colour_Weight.IsEnabled = NewCheckedStatus;
@@ -564,7 +576,8 @@ namespace MarathonRandomiser
                         case 4: Helpers.InvalidateCheckedListBox(CheckedList_Wildcard_Textures, true, selectAll); break;
                         case 5: Helpers.InvalidateCheckedListBox(CheckedList_Wildcard_Audio, true, selectAll); break;
                         case 6: Helpers.InvalidateCheckedListBox(CheckedList_Wildcard_Text, true, selectAll); break;
-                        case 7: Helpers.InvalidateCheckedListBox(CheckedList_Wildcard_Miscellaneous, true, selectAll); break;
+                        case 7: Helpers.InvalidateCheckedListBox(CheckedList_Wildcard_XNCP, true, selectAll); break;
+                        case 8: Helpers.InvalidateCheckedListBox(CheckedList_Wildcard_Miscellaneous, true, selectAll); break;
                     }
                     break;
 
@@ -768,6 +781,10 @@ namespace MarathonRandomiser
             ConfigTabRead(configInfo, "Text", StackPanel_Text);
             ConfigCheckedListBoxRead(configInfo, CheckedList_Text_Languages);
             ConfigCheckedListBoxRead(configInfo, CheckedList_Text_Buttons);
+            configInfo.WriteLine();
+
+            // User Interface Block.
+            ConfigTabRead(configInfo, "UI", StackPanel_XNCP);
             configInfo.WriteLine();
 
             // Misc Block.
@@ -976,6 +993,11 @@ namespace MarathonRandomiser
         {
             updown.Value = Randomiser.NextDouble();
         }
+        private static void WildcardNumericUpDown(HandyControl.Controls.NumericUpDown updown, float min, float max)
+        {
+            double range = max - min;
+            updown.Value = (Randomiser.NextDouble() * range) + min;
+        }
         #endregion
 
         /// <summary>
@@ -1066,6 +1088,7 @@ namespace MarathonRandomiser
                 WildcardTabCheckboxes(Grid_Textures, (int)NumericUpDown_Wildcard_Weight.Value, CheckedList_Wildcard_Textures, true);
                 WildcardTabCheckboxes(Grid_Audio, (int)NumericUpDown_Wildcard_Weight.Value, CheckedList_Wildcard_Audio, true);
                 WildcardTabCheckboxes(Grid_Text, (int)NumericUpDown_Wildcard_Weight.Value, CheckedList_Wildcard_Text, true);
+                WildcardTabCheckboxes(Grid_XNCP, (int)NumericUpDown_Wildcard_Weight.Value, CheckedList_Wildcard_XNCP, true);
                 WildcardTabCheckboxes(Grid_Miscellaneous, (int)NumericUpDown_Wildcard_Weight.Value, CheckedList_Wildcard_Miscellaneous, true);
 
                 // Go through and configure elements based on the Wildcard.
@@ -1124,6 +1147,13 @@ namespace MarathonRandomiser
                     WildcardCheckedList(CheckedList_Text_Languages, (int)NumericUpDown_Wildcard_Weight.Value);
                     WildcardCheckedList(CheckedList_Text_Buttons, (int)NumericUpDown_Wildcard_Weight.Value);
                     WildcardNumericUpDown(NumericUpDown_Text_Colour_Weight, 0, 100);
+                }
+
+                if (CheckBox_Wildcard_XNCP.IsChecked == true)
+                {
+                    WildcardTabCheckboxes(Grid_XNCP, (int)NumericUpDown_Wildcard_Weight.Value, CheckedList_Wildcard_Animations);
+                    WildcardNumericUpDown(NumericUpDown_XNCP_Scale_Min, 0.25f, 1.75f);
+                    WildcardNumericUpDown(NumericUpDown_XNCP_Scale_Max, 0.25f, 1.75f);
                 }
 
                 if (CheckBox_Wildcard_Miscellaneous.IsChecked == true)
@@ -2012,6 +2042,38 @@ namespace MarathonRandomiser
                 {
                     UpdateLogger($"Shuffling text.");
                     await Task.Run(() => TextRandomiser.ShuffleText(mstFiles, eventArc, textArc, TextLanguages));
+                }
+            }
+            #endregion
+
+            #region UI Randomisers
+            bool? xncpColours = CheckBox_XNCP_Colours.IsChecked;
+            bool? xncpColoursSame = CheckBox_XNCP_Colours_Same.IsChecked;
+            bool? xncpColoursAlpha = CheckBox_XNCP_Colours_Alpha.IsChecked;
+            bool? xncpScale = CheckBox_XNCP_Scale.IsChecked;
+            double xncpScaleMin = NumericUpDown_XNCP_Scale_Min.Value;
+            double xncpScaleMax = NumericUpDown_XNCP_Scale_Max.Value;
+
+            // Check if we need to actually do any XNCP stuff.
+            if (xncpColours == true || xncpScale == true)
+            {
+                foreach (string archive in archives)
+                {
+                    if (Path.GetFileName(archive).ToLower() == "sprite.arc")
+                    {
+                        string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+                        string[] xncpFiles = Directory.GetFiles(unpackedArchive, "*.xncp", SearchOption.AllDirectories);
+
+                        foreach (string xncpFile in xncpFiles)
+                        {
+                            // Skip black_out.xncp as XNCPLib doesn't know what the hell to do with it.
+                            if (Path.GetFileName(xncpFile) != "black_out.xncp")
+                            {
+                                UpdateLogger($"Randomising: '{xncpFile}'.");
+                                await Task.Run(() => XNCPRandomisation.Process(xncpFile, xncpColours, xncpColoursSame, xncpColoursAlpha, xncpScale, xncpScaleMin, xncpScaleMax));
+                            }
+                        }
+                    }
                 }
             }
             #endregion

@@ -23,6 +23,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Shuriken\XNCPLib\XNCPLib.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="SonicAudioLib">
       <HintPath>ExternalResources\SonicAudioLib.dll</HintPath>
     </Reference>

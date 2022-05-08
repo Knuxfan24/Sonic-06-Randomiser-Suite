@@ -5,6 +5,10 @@ VisualStudioVersion = 17.0.31717.71
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarathonRandomiser", "MarathonRandomiser\MarathonRandomiser.csproj", "{A45835C8-4CC8-4C91-9C61-E74E87406985}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XNCPLib", "Shuriken\XNCPLib\XNCPLib.csproj", "{2324C3F2-F3A9-4D01-B99E-068C1EE2F8FF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Amicitia.IO", "Shuriken\Amicitia.IO\Amicitia.IO.csproj", "{17650E09-99E8-4FF2-9293-F9FE1B3AB65B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{A45835C8-4CC8-4C91-9C61-E74E87406985}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A45835C8-4CC8-4C91-9C61-E74E87406985}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A45835C8-4CC8-4C91-9C61-E74E87406985}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2324C3F2-F3A9-4D01-B99E-068C1EE2F8FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2324C3F2-F3A9-4D01-B99E-068C1EE2F8FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2324C3F2-F3A9-4D01-B99E-068C1EE2F8FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2324C3F2-F3A9-4D01-B99E-068C1EE2F8FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17650E09-99E8-4FF2-9293-F9FE1B3AB65B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17650E09-99E8-4FF2-9293-F9FE1B3AB65B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17650E09-99E8-4FF2-9293-F9FE1B3AB65B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17650E09-99E8-4FF2-9293-F9FE1B3AB65B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
