@@ -983,8 +983,8 @@ namespace MarathonRandomiser
         /// Randomly generate a number for a NumericUpDown element, if the min and max values are not specified then generate a float between 0 and 1.
         /// </summary>
         /// <param name="updown">The element to generate a value for.</param>
-        /// <param name="min">The minimum valid number.</param>
-        /// <param name="max">The maximum valid number.</param>
+        /// <param name="min">The minimum valid number, if a float is passed in then a floating point number between the two will be returned instead of a whole number.</param>
+        /// <param name="max">The maximum valid number, if a float is passed in then a floating point number between the two will be returned instead of a whole number.</param>
         private static void WildcardNumericUpDown(HandyControl.Controls.NumericUpDown updown, int min, int max)
         {
             updown.Value = Randomiser.Next(min, max);
