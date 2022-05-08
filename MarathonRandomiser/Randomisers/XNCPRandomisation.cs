@@ -16,11 +16,14 @@ namespace MarathonRandomiser
         /// <param name="scaleMax">The maximum scale value to use.</param>
         /// <param name="zIndex">Whether or not to shuffle the ZIndex values.</param>
         /// <returns></returns>
-        public static async Task Process(string xncpFile, bool? colours, bool? coloursSame, bool? coloursAlpha, bool? scale, double scaleMin, double scaleMax, bool? zIndex)
+        public static async Task Process(string xncpFile, bool? colours, bool? coloursSame, bool? coloursAlpha, bool? scale, double scaleMin, double scaleMax, bool? zIndex, bool? textureIndex)
         {
             // Set up a couple of list of numbers for the layer depths.
             List<float> zIndexList = new();
-            List<int> usedNumbers = new();
+            List<int> zIndexUsedNumbers = new();
+
+            // Set up a couple of list of numbers for the texture indices.
+            List<uint> textureIndicesList = new();
 
             // Load this XNCP file.
             FAPCFile? xncp = new();
@@ -36,6 +39,11 @@ namespace MarathonRandomiser
                     {
                         // Get the ZIndex of this scene.
                         zIndexList.Add(scene.ZIndex);
+
+                        // Get all the texture indices in ths file.
+                        foreach (SubImage? subimage in scene.SubImages)
+                            if (!textureIndicesList.Contains(subimage.TextureIndex))
+                                textureIndicesList.Add(subimage.TextureIndex);
 
                         foreach (CastGroup? uiCast in scene.UICastGroups)
                         {
@@ -110,8 +118,7 @@ namespace MarathonRandomiser
                 }
             }
 
-            // Loop again if we're randomising the ZIndex value.
-            if (zIndex == true)
+            // Loop again for ZIndex and Texture Index stuff.
             {
                 foreach (FAPCEmbeddedRes? resource in xncp.Resources)
                 {
@@ -119,21 +126,30 @@ namespace MarathonRandomiser
                     {
                         foreach (Scene? scene in resource.Content.CsdmProject.Root.Scenes)
                         {
-                            // Pick a random number from the amount of entires in the zIndexList.
-                            int index = MainWindow.Randomiser.Next(zIndexList.Count);
-
-                            // If the selected number is already used, pick another until it isn't.
-                            if (usedNumbers.Contains(index))
+                            // ZIndex Shuffling.
+                            if (zIndex == true)
                             {
-                                do { index = MainWindow.Randomiser.Next(zIndexList.Count); }
-                                while (usedNumbers.Contains(index));
+                                // Pick a random number from the amount of entires in the zIndexList.
+                                int index = MainWindow.Randomiser.Next(zIndexList.Count);
+
+                                // If the selected number is already used, pick another until it isn't.
+                                if (zIndexUsedNumbers.Contains(index))
+                                {
+                                    do { index = MainWindow.Randomiser.Next(zIndexList.Count); }
+                                    while (zIndexUsedNumbers.Contains(index));
+                                }
+
+                                // Add this number to the usedNumbers list so we can't pull the same value twice.
+                                zIndexUsedNumbers.Add(index);
+
+                                // Set the ZIndex to the chosen number.
+                                scene.ZIndex = zIndexList[index];
                             }
 
-                            // Add this number to the usedNumbers list so we can't pull the same value twice.
-                            usedNumbers.Add(index);
-
-                            // Set the ZIndex to the chosen number.
-                            scene.ZIndex = zIndexList[index];
+                            // Texture Index Subimage Randomisation.
+                            if (textureIndex == true)
+                                foreach (SubImage? subimage in scene.SubImages)
+                                    subimage.TextureIndex = textureIndicesList[MainWindow.Randomiser.Next(textureIndicesList.Count)];
                         }
                     }
                 }
