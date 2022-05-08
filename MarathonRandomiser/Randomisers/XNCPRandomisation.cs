@@ -14,9 +14,14 @@ namespace MarathonRandomiser
         /// <param name="scale">Whether or not to randomly scale the XNCP elements.</param>
         /// <param name="scaleMin">The minimum scale value to use.</param>
         /// <param name="scaleMax">The maximum scale value to use.</param>
+        /// <param name="zIndex">Whether or not to shuffle the ZIndex values.</param>
         /// <returns></returns>
-        public static async Task Process(string xncpFile, bool? colours, bool? coloursSame, bool? coloursAlpha, bool? scale, double scaleMin, double scaleMax)
+        public static async Task Process(string xncpFile, bool? colours, bool? coloursSame, bool? coloursAlpha, bool? scale, double scaleMin, double scaleMax, bool? zIndex)
         {
+            // Set up a couple of list of numbers for the layer depths.
+            List<float> zIndexList = new();
+            List<int> usedNumbers = new();
+
             // Load this XNCP file.
             FAPCFile? xncp = new();
             xncp.Load(xncpFile);
@@ -29,6 +34,9 @@ namespace MarathonRandomiser
                 {
                     foreach (Scene? scene in resource.Content.CsdmProject.Root.Scenes)
                     {
+                        // Get the ZIndex of this scene.
+                        zIndexList.Add(scene.ZIndex);
+
                         foreach (CastGroup? uiCast in scene.UICastGroups)
                         {
                             foreach (Cast? cast in uiCast.Casts)
@@ -97,6 +105,35 @@ namespace MarathonRandomiser
                                     cast.CastInfoData.Scale = new((float)((MainWindow.Randomiser.NextDouble() * range) + scaleMin), (float)((MainWindow.Randomiser.NextDouble() * range) + scaleMax));
                                 }
                             }
+                        }
+                    }
+                }
+            }
+
+            // Loop again if we're randomising the ZIndex value.
+            if (zIndex == true)
+            {
+                foreach (FAPCEmbeddedRes? resource in xncp.Resources)
+                {
+                    if (resource.Content.CsdmProject != null)
+                    {
+                        foreach (Scene? scene in resource.Content.CsdmProject.Root.Scenes)
+                        {
+                            // Pick a random number from the amount of entires in the zIndexList.
+                            int index = MainWindow.Randomiser.Next(zIndexList.Count);
+
+                            // If the selected number is already used, pick another until it isn't.
+                            if (usedNumbers.Contains(index))
+                            {
+                                do { index = MainWindow.Randomiser.Next(zIndexList.Count); }
+                                while (usedNumbers.Contains(index));
+                            }
+
+                            // Add this number to the usedNumbers list so we can't pull the same value twice.
+                            usedNumbers.Add(index);
+
+                            // Set the ZIndex to the chosen number.
+                            scene.ZIndex = zIndexList[index];
                         }
                     }
                 }

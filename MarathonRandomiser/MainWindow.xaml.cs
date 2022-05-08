@@ -2053,9 +2053,10 @@ namespace MarathonRandomiser
             bool? xncpScale = CheckBox_XNCP_Scale.IsChecked;
             double xncpScaleMin = NumericUpDown_XNCP_Scale_Min.Value;
             double xncpScaleMax = NumericUpDown_XNCP_Scale_Max.Value;
+            bool? xncpZIndex = CheckBox_XNCP_ZIndex.IsChecked;
 
             // Check if we need to actually do any XNCP stuff.
-            if (xncpColours == true || xncpScale == true)
+            if (xncpColours == true || xncpScale == true || xncpZIndex == true)
             {
                 foreach (string archive in archives)
                 {
@@ -2070,7 +2071,7 @@ namespace MarathonRandomiser
                             if (Path.GetFileName(xncpFile) != "black_out.xncp")
                             {
                                 UpdateLogger($"Randomising: '{xncpFile}'.");
-                                await Task.Run(() => XNCPRandomisation.Process(xncpFile, xncpColours, xncpColoursSame, xncpColoursAlpha, xncpScale, xncpScaleMin, xncpScaleMax));
+                                await Task.Run(() => XNCPRandomisation.Process(xncpFile, xncpColours, xncpColoursSame, xncpColoursAlpha, xncpScale, xncpScaleMin, xncpScaleMax, xncpZIndex));
                             }
                         }
                     }
