@@ -108,7 +108,7 @@ namespace MarathonRandomiser
         /// <param name="archivePath">The path to the extracted cache.arc.</param>
         /// <param name="ModDirectory">The path to the randomisation's mod directory.</param>
         /// <param name="GameExecutable">The path to the game executable (so we know what platform we're working on).</param>
-        public static async Task EventShuffler(string archivePath, string ModDirectory, string GameExecutable)
+        public static async Task EventShuffler(string archivePath, string ModDirectory, string GameExecutable, bool? skipFMVs)
         {
             // Load eventplaybook.epb.
             EventPlaybook epb = new($@"{archivePath}\xenon\eventplaybook.epb");
@@ -175,46 +175,49 @@ namespace MarathonRandomiser
             }
 
             // FMVs (this shit doesn't work right and dupes an FMV because Aquatic Base can go fuck itself).
-            // Determine what the file extension for the FMVs are.
-            string filetype = "wmv";
-            if (GameExecutable.ToLower().EndsWith(".bin"))
-                filetype = "pam";
-
-            usedNumbers.Clear();
-            string[] fmvs = Directory.GetFiles($@"{Path.GetDirectoryName(GameExecutable)}\xenon\event", $"*{filetype}", SearchOption.AllDirectories);
-            for (int i = 0; i < epb.Events.Count; i++)
+            if (skipFMVs == false)
             {
-                if (epb.Events[i].Terrain == null)
+                // Determine what the file extension for the FMVs are.
+                string filetype = "wmv";
+                if (GameExecutable.ToLower().EndsWith(".bin"))
+                    filetype = "pam";
+
+                usedNumbers.Clear();
+                string[] fmvs = Directory.GetFiles($@"{Path.GetDirectoryName(GameExecutable)}\xenon\event", $"*{filetype}", SearchOption.AllDirectories);
+                for (int i = 0; i < epb.Events.Count; i++)
                 {
-                    // Pick a random number from the amount of entires in the fvm event table.
-                    int index = MainWindow.Randomiser.Next(eventsFMV.Count);
-
-                    // If the selected number is already used, pick another until it isn't.
-                    if (usedNumbers.Contains(index))
+                    if (epb.Events[i].Terrain == null)
                     {
-                        do { index = MainWindow.Randomiser.Next(eventsFMV.Count); }
-                        while (usedNumbers.Contains(index));
-                    }
-                    usedNumbers.Add(index);
+                        // Pick a random number from the amount of entires in the fvm event table.
+                        int index = MainWindow.Randomiser.Next(eventsFMV.Count);
 
-                    // Set the values for this event to that of our selected one.
-                    epb.Events[i].Folder               = eventsFMV[index].Folder;
-                    epb.Events[i].Terrain              = eventsFMV[index].Terrain;
-                    epb.Events[i].SceneLua             = eventsFMV[index].SceneLua;
-                    epb.Events[i].SoundBank            = eventsFMV[index].SoundBank;
-                    epb.Events[i].ParticleContainer    = eventsFMV[index].ParticleContainer;
-                    epb.Events[i].SubtitleMessageTable = eventsFMV[index].SubtitleMessageTable;
-                    epb.Events[i].EventLength          = eventsFMV[index].EventLength;
-                    epb.Events[i].Position             = eventsFMV[index].Position;
-                    epb.Events[i].Rotation             = eventsFMV[index].Rotation;
-
-                    // Handle the WMV files (has a bug that dupes the Aquatic Base Past FMV because of how its set up).
-                    foreach (string fmv in fmvs)
-                    {
-                        if (fmv.Contains(eventsFMV[index].Folder.Replace('/', '\\')) && epb.Events[i].Name != "e0220")
+                        // If the selected number is already used, pick another until it isn't.
+                        if (usedNumbers.Contains(index))
                         {
-                            Directory.CreateDirectory($@"{ModDirectory}\xenon\event\{epb.Events[i].Name}");
-                            File.Copy(fmv, $@"{ModDirectory}\xenon\event\{epb.Events[i].Name}\{epb.Events[i].Name}.{filetype}");
+                            do { index = MainWindow.Randomiser.Next(eventsFMV.Count); }
+                            while (usedNumbers.Contains(index));
+                        }
+                        usedNumbers.Add(index);
+
+                        // Set the values for this event to that of our selected one.
+                        epb.Events[i].Folder               = eventsFMV[index].Folder;
+                        epb.Events[i].Terrain              = eventsFMV[index].Terrain;
+                        epb.Events[i].SceneLua             = eventsFMV[index].SceneLua;
+                        epb.Events[i].SoundBank            = eventsFMV[index].SoundBank;
+                        epb.Events[i].ParticleContainer    = eventsFMV[index].ParticleContainer;
+                        epb.Events[i].SubtitleMessageTable = eventsFMV[index].SubtitleMessageTable;
+                        epb.Events[i].EventLength          = eventsFMV[index].EventLength;
+                        epb.Events[i].Position             = eventsFMV[index].Position;
+                        epb.Events[i].Rotation             = eventsFMV[index].Rotation;
+
+                        // Handle the WMV files (has a bug that dupes the Aquatic Base Past FMV because of how its set up).
+                        foreach (string fmv in fmvs)
+                        {
+                            if (fmv.Contains(eventsFMV[index].Folder.Replace('/', '\\')) && epb.Events[i].Name != "e0220")
+                            {
+                                Directory.CreateDirectory($@"{ModDirectory}\xenon\event\{epb.Events[i].Name}");
+                                File.Copy(fmv, $@"{ModDirectory}\xenon\event\{epb.Events[i].Name}\{epb.Events[i].Name}.{filetype}");
+                            }
                         }
                     }
                 }

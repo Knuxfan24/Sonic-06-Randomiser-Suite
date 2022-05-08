@@ -391,6 +391,10 @@ namespace MarathonRandomiser
                     CheckBox_Event_Voices_Japanese.IsEnabled = NewCheckedStatus;
                     CheckBox_Event_Voices_Gameplay.IsEnabled = NewCheckedStatus;
                     break;
+                case "CheckBox_Event_Order":
+                    CheckBox_Event_SkipFMVs.IsEnabled = NewCheckedStatus;
+                    CheckBox_Event_SkipFMVs.IsEnabled = NewCheckedStatus;
+                    break;
 
                 case "CheckBox_Scene_Light_Ambient":
                 case "CheckBox_Scene_Light_Main":
@@ -1475,6 +1479,7 @@ namespace MarathonRandomiser
             bool? eventVoiceGame = CheckBox_Event_Voices_Gameplay.IsChecked;
             bool? eventTerrain = CheckBox_Event_Terrain.IsChecked;
             bool? eventOrder = CheckBox_Event_Order.IsChecked;
+            bool? eventSkipFMVs = CheckBox_Event_SkipFMVs.IsChecked;
 
             // Check if we actually need to do event stuff.
             if (eventLighting == true || eventRotX == true || eventRotY == true || eventRotZ == true || eventPosX == true || eventPosY == true || eventPosZ == true || eventTerrain == true ||
@@ -1498,7 +1503,7 @@ namespace MarathonRandomiser
                         if (eventOrder == true)
                         {
                             UpdateLogger($"Shuffling event order.");
-                            await Task.Run(() => EventRandomiser.EventShuffler(unpackedArchive, ModDirectory, GameExecutable));
+                            await Task.Run(() => EventRandomiser.EventShuffler(unpackedArchive, ModDirectory, GameExecutable, eventSkipFMVs));
                         }
 
                         // Event Voice Line Shuffling.
