@@ -225,7 +225,7 @@
                 for (int i = 0; i < lua.Length; i++)
                 {
                     // Use the AddComponent call as a donor, as those always seem to be on the block that controls terrain loading.
-                    if (lua[i].Contains("_ARG_0_:AddComponent({"))
+                    if (lua[i].Contains("a1:AddComponent({"))
                     {
                         // Add a new line under the AddComponent call with the Game.LoadSky() function.
                         lua[i] += $"\n    Game.LoadSky(\"{SceneSkyboxes[MainWindow.Randomiser.Next(SceneSkyboxes.Count)]}\"),";
