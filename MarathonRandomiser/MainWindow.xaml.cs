@@ -64,7 +64,7 @@ namespace MarathonRandomiser
 
             // If this is a debug build, set the seed to WPF Test for the sake of consistent testing and list the Temporary Directory path.
             #if DEBUG
-            TextBox_General_Seed.Text = "WPF Test";
+            TextBox_General_Seed.Text = "Development Testing";
             Debug.WriteLine($"Current temporary path is: {TemporaryDirectory}.");
             #endif
 
