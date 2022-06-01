@@ -1062,7 +1062,7 @@ namespace MarathonRandomiser
             {
                 configInfo.WriteLine("[Details]");
                 configInfo.WriteLine($"Title=\"Sonic '06 Randomised ({TextBox_General_Seed.Text})\"");
-                configInfo.WriteLine($"Version=\"{TextBox_General_Seed.Text}\"");
+                configInfo.WriteLine($"Version=\"{GlobalVersionNumber.Replace("Version ", "")}\"");
                 configInfo.WriteLine($"Date=\"{DateTime.Now:dd/MM/yyyy}\"");
                 configInfo.WriteLine($"Author=\"Sonic '06 Randomiser Suite\"");
 
