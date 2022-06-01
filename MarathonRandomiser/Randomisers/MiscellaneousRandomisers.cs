@@ -199,5 +199,53 @@ namespace MarathonRandomiser
             // Save the updated lua binary.
             File.WriteAllLines($@"{archivePath}\{corePath}\scripts\mission\0001\mission.lub", lua);
         }
+    
+        /// <summary>
+        /// Edits attributes in Common.bin to change how physics props behave.
+        /// </summary>
+        /// <param name="archivePath">The path to the extracted object.arc.</param>
+        /// <param name="psi">Whether or not the object's behaviour when grabbed by Silver should be randomised.</param>
+        /// <param name="psiNoGrab">Whether or not to allow making a prop not grabbable.</param>
+        /// <param name="psiNoDebris">Whether or not to skip randomising the PSI behaviour on a break object.</param>
+        /// <param name="debris">Whether or not to randomise what break object spawns from a prop.</param>
+        public static async Task PropAttributes(string archivePath, bool? psi, bool? psiNoGrab, bool? psiNoDebris, bool? debris)
+        {
+            // Set up a list of valid break objects.
+            List<string> debrisTypes = new();
+
+            // Load the Common Package.
+            CommonPackage commonBIN = new($@"{archivePath}\xenon\object\Common.bin");
+
+            // Build up a list of valid debris stuff
+            foreach (CommonObject? entry in commonBIN.Objects)
+                if (entry.BreakObject != "")
+                    if (!debrisTypes.Contains(entry.BreakObject))
+                        debrisTypes.Add(entry.BreakObject);
+
+            // Loop through each object for the actual randomisation.
+            foreach (CommonObject? entry in commonBIN.Objects)
+            {
+                // Randomise the PsiBehaviour if we need to.
+                if (psi == true)
+                {
+                    // Skip this object if it's in the debris list and we're not randomising debris PsiBehaviour.
+                    if (psiNoDebris == true && debrisTypes.Contains(entry.PropName))
+                        continue;
+
+                    // Generate a number for the PsiBehaviour depending on whether we're allowed to generate a 0 or not.
+                    if (psiNoGrab == true)
+                        entry.PsiBehaviour = (uint)MainWindow.Randomiser.Next(1, 3);
+                    else
+                        entry.PsiBehaviour = (uint)MainWindow.Randomiser.Next(0, 3);
+                }
+
+                // Pick a new break object if we're randomising debris and this object calls for one.
+                if (debris == true && entry.BreakObject != "")
+                    entry.BreakObject = debrisTypes[MainWindow.Randomiser.Next(debrisTypes.Count)];
+            }
+
+            // Save the updated Common.bin
+            commonBIN.Save();
+        }
     }
 }

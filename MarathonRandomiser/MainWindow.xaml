@@ -7,7 +7,7 @@
         xmlns:hc="https://handyorg.github.io/handycontrol"
         x:Class="MarathonRandomiser.MainWindow"
         mc:Ignorable="d"
-        Title="Sonic '06 Randomiser Suite" Height="720" Width="1280" MinHeight="720" MinWidth="1280">
+        Title="Sonic '06 Randomiser Suite" Height="720" Width="1400" MinHeight="720" MinWidth="1400">
     <Grid Background="#FF181818">
         <hc:TabControl Style="{StaticResource TabControlInLine}" Margin="0,0,0,50" x:Name="TabControl_Main">
             <!--General Tab-->
@@ -409,6 +409,10 @@
                         <Label x:Name="Label_Misc_Patches_Weight" Content="Weight:" Background="{x:Null}" BorderBrush="{x:Null}" IsEnabled="False"/>
                         <hc:NumericUpDown x:Name="NumericUpDown_Misc_Patches_Weight" Minimum="1" Maximum="100" Value="50" Margin="10,0,10,0" SelectionBrush="#FFB146C2" IsEnabled="False"/>
                         <CheckBox x:Name="CheckBox_Misc_AutoUnlock" Content="Auto Unlock Episodes"/>
+                        <CheckBox x:Name="CheckBox_Misc_PropPSIBehaviour" Content="Randomise Prop PSI Behaviour" Click="Dependency_CheckBox_Changed"/>
+                        <CheckBox x:Name="CheckBox_Misc_PropPSIBehaviour_NoGrab" Content="Don't Disable Grabbing" IsEnabled="False"/>
+                        <CheckBox x:Name="CheckBox_Misc_PropPSIBehaviour_NoDebris" Content="Ignore Debris" IsEnabled="False"/>
+                        <CheckBox x:Name="CheckBox_Misc_PropDebris" Content="Randomise Prop Debris"/>
                     </StackPanel>
 
                     <!--Miscellaneous Configuration Toggles-->

@@ -375,8 +375,12 @@ namespace MarathonRandomiser
             // Check the name of the Checkbox and carry out the appropriate task(s).
             switch (CheckBoxName)
             {
-                case "CheckBox_SET_Enemies": CheckBox_SET_Enemies_NoBosses.IsEnabled = NewCheckedStatus; break;
-                case "CheckBox_SET_Enemies_Behaviour": CheckBox_SET_Enemies_Behaviour_NoEnforce.IsEnabled = NewCheckedStatus; break;
+                case "CheckBox_SET_Enemies":
+                    CheckBox_SET_Enemies_NoBosses.IsEnabled = NewCheckedStatus;
+                    break;
+                case "CheckBox_SET_Enemies_Behaviour":
+                    CheckBox_SET_Enemies_Behaviour_NoEnforce.IsEnabled = NewCheckedStatus;
+                    break;
                 case "CheckBox_SET_DrawDistance":
                     Label_SET_DrawDistance_Min.IsEnabled = NewCheckedStatus;
                     NumericUpDown_SET_DrawDistance_Min.IsEnabled = NewCheckedStatus;
@@ -411,7 +415,9 @@ namespace MarathonRandomiser
                         NumericUpDown_Scene_MinStrength.IsEnabled = false;
                     }
                     break;
-                case "CheckBox_Scene_Light_Direction": CheckBox_Scene_Light_Direction_Enforce.IsEnabled = NewCheckedStatus; break;
+                case "CheckBox_Scene_Light_Direction":
+                    CheckBox_Scene_Light_Direction_Enforce.IsEnabled = NewCheckedStatus;
+                    break;
 
                 case "CheckBox_Anim_Gameplay":
                     CheckBox_Anim_GameplayUseAll.IsEnabled = NewCheckedStatus;
@@ -431,7 +437,9 @@ namespace MarathonRandomiser
                     CheckBox_Textures_OnlyCustom.IsEnabled = NewCheckedStatus;
                     break;
 
-                case "CheckBox_Text_Generate": CheckBox_Text_Generate_Enforce.IsEnabled = NewCheckedStatus; break;
+                case "CheckBox_Text_Generate":
+                    CheckBox_Text_Generate_Enforce.IsEnabled = NewCheckedStatus;
+                    break;
 
                 case "CheckBox_XNCP_Colours":
                     CheckBox_XNCP_Colours_Same.IsEnabled = NewCheckedStatus;
@@ -456,9 +464,13 @@ namespace MarathonRandomiser
                     NumericUpDown_Misc_EnemyHealth_Max.IsEnabled = NewCheckedStatus;
                     CheckBox_Misc_EnemyHealth_Bosses.IsEnabled = NewCheckedStatus;
                     break;
-
-                case "CheckBox_Misc_Collision": CheckBox_Misc_Collision_PerFace.IsEnabled = NewCheckedStatus; break;
-
+                case "CheckBox_Misc_PropPSIBehaviour":
+                    CheckBox_Misc_PropPSIBehaviour_NoGrab.IsEnabled = NewCheckedStatus;
+                    CheckBox_Misc_PropPSIBehaviour_NoDebris.IsEnabled = NewCheckedStatus;
+                    break;
+                case "CheckBox_Misc_Collision":
+                    CheckBox_Misc_Collision_PerFace.IsEnabled = NewCheckedStatus;
+                    break;
                 case "CheckBox_Misc_Patches":
                     Label_Misc_Patches_Weight.IsEnabled = NewCheckedStatus;
                     NumericUpDown_Misc_Patches_Weight.IsEnabled = NewCheckedStatus;
@@ -673,7 +685,8 @@ namespace MarathonRandomiser
                                                   "Microsoft: xmaencode and texconv utilities.\n" +
                                                   "HandyControl: WPF Form Controls.\n" +
                                                   "Skyth: Sonic Audio Tools.\n" +
-                                                  "dwyl: Plain Text List of English Words.",
+                                                  "dwyl: Plain Text List of English Words.\n" +
+                                                  "crash5band: XNCPLib.",
                                                   "Sonic '06 Randomiser Suite",
                                                   MessageBoxButton.OK,
                                                   MessageBoxImage.Information);
@@ -2091,6 +2104,10 @@ namespace MarathonRandomiser
             bool? miscPatches = CheckBox_Misc_Patches.IsChecked;
             int miscPatchesWeight = (int)NumericUpDown_Misc_Patches_Weight.Value;
             bool? miscUnlock = CheckBox_Misc_AutoUnlock.IsChecked;
+            bool? miscPropPSI = CheckBox_Misc_PropPSIBehaviour.IsChecked;
+            bool? miscPropPSINoGrab = CheckBox_Misc_PropPSIBehaviour_NoGrab.IsChecked;
+            bool? miscPropPSINoDebris = CheckBox_Misc_PropPSIBehaviour_NoDebris.IsChecked;
+            bool? miscPropDebris = CheckBox_Misc_PropDebris.IsChecked;
 
             // Check if we need to actually do enemy health randomisation.
             if (miscEnemyHealth == true)
@@ -2142,6 +2159,20 @@ namespace MarathonRandomiser
                         UpdateLogger($"Patching first Sonic mission Lua to unlock Shadow and Silver's episodes.");
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
                         await Task.Run(() => MiscellaneousRandomisers.UnlockEpisodes(unpackedArchive, GameExecutable));
+                    }
+                }
+            }
+
+            // Check if we need to modify Common.bin
+            if (miscPropPSI == true || miscPropDebris == true)
+            {
+                foreach (string archive in archives)
+                {
+                    if (Path.GetFileName(archive).ToLower() == "object.arc")
+                    {
+                        UpdateLogger($"Randomising prop attributes.");
+                        string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+                        await Task.Run(() => MiscellaneousRandomisers.PropAttributes(unpackedArchive, miscPropPSI, miscPropPSINoGrab, miscPropPSINoDebris, miscPropDebris));
                     }
                 }
             }
