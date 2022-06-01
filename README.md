@@ -143,6 +143,10 @@ Randomisation of miscellaneous elements across one off files, these are:
 
 * Optionally automatically unlocking Shadow and Silver's episodes from the start
 
+* Randomising how props interact with Silver's PSI
+
+* Randomising the debris spawned when a prop breaks
+
 ### Custom Elements
 
 <img src="https://raw.githubusercontent.com/wiki/Knuxfan24/Sonic-06-Randomiser-Suite/images/tab_custom.png">
