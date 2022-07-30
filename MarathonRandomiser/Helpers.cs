@@ -1,5 +1,6 @@
 ﻿using Marathon.Formats.Archive;
 using Marathon.Formats.Audio;
+using Marathon.Formats.Placement;
 using Marathon.Formats.Script.Lua;
 using Marathon.IO;
 using Newtonsoft.Json;
@@ -9,6 +10,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Numerics;
 using System.Web;
 using System.Windows;
 using System.Windows.Controls;
@@ -413,6 +415,43 @@ namespace MarathonRandomiser
 
             // Save our updated voice_all_e.sbk.
             voice_all.Save();
+        }
+
+        /// <summary>
+        /// Creates and returns an '06 SET Object.
+        /// </summary>
+        /// <param name="name">The created object's name.</param>
+        /// <param name="type">The created object's type.</param>
+        /// <param name="startInactive">Whether or not this object should start deactivated.</param>
+        /// <param name="position">The object's position in the world.</param>
+        /// <param name="rotation">The object's rotation.</param>
+        /// <returns></returns>
+        public static SetObject ObjectCreate(string name, string type, bool startInactive, Vector3 position, Quaternion rotation)
+        {
+            SetObject obj = new()
+            {
+                Name = name,
+                Type = type,
+                StartInactive = startInactive,
+                Position = position,
+                Rotation = rotation
+            };
+            return obj;
+        }
+        
+        /// <summary>
+        /// Creates and returns an '06 SET Object Parameter.
+        /// </summary>
+        /// <param name="value">The value of this parameter.</param>
+        /// <param name="type">The type of this parameter.</param>
+        public static SetParameter ParameterCreate(object value, ObjectDataType type)
+        {
+            SetParameter parameter = new()
+            {
+                Data = value,
+                Type = type
+            };
+            return parameter;
         }
     }
 }

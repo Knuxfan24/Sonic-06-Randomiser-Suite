@@ -377,6 +377,10 @@ namespace MarathonRandomiser
             {
                 case "CheckBox_SET_Enemies":
                     CheckBox_SET_Enemies_NoBosses.IsEnabled = NewCheckedStatus;
+                    if (CheckBox_SET_Beatable.IsChecked == true)
+                    {
+                        CheckBox_SET_Enemies_Behaviour.IsChecked = NewCheckedStatus;
+                    }
                     break;
                 case "CheckBox_SET_Enemies_Behaviour":
                     CheckBox_SET_Enemies_Behaviour_NoEnforce.IsEnabled = NewCheckedStatus;
@@ -390,6 +394,15 @@ namespace MarathonRandomiser
                 case "CheckBox_SET_Jumpboards":
                     Label_SET_Jumpboards_Chance.IsEnabled = NewCheckedStatus;
                     NumericUpDown_SET_Jumpboards_Chance.IsEnabled = NewCheckedStatus;
+                    break;
+                case "CheckBox_SET_Beatable":
+                    CheckBox_SET_Enemies_Behaviour.IsEnabled = !NewCheckedStatus;
+                    CheckBox_SET_Enemies_Behaviour_NoEnforce.IsEnabled = !NewCheckedStatus;
+                    CheckBox_SET_Jumpboards.IsChecked = false;
+                    CheckBox_SET_Jumpboards.IsEnabled = !NewCheckedStatus;
+                    CheckBox_SET_PlacementShuffle.IsChecked = false;
+                    CheckBox_SET_PlacementShuffle.IsEnabled = !NewCheckedStatus;
+                    CheckedList_SET_ObjectShuffle.IsEnabled = false;
                     break;
 
                 case "CheckBox_Event_Voices":
@@ -1375,6 +1388,7 @@ namespace MarathonRandomiser
             int setMaxDrawDistance = (int)NumericUpDown_SET_DrawDistance_Max.Value;
             int setJumpboardsChance = (int)NumericUpDown_SET_Jumpboards_Chance.Value;
             bool? setTransform = CheckBox_SET_PlacementShuffle.IsChecked;
+            bool? setEnforceBeatable = CheckBox_SET_Beatable.IsChecked;
 
             // Check if we actually need to do SET stuff.
             if (setEnemies == true || setBehaviour == true || setCharacters == true || setItemCapsules == true || setCommonProps == true || setPathProps == true || setHints == true || setDoors == true||
@@ -1393,10 +1407,36 @@ namespace MarathonRandomiser
                         foreach (string setFile in setFiles)
                         {
                             UpdateLogger($"Randomising: '{setFile}'.");
-                            await Task.Run(() => ObjectPlacementRandomiser.Process(setFile, setEnemies, setEnemiesNoBosses, setBehaviour, setBehaviourNoEnforce, setCharacters, setItemCapsules,
+                            bool success = false;
+                            success = await Task.Run(() => ObjectPlacementRandomiser.Process(setFile, setEnemies, setEnemiesNoBosses, setBehaviour, setBehaviourNoEnforce, setCharacters, setItemCapsules,
                                                                                    setCommonProps, setPathProps, setHints, setDoors, setDrawDistance, setCosmetic, setParticles, setJumpboards, SetEnemies,
                                                                                    SetCharacters, SetItemCapsules, SetCommonProps, SetPathProps, SetHints, SetDoors, SetParticleBanks, setMinDrawDistance,
-                                                                                   setMaxDrawDistance, setJumpboardsChance, setTransform, SetShuffleBlacklist));
+                                                                                   setMaxDrawDistance, setJumpboardsChance, setTransform, SetShuffleBlacklist, setEnforceBeatable));
+                            if (!success)
+                            {
+                                // Delete the temp directory so it isn't left over from a failed roll.
+                                if (Directory.Exists(TemporaryDirectory))
+                                    Directory.Delete(TemporaryDirectory, true);
+
+                                // Delete the failed mod directory.
+                                Directory.Delete(ModDirectory, true);
+
+                                // Restore Form Visiblity.
+                                TabControl_Main.Visibility = Visibility.Visible;
+                                ListView_ProgressLogger.Visibility = Visibility.Hidden;
+                                ProgressBar_ProgressLogger.Visibility = Visibility.Hidden;
+                                Button_Randomise.IsEnabled = true;
+                                Button_LoadConfig.IsEnabled = true;
+
+                                // Show the Randomisation failed message box.
+                                HandyControl.Controls.MessageBox.Show("Randomisation failed... This may be due to your settings resulting in it being impossible to generate a beatable seed.",
+                                                                      "Sonic '06 Randomiser Suite",
+                                                                      MessageBoxButton.OK,
+                                                                      MessageBoxImage.Error);
+
+                                // Stop the rest of the randomisation function.
+                                return;
+                            }
                         }
 
                         // Patch enemy luas if they need patching.

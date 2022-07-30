@@ -37,11 +37,15 @@ namespace MarathonRandomiser
         /// <param name="jumpboardChance">The chance that a Jump Panel will be switched for a Jump Board.</param>
         /// <param name="shuffleTransform">Whether or not objects will have their positions shuffled around.</param>
         /// <param name="shuffleBlacklist">The list of objects we should ignore for the position shuffling process.</param>
-        public static async Task Process(string setFile, bool? enemies, bool? enemiesNoBosses, bool? behaviour, bool? behaviourNoEnforce, bool? characters, bool? itemCapsules, bool? commonProps,
+        /// <param name="enforceBeatable">Whether we need to do the hardcoded beatable checks.</param>
+        public static async Task<bool> Process(string setFile, bool? enemies, bool? enemiesNoBosses, bool? behaviour, bool? behaviourNoEnforce, bool? characters, bool? itemCapsules, bool? commonProps,
                                       bool? pathProps, bool? hints, bool? doors, bool? drawDistance, bool? cosmetic, bool? particle, bool? jumpboards, List<string> SetEnemies,
                                       List<string> SetCharacters, List<string> SetItemCapsules, List<string> SetCommonProps, List<string> SetPathProps, List<string> SetHints, List<string> SetDoors,
-                                      List<string> SetParticleBanks, int minDrawDistance, int maxDrawDistance, int jumpboardChance, bool? shuffleTransform, List<string> shuffleBlacklist)
+                                      List<string> SetParticleBanks, int minDrawDistance, int maxDrawDistance, int jumpboardChance, bool? shuffleTransform, List<string> shuffleBlacklist,
+                                      bool? enforceBeatable)
         {
+            bool successful = true;
+
             List<Vector3> Positions = new();
             List<Quaternion> Rotations = new();
 
@@ -208,10 +212,10 @@ namespace MarathonRandomiser
                         };
 
                         // Set the parameters.
-                        eventIndicator.Parameters.Add(ParameterCreate("EventIndicator", ObjectDataType.String));
-                        eventIndicator.Parameters.Add(ParameterCreate("", ObjectDataType.String));
-                        eventIndicator.Parameters.Add(ParameterCreate(0f, ObjectDataType.Single));
-                        eventIndicator.Parameters.Add(ParameterCreate(0f, ObjectDataType.Single));
+                        eventIndicator.Parameters.Add(Helpers.ParameterCreate("EventIndicator", ObjectDataType.String));
+                        eventIndicator.Parameters.Add(Helpers.ParameterCreate("", ObjectDataType.String));
+                        eventIndicator.Parameters.Add(Helpers.ParameterCreate(0f, ObjectDataType.Single));
+                        eventIndicator.Parameters.Add(Helpers.ParameterCreate(0f, ObjectDataType.Single));
 
                         // Add the object to the set file.
                         set.Data.Objects.Add(eventIndicator);
@@ -219,8 +223,21 @@ namespace MarathonRandomiser
                 }
             }
 
+            if (enforceBeatable == true)
+            {
+                switch (Path.GetFileName(setFile))
+                {
+                    case "set_wvoA_sonic.set":
+                        successful = await Task.Run(() => BeatableEnforcement(set, characters, SetCharacters, commonProps, enemies, SetEnemies, enemiesNoBosses, Randomisers.ObjectPlacement_Beatable.WaveOcean.set_wvoA_sonic_Characters, Randomisers.ObjectPlacement_Beatable.WaveOcean.set_wvoA_sonic_NoBoss, Randomisers.ObjectPlacement_Beatable.WaveOcean.set_wvoA_sonic_RequiredProps));
+                        set.Data.Objects[244].Parameters[1].Data = "sonic_new"; // Force the player_start2 at 244 to be Sonic.
+                        await Task.Run(() => Randomisers.ObjectPlacement_Beatable.WaveOcean.set_wvoA_sonic_NewObjects(set));
+                        break;
+                }
+            }
+
             // Save the updated set file.
             set.Save();
+            return successful;
         }
 
         /// <summary>
@@ -228,7 +245,7 @@ namespace MarathonRandomiser
         /// </summary>
         /// <param name="setObject">The object we're editing.</param>
         /// <param name="enemyTypes">The list of valid enemy types.</param>
-        static async Task EnemyTypeRandomiser(SetObject setObject, List<string> enemyTypes, bool? enemiesNoBosses)
+        public static async Task EnemyTypeRandomiser(SetObject setObject, List<string> enemyTypes, bool? enemiesNoBosses)
         {
             // If this object is a boss but the user has disallowed boss randomisation, then don't change anything.
             if (enemiesNoBosses == true && (setObject.Parameters[0].Data.ToString() == "eCerberus" || setObject.Parameters[0].Data.ToString() == "eGenesis" ||
@@ -287,14 +304,21 @@ namespace MarathonRandomiser
         /// </summary>
         /// <param name="setObject">The object we're editing.</param>
         /// <param name="dontEnforceBehaviours">Whether we should ensure that the chosen behaviour belongs to this enemy type.</param>
-        static async Task EnemyBehaviourRandomiser(SetObject setObject, bool? dontEnforceBehaviours, bool? enemiesNoBosses)
+        public static async Task EnemyBehaviourRandomiser(SetObject setObject, bool? dontEnforceBehaviours, bool? enemiesNoBosses)
         {
             // If this object is a boss but the user has disallowed boss randomisation, then don't change anything.
             if (enemiesNoBosses == true && (setObject.Parameters[0].Data.ToString() == "eCerberus" || setObject.Parameters[0].Data.ToString() == "eGenesis" ||
                 setObject.Parameters[0].Data.ToString() == "eWyvern" || setObject.Parameters[0].Data.ToString() == "firstiblis" || setObject.Parameters[0].Data.ToString() == "secondiblis" ||
                 setObject.Parameters[0].Data.ToString() == "thirdiblis" || setObject.Parameters[0].Data.ToString() == "firstmefiress" || setObject.Parameters[0].Data.ToString() == "secondmefiress" ||
                 setObject.Parameters[0].Data.ToString() == "solaris01" || setObject.Parameters[0].Data.ToString() == "solaris02"))
-                return;
+            {
+                // Check if this boss actually has a boss's parameter, if not, then it's probably a regular enemy that's been randomised into a boss and will need its parameter changing.
+                // If it does have a boss parameter, then we can just return.
+                if (setObject.Parameters[2].Data is (object)"secondIblis_sonic" or (object)"secondIblis_shadow" or (object)"firstmefiress_shadow" or (object)"firstmefiress_omega"
+                                                 or (object)"eCerberus_sonic" or (object)"eCerberus_shadow" or (object)"eGenesis_sonic" or (object)"eGenesis_silver" or (object)"firstIblis"
+                                                 or (object)"thirdIblis" or (object)"secondmefiress_shadow" or (object)"eWyvern" or (object)"solaris01" or (object)"solaris02")
+                    return;
+            }
 
             // Setup for if we are enforcing the behaviour type.
             if (dontEnforceBehaviours == false)
@@ -830,21 +854,6 @@ namespace MarathonRandomiser
             // Save the updated lua binary.
             File.WriteAllLines(luaFile, lua);
         }
-
-        /// <summary>
-        /// Creates and returns a '06 SET Object Parameter.
-        /// </summary>
-        /// <param name="value">The value of this parameter.</param>
-        /// <param name="type">The type of this parameter.</param>
-        private static SetParameter ParameterCreate(object value, ObjectDataType type)
-        {
-            SetParameter parameter = new SetParameter()
-            {
-                Data = value,
-                Type = type
-            };
-            return parameter;
-        }
     
         /// <summary>
         /// Patches the PathObj.bin file to add the stuff needed for the event volume position model.
@@ -878,5 +887,97 @@ namespace MarathonRandomiser
             File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\crate_iron_switch.dds", $@"{archivePath}\win32\object\rando\eventindicator\crate_iron_switch.dds", true);
             File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\rando_obj_indicator.xno", $@"{archivePath}\win32\object\rando\eventindicator\rando_obj_indicator.xno", true);
         }
+    
+        /// <summary>
+        /// Performs the generic alterations to enforce a stage is beatable.
+        /// </summary>
+        /// <param name="set">The set file we're processing.</param>
+        /// <param name="characters">Whether characters were randomised.</param>
+        /// <param name="SetCharacters">What characters were included in the randomisation.</param>
+        /// <param name="commonProps">Whether props were randomised.</param>
+        /// <param name="enemies">Whether enemies were randomised.</param>
+        /// <param name="SetEnemies">What enemies were included in the randomisation.</param>
+        /// <param name="enemiesNoBosses">Whether bosses were ignored in the randomisation.</param>
+        /// <param name="AllowedCharacters">What characters this stage allows.</param>
+        /// <param name="DisallowedBosses">What enemy indices this stage shouldn't allow to be a boss.</param>
+        /// <param name="RequiredProps">What props need to be reverted.</param>
+        /// <returns></returns>
+        public static async Task<bool> BeatableEnforcement(ObjectPlacement set, bool? characters, List<string> SetCharacters, bool? commonProps, bool? enemies, List<string> SetEnemies, bool? enemiesNoBosses, List<string> AllowedCharacters, List<int> DisallowedBosses, Dictionary<int, string> RequiredProps)
+        {
+            // Loop through the objects in the set.
+            for (int i = 0; i < set.Data.Objects.Count; i++)
+            {
+                // Set an attempt count for how many times we have to try and roll something beatable.
+                int remainingAttempts = 1000000;
+
+                // Check if we need to process this object.
+                switch (set.Data.Objects[i].Type)
+                {
+                    case "player_start2":
+                        if (characters == true)
+                        {
+                            // Try to select a character that is in our valid list.
+                            while (remainingAttempts != 0 && !AllowedCharacters.Contains(set.Data.Objects[i].Parameters[1].Data.ToString()))
+                            {
+                                set.Data.Objects[i].Parameters[1].Data = SetCharacters[MainWindow.Randomiser.Next(SetCharacters.Count)];
+                                remainingAttempts--;
+                            }
+
+                            // If we've failed to pick a valid character, then give up.
+                            if (remainingAttempts == 0)
+                                return false;
+                        }
+                        break;
+
+                    case "objectphysics":
+                        if (commonProps == true)
+                        {
+                            // Revert any props that shouldn't be randomised.
+                            if (RequiredProps.ContainsKey(i))
+                            {
+                                set.Data.Objects[i].Parameters[0].Data = RequiredProps[i];
+                            }
+                        }
+                        break;
+
+                    case "enemy":
+                    case "enemyextra":
+                        if (enemies == true)
+                        {
+                            if (DisallowedBosses.Contains(i))
+                            {
+                                // While this enemy is a boss, reroll it.
+                                while (remainingAttempts != 0 && (set.Data.Objects[i].Parameters[0].ToString() == "eCerberus"
+                                                               || set.Data.Objects[i].Parameters[0].ToString() == "eGenesis"
+                                                               || set.Data.Objects[i].Parameters[0].ToString() == "eWyvern"
+                                                               || set.Data.Objects[i].Parameters[0].ToString() == "firstiblis"
+                                                               || set.Data.Objects[i].Parameters[0].ToString() == "secondiblis"
+                                                               || set.Data.Objects[i].Parameters[0].ToString() == "thirdiblis"
+                                                               || set.Data.Objects[i].Parameters[0].ToString() == "firstmefiress"
+                                                               || set.Data.Objects[i].Parameters[0].ToString() == "secondmefiress"
+                                                               || set.Data.Objects[i].Parameters[0].ToString() == "solaris01"
+                                                               || set.Data.Objects[i].Parameters[0].ToString() == "solaris02"))
+                                {
+                                    await Task.Run(() => EnemyTypeRandomiser(set.Data.Objects[i], SetEnemies, enemiesNoBosses));
+                                    remainingAttempts--;
+                                }
+
+                                // If we've failed to pick a valid enemy, then give up.
+                                if (remainingAttempts == 0)
+                                    return false;
+
+                                // If we haven't failed, then make sure we roll an approriate behaviour for this enemy.
+                                await Task.Run(() => EnemyBehaviourRandomiser(set.Data.Objects[i], false, enemiesNoBosses));
+                            }
+                        }
+
+                        break;
+
+                }
+            }
+
+            return true;
+        }
+
     }
 }

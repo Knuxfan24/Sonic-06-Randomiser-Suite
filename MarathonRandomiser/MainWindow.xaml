@@ -7,7 +7,7 @@
         xmlns:hc="https://handyorg.github.io/handycontrol"
         x:Class="MarathonRandomiser.MainWindow"
         mc:Ignorable="d"
-        Title="Sonic '06 Randomiser Suite" Height="720" Width="1400" MinHeight="720" MinWidth="1400">
+        Title="Sonic '06 Randomiser Suite" Height="760" Width="1400" MinHeight="760" MinWidth="1400">
     <Grid Background="#FF181818">
         <hc:TabControl Style="{StaticResource TabControlInLine}" Margin="0,0,0,50" x:Name="TabControl_Main">
             <!--General Tab-->
@@ -90,6 +90,7 @@
                         <Label x:Name="Label_SET_Jumpboards_Chance" Content="Chance:" Background="{x:Null}" BorderBrush="{x:Null}" IsEnabled="False"/>
                         <hc:NumericUpDown x:Name="NumericUpDown_SET_Jumpboards_Chance" Value="50" SelectionBrush="#FFB146C2" IsEnabled="False" Minimum="0"/>
                         <CheckBox x:Name="CheckBox_SET_PlacementShuffle" Content="Shuffle Object Positions" Foreground="Firebrick" Click="Dependency_CheckBox_Changed"/>
+                        <CheckBox x:Name="CheckBox_SET_Beatable" Content="Try Enforce Beatable" Click="Dependency_CheckBox_Changed"/>
                     </StackPanel>
 
                     <!--Object Placement Configuration Toggles-->

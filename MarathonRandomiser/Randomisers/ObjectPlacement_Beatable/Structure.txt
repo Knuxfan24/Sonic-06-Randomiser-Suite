@@ -1,0 +1,10 @@
+﻿The CS files in this folder are structered in specific ways to provide bits of data to check against.
+
+- Characters
+What Characters are allowed to be picked by the Randomiser for this stage. (Might change this to a blacklist rather than a whitelist?)
+
+- NoBoss
+The index values of enemy objects that shouldn't be made into a boss (assuming any are even selected for the Enemy Randomiser), due to them activating an event for progression (such as spawning a Light Dash) trail or opening a cage/door. Commander enemies are exempt from this check.
+
+- RequiredProps
+The index values of props that should be left alone so they don't block progression (such as Wave Ocean A's boardwalks), also contains what prop they should be.
