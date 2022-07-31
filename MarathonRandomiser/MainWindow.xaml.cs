@@ -22,7 +22,7 @@ namespace MarathonRandomiser
     public partial class MainWindow : Window
     {
         // Version Number.
-        public static readonly string GlobalVersionNumber = $"Version 2.1.14";
+        public static readonly string GlobalVersionNumber = $"Version 2.1.15";
 
         #if !DEBUG
         public static readonly string VersionNumber = GlobalVersionNumber;
@@ -2108,6 +2108,7 @@ namespace MarathonRandomiser
             bool? miscPropPSINoGrab = CheckBox_Misc_PropPSIBehaviour_NoGrab.IsChecked;
             bool? miscPropPSINoDebris = CheckBox_Misc_PropPSIBehaviour_NoDebris.IsChecked;
             bool? miscPropDebris = CheckBox_Misc_PropDebris.IsChecked;
+            bool? miscRandomEpisode = CheckBox_Misc_RandomEpisode.IsChecked;
 
             // Check if we need to actually do enemy health randomisation.
             if (miscEnemyHealth == true)
@@ -2173,6 +2174,20 @@ namespace MarathonRandomiser
                         UpdateLogger($"Randomising prop attributes.");
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
                         await Task.Run(() => MiscellaneousRandomisers.PropAttributes(unpackedArchive, miscPropPSI, miscPropPSINoGrab, miscPropPSINoDebris, miscPropDebris));
+                    }
+                }
+            }
+
+            if (miscRandomEpisode == true)
+            {
+                foreach (string archive in archives)
+                {
+                    if (Path.GetFileName(archive).ToLower() == "scripts.arc")
+                    {
+                        UpdateLogger($"Generating random episode.");
+                        string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+                        await Task.Run(() => MiscellaneousRandomisers.EpisodeGenerator(unpackedArchive, GameExecutable));
+                        // TODO: Add MST stuff and figure out a system for adding the stage count to the loading screen.
                     }
                 }
             }

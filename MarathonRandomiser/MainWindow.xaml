@@ -413,6 +413,7 @@
                         <CheckBox x:Name="CheckBox_Misc_PropPSIBehaviour_NoGrab" Content="Don't Disable Grabbing" IsEnabled="False"/>
                         <CheckBox x:Name="CheckBox_Misc_PropPSIBehaviour_NoDebris" Content="Ignore Debris" IsEnabled="False"/>
                         <CheckBox x:Name="CheckBox_Misc_PropDebris" Content="Randomise Prop Debris"/>
+                        <CheckBox x:Name="CheckBox_Misc_RandomEpisode" Content="Generate Random Episode"/>
                     </StackPanel>
 
                     <!--Miscellaneous Configuration Toggles-->

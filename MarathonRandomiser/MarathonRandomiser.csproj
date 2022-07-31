@@ -62,6 +62,9 @@
     <None Update="ExternalResources\crate_iron_switch.dds">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ExternalResources\DLC_RandomEpisode.lub">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ExternalResources\rando_obj_indicator.xno">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

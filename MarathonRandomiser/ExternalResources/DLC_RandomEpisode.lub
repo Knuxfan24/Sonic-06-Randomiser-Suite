@@ -1,0 +1,40 @@
+c_table_single_episode = {
+  {
+    select_character = "character_placeholder.lua",
+    mission_file = "scripts/mission/rando/mission_start.lua",
+	translation_x = -85,
+	translation_y = -29.975,
+	translation_z = 690,
+	rotation_x = 0.1265,
+	rotation_y = 0.1265,
+	rotation_z = -0.0175,
+	rotation_w = 1,
+    translation2_x = 0,
+    translation2_y = -40,
+    translation2_z = 670,
+    rotation2_x = 0,
+    rotation2_y = 0,
+    rotation2_z = 0,
+    rotation2_w = 1,
+    text_book = "text/randomiser.mst",
+    name = "episode_name",
+    savecategory = 4
+  }
+}
+c_table_single_act_trial = {
+  {
+    mission_file = "scripts/mission/rando/mission_start.lua",
+    act_type = 15,
+    stage_type = 16,
+    mission_type = 0,
+    act_id = 199
+  }
+}
+c_table_single_town_trial = {
+  {
+    mission_file = "scripts/mission/rando/mission_start.lua",
+    name = "episode_name",
+    text_book = "text/msg_dl4562_title.mst",
+    act_id = 199
+  }
+}
