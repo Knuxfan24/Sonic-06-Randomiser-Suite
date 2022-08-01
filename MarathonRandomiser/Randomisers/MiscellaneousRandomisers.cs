@@ -825,7 +825,7 @@ namespace MarathonRandomiser
             };
             mst.Data.Messages.Add(msg);
 
-            // TODO: Figure out how to replace this text in a way that preserves the original mission text.
+            // Write a message for each stage's number to allow the player to keep track of how much of the game is left.
             foreach (var entry in LevelOrder)
             {
                 msg = new()
