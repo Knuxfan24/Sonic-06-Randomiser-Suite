@@ -294,7 +294,14 @@ namespace MarathonRandomiser
                 setObject.Parameters[0].Data.ToString() == "eWyvern" || setObject.Parameters[0].Data.ToString() == "firstiblis" || setObject.Parameters[0].Data.ToString() == "secondiblis" ||
                 setObject.Parameters[0].Data.ToString() == "thirdiblis" || setObject.Parameters[0].Data.ToString() == "firstmefiress" || setObject.Parameters[0].Data.ToString() == "secondmefiress" ||
                 setObject.Parameters[0].Data.ToString() == "solaris01" || setObject.Parameters[0].Data.ToString() == "solaris02"))
-                return;
+            {
+                // Check if this boss actually has a boss's parameter, if not, then it's probably a regular enemy that's been randomised into a boss and will need its parameter changing.
+                // If it does have a boss parameter, then we can just return.
+                if (setObject.Parameters[2].Data is (object)"secondIblis_sonic" or (object)"secondIblis_shadow" or (object)"firstmefiress_shadow" or (object)"firstmefiress_omega"
+                                                 or (object)"eCerberus_sonic" or (object)"eCerberus_shadow" or (object)"eGenesis_sonic" or (object)"eGenesis_silver" or (object)"firstIblis"
+                                                 or (object)"thirdIblis" or (object)"secondmefiress_shadow" or (object)"eWyvern" or (object)"solaris01" or (object)"solaris02")
+                    return;
+            }
 
             // Setup for if we are enforcing the behaviour type.
             if (dontEnforceBehaviours == false)
