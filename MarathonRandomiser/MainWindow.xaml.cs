@@ -2180,14 +2180,26 @@ namespace MarathonRandomiser
 
             if (miscRandomEpisode == true)
             {
+                Dictionary<string, int> LevelOrder = new();
                 foreach (string archive in archives)
                 {
                     if (Path.GetFileName(archive).ToLower() == "scripts.arc")
                     {
                         UpdateLogger($"Generating random episode.");
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
-                        await Task.Run(() => MiscellaneousRandomisers.EpisodeGenerator(unpackedArchive, GameExecutable));
+                        LevelOrder = await Task.Run(() => MiscellaneousRandomisers.EpisodeGenerator(unpackedArchive, GameExecutable));
                         // TODO: Add MST stuff and figure out a system for adding the stage count to the loading screen.
+                        // TODO: Maybe see if it's possible to detect Very Hard and work that in?
+                    }
+                }
+
+                foreach (string archive in archives)
+                {
+                    if (Path.GetFileName(archive).ToLower() == "text.arc")
+                    {
+                        UpdateLogger($"Generating random episode message table.");
+                        string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+                        await Task.Run(() => MiscellaneousRandomisers.RandomEpisodeMST(unpackedArchive, GameExecutable, LevelOrder));
                     }
                 }
             }

@@ -1,5 +1,6 @@
 ﻿using Marathon.Formats.Mesh;
 using Marathon.Formats.Package;
+using Marathon.Formats.Text;
 using System.Linq;
 
 namespace MarathonRandomiser
@@ -254,9 +255,10 @@ namespace MarathonRandomiser
         /// </summary>
         /// <param name="archivePath">The path to the extracted scripts.arc.</param>
         /// <param name="GameExecutable">The filepath of the game executable (used to determine the path).</param>
-        /// <returns></returns>
-        public static async Task EpisodeGenerator(string archivePath, string GameExecutable)
+        public static async Task<Dictionary<string, int>> EpisodeGenerator(string archivePath, string GameExecutable)
         {
+            Dictionary<string, int> LevelOrder = new();
+
             // List of events for the sake of picking one to play at the start of each level.
             List<string> events = new() { "e0001", "e0002", "e0003", "e0004", "e0006", "e0007", "e0009", "e0010", "e0011", "e0012", "e0013", "e0014", "e0015", "e0016", "e0017", "e0018", "e0019", "e0021", "e0022", "e0023", "e0024", "e0026", "e0027", "e0028", "e0029", "e0031", "e0102", "e0103", "e0104", "e0105", "e0106", "e0107", "e0108", "e0109", "e0110", "e0111", "e0112", "e0113", "e0114", "e0115", "e0116", "e0117", "e0118", "e0119", "e0120", "e0121", "e0122", "e0125", "e0126", "e0127", "e0128", "e0129", "e0201", "e0202", "e0203", "e0204", "e0205", "e0206", "e0207", "e0208", "e0209", "e0210", "e0211", "e0212", "e0213", "e0214", "e0215", "e0216", "e0217", "e0218", "e0219", "e0221", "e0222", "e0223", "e0224", "e0225", "e0226", "e0227", "e0300", "e0301", "e0302", "e0304", "e1001", "e1002", "e1011", "e1012", "e1031", "e1032", "e1041", "e1052", "e1061", "e1062", "e1071", "e1072", "e1081", "e1082", "e1091", "e1101", "e1111", "e1112", "e1121", "e1122", "e1123", "e1141", "e1151", "e1161", "e1171" };
             
@@ -495,11 +497,135 @@ namespace MarathonRandomiser
             File.Copy($@"{archivePath}\{corePath}\scripts\mission\2300\mission_2311.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_solaris.lub");
             #endregion
 
+            #region Copy Team Attack Amigo (if it exists)
+            if (File.Exists($@"{archivePath}\{corePath}\download\0030.lub"))
+                File.Copy($@"{archivePath}\{corePath}\scripts\mission\4545\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_taa.lub");
+            #endregion
+
+            #region 1/3 chance to swap in Sonic's Very Hard Luas (if they exist)
+
+            if (File.Exists($@"{archivePath}\{corePath}\download\0003.lub"))
+            {
+                // Wave Ocean
+                if (MainWindow.Randomiser.Next(0, 3) == 0)
+                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4002\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_sonic_wvo.lub", true);
+
+                // Dusty Desert
+                if (MainWindow.Randomiser.Next(0, 3) == 0)
+                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4007\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_sonic_dtd.lub", true);
+
+                // White Acropolis
+                if (MainWindow.Randomiser.Next(0, 3) == 0)
+                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4012\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_sonic_wap.lub", true);
+
+                // Crisis City
+                if (MainWindow.Randomiser.Next(0, 3) == 0)
+                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4017\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_sonic_csc.lub", true);
+
+                // Flame Core
+                if (MainWindow.Randomiser.Next(0, 3) == 0)
+                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4022\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_sonic_flc.lub", true);
+
+                // Radical Train
+                if (MainWindow.Randomiser.Next(0, 3) == 0)
+                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4027\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_sonic_rct.lub", true);
+
+                // Tropical Jungle
+                if (MainWindow.Randomiser.Next(0, 3) == 0)
+                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4032\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_sonic_tpj.lub", true);
+
+                // Kingdom Valley
+                if (MainWindow.Randomiser.Next(0, 3) == 0)
+                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4037\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_sonic_kdv.lub", true);
+
+                // Aquatic Base
+                if (MainWindow.Randomiser.Next(0, 3) == 0)
+                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4042\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_sonic_aqa.lub", true);
+            }
+            #endregion
+
+            #region 1/3 chance to swap in Shadow's Very Hard Luas (if they exist)
+
+            if (File.Exists($@"{archivePath}\{corePath}\download\0004.lub"))
+            {
+                // White Acropolis
+                if (MainWindow.Randomiser.Next(0, 3) == 0)
+                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4053\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_shadow_wap.lub", true);
+
+                // Kingdom Valley
+                if (MainWindow.Randomiser.Next(0, 3) == 0)
+                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4058\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_shadow_kdv.lub", true);
+
+                // Crisis City
+                if (MainWindow.Randomiser.Next(0, 3) == 0)
+                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4063\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_shadow_csc.lub", true);
+
+                // Flame Core
+                if (MainWindow.Randomiser.Next(0, 3) == 0)
+                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4068\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_shadow_flc.lub", true);
+
+                // Radical Train
+                if (MainWindow.Randomiser.Next(0, 3) == 0)
+                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4073\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_shadow_rct.lub", true);
+
+                // Aquatic Base
+                if (MainWindow.Randomiser.Next(0, 3) == 0)
+                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4078\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_shadow_aqa.lub", true);
+
+                // Wave Ocean
+                if (MainWindow.Randomiser.Next(0, 3) == 0)
+                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4083\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_shadow_wvo.lub", true);
+
+                // Dusty Desert
+                if (MainWindow.Randomiser.Next(0, 3) == 0)
+                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4088\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_shadow_dtd.lub", true);
+            }
+            #endregion
+
+            #region 1/3 chance to swap in Silver's Very Hard Luas (if they exist)
+
+            if (File.Exists($@"{archivePath}\{corePath}\download\0005.lub"))
+            {
+                // Crisis City
+                if (MainWindow.Randomiser.Next(0, 3) == 0)
+                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4099\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_silver_csc.lub", true);
+
+                // Tropical Jungle
+                if (MainWindow.Randomiser.Next(0, 3) == 0)
+                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4104\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_silver_tpj.lub", true);
+
+                // Dusty Desert
+                if (MainWindow.Randomiser.Next(0, 3) == 0)
+                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4109\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_silver_dtd.lub", true);
+
+                // White Acropolis
+                if (MainWindow.Randomiser.Next(0, 3) == 0)
+                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4114\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_silver_wap.lub", true);
+
+                // Radical Train
+                if (MainWindow.Randomiser.Next(0, 3) == 0)
+                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4119\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_silver_rct.lub", true);
+
+                // Aquatic Base
+                if (MainWindow.Randomiser.Next(0, 3) == 0)
+                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4124\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_silver_aqa.lub", true);
+
+                // Kingdom Valley
+                if (MainWindow.Randomiser.Next(0, 3) == 0)
+                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4129\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_silver_kdv.lub", true);
+
+                // Flame Core
+                if (MainWindow.Randomiser.Next(0, 3) == 0)
+                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4134\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_silver_flc.lub", true);
+            }
+            #endregion
+
             // Get a list of all the mission luas we have.
             List<string> luas = Directory.GetFiles($@"{archivePath}\{corePath}\scripts\mission\rando\", "*.lub").ToList();
 
             // Determine which mission lua to start on.
             string startLua = luas[MainWindow.Randomiser.Next(luas.Count)];
+            LevelOrder.Add(Path.GetFileNameWithoutExtension(startLua), 1);
 
             // Remove the startLua from the list.
             luas.Remove(startLua);
@@ -512,10 +638,16 @@ namespace MarathonRandomiser
 
             // Create lastLua with the same value.
             string lastLua = startLua;
+            int levelCount = 1;
 
             // Loop through and add every mission to the "episode".
             while (luas.Count > 0)
             {
+                if (levelCount != 1)
+                    LevelOrder.Add(Path.GetFileNameWithoutExtension(lastLua), levelCount);
+
+                levelCount++;
+
                 // Decompile the Lua file we need to add a mission redirect to.
                 await Task.Run(() => Helpers.LuaDecompile(lastLua));
 
@@ -553,6 +685,7 @@ namespace MarathonRandomiser
                 // Set the lastLua to the nextLua.
                 lastLua = nextLua;
             }
+            LevelOrder.Add(Path.GetFileNameWithoutExtension(lastLua), levelCount);
 
             // Make startLua unlock all the player upgrades.
             await Task.Run(() => Helpers.LuaDecompile(startLua));
@@ -611,6 +744,100 @@ namespace MarathonRandomiser
 
             // Resave the DLC entry.
             File.WriteAllText($@"{archivePath}\{corePath}\download\DLC_RandomEpisode.lub", dlc);
+
+            // Set all the stage messages.
+            foreach (var entry in LevelOrder)
+            {
+                // Read the filename key seperately so we don't dupe code.
+                string fileName = entry.Key;
+
+                // First entry doesn't have the same name as its lua, handle that.
+                if (entry.Value == 1)
+                    fileName = "mission_start";
+
+                // Decompile the Lua file (needed so the last one doesn't brick itself)
+                await Task.Run(() => Helpers.LuaDecompile($@"{archivePath}\{corePath}\scripts\mission\rando\{fileName}.lub"));
+
+                // Read the lua.
+                string[] lua = File.ReadAllLines($@"{archivePath}\{corePath}\scripts\mission\rando\{fileName}.lub");
+
+                for (int i = 0; i < lua.Length; i++)
+                {
+                    // Set the mission string.
+                    if (lua[i].Contains("mission_string = "))
+                    {
+                        // Determine if we need to add a comma.
+                        bool hasComma = lua[i].Contains(',');
+
+                        // Select the approriate mission string.
+                        lua[i] = $"  mission_string = \"{entry.Key.Replace("mission", "msg")}\"";
+
+                        // Add the comma if we need to.
+                        if (hasComma)
+                            lua[i] += ",";
+                    }
+
+                    // Set the mission text to our MST.
+                    if (lua[i].Contains("mission_text = "))
+                    {
+                        // Determine if we need to add a comma.
+                        bool hasComma = lua[i].Contains(',');
+
+                        lua[i] = $"  mission_text = \"text/msg_randomiser.mst\"";
+
+                        // Add the comma if we need to.
+                        if (hasComma)
+                            lua[i] += ",";
+                    }
+                }
+
+                // Resave the updated Lua.
+                File.WriteAllLines($@"{archivePath}\{corePath}\scripts\mission\rando\{fileName}.lub", lua);
+            }
+
+            return LevelOrder;
+        }
+
+        /// <summary>
+        /// Generate the Message Table for our random episode.
+        /// </summary>
+        /// <param name="archivePath">The path to the extracted text.arc.</param>
+        /// <param name="GameExecutable">The filepath of the game executable (used to determine the path).</param>
+        public static async Task RandomEpisodeMST(string archivePath, string GameExecutable, Dictionary<string, int> LevelOrder)
+        {
+            // Determine if we need a xenon folder or a ps3 folder.
+            string corePath = "xenon";
+            if (GameExecutable.ToLower().EndsWith(".bin"))
+                corePath = "ps3";
+
+            // Create the MST for the random episode.
+            MessageTable mst = new();
+            mst.Data.Name = "msg_randomiser";
+
+            // Set up a dummy message.
+            Message msg;
+
+            // Add the episode name.
+            msg = new()
+            {
+                Name = "episode_name",
+                Text = "GENERATED EPISODE"
+            };
+            mst.Data.Messages.Add(msg);
+
+            // TODO: Figure out how to replace this text in a way that preserves the original mission text.
+            foreach (var entry in LevelOrder)
+            {
+                msg = new()
+                {
+                    Name = $"{entry.Key.Replace("mission", "msg")}",
+                    Text = $"Stage {entry.Value}/{LevelOrder.Count}"
+                };
+                mst.Data.Messages.Add(msg);
+            }
+
+            // Save our new MST.
+            mst.Save($@"{archivePath}\{corePath}\text\english\msg_randomiser.e.mst");
         }
     }
 }

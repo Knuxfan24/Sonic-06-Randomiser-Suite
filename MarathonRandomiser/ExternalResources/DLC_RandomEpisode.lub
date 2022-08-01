@@ -16,7 +16,7 @@ c_table_single_episode = {
     rotation2_y = 0,
     rotation2_z = 0,
     rotation2_w = 1,
-    text_book = "text/randomiser.mst",
+    text_book = "text/msg_randomiser.mst",
     name = "episode_name",
     savecategory = 4
   }
