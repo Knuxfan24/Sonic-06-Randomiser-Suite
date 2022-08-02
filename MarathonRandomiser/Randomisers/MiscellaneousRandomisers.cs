@@ -502,6 +502,8 @@ namespace MarathonRandomiser
                 File.Copy($@"{archivePath}\{corePath}\scripts\mission\4545\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_taa.lub");
             #endregion
 
+            /* Disable the Very Hard support as it breaks the other sets by replacing their area luas (and Sonic's fucks game.lub, screwing over Team Attack Amigo and vice versa)
+             * If I'm to readd this, the DLC arcs will need to be handled seperately.
             #region 1/3 chance to swap in Sonic's Very Hard Luas (if they exist)
 
             if (File.Exists($@"{archivePath}\{corePath}\download\0003.lub"))
@@ -619,6 +621,7 @@ namespace MarathonRandomiser
                     File.Copy($@"{archivePath}\{corePath}\scripts\mission\4134\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_silver_flc.lub", true);
             }
             #endregion
+            */
 
             // Get a list of all the mission luas we have.
             List<string> luas = Directory.GetFiles($@"{archivePath}\{corePath}\scripts\mission\rando\", "*.lub").ToList();
