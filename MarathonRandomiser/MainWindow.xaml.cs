@@ -98,10 +98,14 @@ namespace MarathonRandomiser
             TextBox_General_GameExecutable.Text = Properties.Settings.Default.GameExecutable;
 
             if (TextBox_General_Patches.Text != $"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\\Unify\\Patches\\" && !Directory.Exists(Properties.Settings.Default.PatchDirectory))
+            {
                 TextBox_General_Patches.Text = $"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\\Unify\\Patches\\";
-            else
                 Debug.WriteLine("Patch Directory was invalid, restored default localappdata path.");
-            TextBox_General_Patches.Text = Properties.Settings.Default.PatchDirectory;
+            }
+            else
+            {
+                TextBox_General_Patches.Text = Properties.Settings.Default.PatchDirectory;
+            }
 
             // Generate a seed to use.
             TextBox_General_Seed.Text = Randomiser.Next().ToString();
@@ -138,6 +142,7 @@ namespace MarathonRandomiser
             Helpers.FillWildcardCheckedListBox(Grid_Event, CheckedList_Wildcard_Event);
             Helpers.FillWildcardCheckedListBox(Grid_Scene, CheckedList_Wildcard_Scene);
             Helpers.FillWildcardCheckedListBox(Grid_Animations, CheckedList_Wildcard_Animations);
+            Helpers.FillWildcardCheckedListBox(Grid_Models, CheckedList_Wildcard_Models);
             Helpers.FillWildcardCheckedListBox(Grid_Textures, CheckedList_Wildcard_Textures);
             Helpers.FillWildcardCheckedListBox(Grid_Audio, CheckedList_Wildcard_Audio);
             Helpers.FillWildcardCheckedListBox(Grid_Text, CheckedList_Wildcard_Text);
@@ -201,7 +206,7 @@ namespace MarathonRandomiser
             else
                 TabItem_Custom.IsEnabled = true;
 
-            // If the selected executable exists, populate the Texture Randomiser's archives list.
+            // If the selected executable exists, populate the Texture Randomiser and Model Randomiser's archives lists.
             if (File.Exists(TextBox_General_GameExecutable.Text))
             {
                 CheckedList_Textures_Arcs.Items.Clear();
@@ -209,18 +214,61 @@ namespace MarathonRandomiser
 
                 foreach(string archive in archives)
                 {
-                    CheckedListBoxItem item = new()
+                    // Load a list of the files in this archive.
+                    U8Archive arc = new(archive, ReadMode.IndexOnly);
+                    IEnumerable<Marathon.IO.Interfaces.IArchiveFile> arcFiles = arc.Root.GetFiles();
+
+                    // Determine if we have textures in this archive.
+                    bool hasTexture = false;
+                    foreach (var file in arcFiles)
                     {
-                        DisplayName = Path.GetFileName(archive),
-                        Tag = Path.GetFileName(archive),
-                        Checked = false
-                    };
+                        if (Path.GetExtension(file.Name) == ".dds")
+                        {
+                            hasTexture = true;
+                            break;
+                        }
+                    }
 
-                    // Auto check it if it's a stage archive.
-                    if (Path.GetFileName(archive).StartsWith("stage_"))
-                        item.Checked = true;
+                    // Determine if we have models in this archive.
+                    bool hasModel = false;
+                    foreach (var file in arcFiles)
+                    {
+                        if (Path.GetExtension(file.Name) == ".xno")
+                        {
+                            hasModel = true;
+                            break;
+                        }
+                    }
 
-                    CheckedList_Textures_Arcs.Items.Add(item);
+                    // Texture Randomiser List.
+                    if (hasTexture)
+                    {
+                        CheckedListBoxItem item = new()
+                        {
+                            DisplayName = Path.GetFileName(archive),
+                            Tag = Path.GetFileName(archive),
+                            Checked = false
+                        };
+
+                        // Auto check it if it's a stage archive.
+                        if (Path.GetFileName(archive).StartsWith("stage_"))
+                            item.Checked = true;
+
+                        CheckedList_Textures_Arcs.Items.Add(item);
+                    }
+
+                    // Model Randomiser List.
+                    if (hasModel)
+                    {
+                        CheckedListBoxItem item = new()
+                        {
+                            DisplayName = Path.GetFileName(archive),
+                            Tag = Path.GetFileName(archive),
+                            Checked = false
+                        };
+
+                        CheckedList_Models_Arcs.Items.Add(item);
+                    }
                 }
             }
         }
@@ -431,17 +479,17 @@ namespace MarathonRandomiser
                     CheckBox_Anim_Framerate_NoLights.IsEnabled = NewCheckedStatus;
                     break;
 
+                case "CheckBox_Models_MaterialColour":
+                    CheckBox_Models_MaterialDiffuse.IsEnabled = NewCheckedStatus;
+                    CheckBox_Models_MaterialAmbient.IsEnabled = NewCheckedStatus;
+                    CheckBox_Models_MaterialSpecular.IsEnabled = NewCheckedStatus;
+                    CheckBox_Models_MaterialEmissive.IsEnabled = NewCheckedStatus;
+                    break;
+
                 case "CheckBox_Textures_Textures":
                     CheckBox_Textures_PerArc.IsEnabled = NewCheckedStatus;
                     CheckBox_Textures_AllowDupes.IsEnabled = NewCheckedStatus;
                     CheckBox_Textures_OnlyCustom.IsEnabled = NewCheckedStatus;
-                    break;
-
-                case "CheckBox_Textures_MaterialColour":
-                    CheckBox_Textures_MaterialDiffuse.IsEnabled = NewCheckedStatus;
-                    CheckBox_Textures_MaterialAmbient.IsEnabled = NewCheckedStatus;
-                    CheckBox_Textures_MaterialSpecular.IsEnabled = NewCheckedStatus;
-                    CheckBox_Textures_MaterialEmissive.IsEnabled = NewCheckedStatus;
                     break;
 
                 case "CheckBox_Text_Generate":
@@ -488,9 +536,11 @@ namespace MarathonRandomiser
                     TabItem_Event.IsEnabled = !NewCheckedStatus;
                     TabItem_Scene.IsEnabled = !NewCheckedStatus;
                     TabItem_Anim.IsEnabled = !NewCheckedStatus;
+                    TabItem_Models.IsEnabled = !NewCheckedStatus;
                     TabItem_Textures.IsEnabled = !NewCheckedStatus;
                     TabItem_Audio.IsEnabled = !NewCheckedStatus;
                     TabItem_Text.IsEnabled = !NewCheckedStatus;
+                    TabItem_XNCP.IsEnabled = !NewCheckedStatus;
                     TabItem_Misc.IsEnabled = !NewCheckedStatus;
 
                     Label_Wildcard_Weight.IsEnabled = NewCheckedStatus;
@@ -499,9 +549,11 @@ namespace MarathonRandomiser
                     CheckBox_Wildcard_Event.IsEnabled = NewCheckedStatus;
                     CheckBox_Wildcard_Scene.IsEnabled = NewCheckedStatus;
                     CheckBox_Wildcard_Animations.IsEnabled = NewCheckedStatus;
+                    CheckBox_Wildcard_Models.IsEnabled = NewCheckedStatus;
                     CheckBox_Wildcard_Textures.IsEnabled = NewCheckedStatus;
                     CheckBox_Wildcard_Audio.IsEnabled = NewCheckedStatus;
                     CheckBox_Wildcard_Text.IsEnabled = NewCheckedStatus;
+                    CheckBox_Wildcard_XNCP.IsEnabled = NewCheckedStatus;
                     CheckBox_Wildcard_Miscellaneous.IsEnabled = NewCheckedStatus;
                     break;
             }
@@ -557,6 +609,10 @@ namespace MarathonRandomiser
                     }
                     break;
 
+                case "Grid_Models":
+                    Helpers.InvalidateCheckedListBox(CheckedList_Models_Arcs, true, selectAll);
+                    break;
+
                 case "Grid_Textures":
                     Helpers.InvalidateCheckedListBox(CheckedList_Textures_Arcs, true, selectAll);
                     break;
@@ -592,11 +648,12 @@ namespace MarathonRandomiser
                         case 1: Helpers.InvalidateCheckedListBox(CheckedList_Wildcard_Event, true, selectAll); break;
                         case 2: Helpers.InvalidateCheckedListBox(CheckedList_Wildcard_Scene, true, selectAll); break;
                         case 3: Helpers.InvalidateCheckedListBox(CheckedList_Wildcard_Animations, true, selectAll); break;
-                        case 4: Helpers.InvalidateCheckedListBox(CheckedList_Wildcard_Textures, true, selectAll); break;
-                        case 5: Helpers.InvalidateCheckedListBox(CheckedList_Wildcard_Audio, true, selectAll); break;
-                        case 6: Helpers.InvalidateCheckedListBox(CheckedList_Wildcard_Text, true, selectAll); break;
-                        case 7: Helpers.InvalidateCheckedListBox(CheckedList_Wildcard_XNCP, true, selectAll); break;
-                        case 8: Helpers.InvalidateCheckedListBox(CheckedList_Wildcard_Miscellaneous, true, selectAll); break;
+                        case 4: Helpers.InvalidateCheckedListBox(CheckedList_Wildcard_Models, true, selectAll); break;
+                        case 5: Helpers.InvalidateCheckedListBox(CheckedList_Wildcard_Textures, true, selectAll); break;
+                        case 6: Helpers.InvalidateCheckedListBox(CheckedList_Wildcard_Audio, true, selectAll); break;
+                        case 7: Helpers.InvalidateCheckedListBox(CheckedList_Wildcard_Text, true, selectAll); break;
+                        case 8: Helpers.InvalidateCheckedListBox(CheckedList_Wildcard_XNCP, true, selectAll); break;
+                        case 9: Helpers.InvalidateCheckedListBox(CheckedList_Wildcard_Miscellaneous, true, selectAll); break;
                     }
                     break;
 
@@ -784,6 +841,11 @@ namespace MarathonRandomiser
 
             // Animation Block.
             ConfigTabRead(configInfo, "Animations", StackPanel_Animation);
+            configInfo.WriteLine();
+
+            // Models Block.
+            ConfigTabRead(configInfo, "Models", StackPanel_Models);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_Models_Arcs);
             configInfo.WriteLine();
 
             // Textures Block.
@@ -1105,6 +1167,7 @@ namespace MarathonRandomiser
                 WildcardTabCheckboxes(Grid_Event, (int)NumericUpDown_Wildcard_Weight.Value, CheckedList_Wildcard_Event, true);
                 WildcardTabCheckboxes(Grid_Scene, (int)NumericUpDown_Wildcard_Weight.Value, CheckedList_Wildcard_Scene, true);
                 WildcardTabCheckboxes(Grid_Animations, (int)NumericUpDown_Wildcard_Weight.Value, CheckedList_Wildcard_Animations, true);
+                WildcardTabCheckboxes(Grid_Models, (int)NumericUpDown_Wildcard_Weight.Value, CheckedList_Wildcard_Models, true);
                 WildcardTabCheckboxes(Grid_Textures, (int)NumericUpDown_Wildcard_Weight.Value, CheckedList_Wildcard_Textures, true);
                 WildcardTabCheckboxes(Grid_Audio, (int)NumericUpDown_Wildcard_Weight.Value, CheckedList_Wildcard_Audio, true);
                 WildcardTabCheckboxes(Grid_Text, (int)NumericUpDown_Wildcard_Weight.Value, CheckedList_Wildcard_Text, true);
@@ -1146,6 +1209,12 @@ namespace MarathonRandomiser
                 if (CheckBox_Wildcard_Animations.IsChecked == true)
                 {
                     WildcardTabCheckboxes(Grid_Animations, (int)NumericUpDown_Wildcard_Weight.Value, CheckedList_Wildcard_Animations);
+                }
+
+                if (CheckBox_Wildcard_Models.IsChecked == true)
+                {
+                    WildcardTabCheckboxes(Grid_Models, (int)NumericUpDown_Wildcard_Weight.Value, CheckedList_Wildcard_Models);
+                    WildcardCheckedList(CheckedList_Models_Arcs, (int)NumericUpDown_Wildcard_Weight.Value);
                 }
 
                 if (CheckBox_Wildcard_Textures.IsChecked == true)
@@ -1202,6 +1271,8 @@ namespace MarathonRandomiser
 
             List<string> SceneEnvMaps = Helpers.EnumerateCheckedListBox(CheckedList_Scene_EnvMaps);
             List<string> SceneSkyboxes = Helpers.EnumerateCheckedListBox(CheckedList_Scene_Skyboxes);
+
+            List<string> ModelsArchives = Helpers.EnumerateCheckedListBox(CheckedList_Models_Arcs);
 
             List<string> TexturesArchives = Helpers.EnumerateCheckedListBox(CheckedList_Textures_Arcs);
 
@@ -1339,11 +1410,14 @@ namespace MarathonRandomiser
             if (SceneSkyboxes.Count == 0)
                 CheckBox_Scene_Skyboxes.IsChecked = false;
 
-            if (TexturesArchives.Count == 0)
+            if (ModelsArchives.Count == 0)
             {
-                CheckBox_Textures_Textures.IsChecked = false;
-                CheckBox_Textures_VertexColour.IsChecked = false;
+                CheckBox_Models_VertexColour.IsChecked = false;
+                CheckBox_Models_MaterialColour.IsChecked = false;
             }
+
+            if (TexturesArchives.Count == 0)
+                CheckBox_Textures_Textures.IsChecked = false;
 
             if (AudioMusic.Count == 0)
                 CheckBox_Audio_Music.IsChecked = false;
@@ -1738,6 +1812,53 @@ namespace MarathonRandomiser
             }
             #endregion
 
+            #region Model Randomisers
+            // Set up values.
+            bool? modelsVertexColours = CheckBox_Models_VertexColour.IsChecked;
+            bool? modelsMaterialColours = CheckBox_Models_MaterialColour.IsChecked;
+            bool? modelsMaterialDiffuse = CheckBox_Models_MaterialDiffuse.IsChecked;
+            bool? modelsMaterialAmbient = CheckBox_Models_MaterialAmbient.IsChecked;
+            bool? modelsMaterialSpecular = CheckBox_Models_MaterialSpecular.IsChecked;
+            bool? modelsMaterialEmissive = CheckBox_Models_MaterialEmissive.IsChecked;
+
+            // Check if we need to do vertex colour randomisation.
+            if (modelsVertexColours == true)
+            {
+                foreach (string archive in archives)
+                {
+                    if (ModelsArchives.Contains(Path.GetFileName(archive)))
+                    {
+                        string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+                        string[] xnoFiles = Directory.GetFiles(unpackedArchive, "*.xno", SearchOption.AllDirectories);
+                        foreach (string xnoFile in xnoFiles)
+                        {
+                            UpdateLogger($"Randomising vertex colours in '{xnoFile}'.");
+                            await Task.Run(() => ModelRandomisers.RandomiseVertexColours(xnoFile));
+                        }
+                    }
+                }
+            }
+
+            // Check if we need to do material colour randomisation.
+            // If none of the sub options are selected, then don't bother, otherwise we'd just be loading and saving an XNO for no reason.
+            if (modelsMaterialColours == true && (modelsMaterialDiffuse == true || modelsMaterialAmbient == true || modelsMaterialSpecular == true || modelsMaterialEmissive == true))
+            {
+                foreach (string archive in archives)
+                {
+                    if (ModelsArchives.Contains(Path.GetFileName(archive)))
+                    {
+                        string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+                        string[] xnoFiles = Directory.GetFiles(unpackedArchive, "*.xno", SearchOption.AllDirectories);
+                        foreach (string xnoFile in xnoFiles)
+                        {
+                            UpdateLogger($"Randomising material colours in '{xnoFile}'.");
+                            await Task.Run(() => ModelRandomisers.RandomiseMaterialColours(xnoFile, modelsMaterialDiffuse, modelsMaterialAmbient, modelsMaterialSpecular, modelsMaterialEmissive));
+                        }
+                    }
+                }
+            }
+            #endregion
+
             #region Texture Randomisation
             // Set up values.
             bool? texturesTextures = CheckBox_Textures_Textures.IsChecked;
@@ -1745,12 +1866,6 @@ namespace MarathonRandomiser
             bool? texturesAllowDupes = CheckBox_Textures_AllowDupes.IsChecked;
             bool? texturesOnlyCustom = CheckBox_Textures_OnlyCustom.IsChecked;
             bool? texturesDelete = CheckBox_Textures_DeleteStages.IsChecked;
-            bool? texturesVertexColours = CheckBox_Textures_VertexColour.IsChecked;
-            bool? texturesMaterialColours = CheckBox_Textures_MaterialColour.IsChecked;
-            bool? texturesMaterialDiffuse = CheckBox_Textures_MaterialDiffuse.IsChecked;
-            bool? texturesMaterialAmbient = CheckBox_Textures_MaterialAmbient.IsChecked;
-            bool? texturesMaterialSpecular = CheckBox_Textures_MaterialSpecular.IsChecked;
-            bool? texturesMaterialEmissive = CheckBox_Textures_MaterialEmissive.IsChecked;
 
             // Dupes are NEEDED if we're only using custom textures.
             if (texturesOnlyCustom == true)
@@ -1821,43 +1936,6 @@ namespace MarathonRandomiser
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
                         UpdateLogger($"Deleting textures from '{Path.GetFileName(archive)}'.");
                         await Task.Run(() => TextureRandomiser.DeleteTextures(unpackedArchive));
-                    }
-                }
-            }
-
-            // Check if we need to do vertex colour randomisation.
-            if (texturesVertexColours == true)
-            {
-                foreach (string archive in archives)
-                {
-                    if (TexturesArchives.Contains(Path.GetFileName(archive)))
-                    {
-                        string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
-                        string[] xnoFiles = Directory.GetFiles(unpackedArchive, "*.xno", SearchOption.AllDirectories);
-                        foreach (string xnoFile in xnoFiles)
-                        {
-                            UpdateLogger($"Randomising vertex colours in '{xnoFile}'.");
-                            await Task.Run(() => TextureRandomiser.RandomiseVertexColours(xnoFile));
-                        }
-                    }
-                }
-            }
-
-            // Check if we need to do material colour randomisation.
-            // If none of the sub options are selected, then don't bother, otherwise we'd just be loading and saving an XNO for no reason.
-            if (texturesMaterialColours == true && (texturesMaterialDiffuse == true || texturesMaterialAmbient == true || texturesMaterialSpecular == true || texturesMaterialEmissive == true))
-            {
-                foreach (string archive in archives)
-                {
-                    if (TexturesArchives.Contains(Path.GetFileName(archive)))
-                    {
-                        string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
-                        string[] xnoFiles = Directory.GetFiles(unpackedArchive, "*.xno", SearchOption.AllDirectories);
-                        foreach (string xnoFile in xnoFiles)
-                        {
-                            UpdateLogger($"Randomising material colours in '{xnoFile}'.");
-                            await Task.Run(() => TextureRandomiser.RandomiseMaterialColours(xnoFile, texturesMaterialDiffuse, texturesMaterialAmbient, texturesMaterialSpecular, texturesMaterialEmissive));
-                        }
                     }
                 }
             }

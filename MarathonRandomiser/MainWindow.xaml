@@ -7,7 +7,7 @@
         xmlns:hc="https://handyorg.github.io/handycontrol"
         x:Class="MarathonRandomiser.MainWindow"
         mc:Ignorable="d"
-        Title="Sonic '06 Randomiser Suite" Height="720" Width="1400" MinHeight="720" MinWidth="1400">
+        Title="Sonic '06 Randomiser Suite" Height="720" Width="1520" MinHeight="720" MinWidth="1520">
     <Grid Background="#FF181818">
         <hc:TabControl Style="{StaticResource TabControlInLine}" Margin="0,0,0,50" x:Name="TabControl_Main">
             <!--General Tab-->
@@ -258,6 +258,38 @@
                 </Grid>
             </hc:TabItem>
 
+            <!--Models Tab-->
+            <hc:TabItem Header="Models" BorderBrush="#B146C2" x:Name="TabItem_Models" >
+                <Grid Background="#FF181818" Name="Grid_Models">
+                    <!--Models Configuration Checkboxes/Controls-->
+                    <StackPanel HorizontalAlignment="Left" Width="210" Name="StackPanel_Models">
+                        <StackPanel.Resources>
+                            <Style BasedOn="{StaticResource CheckBoxBaseStyle}" TargetType="{x:Type CheckBox}">
+                                <Setter Property="Margin" Value="10,10,0,0" />
+                                <Setter Property="HorizontalAlignment" Value="Left"/>
+                            </Style>
+                        </StackPanel.Resources>
+                        <CheckBox x:Name="CheckBox_Models_VertexColour" Content="Randomise Vertex Colours" Foreground="Firebrick" VerticalAlignment="Top"/>
+                        <CheckBox x:Name="CheckBox_Models_MaterialColour" Content="Randomise Material Colours" VerticalAlignment="Top" Click="Dependency_CheckBox_Changed"/>
+                        <CheckBox x:Name="CheckBox_Models_MaterialDiffuse" Content="Randomise Diffuse Colour" IsEnabled="False" IsChecked="True"/>
+                        <CheckBox x:Name="CheckBox_Models_MaterialAmbient" Content="Randomise Ambient Colour" IsEnabled="False" IsChecked="True"/>
+                        <CheckBox x:Name="CheckBox_Models_MaterialSpecular" Content="Randomise Specular Colour" IsEnabled="False"/>
+                        <CheckBox x:Name="CheckBox_Models_MaterialEmissive" Content="Randomise Emissive Colour" IsEnabled="False" IsChecked="True"/>
+                    </StackPanel>
+
+                    <!--Texture Configuration Toggles-->
+                    <Button Content="Select All" HorizontalAlignment="Left" Margin="215,0,0,10" VerticalAlignment="Bottom" Height="40" Width="128" Click="CheckedListBox_SelectionToggle"/>
+                    <Button Content="Deselect All" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Height="40" Width="128" Click="CheckedListBox_SelectionToggle"/>
+                    <hc:TabControl Style="{StaticResource TabControlInLine}" Margin="210,0,0,60" HorizontalAlignment="Stretch" Name="TabControl_Models">
+                        <hc:TabItem Header="Archives" BorderBrush="#B146C2" x:Name="TabItem_Models_Arcs" >
+                            <Grid>
+                                <local:CheckedListBox x:Name="CheckedList_Models_Arcs" MultiColumn="True" Margin="0,0,0,0"/>
+                            </Grid>
+                        </hc:TabItem>
+                    </hc:TabControl>
+                </Grid>
+            </hc:TabItem>
+
             <!--Textures Tab-->
             <hc:TabItem Header="Textures" BorderBrush="#B146C2" x:Name="TabItem_Textures" >
                 <Grid Background="#FF181818" Name="Grid_Textures">
@@ -274,12 +306,6 @@
                         <CheckBox x:Name="CheckBox_Textures_AllowDupes" Content="Allow Duplicates" IsEnabled="False"/>
                         <CheckBox x:Name="CheckBox_Textures_OnlyCustom" Content="Only Use Custom Textures" IsEnabled="False"/>
                         <CheckBox x:Name="CheckBox_Textures_DeleteStages" Content="Delete Stage Textures" Foreground="Firebrick"/>
-                        <CheckBox x:Name="CheckBox_Textures_VertexColour" Content="Randomise Vertex Colours" Foreground="Firebrick" VerticalAlignment="Top"/>
-                        <CheckBox x:Name="CheckBox_Textures_MaterialColour" Content="Randomise Material Colours" VerticalAlignment="Top" Click="Dependency_CheckBox_Changed"/>
-                        <CheckBox x:Name="CheckBox_Textures_MaterialDiffuse" Content="Randomise Diffuse Colour" IsEnabled="False" IsChecked="True"/>
-                        <CheckBox x:Name="CheckBox_Textures_MaterialAmbient" Content="Randomise Ambient Colour" IsEnabled="False" IsChecked="True"/>
-                        <CheckBox x:Name="CheckBox_Textures_MaterialSpecular" Content="Randomise Specular Colour" IsEnabled="False"/>
-                        <CheckBox x:Name="CheckBox_Textures_MaterialEmissive" Content="Randomise Emissive Colour" IsEnabled="False" IsChecked="True"/>
                     </StackPanel>
 
                     <!--Texture Configuration Toggles-->
@@ -493,6 +519,7 @@
                         <CheckBox x:Name="CheckBox_Wildcard_Event" Content="Event" IsEnabled="False" IsChecked="True"/>
                         <CheckBox x:Name="CheckBox_Wildcard_Scene" Content="Scene" IsEnabled="False" IsChecked="True"/>
                         <CheckBox x:Name="CheckBox_Wildcard_Animations" Content="Animations" IsEnabled="False" IsChecked="True"/>
+                        <CheckBox x:Name="CheckBox_Wildcard_Models" Content="Models" IsEnabled="False" IsChecked="True"/>
                         <CheckBox x:Name="CheckBox_Wildcard_Textures" Content="Textures" IsEnabled="False" IsChecked="True"/>
                         <CheckBox x:Name="CheckBox_Wildcard_Audio" Content="Audio" IsEnabled="False" IsChecked="True"/>
                         <CheckBox x:Name="CheckBox_Wildcard_Text" Content="Text" IsEnabled="False" IsChecked="True"/>
@@ -522,6 +549,11 @@
                         <hc:TabItem Header="Animations" BorderBrush="#B146C2">
                             <Grid>
                                 <local:CheckedListBox x:Name="CheckedList_Wildcard_Animations" MultiColumn="True" Margin="0,0,0,0"/>
+                            </Grid>
+                        </hc:TabItem>
+                        <hc:TabItem Header="Models" BorderBrush="#B146C2">
+                            <Grid>
+                                <local:CheckedListBox x:Name="CheckedList_Wildcard_Models" MultiColumn="True" Margin="0,0,0,0"/>
                             </Grid>
                         </hc:TabItem>
                         <hc:TabItem Header="Textures" BorderBrush="#B146C2">
