@@ -437,6 +437,10 @@ namespace MarathonRandomiser
                     CheckBox_Textures_OnlyCustom.IsEnabled = NewCheckedStatus;
                     break;
 
+                case "CheckBox_Textures_MaterialColour":
+                    CheckBox_Textures_MaterialWhite.IsEnabled = NewCheckedStatus;
+                    break;
+
                 case "CheckBox_Text_Generate":
                     CheckBox_Text_Generate_Enforce.IsEnabled = NewCheckedStatus;
                     break;
@@ -1739,6 +1743,8 @@ namespace MarathonRandomiser
             bool? texturesOnlyCustom = CheckBox_Textures_OnlyCustom.IsChecked;
             bool? texturesDelete = CheckBox_Textures_DeleteStages.IsChecked;
             bool? texturesVertexColours = CheckBox_Textures_VertexColour.IsChecked;
+            bool? texturesMaterialColours = CheckBox_Textures_MaterialColour.IsChecked;
+            bool? texturesMaterialWhite = CheckBox_Textures_MaterialWhite.IsChecked;
 
             // Dupes are NEEDED if we're only using custom textures.
             if (texturesOnlyCustom == true)
@@ -1813,6 +1819,7 @@ namespace MarathonRandomiser
                 }
             }
 
+            // Check if we need to do vertex colour randomisation.
             if (texturesVertexColours == true)
             {
                 foreach (string archive in archives)
@@ -1825,6 +1832,23 @@ namespace MarathonRandomiser
                         {
                             UpdateLogger($"Randomising vertex colours in '{xnoFile}'.");
                             await Task.Run(() => TextureRandomiser.RandomiseVertexColours(xnoFile));
+                        }
+                    }
+                }
+            }
+
+            if (texturesMaterialColours == true)
+            {
+                foreach (string archive in archives)
+                {
+                    if (TexturesArchives.Contains(Path.GetFileName(archive)))
+                    {
+                        string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+                        string[] xnoFiles = Directory.GetFiles(unpackedArchive, "*.xno", SearchOption.AllDirectories);
+                        foreach (string xnoFile in xnoFiles)
+                        {
+                            UpdateLogger($"Randomising material colours in '{xnoFile}'.");
+                            await Task.Run(() => TextureRandomiser.RandomiseMaterialColours(xnoFile, texturesMaterialWhite));
                         }
                     }
                 }

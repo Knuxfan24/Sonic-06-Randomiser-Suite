@@ -182,5 +182,37 @@ namespace MarathonRandomiser
             }
             catch { }
         }
+
+        /// <summary>
+        /// Randomises the Material Colours in an XNO.
+        /// </summary>
+        /// <param name="xnoFile">The XNO to process.</param>
+        /// <param name="doWhite">Whether materials that have their values the same (so are a white colour) should be randomised as well.</param>
+        public static async Task RandomiseMaterialColours(string xnoFile, bool? doWhite)
+        {
+            // TODO: Mess with stuff other than diffuse and see if there's an obvious difference, if so, maybe add more options.
+
+            // This try catch is needed due to a couple of XNOs using a chunk that isn't supported in Marathon as of yet.
+            try
+            {
+                // Load the XNO.
+                NinjaNext xno = new(xnoFile);
+
+                // Loop through each material colour in the XNO.
+                foreach (NinjaMaterialColours? materialColour in xno.Data.Object.MaterialColours)
+                {
+                    // If we're not colouring materials that have a white value, then just skip this one.
+                    if (doWhite == false && (materialColour.Diffuse.X == materialColour.Diffuse.Y) && (materialColour.Diffuse.X == materialColour.Diffuse.Z))
+                        continue;
+
+                    // TODO: Should I really be changing the alpha value? That sounds like a poor choice.
+                    materialColour.Diffuse = new((float)MainWindow.Randomiser.NextDouble(), (float)MainWindow.Randomiser.NextDouble(), (float)MainWindow.Randomiser.NextDouble(), (float)MainWindow.Randomiser.NextDouble());
+                }
+
+                // Save the updated XNO.
+                xno.Save();
+            }
+            catch { }
+        }
     }
 }
