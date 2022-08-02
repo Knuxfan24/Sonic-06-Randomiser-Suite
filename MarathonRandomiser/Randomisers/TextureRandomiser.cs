@@ -187,11 +187,12 @@ namespace MarathonRandomiser
         /// Randomises the Material Colours in an XNO.
         /// </summary>
         /// <param name="xnoFile">The XNO to process.</param>
-        /// <param name="doWhite">Whether materials that have their values the same (so are a white colour) should be randomised as well.</param>
-        public static async Task RandomiseMaterialColours(string xnoFile, bool? doWhite)
+        /// <param name="diffuse">Whether or not to randomise the material's diffuse colour.</param>
+        /// <param name="ambient">Whether or not to randomise the material's ambient colour.</param>
+        /// <param name="specular">Whether or not to randomise the material's specular colour.</param>
+        /// <param name="emissive">Whether or not to randomise the material's emissive colour.</param>
+        public static async Task RandomiseMaterialColours(string xnoFile, bool? diffuse, bool? ambient, bool? specular, bool? emissive)
         {
-            // TODO: Mess with stuff other than diffuse and see if there's an obvious difference, if so, maybe add more options.
-
             // This try catch is needed due to a couple of XNOs using a chunk that isn't supported in Marathon as of yet.
             try
             {
@@ -201,12 +202,15 @@ namespace MarathonRandomiser
                 // Loop through each material colour in the XNO.
                 foreach (NinjaMaterialColours? materialColour in xno.Data.Object.MaterialColours)
                 {
-                    // If we're not colouring materials that have a white value, then just skip this one.
-                    if (doWhite == false && (materialColour.Diffuse.X == materialColour.Diffuse.Y) && (materialColour.Diffuse.X == materialColour.Diffuse.Z))
-                        continue;
-
                     // TODO: Should I really be changing the alpha value? That sounds like a poor choice.
-                    materialColour.Diffuse = new((float)MainWindow.Randomiser.NextDouble(), (float)MainWindow.Randomiser.NextDouble(), (float)MainWindow.Randomiser.NextDouble(), (float)MainWindow.Randomiser.NextDouble());
+                    if (diffuse == true)
+                        materialColour.Diffuse = new((float)MainWindow.Randomiser.NextDouble(), (float)MainWindow.Randomiser.NextDouble(), (float)MainWindow.Randomiser.NextDouble(), (float)MainWindow.Randomiser.NextDouble());
+                    if (ambient == true)
+                        materialColour.Ambient = new((float)MainWindow.Randomiser.NextDouble(), (float)MainWindow.Randomiser.NextDouble(), (float)MainWindow.Randomiser.NextDouble(), (float)MainWindow.Randomiser.NextDouble());
+                    if (specular == true)
+                        materialColour.Specular = new((float)MainWindow.Randomiser.NextDouble(), (float)MainWindow.Randomiser.NextDouble(), (float)MainWindow.Randomiser.NextDouble(), (float)MainWindow.Randomiser.NextDouble());
+                    if (emissive == true)
+                        materialColour.Emissive = new((float)MainWindow.Randomiser.NextDouble(), (float)MainWindow.Randomiser.NextDouble(), (float)MainWindow.Randomiser.NextDouble(), (float)MainWindow.Randomiser.NextDouble());
                 }
 
                 // Save the updated XNO.

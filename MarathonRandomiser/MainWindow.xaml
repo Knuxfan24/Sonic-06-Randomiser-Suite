@@ -276,7 +276,10 @@
                         <CheckBox x:Name="CheckBox_Textures_DeleteStages" Content="Delete Stage Textures" Foreground="Firebrick"/>
                         <CheckBox x:Name="CheckBox_Textures_VertexColour" Content="Randomise Vertex Colours" Foreground="Firebrick" VerticalAlignment="Top"/>
                         <CheckBox x:Name="CheckBox_Textures_MaterialColour" Content="Randomise Material Colours" VerticalAlignment="Top" Click="Dependency_CheckBox_Changed"/>
-                        <CheckBox x:Name="CheckBox_Textures_MaterialWhite" Content="Include None Coloured Materials" Foreground="Firebrick" IsEnabled="False"/>
+                        <CheckBox x:Name="CheckBox_Textures_MaterialDiffuse" Content="Randomise Diffuse Colour" IsEnabled="False" IsChecked="True"/>
+                        <CheckBox x:Name="CheckBox_Textures_MaterialAmbient" Content="Randomise Ambient Colour" IsEnabled="False" IsChecked="True"/>
+                        <CheckBox x:Name="CheckBox_Textures_MaterialSpecular" Content="Randomise Specular Colour" IsEnabled="False"/>
+                        <CheckBox x:Name="CheckBox_Textures_MaterialEmissive" Content="Randomise Emissive Colour" IsEnabled="False" IsChecked="True"/>
                     </StackPanel>
 
                     <!--Texture Configuration Toggles-->

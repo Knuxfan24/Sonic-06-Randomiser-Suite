@@ -438,7 +438,10 @@ namespace MarathonRandomiser
                     break;
 
                 case "CheckBox_Textures_MaterialColour":
-                    CheckBox_Textures_MaterialWhite.IsEnabled = NewCheckedStatus;
+                    CheckBox_Textures_MaterialDiffuse.IsEnabled = NewCheckedStatus;
+                    CheckBox_Textures_MaterialAmbient.IsEnabled = NewCheckedStatus;
+                    CheckBox_Textures_MaterialSpecular.IsEnabled = NewCheckedStatus;
+                    CheckBox_Textures_MaterialEmissive.IsEnabled = NewCheckedStatus;
                     break;
 
                 case "CheckBox_Text_Generate":
@@ -1744,7 +1747,10 @@ namespace MarathonRandomiser
             bool? texturesDelete = CheckBox_Textures_DeleteStages.IsChecked;
             bool? texturesVertexColours = CheckBox_Textures_VertexColour.IsChecked;
             bool? texturesMaterialColours = CheckBox_Textures_MaterialColour.IsChecked;
-            bool? texturesMaterialWhite = CheckBox_Textures_MaterialWhite.IsChecked;
+            bool? texturesMaterialDiffuse = CheckBox_Textures_MaterialDiffuse.IsChecked;
+            bool? texturesMaterialAmbient = CheckBox_Textures_MaterialAmbient.IsChecked;
+            bool? texturesMaterialSpecular = CheckBox_Textures_MaterialSpecular.IsChecked;
+            bool? texturesMaterialEmissive = CheckBox_Textures_MaterialEmissive.IsChecked;
 
             // Dupes are NEEDED if we're only using custom textures.
             if (texturesOnlyCustom == true)
@@ -1837,7 +1843,9 @@ namespace MarathonRandomiser
                 }
             }
 
-            if (texturesMaterialColours == true)
+            // Check if we need to do material colour randomisation.
+            // If none of the sub options are selected, then don't bother, otherwise we'd just be loading and saving an XNO for no reason.
+            if (texturesMaterialColours == true && (texturesMaterialDiffuse == true || texturesMaterialAmbient == true || texturesMaterialSpecular == true || texturesMaterialEmissive == true))
             {
                 foreach (string archive in archives)
                 {
@@ -1848,7 +1856,7 @@ namespace MarathonRandomiser
                         foreach (string xnoFile in xnoFiles)
                         {
                             UpdateLogger($"Randomising material colours in '{xnoFile}'.");
-                            await Task.Run(() => TextureRandomiser.RandomiseMaterialColours(xnoFile, texturesMaterialWhite));
+                            await Task.Run(() => TextureRandomiser.RandomiseMaterialColours(xnoFile, texturesMaterialDiffuse, texturesMaterialAmbient, texturesMaterialSpecular, texturesMaterialEmissive));
                         }
                     }
                 }
