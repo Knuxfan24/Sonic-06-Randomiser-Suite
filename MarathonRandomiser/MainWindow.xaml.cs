@@ -96,7 +96,8 @@ namespace MarathonRandomiser
             // Load consistent settings.
             TextBox_General_ModsDirectory.Text = Properties.Settings.Default.ModsDirectory;
             TextBox_General_GameExecutable.Text = Properties.Settings.Default.GameExecutable;
-
+            
+            // Handle an invalid patch directory.
             if (TextBox_General_Patches.Text != $"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\\Unify\\Patches\\" && !Directory.Exists(Properties.Settings.Default.PatchDirectory))
             {
                 TextBox_General_Patches.Text = $"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\\Unify\\Patches\\";
@@ -106,6 +107,12 @@ namespace MarathonRandomiser
             {
                 TextBox_General_Patches.Text = Properties.Settings.Default.PatchDirectory;
             }
+
+            // Saved DLC locations.
+            TextBox_Misc_TeamAttackLocation.Text = Properties.Settings.Default.TeamAttackAmigo;
+            TextBox_Misc_SonicVHLocation.Text = Properties.Settings.Default.SonicVeryHard;
+            TextBox_Misc_ShadowVHLocation.Text = Properties.Settings.Default.ShadowVeryHard;
+            TextBox_Misc_SilverVHLocation.Text = Properties.Settings.Default.SilverVeryHard;
 
             // Generate a seed to use.
             TextBox_General_Seed.Text = Randomiser.Next().ToString();
@@ -406,6 +413,106 @@ namespace MarathonRandomiser
         {
             RefreshVoicePacks();
         }
+
+        /// <summary>
+        /// Opens a File Browser to select the archive containing the Team Attack Amigo content.
+        /// </summary>
+        private void TeamAttackLocation_Browse(object sender, RoutedEventArgs e)
+        {
+            VistaOpenFileDialog OpenFileDialog = new()
+            {
+                Title = "Select Team Attack Amigo Archive",
+                Multiselect = false,
+                Filter = "Supported Types|*.arc"
+            };
+
+            if (OpenFileDialog.ShowDialog() == true)
+                TextBox_Misc_TeamAttackLocation.Text = OpenFileDialog.FileName;
+        }
+
+        /// <summary>
+        /// Saves the Team Attack Amigo location setting when the value changes.
+        /// </summary>
+        private void TeamAttackLocation_Update(object sender, TextChangedEventArgs e)
+        {
+            Properties.Settings.Default.TeamAttackAmigo = TextBox_Misc_TeamAttackLocation.Text;
+            Properties.Settings.Default.Save();
+        }
+
+        /// <summary>
+        /// Opens a File Browser to select the archive containing Sonic's Very Hard Mode content.
+        /// </summary>
+        private void SonicVHLocation_Browse(object sender, RoutedEventArgs e)
+        {
+            VistaOpenFileDialog OpenFileDialog = new()
+            {
+                Title = "Select Very Hard Mode ~ Sonic Archive",
+                Multiselect = false,
+                Filter = "Supported Types|*.arc"
+            };
+
+            if (OpenFileDialog.ShowDialog() == true)
+                TextBox_Misc_SonicVHLocation.Text = OpenFileDialog.FileName;
+        }
+
+        /// <summary>
+        /// Saves the Sonic Very Hard Mode location setting when the value changes.
+        /// </summary>
+        private void SonicVHLocation_Update(object sender, TextChangedEventArgs e)
+        {
+            Properties.Settings.Default.SonicVeryHard = TextBox_Misc_SonicVHLocation.Text;
+            Properties.Settings.Default.Save();
+        }
+
+        /// <summary>
+        /// Opens a File Browser to select the archive containing Shadow's Very Hard Mode content.
+        /// </summary>
+        private void ShadowVHLocation_Browse(object sender, RoutedEventArgs e)
+        {
+            VistaOpenFileDialog OpenFileDialog = new()
+            {
+                Title = "Select Very Hard Mode ~ Shadow Archive",
+                Multiselect = false,
+                Filter = "Supported Types|*.arc"
+            };
+
+            if (OpenFileDialog.ShowDialog() == true)
+                TextBox_Misc_ShadowVHLocation.Text = OpenFileDialog.FileName;
+        }
+
+        /// <summary>
+        /// Saves the Shadow Very Hard Mode location setting when the value changes.
+        /// </summary>
+        private void ShadowVHLocation_Update(object sender, TextChangedEventArgs e)
+        {
+            Properties.Settings.Default.ShadowVeryHard = TextBox_Misc_ShadowVHLocation.Text;
+            Properties.Settings.Default.Save();
+        }
+
+        /// <summary>
+        /// Opens a File Browser to select the archive containing Silver's Very Hard Mode content.
+        /// </summary>
+        private void SilverVHLocation_Browse(object sender, RoutedEventArgs e)
+        {
+            VistaOpenFileDialog OpenFileDialog = new()
+            {
+                Title = "Select Very Hard Mode ~ Silver Archive",
+                Multiselect = false,
+                Filter = "Supported Types|*.arc"
+            };
+
+            if (OpenFileDialog.ShowDialog() == true)
+                TextBox_Misc_SilverVHLocation.Text = OpenFileDialog.FileName;
+        }
+
+        /// <summary>
+        /// Saves the Silver Very Hard Mode location setting when the value changes.
+        /// </summary>
+        private void SilverVHLocation_Update(object sender, TextChangedEventArgs e)
+        {
+            Properties.Settings.Default.SilverVeryHard = TextBox_Misc_SilverVHLocation.Text;
+            Properties.Settings.Default.Save();
+        }
         #endregion
 
         #region Form Helper Functions
@@ -529,6 +636,22 @@ namespace MarathonRandomiser
                 case "CheckBox_Misc_Patches":
                     Label_Misc_Patches_Weight.IsEnabled = NewCheckedStatus;
                     NumericUpDown_Misc_Patches_Weight.IsEnabled = NewCheckedStatus;
+                    break;
+                case "CheckBox_Misc_TeamAttack":
+                    Label_Misc_SonicVHLocation.IsEnabled = !NewCheckedStatus;
+                    Label_Misc_SonicVHLocation_Desc.IsEnabled = !NewCheckedStatus;
+                    TextBox_Misc_SonicVHLocation.IsEnabled = !NewCheckedStatus;
+                    Button_Misc_SonicVHLocation_Browse.IsEnabled = !NewCheckedStatus;
+                    CheckBox_Misc_SonicVH.IsEnabled = !NewCheckedStatus;
+                    CheckBox_Misc_SonicVH.IsChecked = false;
+                    break;
+                case "CheckBox_Misc_SonicVH":
+                    Label_Misc_TeamAttackLocation.IsEnabled = !NewCheckedStatus;
+                    Label_Misc_TeamAttackLocation_Desc.IsEnabled = !NewCheckedStatus;
+                    TextBox_Misc_TeamAttackLocation.IsEnabled = !NewCheckedStatus;
+                    Button_Misc_TeamAttackLocation_Browse.IsEnabled = !NewCheckedStatus;
+                    CheckBox_Misc_TeamAttack.IsEnabled = !NewCheckedStatus;
+                    CheckBox_Misc_TeamAttack.IsChecked = false;
                     break;
 
                 case "CheckBox_Wildcard_Enable":
