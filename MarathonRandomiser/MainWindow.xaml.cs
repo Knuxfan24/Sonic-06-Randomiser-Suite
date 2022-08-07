@@ -109,7 +109,6 @@ namespace MarathonRandomiser
             }
 
             // Saved DLC locations.
-            TextBox_Misc_TeamAttackLocation.Text = Properties.Settings.Default.TeamAttackAmigo;
             TextBox_Misc_SonicVHLocation.Text = Properties.Settings.Default.SonicVeryHard;
             TextBox_Misc_ShadowVHLocation.Text = Properties.Settings.Default.ShadowVeryHard;
             TextBox_Misc_SilverVHLocation.Text = Properties.Settings.Default.SilverVeryHard;
@@ -415,31 +414,6 @@ namespace MarathonRandomiser
         }
 
         /// <summary>
-        /// Opens a File Browser to select the archive containing the Team Attack Amigo content.
-        /// </summary>
-        private void TeamAttackLocation_Browse(object sender, RoutedEventArgs e)
-        {
-            VistaOpenFileDialog OpenFileDialog = new()
-            {
-                Title = "Select Team Attack Amigo Archive",
-                Multiselect = false,
-                Filter = "Supported Types|*.arc"
-            };
-
-            if (OpenFileDialog.ShowDialog() == true)
-                TextBox_Misc_TeamAttackLocation.Text = OpenFileDialog.FileName;
-        }
-
-        /// <summary>
-        /// Saves the Team Attack Amigo location setting when the value changes.
-        /// </summary>
-        private void TeamAttackLocation_Update(object sender, TextChangedEventArgs e)
-        {
-            Properties.Settings.Default.TeamAttackAmigo = TextBox_Misc_TeamAttackLocation.Text;
-            Properties.Settings.Default.Save();
-        }
-
-        /// <summary>
         /// Opens a File Browser to select the archive containing Sonic's Very Hard Mode content.
         /// </summary>
         private void SonicVHLocation_Browse(object sender, RoutedEventArgs e)
@@ -637,22 +611,6 @@ namespace MarathonRandomiser
                     Label_Misc_Patches_Weight.IsEnabled = NewCheckedStatus;
                     NumericUpDown_Misc_Patches_Weight.IsEnabled = NewCheckedStatus;
                     break;
-                case "CheckBox_Misc_TeamAttack":
-                    Label_Misc_SonicVHLocation.IsEnabled = !NewCheckedStatus;
-                    Label_Misc_SonicVHLocation_Desc.IsEnabled = !NewCheckedStatus;
-                    TextBox_Misc_SonicVHLocation.IsEnabled = !NewCheckedStatus;
-                    Button_Misc_SonicVHLocation_Browse.IsEnabled = !NewCheckedStatus;
-                    CheckBox_Misc_SonicVH.IsEnabled = !NewCheckedStatus;
-                    CheckBox_Misc_SonicVH.IsChecked = false;
-                    break;
-                case "CheckBox_Misc_SonicVH":
-                    Label_Misc_TeamAttackLocation.IsEnabled = !NewCheckedStatus;
-                    Label_Misc_TeamAttackLocation_Desc.IsEnabled = !NewCheckedStatus;
-                    TextBox_Misc_TeamAttackLocation.IsEnabled = !NewCheckedStatus;
-                    Button_Misc_TeamAttackLocation_Browse.IsEnabled = !NewCheckedStatus;
-                    CheckBox_Misc_TeamAttack.IsEnabled = !NewCheckedStatus;
-                    CheckBox_Misc_TeamAttack.IsChecked = false;
-                    break;
 
                 case "CheckBox_Wildcard_Enable":
                     TabItem_SET.IsEnabled = !NewCheckedStatus;
@@ -759,7 +717,16 @@ namespace MarathonRandomiser
                     break;
 
                 case "Grid_Miscellaneous":
-                    Helpers.InvalidateCheckedListBox(CheckedList_Misc_Patches, true, selectAll);
+                    switch (TabControl_Miscellaneous.SelectedIndex)
+                    {
+                        case 0: Helpers.InvalidateCheckedListBox(CheckedList_Misc_Patches, true, selectAll); break;
+                        case 1:
+                            CheckBox_Misc_SonicVH.IsChecked = selectAll;
+                            CheckBox_Misc_ShadowVH.IsChecked = selectAll;
+                            CheckBox_Misc_SilverVH.IsChecked = selectAll;
+                            break;
+                        default: throw new NotImplementedException();
+                    }
                     break;
 
                 case "Grid_Custom": Helpers.InvalidateCheckedListBox(CheckedList_Custom_Vox, true, selectAll); break;
@@ -994,8 +961,13 @@ namespace MarathonRandomiser
 
             // Misc Block.
             ConfigTabRead(configInfo, "Misc", StackPanel_Misc);
-            ConfigCheckedListBoxRead(configInfo, CheckedList_Text_Languages);
             ConfigCheckedListBoxRead(configInfo, CheckedList_Misc_Patches);
+            configInfo.WriteLine($"TextBox_Misc_SonicVHLocation={TextBox_Misc_SonicVHLocation.Text}");
+            configInfo.WriteLine($"{CheckBox_Misc_SonicVH.Name}={CheckBox_Misc_SonicVH.IsChecked}");
+            configInfo.WriteLine($"TextBox_Misc_ShadowVHLocation={TextBox_Misc_ShadowVHLocation.Text}");
+            configInfo.WriteLine($"{CheckBox_Misc_ShadowVH.Name}={CheckBox_Misc_ShadowVH.IsChecked}");
+            configInfo.WriteLine($"TextBox_Misc_SilverVHLocation={TextBox_Misc_SilverVHLocation.Text}");
+            configInfo.WriteLine($"{CheckBox_Misc_SilverVH.Name}={CheckBox_Misc_SilverVH.IsChecked}");
             configInfo.WriteLine();
 
             // Custom Block.
@@ -1611,8 +1583,12 @@ namespace MarathonRandomiser
                             string[] luaFiles = Directory.GetFiles($"{unpackedArchive}\\xenon\\scripts\\enemy", "*.lub", SearchOption.TopDirectoryOnly);
                             foreach (string luaFile in luaFiles)
                             {
-                                UpdateLogger($"Patching '{luaFile}'.");
-                                await Task.Run(() => ObjectPlacementRandomiser.BossPatch(luaFile, setEnemies, setHints, SetHints, SetEnemies));
+                                // Skip Mephiles Phase 2 for patching as decompiling his Lua breaks the fight.
+                                if (Path.GetFileNameWithoutExtension(luaFile) != "secondmefiress")
+                                {
+                                    UpdateLogger($"Patching '{luaFile}'.");
+                                    await Task.Run(() => ObjectPlacementRandomiser.BossPatch(luaFile, setEnemies, setHints, SetHints, SetEnemies));
+                                }
                             }
                         }
 
@@ -2418,9 +2394,21 @@ namespace MarathonRandomiser
                 {
                     if (Path.GetFileName(archive).ToLower() == "scripts.arc")
                     {
+                        // Definie DLC paths.
+                        string? sonicVH = null;
+                        string? shadowVH = null;
+                        string? silverVH = null;
+
+                        if (Path.GetExtension(TextBox_Misc_SonicVHLocation.Text) == ".arc" && CheckBox_Misc_SonicVH.IsChecked == true)
+                            sonicVH = TextBox_Misc_SonicVHLocation.Text;
+                        if (Path.GetExtension(TextBox_Misc_ShadowVHLocation.Text) == ".arc" && CheckBox_Misc_ShadowVH.IsChecked == true)
+                            shadowVH = TextBox_Misc_ShadowVHLocation.Text;
+                        if (Path.GetExtension(TextBox_Misc_SilverVHLocation.Text) == ".arc" && CheckBox_Misc_SilverVH.IsChecked == true)
+                            silverVH = TextBox_Misc_SilverVHLocation.Text;
+
                         UpdateLogger($"Generating random episode.");
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
-                        LevelOrder = await Task.Run(() => MiscellaneousRandomisers.EpisodeGenerator(unpackedArchive, GameExecutable));
+                        LevelOrder = await Task.Run(() => MiscellaneousRandomisers.EpisodeGenerator(unpackedArchive, GameExecutable, sonicVH, shadowVH, silverVH));
                         // TODO: Add MST stuff and figure out a system for adding the stage count to the loading screen.
                         // TODO: Maybe see if it's possible to detect Very Hard and work that in?
                     }
@@ -2502,6 +2490,15 @@ namespace MarathonRandomiser
                                                   MessageBoxButton.OK,
                                                   MessageBoxImage.Information);
 
+            // Give a note about the Disable Camera Events patch if using the object shuffler.
+            if (setTransform == true)
+            {
+                HandyControl.Controls.MessageBox.Show("While not required, using the Disable Camera Events patch may make object shuffling more enjoyable.",
+                                                      "Sonic '06 Randomiser Suite",
+                                                      MessageBoxButton.OK,
+                                                      MessageBoxImage.Information);
+            }
+
             // If the user has chosen to enable Auto Unlock, inform them of how to actually make it take.
             if (miscUnlock == true)
             {
@@ -2511,10 +2508,10 @@ namespace MarathonRandomiser
                                                       MessageBoxImage.Information);
             }
 
-            // Give a note about the Disable Camera Events patch if using the object shuffler.
-            if (setTransform == true)
+            // Give a note about the  Always Have 99 Lives patch if using the Random Episode Generator.
+            if (miscRandomEpisode == true)
             {
-                HandyControl.Controls.MessageBox.Show("While not required, using the Disable Camera Events patch may make object shuffling more enjoyable.",
+                HandyControl.Controls.MessageBox.Show("While not required, using the Always Have 99 Lives patch may make the random episode more enjoyable.",
                                                       "Sonic '06 Randomiser Suite",
                                                       MessageBoxButton.OK,
                                                       MessageBoxImage.Information);

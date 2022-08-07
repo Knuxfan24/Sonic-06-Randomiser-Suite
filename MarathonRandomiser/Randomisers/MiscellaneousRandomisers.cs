@@ -1,6 +1,10 @@
-﻿using Marathon.Formats.Mesh;
+﻿using Marathon.Formats.Archive;
+using Marathon.Formats.Mesh;
 using Marathon.Formats.Package;
 using Marathon.Formats.Text;
+using Marathon.Helpers;
+using Marathon.IO;
+using Marathon.IO.Interfaces;
 using System.Linq;
 
 namespace MarathonRandomiser
@@ -255,7 +259,7 @@ namespace MarathonRandomiser
         /// </summary>
         /// <param name="archivePath">The path to the extracted scripts.arc.</param>
         /// <param name="GameExecutable">The filepath of the game executable (used to determine the path).</param>
-        public static async Task<Dictionary<string, int>> EpisodeGenerator(string archivePath, string GameExecutable)
+        public static async Task<Dictionary<string, int>> EpisodeGenerator(string archivePath, string GameExecutable, string? sonicVH, string? shadowVH, string? silverVH)
         {
             Dictionary<string, int> LevelOrder = new();
 
@@ -497,131 +501,126 @@ namespace MarathonRandomiser
             File.Copy($@"{archivePath}\{corePath}\scripts\mission\2300\mission_2311.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_solaris.lub");
             #endregion
 
-            #region Copy Team Attack Amigo (if it exists)
-            if (File.Exists($@"{archivePath}\{corePath}\download\0030.lub"))
-                File.Copy($@"{archivePath}\{corePath}\scripts\mission\4545\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_taa.lub");
-            #endregion
-
-            /* Disable the Very Hard support as it breaks the other sets by replacing their area luas (and Sonic's fucks game.lub, screwing over Team Attack Amigo and vice versa)
-             * If I'm to readd this, the DLC arcs will need to be handled seperately.
-            #region 1/3 chance to swap in Sonic's Very Hard Luas (if they exist)
-
-            if (File.Exists($@"{archivePath}\{corePath}\download\0003.lub"))
+            // Load DLC archives if needed.
+            if (sonicVH != null)
             {
+                U8Archive sonicVeryHard = new(sonicVH, ReadMode.CopyToMemory);
+                sonicVeryHard.Root.GetFile($"{corePath}/scripts/game.lub").Extract($@"{archivePath}\{corePath}\scripts\game.lub"); // Sonic's very hard modifies game.lub to include tpjC for him.
+                await Task.Run(() => Helpers.RendererExtract(sonicVeryHard, archivePath));
+
+                // 1/3 chance to swap in Sonic's Very Hard Mode files.
                 // Wave Ocean
                 if (MainWindow.Randomiser.Next(0, 3) == 0)
-                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4002\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_sonic_wvo.lub", true);
+                    await Task.Run(() => Helpers.VeryHardModeExtractor(corePath, sonicVeryHard, "wvo", archivePath, "4002", "sonic"));
 
                 // Dusty Desert
                 if (MainWindow.Randomiser.Next(0, 3) == 0)
-                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4007\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_sonic_dtd.lub", true);
+                    await Task.Run(() => Helpers.VeryHardModeExtractor(corePath, sonicVeryHard, "dtd", archivePath, "4007", "sonic"));
 
                 // White Acropolis
                 if (MainWindow.Randomiser.Next(0, 3) == 0)
-                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4012\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_sonic_wap.lub", true);
+                    await Task.Run(() => Helpers.VeryHardModeExtractor(corePath, sonicVeryHard, "wap", archivePath, "4012", "sonic"));
 
                 // Crisis City
                 if (MainWindow.Randomiser.Next(0, 3) == 0)
-                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4017\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_sonic_csc.lub", true);
+                    await Task.Run(() => Helpers.VeryHardModeExtractor(corePath, sonicVeryHard, "csc", archivePath, "4017", "sonic"));
 
                 // Flame Core
                 if (MainWindow.Randomiser.Next(0, 3) == 0)
-                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4022\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_sonic_flc.lub", true);
+                    await Task.Run(() => Helpers.VeryHardModeExtractor(corePath, sonicVeryHard, "flc", archivePath, "4022", "sonic"));
 
                 // Radical Train
                 if (MainWindow.Randomiser.Next(0, 3) == 0)
-                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4027\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_sonic_rct.lub", true);
+                    await Task.Run(() => Helpers.VeryHardModeExtractor(corePath, sonicVeryHard, "rct", archivePath, "4027", "sonic"));
 
                 // Tropical Jungle
                 if (MainWindow.Randomiser.Next(0, 3) == 0)
-                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4032\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_sonic_tpj.lub", true);
+                    await Task.Run(() => Helpers.VeryHardModeExtractor(corePath, sonicVeryHard, "tpj", archivePath, "4032", "sonic"));
 
                 // Kingdom Valley
                 if (MainWindow.Randomiser.Next(0, 3) == 0)
-                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4037\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_sonic_kdv.lub", true);
+                    await Task.Run(() => Helpers.VeryHardModeExtractor(corePath, sonicVeryHard, "kdv", archivePath, "4037", "sonic"));
 
                 // Aquatic Base
                 if (MainWindow.Randomiser.Next(0, 3) == 0)
-                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4042\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_sonic_aqa.lub", true);
+                    await Task.Run(() => Helpers.VeryHardModeExtractor(corePath, sonicVeryHard, "aqa", archivePath, "4042", "sonic"));
             }
-            #endregion
-
-            #region 1/3 chance to swap in Shadow's Very Hard Luas (if they exist)
-
-            if (File.Exists($@"{archivePath}\{corePath}\download\0004.lub"))
+            if (shadowVH != null)
             {
+                U8Archive shadowVeryHard = new(shadowVH, ReadMode.CopyToMemory);
+                await Task.Run(() => Helpers.RendererExtract(shadowVeryHard, archivePath));
+
+                // 1/3 chance to swap in Shadow's Very Hard Mode files.
                 // White Acropolis
                 if (MainWindow.Randomiser.Next(0, 3) == 0)
-                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4053\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_shadow_wap.lub", true);
+                    await Task.Run(() => Helpers.VeryHardModeExtractor(corePath, shadowVeryHard, "wap", archivePath, "4053", "shadow"));
 
                 // Kingdom Valley
                 if (MainWindow.Randomiser.Next(0, 3) == 0)
-                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4058\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_shadow_kdv.lub", true);
+                    await Task.Run(() => Helpers.VeryHardModeExtractor(corePath, shadowVeryHard, "kdv", archivePath, "4058", "shadow"));
 
                 // Crisis City
                 if (MainWindow.Randomiser.Next(0, 3) == 0)
-                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4063\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_shadow_csc.lub", true);
+                    await Task.Run(() => Helpers.VeryHardModeExtractor(corePath, shadowVeryHard, "csc", archivePath, "4063", "shadow"));
 
                 // Flame Core
                 if (MainWindow.Randomiser.Next(0, 3) == 0)
-                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4068\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_shadow_flc.lub", true);
+                    await Task.Run(() => Helpers.VeryHardModeExtractor(corePath, shadowVeryHard, "flc", archivePath, "4068", "shadow"));
 
                 // Radical Train
                 if (MainWindow.Randomiser.Next(0, 3) == 0)
-                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4073\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_shadow_rct.lub", true);
+                    await Task.Run(() => Helpers.VeryHardModeExtractor(corePath, shadowVeryHard, "rct", archivePath, "4073", "shadow"));
 
                 // Aquatic Base
                 if (MainWindow.Randomiser.Next(0, 3) == 0)
-                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4078\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_shadow_aqa.lub", true);
+                    await Task.Run(() => Helpers.VeryHardModeExtractor(corePath, shadowVeryHard, "aqa", archivePath, "4078", "shadow"));
 
                 // Wave Ocean
                 if (MainWindow.Randomiser.Next(0, 3) == 0)
-                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4083\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_shadow_wvo.lub", true);
+                    await Task.Run(() => Helpers.VeryHardModeExtractor(corePath, shadowVeryHard, "wvo", archivePath, "4083", "shadow"));
 
                 // Dusty Desert
                 if (MainWindow.Randomiser.Next(0, 3) == 0)
-                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4088\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_shadow_dtd.lub", true);
+                    await Task.Run(() => Helpers.VeryHardModeExtractor(corePath, shadowVeryHard, "dtd", archivePath, "4088", "shadow"));
             }
-            #endregion
-
-            #region 1/3 chance to swap in Silver's Very Hard Luas (if they exist)
-
-            if (File.Exists($@"{archivePath}\{corePath}\download\0005.lub"))
+            if (silverVH != null)
             {
+                U8Archive silverVeryHard = new(silverVH, ReadMode.CopyToMemory);
+                await Task.Run(() => Helpers.RendererExtract(silverVeryHard, archivePath));
+
+                // 1/3 chance to swap in Silver's Very Hard Mode files.
                 // Crisis City
                 if (MainWindow.Randomiser.Next(0, 3) == 0)
-                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4099\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_silver_csc.lub", true);
+                    await Task.Run(() => Helpers.VeryHardModeExtractor(corePath, silverVeryHard, "csc", archivePath, "4099", "silver"));
 
                 // Tropical Jungle
                 if (MainWindow.Randomiser.Next(0, 3) == 0)
-                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4104\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_silver_tpj.lub", true);
+                    await Task.Run(() => Helpers.VeryHardModeExtractor(corePath, silverVeryHard, "tpj", archivePath, "4104", "silver"));
 
                 // Dusty Desert
                 if (MainWindow.Randomiser.Next(0, 3) == 0)
-                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4109\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_silver_dtd.lub", true);
+                    await Task.Run(() => Helpers.VeryHardModeExtractor(corePath, silverVeryHard, "dtd", archivePath, "4109", "silver"));
 
                 // White Acropolis
                 if (MainWindow.Randomiser.Next(0, 3) == 0)
-                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4114\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_silver_wap.lub", true);
+                    await Task.Run(() => Helpers.VeryHardModeExtractor(corePath, silverVeryHard, "wap", archivePath, "4114", "silver"));
 
                 // Radical Train
                 if (MainWindow.Randomiser.Next(0, 3) == 0)
-                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4119\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_silver_rct.lub", true);
+                    await Task.Run(() => Helpers.VeryHardModeExtractor(corePath, silverVeryHard, "rct", archivePath, "4119", "silver"));
 
                 // Aquatic Base
                 if (MainWindow.Randomiser.Next(0, 3) == 0)
-                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4124\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_silver_aqa.lub", true);
+                    await Task.Run(() => Helpers.VeryHardModeExtractor(corePath, silverVeryHard, "aqa", archivePath, "4124", "silver"));
 
                 // Kingdom Valley
                 if (MainWindow.Randomiser.Next(0, 3) == 0)
-                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4129\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_silver_kdv.lub", true);
+                    await Task.Run(() => Helpers.VeryHardModeExtractor(corePath, silverVeryHard, "kdv", archivePath, "4129", "silver"));
 
                 // Flame Core
                 if (MainWindow.Randomiser.Next(0, 3) == 0)
-                    File.Copy($@"{archivePath}\{corePath}\scripts\mission\4134\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_silver_flc.lub", true);
+                    await Task.Run(() => Helpers.VeryHardModeExtractor(corePath, silverVeryHard, "flc", archivePath, "4134", "silver"));
             }
-            #endregion
-            */
 
             // Get a list of all the mission luas we have.
             List<string> luas = Directory.GetFiles($@"{archivePath}\{corePath}\scripts\mission\rando\", "*.lub").ToList();

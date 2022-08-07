@@ -1,7 +1,9 @@
 ﻿using Marathon.Formats.Archive;
 using Marathon.Formats.Audio;
 using Marathon.Formats.Script.Lua;
+using Marathon.Helpers;
 using Marathon.IO;
+using Marathon.IO.Interfaces;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.IO.Compression;
@@ -413,6 +415,46 @@ namespace MarathonRandomiser
 
             // Save our updated voice_all_e.sbk.
             voice_all.Save();
+        }
+
+        /// <summary>
+        /// Looks through an archive and extracts all the render scripts from it.
+        /// </summary>
+        /// <param name="archive">The loaded archive.</param>
+        /// <param name="archivePath">Where to extract the files.</param>
+        public static async Task RendererExtract(U8Archive archive, string archivePath)
+        {
+            foreach (IArchiveFile file in archive.Root.GetFiles())
+                if (file.Name.StartsWith("render"))
+                    file.Extract($@"{archivePath}\{file.Path}");
+        }
+
+        /// <summary>
+        /// Automates copying content from Very Hard Mode for use in the Episode Generator.
+        /// </summary>
+        /// <param name="corePath">The platform path (ps3 or xenon)</param>
+        /// <param name="archive">The Very Hard Mode archive in memory.</param>
+        /// <param name="stage">The stage name we need the files of.</param>
+        /// <param name="archivePath">The scripts.arc to extract files to.</param>
+        /// <param name="missionID">The mission ID we need the files of.</param>
+        /// <param name="character">The character we need the files of.</param>
+        public static async Task VeryHardModeExtractor(string corePath, U8Archive archive, string stage, string archivePath, string missionID, string character)
+        {
+            // Extract and replace the area files.
+            foreach (IArchiveFile? file in archive.Root.GetFiles())
+                if (file.Path.Contains($"{corePath}/scripts/stage/{stage}"))
+                    file.Extract($@"{archivePath}\{corePath}\scripts\stage\{stage}\{file.Name}");
+
+            // Replace the mission script.
+            archive.Root.GetFile($"{corePath}/scripts/mission/{missionID}/mission.lub").Extract($@"{archivePath}\{corePath}\scripts\mission\rando\mission_{character}_{stage}.lub");
+
+            // Create the directory for the paths and sets.
+            Directory.CreateDirectory($@"{archivePath}\{corePath}\scripts\mission\{missionID}");
+
+            // Extract the paths and sets.
+            foreach (IArchiveFile? file in archive.Root.GetFiles())
+                if (file.Path.Contains(missionID) && file.Name != "mission.lub")
+                    file.Extract($@"{archivePath}\{corePath}\scripts\mission\{missionID}\{file.Name}");
         }
     }
 }
