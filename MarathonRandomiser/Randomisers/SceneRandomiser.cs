@@ -16,7 +16,7 @@
         /// <param name="fogDensity">Whether or not to randomise how thick the fog is.</param>
         /// <param name="env">Whether or not to randomise the cubemap.</param>
         /// <param name="SceneEnvMaps">The list of valid cubemap file paths.</param>
-        public static async Task Process(string sceneLua, bool? ambient, bool? main, bool? sub, double minLight, bool? direction, bool? enforceDirection, bool? fogColour, bool? fogDensity, bool? env, List<string> SceneEnvMaps)
+        public static async Task Process(string sceneLua, bool? ambient, bool? main, bool? sub, double minLight, bool? direction, bool? enforceDirection, bool? fogColour, bool? fogDensity, bool? env, List<string> SceneEnvMaps, bool? noBloom)
         {
             // Decompile this lua file.
             await Task.Run(() => Helpers.LuaDecompile(sceneLua));
@@ -84,6 +84,12 @@
                     string[] envMap = lua[i + 1].Split(' ');
                     envMap[4] = $"\"{SceneEnvMaps[MainWindow.Randomiser.Next(SceneEnvMaps.Count)]}\"";
                     lua[i + 1] = string.Join(' ', envMap);
+                }
+
+                // Disable Bloom
+                if (lua[i].Contains("Bloom") && noBloom == true)
+                {
+                    lua[i + 3] = "  Scale = 0";
                 }
             }
 

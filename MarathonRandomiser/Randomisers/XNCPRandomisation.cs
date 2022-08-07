@@ -5,6 +5,23 @@ namespace MarathonRandomiser
     internal class XNCPRandomisation
     {
         /// <summary>
+        /// Edits the copy of the italian loading xncp to use the english texture.
+        /// </summary>
+        /// <param name="xncpFile">The filepath to the XNCP file we're processing.</param>
+        public static async Task NowLoadingHack(string xncpFile)
+        {
+            // Load the italian XNCP file.
+            FAPCFile? xncp = new();
+            xncp.Load(xncpFile);
+
+            // Change the nowloading_Italian.dds reference to the english one.
+            xncp.Resources[1].Content.TextureList.Textures[1].Name = "nowloading.dds";
+
+            // Save the modified XNCP.
+            xncp.Save(xncpFile);
+        }
+
+        /// <summary>
         /// Process and randomise elements in an XNCP file.
         /// </summary>
         /// <param name="xncpFile">The filepath to the XNCP file we're processing.</param>

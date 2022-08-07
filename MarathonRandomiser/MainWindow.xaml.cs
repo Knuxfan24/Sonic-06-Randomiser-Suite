@@ -1786,9 +1786,10 @@ namespace MarathonRandomiser
             bool? sceneFogDensity = CheckBox_Scene_Fog_Density.IsChecked;
             bool? sceneEnvMaps = CheckBox_Scene_EnvMaps.IsChecked;
             bool? sceneSkyboxes = CheckBox_Scene_Skyboxes.IsChecked;
+            bool? sceneNoBloom = CheckBox_Scene_NoBloom.IsChecked;
 
             // Check if we actually need to do scene randomisation.
-            if (sceneLightAmbient == true || sceneLightMain == true || sceneLightSub == true || sceneLightDirection == true || sceneFogColour == true || sceneFogDensity == true || sceneEnvMaps == true)
+            if (sceneLightAmbient == true || sceneLightMain == true || sceneLightSub == true || sceneLightDirection == true || sceneFogColour == true || sceneFogDensity == true || sceneEnvMaps == true || sceneNoBloom == true)
             {
                 foreach (string archive in archives)
                 {
@@ -1801,7 +1802,7 @@ namespace MarathonRandomiser
                         {
                             UpdateLogger($"Randomising scene parameters in '{luaFile}'.");
                             await Task.Run(() => SceneRandomiser.Process(luaFile, sceneLightAmbient, sceneLightMain, sceneLightSub, sceneMinLight, sceneLightDirection, sceneLightDirectionEnforce,
-                                                                         sceneFogColour, sceneFogDensity, sceneEnvMaps, SceneEnvMaps));
+                                                                         sceneFogColour, sceneFogDensity, sceneEnvMaps, SceneEnvMaps, sceneNoBloom));
                         }
                     }
                 }
@@ -2322,6 +2323,13 @@ namespace MarathonRandomiser
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
                         string[] xncpFiles = Directory.GetFiles(unpackedArchive, "*.xncp", SearchOption.AllDirectories);
 
+                        // loading_english.xncp embeds the texture, which XNCPLib seems to fail with, so replace it with the italian one.
+                        UpdateLogger($"Patching now loading xncp.");
+                        string italianXNCP = Array.Find(xncpFiles, file => file.EndsWith("loading_italian.xncp"));
+                        string englishXNCP = Array.Find(xncpFiles, file => file.EndsWith("loading_english.xncp"));
+                        File.Copy(italianXNCP, englishXNCP, true);
+                        await Task.Run(() => XNCPRandomisation.NowLoadingHack(englishXNCP));
+
                         foreach (string xncpFile in xncpFiles)
                         {
                             // Skip black_out.xncp as XNCPLib doesn't know what the hell to do with it.
@@ -2421,6 +2429,7 @@ namespace MarathonRandomiser
             }
 
             // Make the Random Episode's MST.
+            // We do this down here so the Text Randomisers can't interfere with it.
             if (miscRandomEpisode == true)
             {
                 foreach (string archive in archives)

@@ -501,6 +501,7 @@ namespace MarathonRandomiser
             File.Copy($@"{archivePath}\{corePath}\scripts\mission\2300\mission_2311.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_solaris.lub");
             #endregion
 
+            #region DLC
             // Load DLC archives if needed.
             if (sonicVH != null)
             {
@@ -621,6 +622,7 @@ namespace MarathonRandomiser
                 if (MainWindow.Randomiser.Next(0, 3) == 0)
                     await Task.Run(() => Helpers.VeryHardModeExtractor(corePath, silverVeryHard, "flc", archivePath, "4134", "silver"));
             }
+            #endregion
 
             // Get a list of all the mission luas we have.
             List<string> luas = Directory.GetFiles($@"{archivePath}\{corePath}\scripts\mission\rando\", "*.lub").ToList();
@@ -798,6 +800,8 @@ namespace MarathonRandomiser
             }
 
             return LevelOrder;
+
+            // TODO: Maybe add a stage select before the actual stages, means I don't have to keep replacing mission_start to skip ones.
         }
 
         /// <summary>

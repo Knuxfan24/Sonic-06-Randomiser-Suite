@@ -211,6 +211,7 @@
                         <CheckBox x:Name="CheckBox_Scene_Fog_Density" Content="Randomise Fog Density" Foreground="Firebrick"/>
                         <CheckBox x:Name="CheckBox_Scene_EnvMaps" Content="Randomise Environment Maps" IsChecked="True"/>
                         <CheckBox x:Name="CheckBox_Scene_Skyboxes" Content="Randomise Skyboxes" IsChecked="True"/>
+                        <CheckBox x:Name="CheckBox_Scene_NoBloom" Content="Disable Bloom" IsChecked="False"/>
                     </StackPanel>
 
                     <!--Scene Configuration Toggles-->
