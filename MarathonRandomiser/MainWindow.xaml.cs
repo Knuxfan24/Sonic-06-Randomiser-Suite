@@ -1531,6 +1531,40 @@ namespace MarathonRandomiser
             if (MiscPatches.Count == 0)
                 CheckBox_Misc_Patches.IsChecked = false;
 
+            #region Random Episode Generation
+            // This has to be done up here or the Very Hard mode content won't be randomised.
+            bool? miscRandomEpisode = CheckBox_Misc_RandomEpisode.IsChecked;
+
+            // Set up a level order for later.
+            Dictionary<string, int> LevelOrder = new();
+
+            // Check if the Random Episode needs to be generated.
+            if (miscRandomEpisode == true)
+            {
+                foreach (string archive in archives)
+                {
+                    if (Path.GetFileName(archive).ToLower() == "scripts.arc")
+                    {
+                        // Definie DLC paths.
+                        string? sonicVH = null;
+                        string? shadowVH = null;
+                        string? silverVH = null;
+
+                        if (Path.GetExtension(TextBox_Misc_SonicVHLocation.Text) == ".arc" && CheckBox_Misc_SonicVH.IsChecked == true)
+                            sonicVH = TextBox_Misc_SonicVHLocation.Text;
+                        if (Path.GetExtension(TextBox_Misc_ShadowVHLocation.Text) == ".arc" && CheckBox_Misc_ShadowVH.IsChecked == true)
+                            shadowVH = TextBox_Misc_ShadowVHLocation.Text;
+                        if (Path.GetExtension(TextBox_Misc_SilverVHLocation.Text) == ".arc" && CheckBox_Misc_SilverVH.IsChecked == true)
+                            silverVH = TextBox_Misc_SilverVHLocation.Text;
+
+                        UpdateLogger($"Generating random episode.");
+                        string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+                        LevelOrder = await Task.Run(() => MiscellaneousRandomisers.EpisodeGenerator(unpackedArchive, GameExecutable, sonicVH, shadowVH, silverVH));
+                    }
+                }
+            }
+            #endregion
+
             #region Object Placement
             // Set up values.
             bool? setEnemies = CheckBox_SET_Enemies.IsChecked;
@@ -2317,7 +2351,6 @@ namespace MarathonRandomiser
             bool? miscPropPSINoGrab = CheckBox_Misc_PropPSIBehaviour_NoGrab.IsChecked;
             bool? miscPropPSINoDebris = CheckBox_Misc_PropPSIBehaviour_NoDebris.IsChecked;
             bool? miscPropDebris = CheckBox_Misc_PropDebris.IsChecked;
-            bool? miscRandomEpisode = CheckBox_Misc_RandomEpisode.IsChecked;
 
             // Check if we need to actually do enemy health randomisation.
             if (miscEnemyHealth == true)
@@ -2387,33 +2420,9 @@ namespace MarathonRandomiser
                 }
             }
 
+            // Make the Random Episode's MST.
             if (miscRandomEpisode == true)
             {
-                Dictionary<string, int> LevelOrder = new();
-                foreach (string archive in archives)
-                {
-                    if (Path.GetFileName(archive).ToLower() == "scripts.arc")
-                    {
-                        // Definie DLC paths.
-                        string? sonicVH = null;
-                        string? shadowVH = null;
-                        string? silverVH = null;
-
-                        if (Path.GetExtension(TextBox_Misc_SonicVHLocation.Text) == ".arc" && CheckBox_Misc_SonicVH.IsChecked == true)
-                            sonicVH = TextBox_Misc_SonicVHLocation.Text;
-                        if (Path.GetExtension(TextBox_Misc_ShadowVHLocation.Text) == ".arc" && CheckBox_Misc_ShadowVH.IsChecked == true)
-                            shadowVH = TextBox_Misc_ShadowVHLocation.Text;
-                        if (Path.GetExtension(TextBox_Misc_SilverVHLocation.Text) == ".arc" && CheckBox_Misc_SilverVH.IsChecked == true)
-                            silverVH = TextBox_Misc_SilverVHLocation.Text;
-
-                        UpdateLogger($"Generating random episode.");
-                        string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
-                        LevelOrder = await Task.Run(() => MiscellaneousRandomisers.EpisodeGenerator(unpackedArchive, GameExecutable, sonicVH, shadowVH, silverVH));
-                        // TODO: Add MST stuff and figure out a system for adding the stage count to the loading screen.
-                        // TODO: Maybe see if it's possible to detect Very Hard and work that in?
-                    }
-                }
-
                 foreach (string archive in archives)
                 {
                     if (Path.GetFileName(archive).ToLower() == "text.arc")
