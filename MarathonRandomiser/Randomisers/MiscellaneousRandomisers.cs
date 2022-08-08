@@ -634,12 +634,6 @@ namespace MarathonRandomiser
             // Remove the startLua from the list.
             luas.Remove(startLua);
 
-            // Rename the start lua.
-            File.Move(startLua, $@"{archivePath}\{corePath}\scripts\mission\rando\mission_start.lub");
-
-            // Update the variable for the new name.
-            startLua = $@"{archivePath}\{corePath}\scripts\mission\rando\mission_start.lub";
-
             // Create lastLua with the same value.
             string lastLua = startLua;
             int levelCount = 1;
@@ -691,46 +685,6 @@ namespace MarathonRandomiser
             }
             LevelOrder.Add(Path.GetFileNameWithoutExtension(lastLua), levelCount);
 
-            // Make startLua unlock all the player upgrades.
-            await Task.Run(() => Helpers.LuaDecompile(startLua));
-
-            // Load the decompiled lua into a string array for editing.
-            string[] mission = File.ReadAllLines(startLua);
-
-            // Find the main function and strap all the global flag toggles to it.
-            for (int i = 0; i < mission.Length; i++)
-            {
-                if (mission[i].StartsWith("function main("))
-                {
-                    // Unlock Sonic's items (including the gems).
-                    mission[i] += $"\r\n  SetGlobalFlag(a1, 6000, 1)";
-                    mission[i] += $"\r\n  SetGlobalFlag(a1, 6001, 1)";
-                    mission[i] += $"\r\n  SetGlobalFlag(a1, 6002, 1)";
-                    mission[i] += $"\r\n  SetGlobalFlag(a1, 6004, 1)";
-                    mission[i] += $"\r\n  SetGlobalFlag(a1, 6005, 1)";
-                    mission[i] += $"\r\n  SetGlobalFlag(a1, 6006, 1)";
-                    mission[i] += $"\r\n  SetGlobalFlag(a1, 6007, 1)";
-                    mission[i] += $"\r\n  SetGlobalFlag(a1, 6008, 1)";
-                    mission[i] += $"\r\n  SetGlobalFlag(a1, 6009, 1)";
-                    mission[i] += $"\r\n  SetGlobalFlag(a1, 6010, 1)";
-
-                    // Unlock Shadow's items.
-                    mission[i] += $"\r\n  SetGlobalFlag(a1, 6012, 1)";
-                    mission[i] += $"\r\n  SetGlobalFlag(a1, 6013, 1)";
-                    mission[i] += $"\r\n  SetGlobalFlag(a1, 6014, 1)";
-                    mission[i] += $"\r\n  SetGlobalFlag(a1, 6015, 1)";
-
-                    // Unlock Silver's items.
-                    mission[i] += $"\r\n  SetGlobalFlag(a1, 6016, 1)";
-                    mission[i] += $"\r\n  SetGlobalFlag(a1, 6017, 1)";
-                    mission[i] += $"\r\n  SetGlobalFlag(a1, 6018, 1)";
-                    mission[i] += $"\r\n  SetGlobalFlag(a1, 6019, 1)";
-                }
-            }
-
-            // Save the updated lua binary.
-            File.WriteAllLines(startLua, mission);
-
             // Create the DLC directory.
             Directory.CreateDirectory($@"{archivePath}\{corePath}\download");
 
@@ -754,10 +708,6 @@ namespace MarathonRandomiser
             {
                 // Read the filename key seperately so we don't dupe code.
                 string fileName = entry.Key;
-
-                // First entry doesn't have the same name as its lua, handle that.
-                if (entry.Value == 1)
-                    fileName = "mission_start";
 
                 // Decompile the Lua file (needed so the last one doesn't brick itself)
                 await Task.Run(() => Helpers.LuaDecompile($@"{archivePath}\{corePath}\scripts\mission\rando\{fileName}.lub"));
@@ -800,8 +750,6 @@ namespace MarathonRandomiser
             }
 
             return LevelOrder;
-
-            // TODO: Maybe add a stage select before the actual stages, means I don't have to keep replacing mission_start to skip ones.
         }
 
         /// <summary>
@@ -809,6 +757,7 @@ namespace MarathonRandomiser
         /// </summary>
         /// <param name="archivePath">The path to the extracted text.arc.</param>
         /// <param name="GameExecutable">The filepath of the game executable (used to determine the path).</param>
+        /// <param name="LevelOrder">Used to determine what stage is where in order.</param>
         public static async Task RandomEpisodeMST(string archivePath, string GameExecutable, Dictionary<string, int> LevelOrder)
         {
             // Determine if we need a xenon folder or a ps3 folder.
@@ -831,6 +780,14 @@ namespace MarathonRandomiser
             };
             mst.Data.Messages.Add(msg);
 
+            // Add a description for the stage select.
+            msg = new()
+            {
+                Name = "stage_select",
+                Text = "Select a Stage!"
+            };
+            mst.Data.Messages.Add(msg);
+
             // Write a message for each stage's number to allow the player to keep track of how much of the game is left.
             foreach (var entry in LevelOrder)
             {
@@ -844,6 +801,256 @@ namespace MarathonRandomiser
 
             // Save our new MST.
             mst.Save($@"{archivePath}\{corePath}\text\english\msg_randomiser.e.mst");
+        }
+
+        /// <summary>
+        /// Generate the Message Table for our random episode's shop stage select.
+        /// </summary>
+        /// <param name="archivePath">The path to the extracted text.arc.</param>
+        /// <param name="GameExecutable">The filepath of the game executable (used to determine the path).</param>
+        /// <param name="LevelOrder">Used to determine what stage is where in order.</param>
+        public static async Task RandomEpisodeShopMST(string archivePath, string GameExecutable, Dictionary<string, int> LevelOrder)
+        {
+            // Determine if we need a xenon folder or a ps3 folder.
+            string corePath = "xenon";
+            if (GameExecutable.ToLower().EndsWith(".bin"))
+                corePath = "ps3";
+
+            // Load the shop MST.
+            MessageTable mst = new($@"{archivePath}\{corePath}\text\english\msg_shop.e.mst");
+
+            // Set up a dummy message.
+            Message msg;
+
+            // Create the actual shop listing.
+            foreach (var entry in LevelOrder)
+            {
+                msg = new()
+                {
+                    Name = $"msg_shop_24{entry.Value.ToString().PadLeft(2, '0')}",
+                    Text = $"Stage {entry.Value}"
+                };
+                mst.Data.Messages.Add(msg);
+            }
+
+            // Create the stage descriptions.
+            foreach (var entry in LevelOrder)
+            {
+                // Handle End of the World and Solaris differently.
+                if (entry.Key != "mission_eotw" && entry.Key != "mission_solaris")
+                {
+                    // Split the entry into three.
+                    string[] split = entry.Key.Split('_');
+
+                    // Properly capitalise the Hedgehog name.
+                    split[1] = Helpers.FirstLetterToUpper(split[1]);
+
+                    // Swap out the stage shorthand for its proper name.
+                    switch (split[2])
+                    {
+                        case "aqa": split[2] = "Aquatic Base"; break;
+                        case "csc": split[2] = "Crisis City"; break;
+                        case "dtd": split[2] = "Dusty Desert"; break;
+                        case "flc": split[2] = "Flame Core"; break;
+                        case "kdv": split[2] = "Kingdom Valley"; break;
+                        case "rct": split[2] = "Radical Train"; break;
+                        case "tpj": split[2] = "Tropical Jungle"; break;
+                        case "wap": split[2] = "White Acropolis"; break;
+                        case "wvo": split[2] = "Wave Ocean"; break;
+                        case "wvoT": split[2] = "Wave Ocean (Tails)"; break;
+
+                        case "eCerberus": split[2] = "Egg Cerberus"; break;
+                        case "eGenesis": split[2] = "Egg Genesis"; break;
+                        case "eWyvern": split[2] = "Egg Wyvern"; break;
+
+                        case "iblis01": split[2] = "Iblis Phase 1"; break;
+                        case "iblis02": split[2] = "Iblis Phase 2"; break;
+                        case "iblis03": split[2] = "Iblis Phase 3"; break;
+
+                        case "mephiles01": split[2] = "Mephiles Phase 1"; break;
+                        case "mephiles02": split[2] = "Mephiles Phase 2"; break;
+
+                        case "silver": split[2] = "Silver The Hedgehog"; break;
+                        case "sonic": split[2] = "Sonic The Hedgehog"; break;
+                        case "shadow": split[2] = "Shadow The Hedgehog"; break;
+
+                        default: System.Diagnostics.Debug.WriteLine($"Unhandled stage shorthand '{split[2]}'"); break;
+                    }
+
+                    // Write a message for the shop menu.
+                    msg = new()
+                    {
+                        Name = $"msg_shop_25{entry.Value.ToString().PadLeft(2, '0')}",
+                        Text = $"{split[2]}\n{split[1]}"
+                    };
+                    mst.Data.Messages.Add(msg);
+                }
+                
+                // End of the World and Solaris don't have a character tag, so handle them differently.
+                else if (entry.Key == "mission_eotw")
+                {
+                    msg = new()
+                    {
+                        Name = $"msg_shop_25{entry.Value.ToString().PadLeft(2, '0')}",
+                        Text = $"End of the World"
+                    };
+                    mst.Data.Messages.Add(msg);
+                }
+                else if (entry.Key == "mission_solaris")
+                {
+                    msg = new()
+                    {
+                        Name = $"msg_shop_25{entry.Value.ToString().PadLeft(2, '0')}",
+                        Text = $"Solaris"
+                    };
+                    mst.Data.Messages.Add(msg);
+                }
+            }
+
+            // Save the edited shop MST.
+            mst.Save();
+        }
+    
+        public static async Task GenerateRandomEpisodeTown(string archivePath, string GameExecutable, Dictionary<string, int> LevelOrder)
+        {
+            // Determine if we need a xenon folder or a ps3 folder.
+            string corePath = "xenon";
+            if (GameExecutable.ToLower().EndsWith(".bin"))
+                corePath = "ps3";
+
+            // Copy the HUB set.
+            File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\set_rando_hub.set", $@"{archivePath}\{corePath}\scripts\mission\rando\set_rando_hub.set", true);
+
+            // Write the mission lua.
+            using (Stream luaCreate = File.Open($@"{archivePath}\{corePath}\scripts\mission\rando\mission_start.lub", FileMode.Create))
+            using (StreamWriter luaInfo = new(luaCreate))
+            {
+                // Mission Header.
+                luaInfo.WriteLine("g_mission_information = {");
+                luaInfo.WriteLine("  mission_string = \"stage_select\",");
+                luaInfo.WriteLine("  mission_area = \"twn/sonic/a\",");
+                luaInfo.WriteLine("  mission_terrain = \"stage/twn/a/\",");
+                luaInfo.WriteLine("  mission_set_default = \"scripts/mission/rando/set_rando_hub.XML\",");
+                luaInfo.WriteLine("  mission_event_start = \"\",");
+                luaInfo.WriteLine("  mission_event_end = \"\",");
+                luaInfo.WriteLine("  mission_text = \"text/msg_randomiser.mst\",");
+                luaInfo.WriteLine("  mission_is_battle = true");
+                luaInfo.WriteLine("}");
+
+                // Shop Header.
+                luaInfo.WriteLine("g_shop = {");
+
+                // Shop Basics.
+                luaInfo.WriteLine("  {");
+                luaInfo.WriteLine("    message_first = \"msg_shop_001\",");
+                luaInfo.WriteLine("    message_agree = \"msg_shop_005\",");
+                luaInfo.WriteLine("    message_buy_item = \"msg_shop_006\",");
+                luaInfo.WriteLine("    message_cancel_item = \"msg_shop_007\",");
+                luaInfo.WriteLine("    message_second = \"msg_shop_007\",");
+                luaInfo.WriteLine("    message_no_money = \"msg_shop_008\",");
+                luaInfo.WriteLine("    message_soldout = \"msg_shop_011\",");
+                luaInfo.WriteLine("    message_end = \"msg_shop_012\"");
+                luaInfo.WriteLine("  },");
+
+                // Shop Entries.
+                KeyValuePair<string, int> lastLevel = LevelOrder.Last();
+                foreach (KeyValuePair<string, int> entry in LevelOrder)
+                {
+                    luaInfo.WriteLine("  {");
+                    luaInfo.WriteLine($"    name = \"msg_shop_24{entry.Value.ToString().PadLeft(2, '0')}\",");
+                    luaInfo.WriteLine($"    price = 0,");
+                    luaInfo.WriteLine($"    explain = \"msg_shop_25{entry.Value.ToString().PadLeft(2, '0')}\",");
+                    luaInfo.WriteLine($"    event = \"shop_buy_24{entry.Value.ToString().PadLeft(2, '0')}\"");
+
+                    if (entry.Key != lastLevel.Key)
+                        luaInfo.WriteLine("  },");
+                    else
+                        luaInfo.WriteLine("  }");
+                }
+
+                // Shop Close.
+                luaInfo.WriteLine("}");
+
+                // Town stuff needed to make the game not die.
+                luaInfo.WriteLine("g_message_setuped = \"\"");
+                luaInfo.WriteLine("g_message_icon = 0");
+                luaInfo.WriteLine("g_name_setuped = \"\"");
+
+                // Main Function.
+                luaInfo.WriteLine("function main(a1)");
+
+                // Unlock Sonic's Items.
+                luaInfo.WriteLine("  SetGlobalFlag(a1, 6000, 1)");
+                luaInfo.WriteLine("  SetGlobalFlag(a1, 6001, 1)");
+                luaInfo.WriteLine("  SetGlobalFlag(a1, 6002, 1)");
+                luaInfo.WriteLine("  SetGlobalFlag(a1, 6004, 1)");
+                luaInfo.WriteLine("  SetGlobalFlag(a1, 6005, 1)");
+                luaInfo.WriteLine("  SetGlobalFlag(a1, 6006, 1)");
+                luaInfo.WriteLine("  SetGlobalFlag(a1, 6007, 1)");
+                luaInfo.WriteLine("  SetGlobalFlag(a1, 6008, 1)");
+                luaInfo.WriteLine("  SetGlobalFlag(a1, 6009, 1)");
+                luaInfo.WriteLine("  SetGlobalFlag(a1, 6010, 1)");
+
+                // Unlock Shadow's Items.
+                luaInfo.WriteLine("  SetGlobalFlag(a1, 6012, 1)");
+                luaInfo.WriteLine("  SetGlobalFlag(a1, 6013, 1)");
+                luaInfo.WriteLine("  SetGlobalFlag(a1, 6014, 1)");
+                luaInfo.WriteLine("  SetGlobalFlag(a1, 6015, 1)");
+
+                // Unlock Silver's Items.
+                luaInfo.WriteLine("  SetGlobalFlag(a1, 6016, 1)");
+                luaInfo.WriteLine("  SetGlobalFlag(a1, 6017, 1)");
+                luaInfo.WriteLine("  SetGlobalFlag(a1, 6018, 1)");
+                luaInfo.WriteLine("  SetGlobalFlag(a1, 6019, 1)");
+
+                // Main Function Close.
+                luaInfo.WriteLine("end");
+
+                // on_hint function.
+                luaInfo.WriteLine("function on_hint(a1, a2)");
+                luaInfo.WriteLine("end");
+
+                // on_goto function.
+                luaInfo.WriteLine("function on_goto(a1, a2)");
+                luaInfo.WriteLine("end");
+
+                // on_event function.
+                luaInfo.WriteLine("function on_event(a1, a2)");
+                foreach (KeyValuePair<string, int> entry in LevelOrder)
+                {
+                    luaInfo.WriteLine($"  if a2 == \"shop_buy_24{entry.Value.ToString().PadLeft(2, '0')}\" then");
+                    luaInfo.WriteLine($"    SetNextMission(a1, \"scripts/mission/rando/{entry.Key}.lua\")");
+                    luaInfo.WriteLine($"    MissionClear(a1, \"complete\")");
+                    luaInfo.WriteLine($"  end");
+                }
+                luaInfo.WriteLine("end");
+
+                // on_talk_icon function.
+                luaInfo.WriteLine("function on_talk_icon(a1, a2)");
+                luaInfo.WriteLine("end");
+
+                // on_talk_setup function.
+                luaInfo.WriteLine("function on_talk_setup(a1, a2)");
+                luaInfo.WriteLine("  if a2 == \"shop\" then");
+                luaInfo.WriteLine("    OpenShop(a1, \"g_shop\")");
+                luaInfo.WriteLine("    g_message_setuped = \"\"");
+                luaInfo.WriteLine("  end");
+                luaInfo.WriteLine("end");
+
+                // on_talk_open function.
+                luaInfo.WriteLine("function on_talk_open(a1, a2)");
+                luaInfo.WriteLine("end");
+
+                // on_talk_close function.
+                luaInfo.WriteLine("function on_talk_close(a1, a2)");
+                luaInfo.WriteLine("end");
+
+                // on_goal function.
+                luaInfo.WriteLine("function on_goal(a1)");
+                luaInfo.WriteLine("end");
+
+                luaInfo.Close();
+            }
         }
     }
 }

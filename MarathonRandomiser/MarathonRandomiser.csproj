@@ -68,6 +68,9 @@
     <None Update="ExternalResources\rando_obj_indicator.xno">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ExternalResources\set_rando_hub.set">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ExternalResources\susIblis.adx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

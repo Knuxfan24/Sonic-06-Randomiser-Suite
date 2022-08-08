@@ -34,7 +34,7 @@ c_table_single_town_trial = {
   {
     mission_file = "scripts/mission/rando/mission_start.lua",
     name = "episode_name",
-    text_book = "text/msg_dl4562_title.mst",
+    text_book = "text/msg_randomiser.mst",
     act_id = 199
   }
 }

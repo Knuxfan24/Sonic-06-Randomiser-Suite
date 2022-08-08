@@ -2428,8 +2428,8 @@ namespace MarathonRandomiser
                 }
             }
 
-            // Make the Random Episode's MST.
-            // We do this down here so the Text Randomisers can't interfere with it.
+            // Make the Random Episode's MST and HUB.
+            // We do this down here so the Text and SET Randomisers can't interfere with it.
             if (miscRandomEpisode == true)
             {
                 foreach (string archive in archives)
@@ -2439,6 +2439,18 @@ namespace MarathonRandomiser
                         UpdateLogger($"Generating random episode message table.");
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
                         await Task.Run(() => MiscellaneousRandomisers.RandomEpisodeMST(unpackedArchive, GameExecutable, LevelOrder));
+
+                        UpdateLogger($"Creating stage select hub.");
+                        await Task.Run(() => MiscellaneousRandomisers.RandomEpisodeShopMST(unpackedArchive, GameExecutable, LevelOrder));
+                    }
+                }
+
+                foreach (string archive in archives)
+                {
+                    if (Path.GetFileName(archive).ToLower() == "scripts.arc")
+                    {
+                        string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+                        await Task.Run(() => MiscellaneousRandomisers.GenerateRandomEpisodeTown(unpackedArchive, GameExecutable, LevelOrder));
                     }
                 }
             }
@@ -2521,15 +2533,6 @@ namespace MarathonRandomiser
             if (miscUnlock == true)
             {
                 HandyControl.Controls.MessageBox.Show("To enable access to Shadow and Silver's episodes, load Sonic's and save the game from the pause menu.",
-                                                      "Sonic '06 Randomiser Suite",
-                                                      MessageBoxButton.OK,
-                                                      MessageBoxImage.Information);
-            }
-
-            // Give a note about the  Always Have 99 Lives patch if using the Random Episode Generator.
-            if (miscRandomEpisode == true)
-            {
-                HandyControl.Controls.MessageBox.Show("While not required, using the Always Have 99 Lives patch may make the random episode more enjoyable.",
                                                       "Sonic '06 Randomiser Suite",
                                                       MessageBoxButton.OK,
                                                       MessageBoxImage.Information);
