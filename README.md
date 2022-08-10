@@ -89,11 +89,17 @@ Randomisation of various values within the game's scene lua binaries (.lub) file
 
 Shuffling of both Gameplay and Event Animations, as well as Event Cameras; alongside being able to change the framerate of all Ninja Animations.
 
+### Model Randomisation
+
+<img src="https://raw.githubusercontent.com/wiki/Knuxfan24/Sonic-06-Randomiser-Suite/images/tab_models.png">
+
+Randomisation of colouring elements within Ninja models.
+
 ### Texture Randomisation
 
 <img src="https://raw.githubusercontent.com/wiki/Knuxfan24/Sonic-06-Randomiser-Suite/images/tab_textures.png">
 
-Shuffling of textures, with options for cross archive randomisation; alongside model vertex colour randomisation.
+Shuffling of textures, with options for cross archive randomisation.
 
 ### Audio Randomisation
 
@@ -146,6 +152,8 @@ Randomisation of miscellaneous elements across one off files, these are:
 * Randomising how props interact with Silver's PSI
 
 * Randomising the debris spawned when a prop breaks
+
+* Randomly generating an episode that plays through every stage in a random order
 
 ### Custom Elements
 
