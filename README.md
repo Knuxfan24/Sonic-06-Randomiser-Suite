@@ -123,7 +123,7 @@ Modification of various attributes relating to the game's text within the messag
 
 ### User Interface Randomisation
 
-<img src="https://raw.githubusercontent.com/wiki/Knuxfan24/Sonic-06-Randomiser-Suite/images/tab_xncp.png">
+<img src="https://raw.githubusercontent.com/wiki/Knuxfan24/Sonic-06-Randomiser-Suite/images/tab_ui.png">
 
 Randomisation of various bits of data within the game's User Interface (.xncp) files. These are:
 
