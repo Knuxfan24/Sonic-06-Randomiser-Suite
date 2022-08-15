@@ -852,16 +852,17 @@ namespace MarathonRandomiser
             };
             return parameter;
         }
-    
+
         /// <summary>
         /// Patches the PathObj.bin file to add the stuff needed for the event volume position model.
         /// Also copies the resources for the model to their positions in object.arc.
         /// </summary>
         /// <param name="archivePath">The path to the already extracted object.arc.</param>
-        public static async Task PathObjPatcher(string archivePath)
+        /// <param name="corePath">The platform path (ps3 or xenon)</param>
+        public static async Task PathObjPatcher(string archivePath, string corePath)
         {
             // Load PathObj.bin.
-            PathPackage PathObj = new($@"{archivePath}\xenon\object\PathObj.bin");
+            PathPackage PathObj = new($@"{archivePath}\{corePath}\object\PathObj.bin");
 
             // Create our new PathObj.bin entry.
             PathObject obj = new()

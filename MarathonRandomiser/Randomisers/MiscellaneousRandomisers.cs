@@ -15,13 +15,14 @@ namespace MarathonRandomiser
         /// Randomises the amount of health enemies have, controlled by ScriptParameter.bin.
         /// </summary>
         /// <param name="archivePath">The path to the already unpacked enemy.arc containing ScriptParameter.bin</param>
+        /// <param name="corePath">The platform path (ps3 or xenon)</param>
         /// <param name="minHealth">The minimum value the enemy health can be set to.</param>
         /// <param name="maxHealth">The maximum value the enemy health can be set to.</param>
         /// <param name="includeBosses">Whether or not bosses should also get their health values randomised.</param>
-        public static async Task EnemyHealthRandomiser(string archivePath, int minHealth, int maxHealth, bool? includeBosses)
+        public static async Task EnemyHealthRandomiser(string archivePath, string corePath, int minHealth, int maxHealth, bool? includeBosses)
         {
             // Load ScriptParameter.bin
-            ScriptPackage scriptPackage = new($@"{archivePath}\xenon\enemy\ScriptParameter.bin");
+            ScriptPackage scriptPackage = new($@"{archivePath}\{corePath}\enemy\ScriptParameter.bin");
 
             // Loop through every enemy parameter in ScriptParameter.bin
             foreach (ScriptParameter parameter in scriptPackage.Parameters)
@@ -178,14 +179,9 @@ namespace MarathonRandomiser
         /// Patches the first mission lua in Sonic's story to instantly unlock Shadow and Silver's episodes.
         /// </summary>
         /// <param name="archivePath">The path to the extracted scripts.arc.</param>
-        /// <param name="GameExecutable">The filepath of the game executable (used to determine the path).</param>
-        public static async Task UnlockEpisodes(string archivePath, string GameExecutable)
+        /// <param name="corePath">The platform path (ps3 or xenon)</param>
+        public static async Task UnlockEpisodes(string archivePath, string corePath)
         {
-            // Determine if we need a xenon folder or a ps3 folder.
-            string corePath = "xenon";
-            if (GameExecutable.ToLower().EndsWith(".bin"))
-                corePath = "ps3";
-
             // Decompile the 0001 mission lua.
             await Task.Run(() => Helpers.LuaDecompile($@"{archivePath}\{corePath}\scripts\mission\0001\mission.lub"));
 
@@ -205,22 +201,23 @@ namespace MarathonRandomiser
             // Save the updated lua binary.
             File.WriteAllLines($@"{archivePath}\{corePath}\scripts\mission\0001\mission.lub", lua);
         }
-    
+
         /// <summary>
         /// Edits attributes in Common.bin to change how physics props behave.
         /// </summary>
         /// <param name="archivePath">The path to the extracted object.arc.</param>
+        /// <param name="corePath">The platform path (ps3 or xenon)</param>
         /// <param name="psi">Whether or not the object's behaviour when grabbed by Silver should be randomised.</param>
         /// <param name="psiNoGrab">Whether or not to allow making a prop not grabbable.</param>
         /// <param name="psiNoDebris">Whether or not to skip randomising the PSI behaviour on a break object.</param>
         /// <param name="debris">Whether or not to randomise what break object spawns from a prop.</param>
-        public static async Task PropAttributes(string archivePath, bool? psi, bool? psiNoGrab, bool? psiNoDebris, bool? debris)
+        public static async Task PropAttributes(string archivePath, string corePath, bool? psi, bool? psiNoGrab, bool? psiNoDebris, bool? debris)
         {
             // Set up a list of valid break objects.
             List<string> debrisTypes = new();
 
             // Load the Common Package.
-            CommonPackage commonBIN = new($@"{archivePath}\xenon\object\Common.bin");
+            CommonPackage commonBIN = new($@"{archivePath}\{corePath}\object\Common.bin");
 
             // Build up a list of valid debris stuff
             foreach (CommonObject? entry in commonBIN.Objects)
@@ -258,19 +255,17 @@ namespace MarathonRandomiser
         /// Generates a random episode setup.
         /// </summary>
         /// <param name="archivePath">The path to the extracted scripts.arc.</param>
-        /// <param name="GameExecutable">The filepath of the game executable (used to determine the path).</param>
-        public static async Task<Dictionary<string, int>> EpisodeGenerator(string archivePath, string GameExecutable, string? sonicVH, string? shadowVH, string? silverVH)
+        /// <param name="corePath">The platform path (ps3 or xenon)</param>
+        /// <param name="sonicVH">The path to Sonic's Very Hard Mode Arc.</param>
+        /// <param name="shadowVH">The path to Shadow's Very Hard Mode Arc.</param>
+        /// <param name="silverVH">The path to Silver's Very Hard Mode Arc.</param>
+        public static async Task<Dictionary<string, int>> EpisodeGenerator(string archivePath, string corePath, string? sonicVH, string? shadowVH, string? silverVH)
         {
             Dictionary<string, int> LevelOrder = new();
 
             // List of events for the sake of picking one to play at the start of each level.
             List<string> events = new() { "e0001", "e0002", "e0003", "e0004", "e0006", "e0007", "e0009", "e0010", "e0011", "e0012", "e0013", "e0014", "e0015", "e0016", "e0017", "e0018", "e0019", "e0021", "e0022", "e0023", "e0024", "e0026", "e0027", "e0028", "e0029", "e0031", "e0102", "e0103", "e0104", "e0105", "e0106", "e0107", "e0108", "e0109", "e0110", "e0111", "e0112", "e0113", "e0114", "e0115", "e0116", "e0117", "e0118", "e0119", "e0120", "e0121", "e0122", "e0125", "e0126", "e0127", "e0128", "e0129", "e0201", "e0202", "e0203", "e0204", "e0205", "e0206", "e0207", "e0208", "e0209", "e0210", "e0211", "e0212", "e0213", "e0214", "e0215", "e0216", "e0217", "e0218", "e0219", "e0221", "e0222", "e0223", "e0224", "e0225", "e0226", "e0227", "e0300", "e0301", "e0302", "e0304", "e1001", "e1002", "e1011", "e1012", "e1031", "e1032", "e1041", "e1052", "e1061", "e1062", "e1071", "e1072", "e1081", "e1082", "e1091", "e1101", "e1111", "e1112", "e1121", "e1122", "e1123", "e1141", "e1151", "e1161", "e1171" };
             
-            // Determine if we need a xenon folder or a ps3 folder.
-            string corePath = "xenon";
-            if (GameExecutable.ToLower().EndsWith(".bin"))
-                corePath = "ps3";
-
             // Create the Randomised Episode scripts directory.
             Directory.CreateDirectory($@"{archivePath}\{corePath}\scripts\mission\rando");
 
@@ -756,15 +751,10 @@ namespace MarathonRandomiser
         /// Generate the Message Table for our random episode.
         /// </summary>
         /// <param name="archivePath">The path to the extracted text.arc.</param>
-        /// <param name="GameExecutable">The filepath of the game executable (used to determine the path).</param>
+        /// <param name="corePath">The platform path (ps3 or xenon)</param>
         /// <param name="LevelOrder">Used to determine what stage is where in order.</param>
-        public static async Task RandomEpisodeMST(string archivePath, string GameExecutable, Dictionary<string, int> LevelOrder)
+        public static async Task RandomEpisodeMST(string archivePath, string corePath, Dictionary<string, int> LevelOrder)
         {
-            // Determine if we need a xenon folder or a ps3 folder.
-            string corePath = "xenon";
-            if (GameExecutable.ToLower().EndsWith(".bin"))
-                corePath = "ps3";
-
             // Create the MST for the random episode.
             MessageTable mst = new();
             mst.Data.Name = "msg_randomiser";
@@ -807,15 +797,10 @@ namespace MarathonRandomiser
         /// Generate the Message Table for our random episode's shop stage select.
         /// </summary>
         /// <param name="archivePath">The path to the extracted text.arc.</param>
-        /// <param name="GameExecutable">The filepath of the game executable (used to determine the path).</param>
+        /// <param name="corePath">The platform path (ps3 or xenon)</param>
         /// <param name="LevelOrder">Used to determine what stage is where in order.</param>
-        public static async Task RandomEpisodeShopMST(string archivePath, string GameExecutable, Dictionary<string, int> LevelOrder)
+        public static async Task RandomEpisodeShopMST(string archivePath, string corePath, Dictionary<string, int> LevelOrder)
         {
-            // Determine if we need a xenon folder or a ps3 folder.
-            string corePath = "xenon";
-            if (GameExecutable.ToLower().EndsWith(".bin"))
-                corePath = "ps3";
-
             // Load the shop MST.
             MessageTable mst = new($@"{archivePath}\{corePath}\text\english\msg_shop.e.mst");
 
@@ -910,14 +895,15 @@ namespace MarathonRandomiser
             // Save the edited shop MST.
             mst.Save();
         }
-    
-        public static async Task GenerateRandomEpisodeTown(string archivePath, string GameExecutable, Dictionary<string, int> LevelOrder)
-        {
-            // Determine if we need a xenon folder or a ps3 folder.
-            string corePath = "xenon";
-            if (GameExecutable.ToLower().EndsWith(".bin"))
-                corePath = "ps3";
 
+        /// <summary>
+        /// Generates the mission lua for the Soleanna Stage Select for the Random Episode.
+        /// </summary>
+        /// <param name="archivePath">The path to the extracted scripts.arc.</param>
+        /// <param name="corePath">The platform path (ps3 or xenon)</param>
+        /// <param name="LevelOrder">Used to determine what stage is where in order.</param>
+        public static async Task GenerateRandomEpisodeTown(string archivePath, string corePath, Dictionary<string, int> LevelOrder)
+        {
             // Copy the HUB set.
             File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\set_rando_hub.set", $@"{archivePath}\{corePath}\scripts\mission\rando\set_rando_hub.set", true);
 

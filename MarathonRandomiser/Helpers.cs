@@ -386,18 +386,19 @@ namespace MarathonRandomiser
             bool b = neededParameters.Any(lua.Contains);
             return b;
         }
-    
+
         /// <summary>
         /// Patches the voice_all_e.sbk file to load every voice file.
         /// </summary>
         /// <param name="archivePath">The path to an extracted sound.arc.</param>
-        public static async Task VoiceBankPatcher(string archivePath)
+        /// <param name="corePath">The platform path (ps3 or xenon)</param>
+        public static async Task VoiceBankPatcher(string archivePath, string corePath)
         {
             // Load the voice_all_e.sbk file.
-            SoundBank voice_all = new($@"{archivePath}\xenon\sound\voice_all_e.sbk");
+            SoundBank voice_all = new($@"{archivePath}\{corePath}\sound\voice_all_e.sbk");
 
             // Get all the English sound banks in sound.arc.
-            string[] sbkFiles = Directory.GetFiles($@"{archivePath}\xenon\sound", "voice_*_e.sbk");
+            string[] sbkFiles = Directory.GetFiles($@"{archivePath}\{corePath}\sound", "voice_*_e.sbk");
 
             // Loop through each sound bank.
             foreach (string sbkFile in sbkFiles)

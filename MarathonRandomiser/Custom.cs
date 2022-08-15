@@ -227,7 +227,7 @@ namespace MarathonRandomiser
                     // Loop through all our custom voice lines and add them to voice_all_e.sbk so they'll play in game.
                     for (int i = 0; i < voiceXmas.Length; i++)
                     {
-                        Cue customSongCue = new()
+                        Cue customVoiceLine = new()
                         {
                             Category = 0,
                             Name = $"{Path.GetFileNameWithoutExtension(voiceXmas[i])}",
@@ -235,7 +235,12 @@ namespace MarathonRandomiser
                             Stream = $"sound/voice/e/{Path.GetFileNameWithoutExtension(voiceXmas[i])}.xma",
                             UnknownSingle = 500
                         };
-                        voiceSBK.Data.Cues.Add(customSongCue);
+
+                        // Debugging message if this sound will cause the voice SBK write to fail and crash.
+                        if (customVoiceLine.Name.Length > 32)
+                            Debug.WriteLine($"{customVoiceLine.Name} is {customVoiceLine.Name.Length} characters long when 32 is the maximum");
+
+                        voiceSBK.Data.Cues.Add(customVoiceLine);
                     }
 
                     // Save the updated voice_all_e.sbk.

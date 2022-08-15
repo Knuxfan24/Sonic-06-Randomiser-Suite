@@ -9,6 +9,7 @@ namespace MarathonRandomiser
         /// Process and randomise elements in eventplaybook.epb.
         /// </summary>
         /// <param name="archivePath">The path to the extracted cache.arc.</param>
+        /// <param name="corePath">The platform path (ps3 or xenon)</param>
         /// <param name="lighting">Whether or not we're randomising the scene lua to use.</param>
         /// <param name="EventLighting">The list of valid scene luas.</param>
         /// <param name="terrain">Whether or not we're randomising event terrain.</param>
@@ -19,11 +20,11 @@ namespace MarathonRandomiser
         /// <param name="posX">Whether or not we're randomising the X position for the events.</param>
         /// <param name="posY">Whether or not we're randomising the Y position for the events.</param>
         /// <param name="posZ">Whether or not we're randomising the Z position for the events.</param>
-        public static async Task Process(string archivePath, bool? lighting, List<string> EventLighting, bool? terrain, List<string> EventTerrain, bool? rotX, bool? rotY, bool? rotZ, bool? posX, bool? posY,
+        public static async Task Process(string archivePath, string corePath, bool? lighting, List<string> EventLighting, bool? terrain, List<string> EventTerrain, bool? rotX, bool? rotY, bool? rotZ, bool? posX, bool? posY,
                                       bool? posZ)
         {
             // Load eventplaybook.epb.
-            EventPlaybook epb = new($@"{archivePath}\xenon\eventplaybook.epb");
+            EventPlaybook epb = new($@"{archivePath}\{corePath}\eventplaybook.epb");
 
             // Loop through each event present in eventplaybook.epb.
             foreach (Event eventEntry in epb.Events)
@@ -106,12 +107,14 @@ namespace MarathonRandomiser
         /// Randomises which events play when.
         /// </summary>
         /// <param name="archivePath">The path to the extracted cache.arc.</param>
+        /// <param name="corePath">The platform path (ps3 or xenon)</param>
         /// <param name="ModDirectory">The path to the randomisation's mod directory.</param>
         /// <param name="GameExecutable">The path to the game executable (so we know what platform we're working on).</param>
-        public static async Task EventShuffler(string archivePath, string ModDirectory, string GameExecutable, bool? skipFMVs)
+        /// <param name="skipFMVs">Whether or not to skip shuffling the prerendered scenes.</param>
+        public static async Task EventShuffler(string archivePath, string corePath, string ModDirectory, string GameExecutable, bool? skipFMVs)
         {
             // Load eventplaybook.epb.
-            EventPlaybook epb = new($@"{archivePath}\xenon\eventplaybook.epb");
+            EventPlaybook epb = new($@"{archivePath}\{corePath}\eventplaybook.epb");
 
             // Set up a list so we can track which events have already been used.
             List<int> usedNumbers = new();
@@ -179,11 +182,11 @@ namespace MarathonRandomiser
             {
                 // Determine what the file extension for the FMVs are.
                 string filetype = "wmv";
-                if (GameExecutable.ToLower().EndsWith(".bin"))
+                if (corePath == "ps3")
                     filetype = "pam";
 
                 usedNumbers.Clear();
-                string[] fmvs = Directory.GetFiles($@"{Path.GetDirectoryName(GameExecutable)}\xenon\event", $"*{filetype}", SearchOption.AllDirectories);
+                string[] fmvs = Directory.GetFiles($@"{Path.GetDirectoryName(GameExecutable)}\{corePath}\event", $"*{filetype}", SearchOption.AllDirectories);
                 for (int i = 0; i < epb.Events.Count; i++)
                 {
                     if (epb.Events[i].Terrain == null)
@@ -215,8 +218,8 @@ namespace MarathonRandomiser
                         {
                             if (fmv.Contains(eventsFMV[index].Folder.Replace('/', '\\')) && epb.Events[i].Name != "e0220")
                             {
-                                Directory.CreateDirectory($@"{ModDirectory}\xenon\event\{epb.Events[i].Name}");
-                                File.Copy(fmv, $@"{ModDirectory}\xenon\event\{epb.Events[i].Name}\{epb.Events[i].Name}.{filetype}");
+                                Directory.CreateDirectory($@"{ModDirectory}\{corePath}\event\{epb.Events[i].Name}");
+                                File.Copy(fmv, $@"{ModDirectory}\{corePath}\event\{epb.Events[i].Name}\{epb.Events[i].Name}.{filetype}");
                             }
                         }
                     }
@@ -231,23 +234,24 @@ namespace MarathonRandomiser
         /// Replaces the XMA files used in cutscenes with other ones.
         /// </summary>
         /// <param name="GameExecutable">The path to the game executable (so we can get the original cutscene XMAs).</param>
+        /// <param name="corePath">The platform path (ps3 or xenon)</param>
         /// <param name="includeJapanese">Whether or not we include Japanese voice lines in the shuffle.</param>
         /// <param name="includeGameplay">Whether or not we include voice lines used in gameplay in the shuffle.</param>
         /// <param name="hasVox">Whether we have an voice packs to take into account.</param>
         /// <param name="ModDirectory">The path to the randomisation's mod directory.</param>
-        public static async Task ShuffleVoiceLines(string GameExecutable, bool? includeJapanese, bool? includeGameplay, bool hasVox, string ModDirectory)
+        public static async Task ShuffleVoiceLines(string GameExecutable, string corePath, bool? includeJapanese, bool? includeGameplay, bool hasVox, string ModDirectory)
         {
-            // Figure out if we're working with a 360 (default) or PS3 version of the game).
-            string neededFolder = "xenon";
-            if (GameExecutable.ToLower().EndsWith(".bin"))
-                neededFolder = "ps3";
+            // Figure out if we need to use XMAs or AT3s.
+            string fileType = "xma";
+            if (corePath == "ps3")
+                fileType = "at3";
 
             // Get the English cutscene XMAs.
-            string[] eventXMAs = Directory.GetFiles($@"{Path.GetDirectoryName(GameExecutable)}\{neededFolder}\event", "E*.xma", SearchOption.AllDirectories);
+            string[] eventXMAs = Directory.GetFiles($@"{Path.GetDirectoryName(GameExecutable)}\{corePath}\event", $"E*.{fileType}", SearchOption.AllDirectories);
 
             // If we're including Japanese lines, invalidate the old array and replace it with one that includes both English and Japanese.
             if (includeJapanese == true)
-                eventXMAs = Directory.GetFiles($@"{Path.GetDirectoryName(GameExecutable)}\{neededFolder}\event", "*.xma", SearchOption.AllDirectories);
+                eventXMAs = Directory.GetFiles($@"{Path.GetDirectoryName(GameExecutable)}\{corePath}\event", $"*.{fileType}", SearchOption.AllDirectories);
 
             // Do this so we don't accidentally shuffle EVERY voice line.
             string[] shuffleArray = eventXMAs;
@@ -256,15 +260,15 @@ namespace MarathonRandomiser
             if (includeGameplay == true)
             {
                 // Set up a list of gameplay XMAs.
-                string[] gameplayXMAs = Directory.GetFiles($@"{Path.GetDirectoryName(GameExecutable)}\{neededFolder}\sound\voice\e", "*.xma", SearchOption.AllDirectories);
+                string[] gameplayXMAs = Directory.GetFiles($@"{Path.GetDirectoryName(GameExecutable)}\{corePath}\sound\voice\e", $"*.{fileType}", SearchOption.AllDirectories);
 
                 // If we're including Japanese ones, merge the existing array with one containing the Japanese lines instead.
                 if (includeJapanese == true)
-                    gameplayXMAs = gameplayXMAs.Concat(Directory.GetFiles($@"{Path.GetDirectoryName(GameExecutable)}\{neededFolder}\sound\voice\j", "*.xma", SearchOption.AllDirectories)).ToArray();
+                    gameplayXMAs = gameplayXMAs.Concat(Directory.GetFiles($@"{Path.GetDirectoryName(GameExecutable)}\{corePath}\sound\voice\j", $"*.{fileType}", SearchOption.AllDirectories)).ToArray();
 
                 // If we have any voice packs, then pick up their XMAs from the randomisation's mod directory and merge them into the existing array.
                 if (hasVox)
-                    gameplayXMAs = gameplayXMAs.Concat(Directory.GetFiles($@"{ModDirectory}\xenon\sound\voice\e\", "*.xma", SearchOption.AllDirectories)).ToArray();
+                    gameplayXMAs = gameplayXMAs.Concat(Directory.GetFiles($@"{ModDirectory}\xenon\sound\voice\e\", $"*.{fileType}", SearchOption.AllDirectories)).ToArray();
 
                 // Merge the event and gameplay arrays into one.
                 eventXMAs = eventXMAs.Concat(gameplayXMAs).ToArray();

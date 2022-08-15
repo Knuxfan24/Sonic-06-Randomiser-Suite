@@ -54,9 +54,7 @@ namespace MarathonRandomiser
 
             // If we're not using all, then just invalidate targetArchive.
             if (useAll == false)
-            {
                 targetArchive = null;
-            }
 
             // Set up a couple of lists.
             List<string> XNMFiles = new();

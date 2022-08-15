@@ -22,7 +22,7 @@ namespace MarathonRandomiser
     public partial class MainWindow : Window
     {
         // Version Number.
-        public static readonly string GlobalVersionNumber = $"Version 2.1.15";
+        public static readonly string GlobalVersionNumber = $"Version 2.1.16";
 
         #if !DEBUG
         public static readonly string VersionNumber = GlobalVersionNumber;
@@ -1204,6 +1204,11 @@ namespace MarathonRandomiser
             string Seed = TextBox_General_Seed.Text;
             bool? DisableEasterEggs = CheckBox_General_NoFun.IsChecked;
 
+            // Determine if we need a xenon folder or a ps3 folder.
+            string corePath = "xenon";
+            if (GameExecutable.ToLower().EndsWith(".bin"))
+                corePath = "ps3";
+
             // Create Mod Directory (prompting the user if they want to delete it first or cancel if it already exists.)
             if (Directory.Exists(ModDirectory))
             {
@@ -1614,7 +1619,7 @@ namespace MarathonRandomiser
                             SetEnemies.Contains("secondiblis") || SetEnemies.Contains("thirdiblis") || SetEnemies.Contains("firstmefiress") || SetEnemies.Contains("secondmefiress") ||
                             SetEnemies.Contains("solaris01") || SetEnemies.Contains("solaris02")) || setHints == true)
                         {
-                            string[] luaFiles = Directory.GetFiles($"{unpackedArchive}\\xenon\\scripts\\enemy", "*.lub", SearchOption.TopDirectoryOnly);
+                            string[] luaFiles = Directory.GetFiles($"{unpackedArchive}\\{corePath}\\scripts\\enemy", "*.lub", SearchOption.TopDirectoryOnly);
                             foreach (string luaFile in luaFiles)
                             {
                                 // Skip Mephiles Phase 2 for patching as decompiling his Lua breaks the fight.
@@ -1715,7 +1720,7 @@ namespace MarathonRandomiser
                         {
                             UpdateLogger($"Adding Event Box Indicator Files.");
                             string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
-                            await Task.Run(() => ObjectPlacementRandomiser.PathObjPatcher(unpackedArchive));
+                            await Task.Run(() => ObjectPlacementRandomiser.PathObjPatcher(unpackedArchive, corePath));
                         }
                     }
                 }
@@ -1752,7 +1757,7 @@ namespace MarathonRandomiser
                         if (eventLighting == true || eventRotX == true || eventRotY == true || eventRotZ == true || eventPosX == true || eventPosY == true || eventPosZ == true || eventTerrain == true)
                         {
                             UpdateLogger($"Randomising 'eventplaybook.epb' parameters.");
-                            await Task.Run(() => EventRandomiser.Process(unpackedArchive, eventLighting, EventLighting, eventTerrain, EventTerrain, eventRotX, eventRotY, eventRotZ, eventPosX, eventPosY,
+                            await Task.Run(() => EventRandomiser.Process(unpackedArchive, corePath, eventLighting, EventLighting, eventTerrain, EventTerrain, eventRotX, eventRotY, eventRotZ, eventPosX, eventPosY,
                                                                          eventPosZ));
                         }
 
@@ -1760,14 +1765,14 @@ namespace MarathonRandomiser
                         if (eventOrder == true)
                         {
                             UpdateLogger($"Shuffling event order.");
-                            await Task.Run(() => EventRandomiser.EventShuffler(unpackedArchive, ModDirectory, GameExecutable, eventSkipFMVs));
+                            await Task.Run(() => EventRandomiser.EventShuffler(unpackedArchive, corePath, ModDirectory, GameExecutable, eventSkipFMVs));
                         }
 
                         // Event Voice Line Shuffling.
                         if (eventVoice == true)
                         {
                             UpdateLogger($"Shuffling event voice files.");
-                            await Task.Run(() => EventRandomiser.ShuffleVoiceLines(GameExecutable, eventVoiceJpn, eventVoiceGame, CustomVoxPacks.Count != 0, ModDirectory));
+                            await Task.Run(() => EventRandomiser.ShuffleVoiceLines(GameExecutable, corePath, eventVoiceJpn, eventVoiceGame, CustomVoxPacks.Count != 0, ModDirectory));
                         }
                     }
                 }
@@ -2369,7 +2374,7 @@ namespace MarathonRandomiser
                     {
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
                         UpdateLogger($"Randomising enemy health values.");
-                        await Task.Run(() => MiscellaneousRandomisers.EnemyHealthRandomiser(unpackedArchive, miscEnemyHealthMin, miscEnemyHealthMax, miscEnemyHealthBosses));
+                        await Task.Run(() => MiscellaneousRandomisers.EnemyHealthRandomiser(unpackedArchive, corePath, miscEnemyHealthMin, miscEnemyHealthMax, miscEnemyHealthBosses));
                     }
                 }
             }
@@ -2409,7 +2414,7 @@ namespace MarathonRandomiser
                     {
                         UpdateLogger($"Patching first Sonic mission Lua to unlock Shadow and Silver's episodes.");
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
-                        await Task.Run(() => MiscellaneousRandomisers.UnlockEpisodes(unpackedArchive, GameExecutable));
+                        await Task.Run(() => MiscellaneousRandomisers.UnlockEpisodes(unpackedArchive, corePath));
                     }
                 }
             }
@@ -2423,7 +2428,7 @@ namespace MarathonRandomiser
                     {
                         UpdateLogger($"Randomising prop attributes.");
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
-                        await Task.Run(() => MiscellaneousRandomisers.PropAttributes(unpackedArchive, miscPropPSI, miscPropPSINoGrab, miscPropPSINoDebris, miscPropDebris));
+                        await Task.Run(() => MiscellaneousRandomisers.PropAttributes(unpackedArchive, corePath, miscPropPSI, miscPropPSINoGrab, miscPropPSINoDebris, miscPropDebris));
                     }
                 }
             }
@@ -2438,10 +2443,10 @@ namespace MarathonRandomiser
                     {
                         UpdateLogger($"Generating random episode message table.");
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
-                        await Task.Run(() => MiscellaneousRandomisers.RandomEpisodeMST(unpackedArchive, GameExecutable, LevelOrder));
+                        await Task.Run(() => MiscellaneousRandomisers.RandomEpisodeMST(unpackedArchive, corePath, LevelOrder));
 
                         UpdateLogger($"Creating stage select hub.");
-                        await Task.Run(() => MiscellaneousRandomisers.RandomEpisodeShopMST(unpackedArchive, GameExecutable, LevelOrder));
+                        await Task.Run(() => MiscellaneousRandomisers.RandomEpisodeShopMST(unpackedArchive, corePath, LevelOrder));
                     }
                 }
 
@@ -2450,7 +2455,7 @@ namespace MarathonRandomiser
                     if (Path.GetFileName(archive).ToLower() == "scripts.arc")
                     {
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
-                        await Task.Run(() => MiscellaneousRandomisers.GenerateRandomEpisodeTown(unpackedArchive, GameExecutable, LevelOrder));
+                        await Task.Run(() => MiscellaneousRandomisers.GenerateRandomEpisodeTown(unpackedArchive, corePath, LevelOrder));
                     }
                 }
             }
@@ -2467,7 +2472,7 @@ namespace MarathonRandomiser
                     {
                         UpdateLogger($"Patching 'voice_all_e.sbk' to allow all voice lines to play in any stage.");
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
-                        await Task.Run(() => Helpers.VoiceBankPatcher(unpackedArchive));
+                        await Task.Run(() => Helpers.VoiceBankPatcher(unpackedArchive, corePath));
                     }
                 }
             }
