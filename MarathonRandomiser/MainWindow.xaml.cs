@@ -1564,7 +1564,7 @@ namespace MarathonRandomiser
 
                         UpdateLogger($"Generating random episode.");
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
-                        LevelOrder = await Task.Run(() => MiscellaneousRandomisers.EpisodeGenerator(unpackedArchive, GameExecutable, sonicVH, shadowVH, silverVH));
+                        LevelOrder = await Task.Run(() => MiscellaneousRandomisers.EpisodeGenerator(unpackedArchive, corePath, sonicVH, shadowVH, silverVH));
                     }
                 }
             }
