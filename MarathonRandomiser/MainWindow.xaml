@@ -510,26 +510,37 @@
                     </Label>
                     <hc:TextBox x:Name="TextBox_Custom_Music" Margin="10,45,53,0" TextWrapping="NoWrap" VerticalAlignment="Top" SelectionBrush="#FFB146C2"/>
                     <Button HorizontalAlignment="Right" Margin="0,45,10,0" VerticalAlignment="Top" hc:IconElement.Geometry="{StaticResource DragHorizontalGeometry}" Width="38" Click="CustomMusic_Browse"/>
-                    <CheckBox x:Name="CheckBox_Custom_Music_XMACache" Content="Cache Custom XMAs" HorizontalAlignment="Left" Margin="10,80,0,0" VerticalAlignment="Top" IsChecked="True"/>
+
+                    <!--Voice Lines-->
+                    <Label Content="Voice Lines" HorizontalAlignment="Left" Margin="10,80,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}"/>
+                    <Label Content="Sounds to be converted and added to the hint randomiser.." HorizontalAlignment="Right" Margin="0,80,10,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" FontStyle="Italic">
+                        <Label.Foreground>
+                            <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlDarkColorKey}}"/>
+                        </Label.Foreground>
+                    </Label>
+                    <hc:TextBox x:Name="TextBox_Custom_Voices" Margin="10,115,53,0" TextWrapping="NoWrap" VerticalAlignment="Top" SelectionBrush="#FFB146C2"/>
+                    <Button HorizontalAlignment="Right" Margin="0,115,10,0" VerticalAlignment="Top" hc:IconElement.Geometry="{StaticResource DragHorizontalGeometry}" Width="38" Click="CustomVoices_Browse"/>
+                    
+                    <CheckBox x:Name="CheckBox_Custom_Audio_XMACache" Content="Cache Custom XMAs" HorizontalAlignment="Left" Margin="10,150,0,0" VerticalAlignment="Top" IsChecked="True"/>
 
                     <!--Textures-->
-                    <Label Content="Textures" HorizontalAlignment="Left" Margin="10,103,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}"/>
-                    <Label Content="Textures to be converted and included in Texture Randomisation." HorizontalAlignment="Right" Margin="0,103,10,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" FontStyle="Italic">
+                    <Label Content="Textures" HorizontalAlignment="Left" Margin="10,171,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}"/>
+                    <Label Content="Textures to be converted and included in Texture Randomisation." HorizontalAlignment="Right" Margin="0,171,10,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" FontStyle="Italic">
                         <Label.Foreground>
                             <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlDarkColorKey}}"/>
                         </Label.Foreground>
                     </Label>
-                    <hc:TextBox x:Name="TextBox_Custom_Textures" Margin="10,138,53,0" TextWrapping="NoWrap" VerticalAlignment="Top" SelectionBrush="#FFB146C2"/>
-                    <Button HorizontalAlignment="Right" Margin="0,138,10,0" VerticalAlignment="Top" hc:IconElement.Geometry="{StaticResource DragHorizontalGeometry}" Width="38" Click="CustomTextures_Browse"/>
+                    <hc:TextBox x:Name="TextBox_Custom_Textures" Margin="10,206,53,0" TextWrapping="NoWrap" VerticalAlignment="Top" SelectionBrush="#FFB146C2"/>
+                    <Button HorizontalAlignment="Right" Margin="0,206,10,0" VerticalAlignment="Top" hc:IconElement.Geometry="{StaticResource DragHorizontalGeometry}" Width="38" Click="CustomTextures_Browse"/>
 
                     <!--Voice Packs-->
-                    <Label Content="Voice Packs" HorizontalAlignment="Left" Margin="10,173,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}"/>
-                    <Label Content="Voice packs to include in voice randomisation." HorizontalAlignment="Right" Margin="0,173,10,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" FontStyle="Italic">
+                    <Label Content="Voice Packs" HorizontalAlignment="Left" Margin="10,246,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}"/>
+                    <Label Content="Voice packs to include in voice randomisation." HorizontalAlignment="Right" Margin="0,241,10,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" FontStyle="Italic">
                         <Label.Foreground>
                             <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlDarkColorKey}}"/>
                         </Label.Foreground>
                     </Label>
-                    <Grid Margin="0,208,0,60" Background="#FF1C1C1C">
+                    <Grid Margin="0,276,0,60" Background="#FF1C1C1C">
                         <local:CheckedListBox x:Name="CheckedList_Custom_Vox" MultiColumn="True" Margin="0,0,0,0"/>
                     </Grid>
                     <Button Content="Select All" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Height="40" Width="128" Click="CheckedListBox_SelectionToggle"/>

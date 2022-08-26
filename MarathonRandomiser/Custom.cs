@@ -1,13 +1,15 @@
 ﻿using Marathon.Formats.Audio;
 using Marathon.Formats.Text;
+using System;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace MarathonRandomiser
 {
     internal class Custom
     {
         /// <summary>
-        /// Converts and saves custom XMAs to the randomisation's mod directory.
+        /// Converts and saves custom song XMAs to the randomisation's mod directory.
         /// </summary>
         /// <param name="CustomSong">The filepath to the current song to process.</param>
         /// <param name="ModDirectory">The path to the randomisation's mod directory.</param>
@@ -68,7 +70,7 @@ namespace MarathonRandomiser
 
                         // If we've failed to convert, throw a proper exception.
                         if (output.Length == 1)
-                            throw new Exception($"Failed to convert '{CustomSong}', this may be due to a character in the filename?");
+                            throw new Exception($"Failed to convert '{CustomSong}', this may be due to a character in the filename or an unsupported filetype?");
 
                         // Set the path to the song to our wav for the rest of the function.
                         CustomSong = $@"{MainWindow.TemporaryDirectory}\tempWavs\custom{index}.wav";
@@ -142,6 +144,157 @@ namespace MarathonRandomiser
 
             // Save the updated bgm.sbk.
             bgm.Save();
+        }
+
+        /// <summary>
+        /// Converts and saves custom voice line XMAs to the randomisation's mod directory.
+        /// </summary>
+        /// <param name="CustomSound">The filepath to the current voice file to process.</param>
+        /// <param name="ModDirectory">The path to the randomisation's mod directory.</param>
+        /// <param name="index">The number in the list of custom voice files of the one we're processing.</param>
+        /// <param name="EnableCache">Whether or not we need to store the generated XMA file.</param>
+        public static async Task VoiceLines(string CustomSound, string ModDirectory, int index, bool? EnableCache)
+        {
+            // Setup a check in chase we already have Custom Files (as the Custom Music function always runs before this one).
+            bool alreadyHasCustom = false;
+            string sounds = $"Custom=\"custom_hint{index}.xma\"";
+
+            // Load the mod configuration ini to see if we already have custom content. If we do, then read the custom files line.
+            string[] modConfig = File.ReadAllLines(Path.Combine($@"{ModDirectory}", "mod.ini"));
+            if (modConfig[9].Contains("True") || modConfig.Length == 11)
+            {
+                alreadyHasCustom = true;
+                sounds = modConfig[10].Remove(modConfig[10].LastIndexOf('\"'));
+                sounds += $",custom_hint{index}.xma\"";
+            }
+
+            // Get the name of the file with the extension replaced with .xma (used for the XMA Cache system).
+            string origName = $"{Path.GetFileNameWithoutExtension(CustomSound)}.xma";
+
+            // If this song is already an XMA we can just copy it straight over.
+            if (Path.GetExtension(CustomSound) == ".xma")
+                File.Copy(CustomSound, $@"{ModDirectory}\xenon\sound\custom_hint{index}.xma");
+
+            // If not, we need to check for it in the cache if we're using it, or convert it.
+            else
+            {
+                // Check if this file exists in the XMA Cache and copy it if the cache is enabled.
+                if (File.Exists($@"{Environment.CurrentDirectory}\Cache\XMA\{origName}") && EnableCache == true)
+                    File.Copy($@"{Environment.CurrentDirectory}\Cache\XMA\{origName}", $@"{ModDirectory}\xenon\sound\voice\e\custom_hint{index}.xma");
+
+                // If not, then convert it.
+                else
+                {
+                    // If this file isn't a WAV, try convert it using vgmstream.
+                    if (Path.GetExtension(CustomSound) != ".wav")
+                    {
+                        Process process = new();
+                        process.StartInfo.FileName = $"\"{Environment.CurrentDirectory}\\ExternalResources\\vgmstream\\vgmstream-cli.exe\"";
+                        process.StartInfo.Arguments = $"-o \"{MainWindow.TemporaryDirectory}\\tempWavs\\custom_hint{index}.wav\" \"{CustomSound}\"";
+                        process.StartInfo.UseShellExecute = false;
+                        process.StartInfo.CreateNoWindow = true;
+                        process.StartInfo.RedirectStandardOutput = true;
+                        process.Start();
+
+                        StreamReader sr = process.StandardOutput;
+                        string[] output = sr.ReadToEnd().Split("\r\n");
+                        process.WaitForExit();
+
+                        // If we've failed to convert, throw a proper exception.
+                        if (output.Length == 1)
+                            throw new Exception($"Failed to convert '{CustomSound}', this may be due to a character in the filename or an unsupported filetype?");
+
+                        // Set the path to the song to our wav for the rest of the function.
+                        CustomSound = $@"{MainWindow.TemporaryDirectory}\tempWavs\custom_hint{index}.wav";
+                    }
+
+                    // Convert WAV file to XMA.
+                    using (Process process = new())
+                    {
+                        process.StartInfo.FileName = $"\"{Environment.CurrentDirectory}\\ExternalResources\\xmaencode.exe\"";
+                        process.StartInfo.Arguments = $"\"{CustomSound}\" /b 64 /t \"{ModDirectory}\\xenon\\sound\\voice\\e\\custom_hint{index}.xma\"";
+                        process.StartInfo.UseShellExecute = false;
+                        process.StartInfo.RedirectStandardOutput = true;
+                        process.StartInfo.CreateNoWindow = true;
+
+                        process.Start();
+                        process.BeginOutputReadLine();
+                        process.WaitForExit();
+                    }
+
+                    // If the cache is enabled, copy the newly converted file to the XMA cache folder.
+                    if (EnableCache == true)
+                        File.Copy($@"{ModDirectory}\xenon\sound\voice\e\custom_hint{index}.xma", $@"{Environment.CurrentDirectory}\Cache\XMA\{origName}");
+                }
+            }
+
+            // If we aren't already using custom files, then write the custom list the same way as the custom music function does.
+            if (!alreadyHasCustom)
+            {
+                using StreamWriter configInfo = File.AppendText(Path.Combine($@"{ModDirectory}", "mod.ini"));
+                configInfo.WriteLine(sounds);
+                configInfo.Close();
+            }
+            // If not, then patch the expanded list over the top of the existing one.
+            else
+            {
+                modConfig[10] = sounds;
+                File.WriteAllLines(Path.Combine($@"{ModDirectory}", "mod.ini"), modConfig);
+            }
+        }
+
+        /// <summary>
+        /// Adds the custom hint lines to voice_all_e.sbk so they can play in game.
+        /// </summary>
+        /// <param name="archivePath">The path to the extracted sound.arc</param>
+        /// <param name="count">How many sounds we're adding.</param>
+        public static async Task UpdateVoiceTable(string archivePath, int count)
+        {
+            // Load voice_all_e.sbk.
+            SoundBank bgm = new($@"{archivePath}\xenon\sound\voice_all_e.sbk");
+
+            // Loop through all our custom voice lines and add them to voice_all_e.sbk so they'll play in game.
+            for (int i = 0; i < count; i++)
+            {
+                Cue customVoiceCue = new()
+                {
+                    Category = 0,
+                    Name = $"hint_custom{i}",
+                    Radius = 6000,
+                    Stream = $"sound/voice/e/custom_hint{i}.wma",
+                    UnknownSingle = 500
+                };
+                bgm.Data.Cues.Add(customVoiceCue);
+            }
+
+            // Save the updated bgm.sbk.
+            bgm.Save();
+        }
+
+        /// <summary>
+        /// Adds the custom hint lines to msg_hint.e.mst so they can be included in the hint list.
+        /// </summary>
+        /// <param name="archivePath">The path to the extracted text.arc</param>
+        /// <param name="CustomVoices">The custom files we're adding.</param>
+        public static async Task UpdateVoiceHints(string archivePath, string[] CustomVoices)
+        {
+            // Load msg_hint.e.mst.
+            MessageTable mst = new($@"{archivePath}\xenon\\text\english\msg_hint.e.mst");
+
+            // Loop through and create a message entry for each sound with a placeholder string.
+            for (int i = 0; i < CustomVoices.Length; i++)
+            {
+                Message message = new()
+                {
+                    Name = $"hint_custom{i}",
+                    Text = $"${Path.GetFileNameWithoutExtension(CustomVoices[i])}",
+                    Placeholders = new[] { $"sound(hint_custom{i})" }
+                };
+                mst.Data.Messages.Add(message);
+            }
+
+            // Save the updated msg_hint.e.mst.
+            mst.Save();
         }
 
         /// <summary>

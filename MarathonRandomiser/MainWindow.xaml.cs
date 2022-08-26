@@ -343,6 +343,34 @@ namespace MarathonRandomiser
         }
 
         /// <summary>
+        /// Opens a File Browser to select one or more custom voice lines.
+        /// </summary>
+        private void CustomVoices_Browse(object sender, EventArgs e)
+        {
+            VistaOpenFileDialog OpenFileDialog = new()
+            {
+                Title = "Select Voice Line Sound Files",
+                Multiselect = true,
+                Filter = "All Types|*.*"
+            };
+
+            // If the selections are valid, add them to the list of text in the custom music textbox.
+            if (OpenFileDialog.ShowDialog() == true)
+            {
+                // Don't erase the box, just add a seperator.
+                if (TextBox_Custom_Voices.Text.Length != 0)
+                    TextBox_Custom_Voices.Text += "|";
+
+                // Add selected files to the text box.
+                for (int i = 0; i < OpenFileDialog.FileNames.Length; i++)
+                    TextBox_Custom_Voices.Text += $"{OpenFileDialog.FileNames[i]}|";
+
+                // Remove the extra comma added at the end.
+                TextBox_Custom_Voices.Text = TextBox_Custom_Voices.Text.Remove(TextBox_Custom_Voices.Text.LastIndexOf('|'));
+            }
+        }
+
+        /// <summary>
         /// Opens a File Browser to select one or more custom songs.
         /// </summary>
         private void CustomTextures_Browse(object sender, EventArgs e)
@@ -973,7 +1001,8 @@ namespace MarathonRandomiser
             // Custom Block.
             configInfo.WriteLine($"[Custom]");
             configInfo.WriteLine($"TextBox_Custom_Music={TextBox_Custom_Music.Text}");
-            configInfo.WriteLine($"CheckBox_Custom_Music_XMACache={CheckBox_Custom_Music_XMACache.IsChecked}");
+            configInfo.WriteLine($"TextBox_Custom_Voices={TextBox_Custom_Voices.Text}");
+            configInfo.WriteLine($"CheckBox_Custom_Audio_XMACache={CheckBox_Custom_Audio_XMACache.IsChecked}");
             configInfo.WriteLine($"TextBox_Custom_Textures={TextBox_Custom_Textures.Text}");
             ConfigCheckedListBoxRead(configInfo, CheckedList_Custom_Vox);
 
@@ -1385,6 +1414,7 @@ namespace MarathonRandomiser
             List<string> MiscPatches = Helpers.EnumerateCheckedListBox(CheckedList_Misc_Patches);
 
             string[] CustomMusic = TextBox_Custom_Music.Text.Split('|');
+            string[] CustomVoices = TextBox_Custom_Voices.Text.Split('|');
             string[] CustomTextures = TextBox_Custom_Textures.Text.Split('|');
             List<string> CustomVoxPacks = Helpers.EnumerateCheckedListBox(CheckedList_Custom_Vox);
 
@@ -1397,18 +1427,18 @@ namespace MarathonRandomiser
                     if (TextBox_Custom_Music.Text.Length != 0)
                         CheckBox_Audio_Music.IsChecked = true;
 
+                    if (TextBox_Custom_Voices.Text.Length != 0 || CustomVoxPacks.Count > 0)
+                        CheckBox_SET_Hints.IsChecked = true;
+
                     if (TextBox_Custom_Textures.Text.Length != 0)
                         CheckBox_Textures_Textures.IsChecked = true;
-
-                    if (CustomVoxPacks.Count > 0)
-                        CheckBox_SET_Hints.IsChecked = true;
                 }
 
                 // Custom Music
                 if (TextBox_Custom_Music.Text.Length != 0)
                 {
                     // Get the status of the XMA Cache Checkbox.
-                    bool? EnableCache = CheckBox_Custom_Music_XMACache.IsChecked;
+                    bool? EnableCache = CheckBox_Custom_Audio_XMACache.IsChecked;
 
                     // Create the directories for the process.
                     Directory.CreateDirectory($@"{TemporaryDirectory}\tempWavs");
@@ -1447,6 +1477,48 @@ namespace MarathonRandomiser
                             UpdateLogger($"Updating 'bgm.sbk' with {CustomMusic.Length} custom songs.");
                             string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
                             await Task.Run(() => Custom.UpdateBGMSoundBank(unpackedArchive, CustomMusic.Length));
+                        }
+                    }
+                }
+
+                // Custom Voice Lines
+                if (TextBox_Custom_Voices.Text.Length != 0)
+                {
+                    // Get the status of the XMA Cache Checkbox.
+                    bool? EnableCache = CheckBox_Custom_Audio_XMACache.IsChecked;
+
+                    // Create the directories for the process.
+                    Directory.CreateDirectory($@"{TemporaryDirectory}\tempWavs");
+                    Directory.CreateDirectory($@"{ModDirectory}\xenon\sound\voice\e");
+
+                    // Loops through the custom songs and process them.
+                    for (int i = 0; i < CustomVoices.Length; i++)
+                    {
+                        UpdateLogger($"Importing: '{CustomVoices[i]}' as a custom hint voice line.");
+                        await Task.Run(() => Custom.VoiceLines(CustomVoices[i], ModDirectory, i, EnableCache));
+                    }
+
+                    // Add all the voice lines to voice_all_e.sbk in sound.arc and add hint entries to msg_hint.e.mst in text.arc
+                    foreach (string archive in archives)
+                    {
+                        // Find sound.arc.
+                        if (Path.GetFileName(archive).ToLower() == "sound.arc")
+                        {
+                            UpdateLogger($"Updating 'voice_all_e.sbk' with {CustomVoices.Length} custom hint lines.");
+                            string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+                            await Task.Run(() => Custom.UpdateVoiceTable(unpackedArchive, CustomVoices.Length));
+                        }
+
+                        // Find text.arc.
+                        if (Path.GetFileName(archive).ToLower() == "text.arc")
+                        {
+                            UpdateLogger($"Updating 'msg_hint.e.mst' with {CustomVoices.Length} custom hint lines.");
+                            string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+                            await Task.Run(() => Custom.UpdateVoiceHints(unpackedArchive, CustomVoices));
+                            for (int i = 0; i < CustomVoices.Length; i++)
+                            {
+                                SetHints.Add($"hint_custom{i}");
+                            }
                         }
                     }
                 }
