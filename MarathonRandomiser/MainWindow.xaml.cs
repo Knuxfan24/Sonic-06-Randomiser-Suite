@@ -1555,6 +1555,23 @@ namespace MarathonRandomiser
                 }
             }
 
+            // Set up the Calposa (https://www.youtube.com/watch?v=NaJy12eqgwM) Easter Egg seed if the right conditions are met.
+            if (DisableEasterEggs == false && Seed.Contains("Calposa"))
+            {
+                // Hijack the enemy list so that only the Iblis Worm and Mephiles Gazer can appear.
+                SetEnemies.Clear();
+                SetEnemies.Add("cCrawler");
+                SetEnemies.Add("cGazer");
+
+                // Flip the right checkboxes.
+                CheckBox_SET_Enemies.IsChecked = true;
+                CheckBox_SET_Enemies_NoBosses.IsChecked = false;
+                CheckBox_SET_Enemies_NoBosses.IsEnabled = true;
+                CheckBox_SET_Enemies_Behaviour.IsChecked = true;
+                CheckBox_SET_Enemies_Behaviour_NoEnforce.IsChecked = false;
+                CheckBox_SET_Enemies_Behaviour_NoEnforce.IsEnabled = true;
+            }
+
             // Disable options if they have nothing to pick from.
             if (SetEnemies.Count == 0)
                 CheckBox_SET_Enemies.IsChecked = false;
@@ -2630,7 +2647,7 @@ namespace MarathonRandomiser
                     HandyControl.Controls.MessageBox.Show("I don't like pies...",
                                                           "Sonic '06 Randomiser Suite",
                                                           MessageBoxButton.OK,
-                                                          MessageBoxImage.Question);
+                                                          MessageBoxImage.Error);
                 }
 
                 if (Seed.Contains("Accordion"))
@@ -2646,7 +2663,15 @@ namespace MarathonRandomiser
                     HandyControl.Controls.MessageBox.Show("When the imposter is sus...",
                                                           "Sonic '06 Randomiser Suite",
                                                           MessageBoxButton.OK,
-                                                          MessageBoxImage.Question);
+                                                          MessageBoxImage.Exclamation);
+                }
+
+                if (Seed.Contains("Calposa"))
+                {
+                    HandyControl.Controls.MessageBox.Show("UH OH WORM!",
+                                                          "Sonic '06 Randomiser Suite",
+                                                          MessageBoxButton.OK,
+                                                          MessageBoxImage.Information);
                 }
             }
         }
