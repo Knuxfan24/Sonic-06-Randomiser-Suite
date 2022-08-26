@@ -588,6 +588,10 @@ namespace MarathonRandomiser
                     NumericUpDown_Anim_Framerate_Max.IsEnabled = NewCheckedStatus;
                     CheckBox_Anim_Framerate_NoLights.IsEnabled = NewCheckedStatus;
                     break;
+                case "CheckBox_Anim_EventTPose":
+                    Label_Anim_EventTPose_Chance.IsEnabled = NewCheckedStatus;
+                    NumericUpDown_Anim_EventTPose_Chance.IsEnabled = NewCheckedStatus;
+                    break;
 
                 case "CheckBox_Models_MaterialColour":
                     CheckBox_Models_MaterialDiffuse.IsEnabled = NewCheckedStatus;
@@ -1907,6 +1911,8 @@ namespace MarathonRandomiser
             int animMinFramerate = (int)NumericUpDown_Anim_Framerate_Min.Value;
             int animMaxFramerate = (int)NumericUpDown_Anim_Framerate_Max.Value;
             bool? animFramerateNoLights = CheckBox_Anim_Framerate_NoLights.IsChecked;
+            bool? animEventTPose = CheckBox_Anim_EventTPose.IsChecked;
+            int animEventTPoseChance = (int)NumericUpDown_Anim_EventTPose_Chance.Value;
 
             // Gameplay.
             if (animGameplay == true)
@@ -1925,7 +1931,7 @@ namespace MarathonRandomiser
                 }
             }
 
-            // Events
+            // Events.
             if (animEvents == true || animEventsFace == true || animEventsCamera == true)
             {
                 foreach (string archive in archives)
@@ -1981,7 +1987,7 @@ namespace MarathonRandomiser
                 }
             }
 
-            // Framerate
+            // Framerate.
             if (animFramerate == true)
             {
                 foreach (string archive in archives)
@@ -2006,6 +2012,21 @@ namespace MarathonRandomiser
                             }
                             break;
                         }
+                    }
+                }
+            }
+
+            // Event T-Posing.
+            if (animEventTPose == true)
+            {
+                foreach (string archive in archives)
+                {
+                    if (Path.GetFileName(archive).ToLower() == "event_data.arc")
+                    {
+                        string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+
+                        UpdateLogger($"Asserting dominance.");
+                        await Task.Run(() => AnimationRandomiser.RemoveEventAnimations(unpackedArchive, animEventTPoseChance));
                     }
                 }
             }

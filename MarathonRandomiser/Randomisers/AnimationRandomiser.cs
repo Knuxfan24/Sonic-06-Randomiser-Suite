@@ -2,6 +2,7 @@
 using Marathon.Formats.Mesh.Ninja;
 using Marathon.Formats.Package;
 using Marathon.Helpers;
+using System.Diagnostics;
 
 namespace MarathonRandomiser
 {
@@ -212,6 +213,33 @@ namespace MarathonRandomiser
 
             // Resave the Ninja Motion File.
             motion.Save();
+        }
+
+        /// <summary>
+        /// Removes any submotions in an event XNM if the Randomiser's chance value is met.
+        /// </summary>
+        /// <param name="archivePath">The path to the extracted event_data.arc.</param>
+        /// <param name="chance">How likely it is for the randomiser to actually erase this XNM's animations.</param>
+        public static async Task RemoveEventAnimations(string archivePath, int chance)
+        {
+            // Loop through each XNM.
+            foreach (string XNMFile in Directory.GetFiles(archivePath, "*_Root.xnm", SearchOption.AllDirectories))
+            {
+                // Check if the randomiesr generates a number lower than or equal to our chance number. Continue if it does.
+                if (MainWindow.Randomiser.Next(0, 101) <= chance)
+                {
+                    // Load the XNM.
+                    NinjaNext xnm = new(XNMFile);
+
+                    // Loop backwards through the submotions and remove ones that aren't animating Node 0, 1 or 2.
+                    for (int i = xnm.Data.Motion.SubMotions.Count - 1; i >= 0; i--)
+                        if (xnm.Data.Motion.SubMotions[i].NodeIndex is not 0 and not 1 and not 2)
+                            xnm.Data.Motion.SubMotions.RemoveAt(i);
+
+                    // Resave the XNM.
+                    xnm.Save();
+                }
+            }
         }
     }
 }
