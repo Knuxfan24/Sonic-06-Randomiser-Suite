@@ -8,6 +8,7 @@ namespace MarathonRandomiser
         /// <summary>
         /// Shuffles all the text entries in all the game's message table files around.
         /// </summary>
+        /// <param name="mstFiles">Array of all the message table files.</param>
         /// <param name="eventArc">The path to the already unpacked event.arc.</param>
         /// <param name="textArc">The path to the already unpacked text.arc.</param>
         /// <param name="languages">The list of valid language codes to include.</param>
@@ -20,7 +21,7 @@ namespace MarathonRandomiser
             using MessageTable list = new();
 
             // Loop through all the message tables.
-            foreach (var mstFile in mstFiles)
+            foreach (string mstFile in mstFiles)
             {
                 // Load this message table.
                 using MessageTable mst = new(mstFile);
@@ -31,7 +32,7 @@ namespace MarathonRandomiser
             }
 
             // Loop through all the message tables again.
-            foreach (var mstFile in mstFiles)
+            foreach (string mstFile in mstFiles)
             {
                 // Load this message table.
                 using MessageTable mst = new(mstFile);

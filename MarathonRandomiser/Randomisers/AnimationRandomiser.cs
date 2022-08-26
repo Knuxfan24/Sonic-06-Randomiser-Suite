@@ -20,20 +20,14 @@ namespace MarathonRandomiser
             string targetArchive = null;
             string neededPart = null;
 
-            // Get a list of all the player archives.
-            string[] win32Arcs = Directory.GetFiles(Path.GetDirectoryName(GameExecutable), "player_*.arc", SearchOption.AllDirectories);
-
             // Get the name of this PKG (surely this way is me having a brainfart?)
             string pkgName = pkgFile[(pkgFile.LastIndexOf('\\') + 1)..];
             pkgName = Path.GetFileNameWithoutExtension(pkgName);
 
-            // Split the name of this PKG to figure out what we're looking for.
-            string[] pkgParts = pkgName.Split('_');
-
-            // Find the archive and pkg name.
-            foreach (string pkgPart in pkgParts)
+            // Find the player's archive and pkg name after splitting the pkgName.
+            foreach (string pkgPart in pkgName.Split('_'))
             {
-                foreach (string arc in win32Arcs)
+                foreach (string arc in Directory.GetFiles(Path.GetDirectoryName(GameExecutable), "player_*.arc", SearchOption.AllDirectories))
                 {
                     if (arc.Contains($"_{pkgPart}"))
                     {
@@ -64,7 +58,7 @@ namespace MarathonRandomiser
             AssetPackage pkg = new(pkgFile);
 
             // Loop through the PKGs to find the Motion Category.
-            foreach (var type in pkg.Types)
+            foreach (AssetType? type in pkg.Types)
             {
                 if (type.Name == "motion")
                 {
@@ -89,11 +83,8 @@ namespace MarathonRandomiser
                         // Load the archive.
                         U8Archive arc = new(targetArchive, Marathon.IO.ReadMode.IndexOnly);
 
-                        // Get a list of all the files in the archive.
-                        IEnumerable<Marathon.IO.Interfaces.IArchiveFile>? arcFiles = arc.Root.GetFiles();
-
-                        // Loop through the files.
-                        foreach (Marathon.IO.Interfaces.IArchiveFile? xnmFile in arcFiles)
+                        // Loop through all the files in the archive.
+                        foreach (Marathon.IO.Interfaces.IArchiveFile? xnmFile in arc.Root.GetFiles())
                         {
                             // Check if this is an XNM and it's not one we're classing as forbidden.
                             if (Path.GetExtension(xnmFile.Name) == ".xnm" && !xnmFile.Name.Contains("_style") && !xnmFile.Name.Contains("_Head") && !xnmFile.Name.Contains("_face") && !xnmFile.Name.Contains("_point"))
@@ -111,11 +102,8 @@ namespace MarathonRandomiser
                         // Load event.arc.
                         U8Archive eventArc = new($@"{Path.GetDirectoryName(GameExecutable)}\win32\archives\event_data.arc", Marathon.IO.ReadMode.IndexOnly);
 
-                        // Get a list of all the files in the archive.
-                        IEnumerable<Marathon.IO.Interfaces.IArchiveFile>? arcFiles = eventArc.Root.GetFiles();
-
-                        // Loop through the files.
-                        foreach (Marathon.IO.Interfaces.IArchiveFile? xnmFile in arcFiles)
+                        // Loop through the files in the archive.
+                        foreach (Marathon.IO.Interfaces.IArchiveFile? xnmFile in eventArc.Root.GetFiles())
                         {
                             if (Path.GetExtension(xnmFile.Name) == ".xnm" && xnmFile.Name.Contains(neededPart) && xnmFile.Name.Contains("_Root"))
                             {
@@ -208,7 +196,6 @@ namespace MarathonRandomiser
             }
         }
     
-
         /// <summary>
         /// Randomises the Framerate a Ninja Motion runs at.
         /// </summary>

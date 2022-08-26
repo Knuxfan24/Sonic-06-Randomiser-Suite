@@ -27,11 +27,8 @@ namespace MarathonRandomiser
         /// <param name="listBox">The CheckedListBox element to populate.</param>
         public static void FillCheckedListBox(string file, CheckedListBox listBox)
         {
-            // Load text file into string array.
-            string[] list = file.Split("\r\n");
-
             // Loop through every entry in the text file.
-            foreach (string line in list)
+            foreach (string line in file.Split("\r\n"))
             {
                 // Split this entry on the comma values.
                 string[] split = line.Split(',');
@@ -63,9 +60,6 @@ namespace MarathonRandomiser
             // Clear out the list.
             listBox.Items.Clear();
 
-            // Fetch the mlua files.
-            string[] patches = Directory.GetFiles(directory, "*.mlua", SearchOption.TopDirectoryOnly);
-
             // Set up a list of patches that don't fit too well with the Randomiser.
             List<string> Forbidden = new()
             {
@@ -87,7 +81,7 @@ namespace MarathonRandomiser
             };
 
             // Loop through and add the patches to the CheckedList_Misc_Patches element
-            foreach (string patch in patches)
+            foreach (string patch in Directory.GetFiles(directory, "*.mlua", SearchOption.TopDirectoryOnly))
             {
                 // Read the mlua and split it's second line (contains the title) into a seperate array we can use.
                 string[] mlua = File.ReadAllLines(patch);
@@ -116,7 +110,7 @@ namespace MarathonRandomiser
         public static void FillWildcardCheckedListBox(DependencyObject element, CheckedListBox listBox)
         {
             // Loop through each Checkbox in the Tab Grid.
-            foreach (var checkbox in Descendants<CheckBox>(element))
+            foreach (CheckBox checkbox in Descendants<CheckBox>(element))
             {
                 // Create an item for each.
                 CheckedListBoxItem item = new()
@@ -143,18 +137,15 @@ namespace MarathonRandomiser
         {
             if (dependencyItem != null)
             {
-                for (var index = 0; index < VisualTreeHelper.GetChildrenCount(dependencyItem); index++)
+                for (int index = 0; index < VisualTreeHelper.GetChildrenCount(dependencyItem); index++)
                 {
-                    var child = VisualTreeHelper.GetChild(dependencyItem, index);
-                    if (child is T dependencyObject)
-                    {
-                        yield return dependencyObject;
-                    }
+                    DependencyObject child = VisualTreeHelper.GetChild(dependencyItem, index);
 
-                    foreach (var childOfChild in Descendants<T>(child))
-                    {
+                    if (child is T dependencyObject)
+                        yield return dependencyObject;
+
+                    foreach (T childOfChild in Descendants<T>(child))
                         yield return childOfChild;
-                    }
                 }
             }
         }
@@ -346,11 +337,8 @@ namespace MarathonRandomiser
         /// <param name="archivePath">The archive to process.</param>
         public static async Task CleanUpShuffleLeftovers(string archivePath)
         {
-            // Find all the files with a .rnd extension.
-            string[] RandomiserFiles = Directory.GetFiles(archivePath, "*.rnd", SearchOption.AllDirectories);
-
-            // Delete each file.
-            foreach (string file in RandomiserFiles)
+            // Delete each file with my .rnd extension.
+            foreach (string file in Directory.GetFiles(archivePath, "*.rnd", SearchOption.AllDirectories))
                 File.Delete(file);
         }
     
@@ -397,11 +385,8 @@ namespace MarathonRandomiser
             // Load the voice_all_e.sbk file.
             SoundBank voice_all = new($@"{archivePath}\{corePath}\sound\voice_all_e.sbk");
 
-            // Get all the English sound banks in sound.arc.
-            string[] sbkFiles = Directory.GetFiles($@"{archivePath}\{corePath}\sound", "voice_*_e.sbk");
-
-            // Loop through each sound bank.
-            foreach (string sbkFile in sbkFiles)
+            // Loop through each English sound bank in sound.arc.
+            foreach (string sbkFile in Directory.GetFiles($@"{archivePath}\{corePath}\sound", "voice_*_e.sbk"))
             {
                 // Ignore this one if it's voice_all_e.sbk.
                 if (Path.GetFileName(sbkFile) == "voice_all_e.sbk")

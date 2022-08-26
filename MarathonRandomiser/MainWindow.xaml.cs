@@ -226,7 +226,7 @@ namespace MarathonRandomiser
 
                     // Determine if we have textures in this archive.
                     bool hasTexture = false;
-                    foreach (var file in arcFiles)
+                    foreach (Marathon.IO.Interfaces.IArchiveFile file in arcFiles)
                     {
                         if (Path.GetExtension(file.Name) == ".dds")
                         {
@@ -237,7 +237,7 @@ namespace MarathonRandomiser
 
                     // Determine if we have models in this archive.
                     bool hasModel = false;
-                    foreach (var file in arcFiles)
+                    foreach (Marathon.IO.Interfaces.IArchiveFile file in arcFiles)
                     {
                         if (Path.GetExtension(file.Name) == ".xno")
                         {
@@ -398,6 +398,7 @@ namespace MarathonRandomiser
                 TextBox_Custom_Textures.Text = TextBox_Custom_Textures.Text.Remove(TextBox_Custom_Textures.Text.LastIndexOf('|'));
             }
         }
+        
         /// <summary>
         /// Downloads my voice packs from GitHub.
         /// </summary>
@@ -678,7 +679,7 @@ namespace MarathonRandomiser
             bool selectAll = (string)((Button)sender).Content == "Select All";
 
             // Get the grid element this button was a part of.
-            var buttonParent = ((Button)sender).Parent;
+            DependencyObject buttonParent = ((Button)sender).Parent;
 
             // Check the name of the parent grid element.
             // In most cases, we then check for the relevant tab control's selected index to determine the next action.
@@ -845,7 +846,7 @@ namespace MarathonRandomiser
         /// </summary>
         private void Button_Documentation(object sender, RoutedEventArgs e)
         {
-            var psi = new ProcessStartInfo
+            ProcessStartInfo psi = new ProcessStartInfo
             {
                 FileName = @"https://github.com/Knuxfan24/Sonic-06-Randomiser-Suite/wiki",
                 UseShellExecute = true
@@ -1021,11 +1022,8 @@ namespace MarathonRandomiser
             // Write the header for this section of the ini.
             configInfo.WriteLine($"[{sectionHeader}]");
 
-            // Get all the children of this StackPanel element.
-            IEnumerable? children = LogicalTreeHelper.GetChildren(element);
-
             // Loop through each item in this StackPanel element.
-            foreach (object? item in children)
+            foreach (object? item in LogicalTreeHelper.GetChildren(element))
             { 
                 // If this is a Checkbox element, write the name and checked state.
                 if (item is CheckBox checkbox)
@@ -1091,7 +1089,7 @@ namespace MarathonRandomiser
                     continue;
 
                 // Split this line so we can get the key and the value(s).
-                var split = setting.Split('=');
+                string[] split = setting.Split('=');
 
                 // Search for this key's name.
                 object element = Grid_General.FindName(split[0]);
@@ -1117,12 +1115,11 @@ namespace MarathonRandomiser
                     // If this element is a checkedlistbox, invalidate the existing list, loop through and check ones that have the tags specified in the list.
                     if (element is CheckedListBox checkedlist)
                     {
-                        string[] checkedlistValues = split[1].Split(',');
                         Helpers.InvalidateCheckedListBox(checkedlist, true, false);
 
-                        foreach(string value in checkedlistValues)
+                        foreach(string value in split[1].Split(','))
                         {
-                            foreach (var item in checkedlist.Items)
+                            foreach (CheckedListBoxItem item in checkedlist.Items)
                             {
                                 if (item.Tag == value)
                                     item.Checked = true;
@@ -1145,7 +1142,7 @@ namespace MarathonRandomiser
         private static void WildcardTabCheckboxes(DependencyObject element, int wildcardWeight, CheckedListBox listBox, bool disabled = false)
         {
             // Loop through all the CheckBoxes in our element.
-            foreach (var checkbox in Helpers.Descendants<CheckBox>(element))
+            foreach (CheckBox checkbox in Helpers.Descendants<CheckBox>(element))
             {
                 // Set it to false by default.
                 checkbox.IsChecked = false;
@@ -1153,7 +1150,7 @@ namespace MarathonRandomiser
                 if (!disabled)
                 {
                     // Scan through the Wildcard Elements to see if we need to try enable this element.
-                    foreach (var item in listBox.Items)
+                    foreach (CheckedListBoxItem item in listBox.Items)
                     {
                         if (item.Tag == checkbox.Name && item.Checked == true)
                         {
@@ -1673,11 +1670,8 @@ namespace MarathonRandomiser
                     {
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
 
-                        // Get a list of all the set files in scripts.arc.
-                        string[] setFiles = Directory.GetFiles(unpackedArchive, "*.set", SearchOption.AllDirectories);
-
                         // Process each set file.
-                        foreach (string setFile in setFiles)
+                        foreach (string setFile in Directory.GetFiles(unpackedArchive, "*.set", SearchOption.AllDirectories))
                         {
                             UpdateLogger($"Randomising: '{setFile}'.");
                             await Task.Run(() => ObjectPlacementRandomiser.Process(setFile, setEnemies, setEnemiesNoBosses, setBehaviour, setBehaviourNoEnforce, setCharacters, setItemCapsules,
@@ -1691,8 +1685,7 @@ namespace MarathonRandomiser
                             SetEnemies.Contains("secondiblis") || SetEnemies.Contains("thirdiblis") || SetEnemies.Contains("firstmefiress") || SetEnemies.Contains("secondmefiress") ||
                             SetEnemies.Contains("solaris01") || SetEnemies.Contains("solaris02")) || setHints == true)
                         {
-                            string[] luaFiles = Directory.GetFiles($"{unpackedArchive}\\{corePath}\\scripts\\enemy", "*.lub", SearchOption.TopDirectoryOnly);
-                            foreach (string luaFile in luaFiles)
+                            foreach (string luaFile in Directory.GetFiles($"{unpackedArchive}\\{corePath}\\scripts\\enemy", "*.lub", SearchOption.TopDirectoryOnly))
                             {
                                 // Skip Mephiles Phase 2 for patching as decompiling his Lua breaks the fight.
                                 if (Path.GetFileNameWithoutExtension(luaFile) != "secondmefiress")
@@ -1760,8 +1753,7 @@ namespace MarathonRandomiser
                         // Patch stage and mission luas for player_start2 entities
                         if ((setEnemies == true && setEnemiesNoBosses != true) || setCharacters == true)
                         {
-                            string[] luaFiles = Directory.GetFiles(unpackedArchive, "*.lub", SearchOption.AllDirectories);
-                            foreach (string luaFile in luaFiles)
+                            foreach (string luaFile in Directory.GetFiles(unpackedArchive, "*.lub", SearchOption.AllDirectories))
                             {
                                 if (await Task.Run(() => Helpers.NeededLua(luaFile, new List<string>() { "SetPlayer" })))
                                 {
@@ -1774,8 +1766,7 @@ namespace MarathonRandomiser
                         // Patch stage luas to load all the particle banks.
                         if (setParticles == true)
                         {
-                            string[] luaFiles = Directory.GetFiles(unpackedArchive, "*.lub", SearchOption.AllDirectories);
-                            foreach (string luaFile in luaFiles)
+                            foreach (string luaFile in Directory.GetFiles(unpackedArchive, "*.lub", SearchOption.AllDirectories))
                             {
                                 if (await Task.Run(() => Helpers.NeededLua(luaFile, new List<string>() { "AddComponent" })))
                                 {
@@ -1873,9 +1864,7 @@ namespace MarathonRandomiser
                     if (Path.GetFileName(archive).ToLower() == "scripts.arc")
                     {
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
-
-                        string[] sceneLuas = Directory.GetFiles(unpackedArchive, "scene*.lub", SearchOption.AllDirectories);
-                        foreach (string luaFile in sceneLuas)
+                        foreach (string luaFile in Directory.GetFiles(unpackedArchive, "scene*.lub", SearchOption.AllDirectories))
                         {
                             UpdateLogger($"Randomising scene parameters in '{luaFile}'.");
                             await Task.Run(() => SceneRandomiser.Process(luaFile, sceneLightAmbient, sceneLightMain, sceneLightSub, sceneMinLight, sceneLightDirection, sceneLightDirectionEnforce,
@@ -1893,8 +1882,7 @@ namespace MarathonRandomiser
                     if (Path.GetFileName(archive).ToLower() == "scripts.arc")
                     {
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
-                        string[] skyLuas = Directory.GetFiles(unpackedArchive, "*.lub", SearchOption.AllDirectories);
-                        foreach (string skyLua in skyLuas)
+                        foreach (string skyLua in Directory.GetFiles(unpackedArchive, "*.lub", SearchOption.AllDirectories))
                         {
                             if (await Task.Run(() => Helpers.NeededLua(skyLua, new List<string>() { "AddComponent" })))
                             {
@@ -1928,9 +1916,7 @@ namespace MarathonRandomiser
                     if (Path.GetFileName(archive).ToLower() == "player.arc")
                     {
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
-                        string[] pkgFiles = Directory.GetFiles(unpackedArchive, "*.pkg", SearchOption.AllDirectories);
-
-                        foreach (string pkgFile in pkgFiles)
+                        foreach (string pkgFile in Directory.GetFiles(unpackedArchive, "*.pkg", SearchOption.AllDirectories))
                         {
                             UpdateLogger($"Randomising animations in '{pkgFile}'.");
                             await Task.Run(() => AnimationRandomiser.GameplayAnimationRandomiser(pkgFile, GameExecutable, animGameplayUseAll, animGameplayUseEvents));
@@ -2001,16 +1987,18 @@ namespace MarathonRandomiser
                 foreach (string archive in archives)
                 {
                     U8Archive arc = new(archive, ReadMode.IndexOnly);
-                    IEnumerable<Marathon.IO.Interfaces.IArchiveFile>? arcFiles = arc.Root.GetFiles();
-                    foreach (var file in arcFiles)
+                    foreach (Marathon.IO.Interfaces.IArchiveFile file in arc.Root.GetFiles())
                     {
                         if (Path.GetExtension(file.Name) == ".xnm" || Path.GetExtension(file.Name) == ".xnv" || Path.GetExtension(file.Name) == ".xni" || Path.GetExtension(file.Name) == ".xnf")
                         {
                             string archivePath = await Task.Run(() => Helpers.ArchiveHandler(archive));
+
+                            // Gather all the motion files we need depending on the settings.
                             string[] motionFiles = Directory.GetFiles(archivePath, "*.xnm", SearchOption.AllDirectories);
                             motionFiles = motionFiles.Concat(Directory.GetFiles(archivePath, "*.xnv", SearchOption.AllDirectories)).ToArray();
                             if (animFramerateNoLights == false) { motionFiles = motionFiles.Concat(Directory.GetFiles(archivePath, "*.xni", SearchOption.AllDirectories)).ToArray(); }
                             motionFiles = motionFiles.Concat(Directory.GetFiles(archivePath, "*.xnf", SearchOption.AllDirectories)).ToArray();
+
                             foreach (string motionFile in motionFiles)
                             {
                                 UpdateLogger($"Randomising framerate in '{motionFile}'.");
@@ -2040,8 +2028,7 @@ namespace MarathonRandomiser
                     if (ModelsArchives.Contains(Path.GetFileName(archive)))
                     {
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
-                        string[] xnoFiles = Directory.GetFiles(unpackedArchive, "*.xno", SearchOption.AllDirectories);
-                        foreach (string xnoFile in xnoFiles)
+                        foreach (string xnoFile in Directory.GetFiles(unpackedArchive, "*.xno", SearchOption.AllDirectories))
                         {
                             UpdateLogger($"Randomising vertex colours in '{xnoFile}'.");
                             await Task.Run(() => ModelRandomisers.RandomiseVertexColours(xnoFile));
@@ -2059,8 +2046,7 @@ namespace MarathonRandomiser
                     if (ModelsArchives.Contains(Path.GetFileName(archive)))
                     {
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
-                        string[] xnoFiles = Directory.GetFiles(unpackedArchive, "*.xno", SearchOption.AllDirectories);
-                        foreach (string xnoFile in xnoFiles)
+                        foreach (string xnoFile in Directory.GetFiles(unpackedArchive, "*.xno", SearchOption.AllDirectories))
                         {
                             UpdateLogger($"Randomising material colours in '{xnoFile}'.");
                             await Task.Run(() => ModelRandomisers.RandomiseMaterialColours(xnoFile, modelsMaterialDiffuse, modelsMaterialAmbient, modelsMaterialSpecular, modelsMaterialEmissive));
@@ -2165,9 +2151,7 @@ namespace MarathonRandomiser
                     if (Path.GetFileName(archive).ToLower() == "scripts.arc")
                     {
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
-
-                        string[] luaFiles = Directory.GetFiles(unpackedArchive, "*.lub", SearchOption.AllDirectories);
-                        foreach (string luaFile in luaFiles)
+                        foreach (string luaFile in Directory.GetFiles(unpackedArchive, "*.lub", SearchOption.AllDirectories))
                         {
                             if (await Task.Run(() => Helpers.NeededLua(luaFile, new List<string>() { "PlayBGM", "mission_bgm" })))
                             {
@@ -2188,8 +2172,10 @@ namespace MarathonRandomiser
                     {
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
 
-                        // Find the CSBs and unpack the ones the user has chosen to randomise.
+                        // Get all the CSB files.
                         string[] csbFiles = Directory.GetFiles($"{unpackedArchive}\\common\\sound", "*.csb", SearchOption.TopDirectoryOnly);
+
+                        // Find the CSBs and unpack the ones the user has chosen to randomise.
                         foreach (string csbFile in csbFiles)
                         {
                             if (AudioCSBs.Contains(Path.GetFileName(csbFile)))
@@ -2398,6 +2384,8 @@ namespace MarathonRandomiser
                     if (Path.GetFileName(archive).ToLower() == "sprite.arc")
                     {
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+
+                        // Get all the XNCP files.
                         string[] xncpFiles = Directory.GetFiles(unpackedArchive, "*.xncp", SearchOption.AllDirectories);
 
                         // loading_english.xncp embeds the texture, which XNCPLib seems to fail with, so replace it with the italian one.
@@ -2459,9 +2447,7 @@ namespace MarathonRandomiser
                     if (Path.GetFileName(archive).ToLower() == "stage.arc")
                     {
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
-
-                        string[] collisionFiles = Directory.GetFiles(unpackedArchive, "collision.bin", SearchOption.AllDirectories);
-                        foreach (string collisionFile in collisionFiles)
+                        foreach (string collisionFile in Directory.GetFiles(unpackedArchive, "collision.bin", SearchOption.AllDirectories))
                         {
                             UpdateLogger($"Randomising collision surface tags in '{collisionFile}'.");
                             await Task.Run(() => MiscellaneousRandomisers.SurfaceRandomiser(collisionFile, miscCollisionPerFace));

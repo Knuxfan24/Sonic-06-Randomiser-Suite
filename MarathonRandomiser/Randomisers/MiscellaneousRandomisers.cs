@@ -699,7 +699,7 @@ namespace MarathonRandomiser
             File.WriteAllText($@"{archivePath}\{corePath}\download\DLC_RandomEpisode.lub", dlc);
 
             // Set all the stage messages.
-            foreach (var entry in LevelOrder)
+            foreach (KeyValuePair<string, int> entry in LevelOrder)
             {
                 // Read the filename key seperately so we don't dupe code.
                 string fileName = entry.Key;
@@ -779,7 +779,7 @@ namespace MarathonRandomiser
             mst.Data.Messages.Add(msg);
 
             // Write a message for each stage's number to allow the player to keep track of how much of the game is left.
-            foreach (var entry in LevelOrder)
+            foreach (KeyValuePair<string, int> entry in LevelOrder)
             {
                 msg = new()
                 {
@@ -808,7 +808,7 @@ namespace MarathonRandomiser
             Message msg;
 
             // Create the actual shop listing.
-            foreach (var entry in LevelOrder)
+            foreach (KeyValuePair<string, int> entry in LevelOrder)
             {
                 msg = new()
                 {
@@ -819,7 +819,7 @@ namespace MarathonRandomiser
             }
 
             // Create the stage descriptions.
-            foreach (var entry in LevelOrder)
+            foreach (KeyValuePair<string, int> entry in LevelOrder)
             {
                 // Handle End of the World and Solaris differently.
                 if (entry.Key != "mission_eotw" && entry.Key != "mission_solaris")

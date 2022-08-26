@@ -186,7 +186,6 @@ namespace MarathonRandomiser
                     filetype = "pam";
 
                 usedNumbers.Clear();
-                string[] fmvs = Directory.GetFiles($@"{Path.GetDirectoryName(GameExecutable)}\{corePath}\event", $"*{filetype}", SearchOption.AllDirectories);
                 for (int i = 0; i < epb.Events.Count; i++)
                 {
                     if (epb.Events[i].Terrain == null)
@@ -214,7 +213,7 @@ namespace MarathonRandomiser
                         epb.Events[i].Rotation             = eventsFMV[index].Rotation;
 
                         // Handle the WMV files (has a bug that dupes the Aquatic Base Past FMV because of how its set up).
-                        foreach (string fmv in fmvs)
+                        foreach (string fmv in Directory.GetFiles($@"{Path.GetDirectoryName(GameExecutable)}\{corePath}\event", $"*{filetype}", SearchOption.AllDirectories))
                         {
                             if (fmv.Contains(eventsFMV[index].Folder.Replace('/', '\\')) && epb.Events[i].Name != "e0220")
                             {

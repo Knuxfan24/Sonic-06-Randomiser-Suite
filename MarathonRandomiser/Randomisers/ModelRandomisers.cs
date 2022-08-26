@@ -3,7 +3,8 @@
 namespace MarathonRandomiser
 {
     internal class ModelRandomisers
-    {/// <summary>
+    {
+        /// <summary>
      /// Randomises the Vertex Colours in an XNO.
      /// </summary>
      /// <param name="xnoFile">The XNO to process.</param>

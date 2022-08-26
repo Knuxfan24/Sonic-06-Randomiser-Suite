@@ -16,6 +16,7 @@
         /// <param name="fogDensity">Whether or not to randomise how thick the fog is.</param>
         /// <param name="env">Whether or not to randomise the cubemap.</param>
         /// <param name="SceneEnvMaps">The list of valid cubemap file paths.</param>
+        /// <param name="noBloom">Whether or not to remove bloom.</param>
         public static async Task Process(string sceneLua, bool? ambient, bool? main, bool? sub, double minLight, bool? direction, bool? enforceDirection, bool? fogColour, bool? fogDensity, bool? env, List<string> SceneEnvMaps, bool? noBloom)
         {
             // Decompile this lua file.
