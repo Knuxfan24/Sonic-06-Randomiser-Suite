@@ -1117,12 +1117,16 @@ namespace MarathonRandomiser
             // Set up the list with the List Box name.
             string list = $"{listBox.Name}=";
 
-            // Add each item to the list, followed by a | character.
-            foreach (string item in listBox.Items)
-                list += $"{item}|";
+            // Make sure there's actually items to write.
+            if (listBox.Items.Count != 0)
+            {
+                // Add each item to the list, followed by a | character.
+                foreach (string item in listBox.Items)
+                    list += $"{item}|";
 
-            // Remove the last | character.
-            list = list.Remove(list.LastIndexOf('|'));
+                // Remove the last | character.
+                list = list.Remove(list.LastIndexOf('|'));
+            }
 
             // Write the list to the config.
             configInfo.WriteLine(list);
