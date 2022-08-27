@@ -502,54 +502,27 @@
             </hc:TabItem>
 
             <!--Custom Tab-->
-            <hc:TabItem x:Name="TabItem_Custom" Header="Custom" BorderBrush="#B146C2" Closed="CustomMusic_Browse" >
+            <hc:TabItem x:Name="TabItem_Custom" Header="Custom" BorderBrush="#B146C2" >
                 <Grid Background="#FF181818" Name="Grid_Custom">
-                    <!--Music-->
-                    <Label Content="Music" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}"/>
-                    <Label Content="Songs to be converted and added to the music list." HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" FontStyle="Italic">
-                        <Label.Foreground>
-                            <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlDarkColorKey}}"/>
-                        </Label.Foreground>
-                    </Label>
-                    <hc:TextBox x:Name="TextBox_Custom_Music" Margin="10,45,53,0" TextWrapping="NoWrap" VerticalAlignment="Top" SelectionBrush="#FFB146C2"/>
-                    <Button HorizontalAlignment="Right" Margin="0,45,10,0" VerticalAlignment="Top" hc:IconElement.Geometry="{StaticResource DragHorizontalGeometry}" Width="38" Click="CustomMusic_Browse"/>
-
-                    <!--Voice Lines-->
-                    <Label Content="Voice Lines" HorizontalAlignment="Left" Margin="10,80,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}"/>
-                    <Label Content="Sounds to be converted and added to the hint randomiser.." HorizontalAlignment="Right" Margin="0,80,10,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" FontStyle="Italic">
-                        <Label.Foreground>
-                            <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlDarkColorKey}}"/>
-                        </Label.Foreground>
-                    </Label>
-                    <hc:TextBox x:Name="TextBox_Custom_Voices" Margin="10,115,53,0" TextWrapping="NoWrap" VerticalAlignment="Top" SelectionBrush="#FFB146C2"/>
-                    <Button HorizontalAlignment="Right" Margin="0,115,10,0" VerticalAlignment="Top" hc:IconElement.Geometry="{StaticResource DragHorizontalGeometry}" Width="38" Click="CustomVoices_Browse"/>
-                    
-                    <CheckBox x:Name="CheckBox_Custom_Audio_XMACache" Content="Cache Custom XMAs" HorizontalAlignment="Left" Margin="10,150,0,0" VerticalAlignment="Top" IsChecked="True"/>
-
-                    <!--Textures-->
-                    <Label Content="Textures" HorizontalAlignment="Left" Margin="10,171,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}"/>
-                    <Label Content="Textures to be converted and included in Texture Randomisation." HorizontalAlignment="Right" Margin="0,171,10,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" FontStyle="Italic">
-                        <Label.Foreground>
-                            <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlDarkColorKey}}"/>
-                        </Label.Foreground>
-                    </Label>
-                    <hc:TextBox x:Name="TextBox_Custom_Textures" Margin="10,206,53,0" TextWrapping="NoWrap" VerticalAlignment="Top" SelectionBrush="#FFB146C2"/>
-                    <Button HorizontalAlignment="Right" Margin="0,206,10,0" VerticalAlignment="Top" hc:IconElement.Geometry="{StaticResource DragHorizontalGeometry}" Width="38" Click="CustomTextures_Browse"/>
-
-                    <!--Voice Packs-->
-                    <Label Content="Voice Packs" HorizontalAlignment="Left" Margin="10,246,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}"/>
-                    <Label Content="Voice packs to include in voice randomisation." HorizontalAlignment="Right" Margin="0,241,10,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" FontStyle="Italic">
-                        <Label.Foreground>
-                            <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlDarkColorKey}}"/>
-                        </Label.Foreground>
-                    </Label>
-                    <Grid Margin="0,276,0,60" Background="#FF1C1C1C">
-                        <local:CheckedListBox x:Name="CheckedList_Custom_Vox" MultiColumn="True" Margin="0,0,0,0"/>
-                    </Grid>
-                    <Button Content="Select All" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Height="40" Width="128" Click="CheckedListBox_SelectionToggle"/>
-                    <Button Content="Fetch Offical Packs" HorizontalAlignment="Left" Margin="143,0,0,10" VerticalAlignment="Bottom" Height="40" Width="128" Click="Custom_FetchVox"/>
-                    <Button Content="Refresh" HorizontalAlignment="Right" Margin="0,0,143,10" VerticalAlignment="Bottom" Height="40" Width="128" Click="Custom_RefreshVox"/>
-                    <Button Content="Deselect All" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Height="40" Width="128" Click="CheckedListBox_SelectionToggle"/>
+                    <hc:TabControl Style="{StaticResource TabControlInLine}" Margin="0,0,0,60" Name="TabControl_Custom" SelectionChanged="Custom_TabChange">
+                        <hc:TabItem Header="Music" BorderBrush="#B146C2">
+                            <ListBox x:Name="ListBox_Custom_Music"/>
+                        </hc:TabItem>
+                        <hc:TabItem Header="Voice Lines" BorderBrush="#B146C2">
+                            <ListBox x:Name="ListBox_Custom_VoiceLines"/>
+                        </hc:TabItem>
+                        <hc:TabItem Header="Textures" BorderBrush="#B146C2">
+                            <ListBox x:Name="ListBox_Custom_Textures"/>
+                        </hc:TabItem>
+                        <hc:TabItem Header="Voice Packs" BorderBrush="#B146C2">
+                            <local:CheckedListBox x:Name="CheckedList_Custom_Vox" MultiColumn="True" Margin="0,0,0,0"/>
+                        </hc:TabItem>
+                    </hc:TabControl>
+                    <CheckBox x:Name="CheckBox_Custom_Audio_XMACache" Content="Cache Custom Audio" IsEnabled="True" IsChecked="True" Margin="10,0,0,22" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="Auto"/>
+                    <Button Content="Add" HorizontalAlignment="Left" Margin="148,0,0,10" VerticalAlignment="Bottom" Height="40" Width="128" Click="Custom_Browse" x:Name="Button_Custom_AddSelectAll"/>
+                    <Button Content="Fetch Offical Packs" HorizontalAlignment="Left" Margin="281,0,0,10" VerticalAlignment="Bottom" Height="40" Width="128" Click="Custom_FetchVox" x:Name="Button_Custom_VoxFetch"/>
+                    <Button Content="Refresh" HorizontalAlignment="Right" Margin="0,0,143,10" VerticalAlignment="Bottom" Height="40" Width="128" Click="Custom_RefreshVox" x:Name="Button_Custom_VoxRefresh"/>
+                    <Button Content="Remove" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Height="40" Width="128" Click="Custom_Remove" x:Name="Button_Custom_RemoveDeselectAll"/>
                 </Grid>
             </hc:TabItem>
 

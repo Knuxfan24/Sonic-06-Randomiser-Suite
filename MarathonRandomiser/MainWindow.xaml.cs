@@ -315,90 +315,126 @@ namespace MarathonRandomiser
         }
 
         /// <summary>
-        /// Opens a File Browser to select one or more custom songs.
+        /// Updates certain buttons on the Custom Tab depending on the selected tab inside it.
         /// </summary>
-        private void CustomMusic_Browse(object sender, EventArgs e)
+        private void Custom_TabChange(object sender, SelectionChangedEventArgs e)
         {
-            VistaOpenFileDialog OpenFileDialog = new()
+            if (TabControl_Custom.SelectedIndex == 3)
             {
-                Title = "Select Songs",
-                Multiselect = true,
-                Filter = "All Types|*.*"
-            };
-
-            // If the selections are valid, add them to the list of text in the custom music textbox.
-            if (OpenFileDialog.ShowDialog() == true)
+                Button_Custom_AddSelectAll.Content = "Select All";
+                Button_Custom_VoxFetch.Visibility = Visibility.Visible;
+                Button_Custom_VoxFetch.IsEnabled = true;
+                Button_Custom_VoxFetch.Content = "Fetch Offical Packs";
+                Button_Custom_VoxRefresh.Content = "Refresh";
+                Button_Custom_RemoveDeselectAll.Content = "Deselect All";
+            }
+            else
             {
-                // Don't erase the box, just add a seperator.
-                if (TextBox_Custom_Music.Text.Length != 0)
-                    TextBox_Custom_Music.Text += "|";
+                Button_Custom_AddSelectAll.Content = "Add";
+                Button_Custom_VoxFetch.Visibility = Visibility.Hidden;
+                Button_Custom_VoxRefresh.Content = "Clear";
+                Button_Custom_RemoveDeselectAll.Content = "Remove";
 
-                // Add selected files to the text box.
-                for (int i = 0; i < OpenFileDialog.FileNames.Length; i++)
-                    TextBox_Custom_Music.Text += $"{OpenFileDialog.FileNames[i]}|";
-
-                // Remove the extra comma added at the end.
-                TextBox_Custom_Music.Text = TextBox_Custom_Music.Text.Remove(TextBox_Custom_Music.Text.LastIndexOf('|'));
+                // Stupid 1 in 1001 chance for the Fetch Offical Packs button to remain visible (but deactivated) and read Pigeon. Why? No reason.
+                if (CheckBox_General_NoFun.IsChecked == false)
+                {
+                    if (Randomiser.Next(0, 1001) == 24)
+                    {
+                        Button_Custom_VoxFetch.Visibility = Visibility.Visible;
+                        Button_Custom_VoxFetch.IsEnabled = false;
+                        Button_Custom_VoxFetch.Content = "Pigeon";
+                    }
+                }
             }
         }
 
         /// <summary>
-        /// Opens a File Browser to select one or more custom voice lines.
+        /// Browses for custom files approriate to the selected tab, or selects all the voice packs.
         /// </summary>
-        private void CustomVoices_Browse(object sender, EventArgs e)
+        /// </summary>
+        private void Custom_Browse(object sender, RoutedEventArgs e)
         {
-            VistaOpenFileDialog OpenFileDialog = new()
+            VistaOpenFileDialog OpenFileDialog = new();
+
+            switch (TabControl_Custom.SelectedIndex)
             {
-                Title = "Select Voice Line Sound Files",
-                Multiselect = true,
-                Filter = "All Types|*.*"
-            };
+                case 0:
+                    OpenFileDialog = new()
+                    {
+                        Title = "Select Songs",
+                        Multiselect = true,
+                        Filter = "All Types|*.*"
+                    };
 
-            // If the selections are valid, add them to the list of text in the custom music textbox.
-            if (OpenFileDialog.ShowDialog() == true)
-            {
-                // Don't erase the box, just add a seperator.
-                if (TextBox_Custom_Voices.Text.Length != 0)
-                    TextBox_Custom_Voices.Text += "|";
+                    // If the selections are valid, add them to the list of custom songs.
+                    if (OpenFileDialog.ShowDialog() == true)
+                        for (int i = 0; i < OpenFileDialog.FileNames.Length; i++)
+                            ListBox_Custom_Music.Items.Add(OpenFileDialog.FileNames[i]);
+                    break;
 
-                // Add selected files to the text box.
-                for (int i = 0; i < OpenFileDialog.FileNames.Length; i++)
-                    TextBox_Custom_Voices.Text += $"{OpenFileDialog.FileNames[i]}|";
+                case 1:
+                    OpenFileDialog = new()
+                    {
+                        Title = "Select Voice Lines",
+                        Multiselect = true,
+                        Filter = "All Types|*.*"
+                    };
 
-                // Remove the extra comma added at the end.
-                TextBox_Custom_Voices.Text = TextBox_Custom_Voices.Text.Remove(TextBox_Custom_Voices.Text.LastIndexOf('|'));
+                    // If the selections are valid, add them to the list of custom voice files.
+                    if (OpenFileDialog.ShowDialog() == true)
+                        for (int i = 0; i < OpenFileDialog.FileNames.Length; i++)
+                            ListBox_Custom_VoiceLines.Items.Add(OpenFileDialog.FileNames[i]);
+                    break;
+
+                case 2:
+                    OpenFileDialog = new()
+                    {
+                        Title = "Select Textures",
+                        Multiselect = true,
+                        Filter = "Supported Types|*.bmp;*.jpg;*.jpeg;*.png;*.dds;*.tga;*.hdr;*.tif;*.tiff;*.wdp;*.hdp;*.jxr;*.ppm;*.pfm|" +
+                                 "BMP|*.bmp|JPEG|*.jpg;*.jpeg|PNG|*.png|DDS|*.dds|TGA|*.tga|HDR|*.hdr|TIFF|*.tif;*.tiff|WDP|*.wdp|HDP|*.hdp|JXR|*.jxr|PPM|*.ppm|PFM|*.pfm"
+                    };
+
+                    // If the selections are valid, add them to the list of custom textures.
+                    if (OpenFileDialog.ShowDialog() == true)
+                        for (int i = 0; i < OpenFileDialog.FileNames.Length; i++)
+                            ListBox_Custom_Textures.Items.Add(OpenFileDialog.FileNames[i]);
+                    break;
+
+                case 3:
+                    CheckedListBox_SelectionToggle(sender, e);
+                    break;
             }
         }
 
         /// <summary>
-        /// Opens a File Browser to select one or more custom songs.
+        /// Clears the custom items on the current tab.
         /// </summary>
-        private void CustomTextures_Browse(object sender, EventArgs e)
+        private void Custom_Remove(object sender, RoutedEventArgs e)
         {
-            VistaOpenFileDialog OpenFileDialog = new()
+            switch (TabControl_Custom.SelectedIndex)
             {
-                Title = "Select Textures",
-                Multiselect = true,
-                Filter = "Supported Types|*.bmp;*.jpg;*.jpeg;*.png;*.dds;*.tga;*.hdr;*.tif;*.tiff;*.wdp;*.hdp;*.jxr;*.ppm;*.pfm|" +
-                "BMP|*.bmp|JPEG|*.jpg;*.jpeg|PNG|*.png|DDS|*.dds|TGA|*.tga|HDR|*.hdr|TIFF|*.tif;*.tiff|WDP|*.wdp|HDP|*.hdp|JXR|*.jxr|PPM|*.ppm|PFM|*.pfm"
-            };
+                case 0:
+                    if (ListBox_Custom_Music.SelectedIndex != -1)
+                        ListBox_Custom_Music.Items.RemoveAt(ListBox_Custom_Music.SelectedIndex);
+                    break;
 
-            // If the selections are valid, add them to the list of text in the custom textures textbox.
-            if (OpenFileDialog.ShowDialog() == true)
-            {
-                // Don't erase the box, just add a seperator.
-                if (TextBox_Custom_Textures.Text.Length != 0)
-                    TextBox_Custom_Textures.Text += "|";
+                case 1:
+                    if (ListBox_Custom_VoiceLines.SelectedIndex != -1)
+                        ListBox_Custom_VoiceLines.Items.RemoveAt(ListBox_Custom_VoiceLines.SelectedIndex);
+                    break;
 
-                // Add selected files to the text box.
-                for (int i = 0; i < OpenFileDialog.FileNames.Length; i++)
-                    TextBox_Custom_Textures.Text += $"{OpenFileDialog.FileNames[i]}|";
+                case 2:
+                    if (ListBox_Custom_Textures.SelectedIndex != -1)
+                        ListBox_Custom_Textures.Items.RemoveAt(ListBox_Custom_Textures.SelectedIndex);
+                    break;
 
-                // Remove the extra comma added at the end.
-                TextBox_Custom_Textures.Text = TextBox_Custom_Textures.Text.Remove(TextBox_Custom_Textures.Text.LastIndexOf('|'));
+                case 3:
+                    CheckedListBox_SelectionToggle(sender, e);
+                    break;
             }
         }
-        
+
         /// <summary>
         /// Downloads my voice packs from GitHub.
         /// </summary>
@@ -439,7 +475,14 @@ namespace MarathonRandomiser
         /// </summary>
         private void Custom_RefreshVox(object sender, RoutedEventArgs e)
         {
-            RefreshVoicePacks();
+            switch (TabControl_Custom.SelectedIndex)
+            {
+                case 0: ListBox_Custom_Music.Items.Clear(); break;
+                case 1: ListBox_Custom_VoiceLines.Items.Clear(); break;
+                case 2: ListBox_Custom_Textures.Items.Clear(); break;
+                case 3: RefreshVoicePacks(); break;
+            }
+
         }
 
         /// <summary>
@@ -1005,10 +1048,9 @@ namespace MarathonRandomiser
 
             // Custom Block.
             configInfo.WriteLine($"[Custom]");
-            configInfo.WriteLine($"TextBox_Custom_Music={TextBox_Custom_Music.Text}");
-            configInfo.WriteLine($"TextBox_Custom_Voices={TextBox_Custom_Voices.Text}");
-            configInfo.WriteLine($"CheckBox_Custom_Audio_XMACache={CheckBox_Custom_Audio_XMACache.IsChecked}");
-            configInfo.WriteLine($"TextBox_Custom_Textures={TextBox_Custom_Textures.Text}");
+            ConfigListBoxRead(configInfo, ListBox_Custom_Music);
+            ConfigListBoxRead(configInfo, ListBox_Custom_VoiceLines);
+            ConfigListBoxRead(configInfo, ListBox_Custom_Textures);
             ConfigCheckedListBoxRead(configInfo, CheckedList_Custom_Vox);
 
             // End Write.
@@ -1043,18 +1085,18 @@ namespace MarathonRandomiser
         /// Reads data from a CheckedListBox element to add to the configuration ini.
         /// </summary>
         /// <param name="configInfo">The StreamWriter from the main save function.</param>
-        /// <param name="listBox">The CheckedListBox to parse.</param>
-        private static void ConfigCheckedListBoxRead(StreamWriter configInfo, CheckedListBox listBox)
+        /// <param name="checkedListBox">The CheckedListBox to parse.</param>
+        private static void ConfigCheckedListBoxRead(StreamWriter configInfo, CheckedListBox checkedListBox)
         {
             // Set up the key.
-            string typeList = $"{listBox.Name}=";
+            string typeList = $"{checkedListBox.Name}=";
 
             // Loop through the CheckedListBox element.
-            for (int i = 0; i < listBox.Items.Count; i++)
+            for (int i = 0; i < checkedListBox.Items.Count; i++)
             {
                 // If this element is checked, add its tag to the list.
-                if (listBox.Items[i].Checked)
-                    typeList += $"{listBox.Items[i].Tag},";
+                if (checkedListBox.Items[i].Checked)
+                    typeList += $"{checkedListBox.Items[i].Tag},";
             }
 
             // Remove the last comma.
@@ -1063,6 +1105,27 @@ namespace MarathonRandomiser
 
             // Write this list to the ini.
             configInfo.WriteLine(typeList);
+        }
+
+        /// <summary>
+        /// Reads data from a ListBox element to add to the configuration ini.
+        /// </summary>
+        /// <param name="configInfo">The StreamWriter from the main save function.</param>
+        /// <param name="listBox">The ListBox to parse.</param>
+        private static void ConfigListBoxRead(StreamWriter configInfo, ListBox listBox)
+        {
+            // Set up the list with the List Box name.
+            string list = $"{listBox.Name}=";
+
+            // Add each item to the list, followed by a | character.
+            foreach (string item in listBox.Items)
+                list += $"{item}|";
+
+            // Remove the last | character.
+            list = list.Remove(list.LastIndexOf('|'));
+
+            // Write the list to the config.
+            configInfo.WriteLine(list);
         }
 
         /// <summary>
@@ -1122,13 +1185,18 @@ namespace MarathonRandomiser
                         Helpers.InvalidateCheckedListBox(checkedlist, true, false);
 
                         foreach(string value in split[1].Split(','))
-                        {
                             foreach (CheckedListBoxItem item in checkedlist.Items)
-                            {
                                 if (item.Tag == value)
                                     item.Checked = true;
-                            }
-                        }
+                    }
+
+                    // If this element is a listbox, clear out the list and add the new items.
+                    if (element is ListBox listbox)
+                    {
+                        listbox.Items.Clear();
+
+                        foreach (string item in split[1].Split('|'))
+                            listbox.Items.Add(item);
                     }
                 }
             }
@@ -1414,9 +1482,18 @@ namespace MarathonRandomiser
 
             List<string> MiscPatches = Helpers.EnumerateCheckedListBox(CheckedList_Misc_Patches);
 
-            string[] CustomMusic = TextBox_Custom_Music.Text.Split('|');
-            string[] CustomVoices = TextBox_Custom_Voices.Text.Split('|');
-            string[] CustomTextures = TextBox_Custom_Textures.Text.Split('|');
+            List<string> CustomMusic = new();
+            foreach (string item in ListBox_Custom_Music.Items)
+                CustomMusic.Add(item);
+
+            List<string> CustomVoices = new();
+            foreach (string item in ListBox_Custom_VoiceLines.Items)
+                CustomVoices.Add(item);
+
+            List<string> CustomTextures = new();
+            foreach (string item in ListBox_Custom_Textures.Items)
+                CustomTextures.Add(item);
+
             List<string> CustomVoxPacks = Helpers.EnumerateCheckedListBox(CheckedList_Custom_Vox);
 
             // Don't do the Custom Audio stuff if we're using a PS3 version
@@ -1425,18 +1502,18 @@ namespace MarathonRandomiser
                 // Wildcard Custom Overrides
                 if (CheckBox_Wildcard_Enable.IsChecked == true)
                 {
-                    if (TextBox_Custom_Music.Text.Length != 0)
+                    if (ListBox_Custom_Music.Items.Count != 0)
                         CheckBox_Audio_Music.IsChecked = true;
 
-                    if (TextBox_Custom_Voices.Text.Length != 0 || CustomVoxPacks.Count > 0)
+                    if (ListBox_Custom_VoiceLines.Items.Count != 0 || CustomVoxPacks.Count > 0)
                         CheckBox_SET_Hints.IsChecked = true;
 
-                    if (TextBox_Custom_Textures.Text.Length != 0)
+                    if (ListBox_Custom_Textures.Items.Count != 0)
                         CheckBox_Textures_Textures.IsChecked = true;
                 }
 
                 // Custom Music
-                if (TextBox_Custom_Music.Text.Length != 0)
+                if (ListBox_Custom_Music.Items.Count != 0)
                 {
                     // Get the status of the XMA Cache Checkbox.
                     bool? EnableCache = CheckBox_Custom_Audio_XMACache.IsChecked;
@@ -1449,7 +1526,7 @@ namespace MarathonRandomiser
                     string songs = "Custom=\"";
 
                     // Loops through the custom songs and process them.
-                    for (int i = 0; i < CustomMusic.Length; i++)
+                    for (int i = 0; i < CustomMusic.Count; i++)
                     {
                         UpdateLogger($"Importing: '{CustomMusic[i]}' as custom music.");
                         await Task.Run(() => Custom.Music(CustomMusic[i], ModDirectory, i, EnableCache));
@@ -1475,15 +1552,15 @@ namespace MarathonRandomiser
                         // Find sound.arc.
                         if (Path.GetFileName(archive).ToLower() == "sound.arc")
                         {
-                            UpdateLogger($"Updating 'bgm.sbk' with {CustomMusic.Length} custom songs.");
+                            UpdateLogger($"Updating 'bgm.sbk' with {CustomMusic.Count} custom songs.");
                             string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
-                            await Task.Run(() => Custom.UpdateBGMSoundBank(unpackedArchive, CustomMusic.Length));
+                            await Task.Run(() => Custom.UpdateBGMSoundBank(unpackedArchive, CustomMusic.Count));
                         }
                     }
                 }
 
                 // Custom Voice Lines
-                if (TextBox_Custom_Voices.Text.Length != 0)
+                if (ListBox_Custom_VoiceLines.Items.Count != 0)
                 {
                     // Get the status of the XMA Cache Checkbox.
                     bool? EnableCache = CheckBox_Custom_Audio_XMACache.IsChecked;
@@ -1493,7 +1570,7 @@ namespace MarathonRandomiser
                     Directory.CreateDirectory($@"{ModDirectory}\xenon\sound\voice\e");
 
                     // Loops through the custom songs and process them.
-                    for (int i = 0; i < CustomVoices.Length; i++)
+                    for (int i = 0; i < CustomVoices.Count; i++)
                     {
                         UpdateLogger($"Importing: '{CustomVoices[i]}' as a custom hint voice line.");
                         await Task.Run(() => Custom.VoiceLines(CustomVoices[i], ModDirectory, i, EnableCache));
@@ -1505,18 +1582,18 @@ namespace MarathonRandomiser
                         // Find sound.arc.
                         if (Path.GetFileName(archive).ToLower() == "sound.arc")
                         {
-                            UpdateLogger($"Updating 'voice_all_e.sbk' with {CustomVoices.Length} custom hint lines.");
+                            UpdateLogger($"Updating 'voice_all_e.sbk' with {CustomVoices.Count} custom hint lines.");
                             string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
-                            await Task.Run(() => Custom.UpdateVoiceTable(unpackedArchive, CustomVoices.Length));
+                            await Task.Run(() => Custom.UpdateVoiceTable(unpackedArchive, CustomVoices.Count));
                         }
 
                         // Find text.arc.
                         if (Path.GetFileName(archive).ToLower() == "text.arc")
                         {
-                            UpdateLogger($"Updating 'msg_hint.e.mst' with {CustomVoices.Length} custom hint lines.");
+                            UpdateLogger($"Updating 'msg_hint.e.mst' with {CustomVoices.Count} custom hint lines.");
                             string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
                             await Task.Run(() => Custom.UpdateVoiceHints(unpackedArchive, CustomVoices));
-                            for (int i = 0; i < CustomVoices.Length; i++)
+                            for (int i = 0; i < CustomVoices.Count; i++)
                             {
                                 SetHints.Add($"hint_custom{i}");
                             }
@@ -1543,12 +1620,12 @@ namespace MarathonRandomiser
 
             // Custom Textures.
             List<string> CustomTextureFiles = new();
-            if (TextBox_Custom_Textures.Text.Length != 0)
+            if (ListBox_Custom_Textures.Items.Count != 0)
             {
                 // Create the temp directory to save converted DDS files into.
                 Directory.CreateDirectory($@"{TemporaryDirectory}\tempDDS");
 
-                for (int i = 0; i < CustomTextures.Length; i++)
+                for (int i = 0; i < CustomTextures.Count; i++)
                 {
                     UpdateLogger($"Importing '{CustomTextures[i]}' as a custom texture.");
                     CustomTextureFiles.Add(await Task.Run(() => Custom.Texture(CustomTextures[i])));
@@ -2123,19 +2200,20 @@ namespace MarathonRandomiser
 
                     List<string> Textures = new();
 
+                    // Fetch all the textures for this archive.
+                    for (int i = 0; i < archivePaths.Count; i++)
+                    {
+                        UpdateLogger($"Getting textures in '{Path.GetFileName(archivePaths[i])}'.");
+                        Textures = await Task.Run(() => TextureRandomiser.FetchTextures(Textures, archivePaths[i]));
+                    }
+
+                    // Drop the Textures list if we're only using custom ones.
+                    if (texturesOnlyCustom == true)
+                        Textures = new();
+
                     // Add our custom textures if we have any.
                     foreach (string custom in CustomTextureFiles)
                         Textures.Add(custom);
-
-                    // If we're not only using custom textures, then fetch all the other textures.
-                    if (texturesOnlyCustom == false)
-                    {
-                        for (int i = 0; i < archivePaths.Count; i++)
-                        {
-                            UpdateLogger($"Getting textures in '{Path.GetFileName(archivePaths[i])}'.");
-                            Textures = await Task.Run(() => TextureRandomiser.FetchTextures(Textures, archivePaths[i]));
-                        }
-                    }
 
                     // Randomise the textures.
                     List<int> usedNumbers = new();

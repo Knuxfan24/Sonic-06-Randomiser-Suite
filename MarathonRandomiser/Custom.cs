@@ -276,13 +276,13 @@ namespace MarathonRandomiser
         /// </summary>
         /// <param name="archivePath">The path to the extracted text.arc</param>
         /// <param name="CustomVoices">The custom files we're adding.</param>
-        public static async Task UpdateVoiceHints(string archivePath, string[] CustomVoices)
+        public static async Task UpdateVoiceHints(string archivePath, List<string> CustomVoices)
         {
             // Load msg_hint.e.mst.
             MessageTable mst = new($@"{archivePath}\xenon\\text\english\msg_hint.e.mst");
 
             // Loop through and create a message entry for each sound with a placeholder string.
-            for (int i = 0; i < CustomVoices.Length; i++)
+            for (int i = 0; i < CustomVoices.Count; i++)
             {
                 Message message = new()
                 {
