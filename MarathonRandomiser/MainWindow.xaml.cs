@@ -1194,13 +1194,14 @@ namespace MarathonRandomiser
                                     item.Checked = true;
                     }
 
-                    // If this element is a listbox, clear out the list and add the new items.
+                    // If this element is a listbox, clear out the list and add the new items (ignore one that's just an empty string).
                     if (element is ListBox listbox)
                     {
                         listbox.Items.Clear();
 
                         foreach (string item in split[1].Split('|'))
-                            listbox.Items.Add(item);
+                            if (item != "")
+                                listbox.Items.Add(item);
                     }
                 }
             }
