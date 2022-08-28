@@ -80,9 +80,13 @@ namespace MarathonRandomiser
             if (!Directory.Exists($@"{Environment.CurrentDirectory}\VoicePacks"))
                 Directory.CreateDirectory($@"{Environment.CurrentDirectory}\VoicePacks");
 
-            // Create the XMA Cache Directory.
-            if (!Directory.Exists($@"{Environment.CurrentDirectory}\Cache\XMA"))
-                Directory.CreateDirectory($@"{Environment.CurrentDirectory}\Cache\XMA");
+            // Create the XMA Music Cache Directory.
+            if (!Directory.Exists($@"{Environment.CurrentDirectory}\Cache\XMA\Music"))
+                Directory.CreateDirectory($@"{Environment.CurrentDirectory}\Cache\XMA\Music");
+
+            // Create the XMA Voice Cache Directory.
+            if (!Directory.Exists($@"{Environment.CurrentDirectory}\Cache\XMA\Voice"))
+                Directory.CreateDirectory($@"{Environment.CurrentDirectory}\Cache\XMA\Voice");
         }
         
         /// <summary>

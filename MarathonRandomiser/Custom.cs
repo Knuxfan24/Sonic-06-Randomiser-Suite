@@ -32,8 +32,8 @@ namespace MarathonRandomiser
             else
             {
                 // Check if this file exists in the XMA Cache and copy it if the cache is enabled.
-                if (File.Exists($@"{Environment.CurrentDirectory}\Cache\XMA\{origName}") && EnableCache == true)
-                    File.Copy($@"{Environment.CurrentDirectory}\Cache\XMA\{origName}", $@"{ModDirectory}\xenon\sound\custom{index}.xma");
+                if (File.Exists($@"{Environment.CurrentDirectory}\Cache\XMA\Music\{origName}") && EnableCache == true)
+                    File.Copy($@"{Environment.CurrentDirectory}\Cache\XMA\Music\{origName}", $@"{ModDirectory}\xenon\sound\Music\custom{index}.xma");
 
                 // If not, then convert it.
                 else
@@ -113,7 +113,7 @@ namespace MarathonRandomiser
 
                     // If the cache is enabled, copy the newly converted file to the XMA cache folder.
                     if (EnableCache == true)
-                        File.Copy($@"{ModDirectory}\xenon\sound\custom{index}.xma", $@"{Environment.CurrentDirectory}\Cache\XMA\{origName}");
+                        File.Copy($@"{ModDirectory}\xenon\sound\custom{index}.xma", $@"{Environment.CurrentDirectory}\Cache\XMA\Music\{origName}");
                 }
             }
         }
@@ -179,8 +179,8 @@ namespace MarathonRandomiser
             else
             {
                 // Check if this file exists in the XMA Cache and copy it if the cache is enabled.
-                if (File.Exists($@"{Environment.CurrentDirectory}\Cache\XMA\{origName}") && EnableCache == true)
-                    File.Copy($@"{Environment.CurrentDirectory}\Cache\XMA\{origName}", $@"{ModDirectory}\xenon\sound\voice\e\custom_hint{index}.xma");
+                if (File.Exists($@"{Environment.CurrentDirectory}\Cache\XMA\Voice\{origName}") && EnableCache == true)
+                    File.Copy($@"{Environment.CurrentDirectory}\Cache\XMA\Voice\{origName}", $@"{ModDirectory}\xenon\sound\voice\e\custom_hint{index}.xma");
 
                 // If not, then convert it.
                 else
@@ -224,7 +224,7 @@ namespace MarathonRandomiser
 
                     // If the cache is enabled, copy the newly converted file to the XMA cache folder.
                     if (EnableCache == true)
-                        File.Copy($@"{ModDirectory}\xenon\sound\voice\e\custom_hint{index}.xma", $@"{Environment.CurrentDirectory}\Cache\XMA\{origName}");
+                        File.Copy($@"{ModDirectory}\xenon\sound\voice\e\custom_hint{index}.xma", $@"{Environment.CurrentDirectory}\Cache\XMA\Voice\{origName}");
                 }
             }
 
