@@ -636,8 +636,8 @@ namespace MarathonRandomiser
                     CheckBox_Anim_Framerate_NoLights.IsEnabled = NewCheckedStatus;
                     break;
                 case "CheckBox_Anim_EventTPose":
-                    Label_Anim_EventTPose_Chance.IsEnabled = NewCheckedStatus;
-                    NumericUpDown_Anim_EventTPose_Chance.IsEnabled = NewCheckedStatus;
+                    Label_Anim_TPose_Chance.IsEnabled = NewCheckedStatus;
+                    NumericUpDown_Anim_TPose_Chance.IsEnabled = NewCheckedStatus;
                     break;
 
                 case "CheckBox_Models_MaterialColour":
@@ -2014,8 +2014,8 @@ namespace MarathonRandomiser
             int animMinFramerate = (int)NumericUpDown_Anim_Framerate_Min.Value;
             int animMaxFramerate = (int)NumericUpDown_Anim_Framerate_Max.Value;
             bool? animFramerateNoLights = CheckBox_Anim_Framerate_NoLights.IsChecked;
-            bool? animEventTPose = CheckBox_Anim_EventTPose.IsChecked;
-            int animEventTPoseChance = (int)NumericUpDown_Anim_EventTPose_Chance.Value;
+            bool? animEventTPose = CheckBox_Anim_TPose.IsChecked;
+            int animEventTPoseChance = (int)NumericUpDown_Anim_TPose_Chance.Value;
 
             // Gameplay.
             if (animGameplay == true)
@@ -2119,17 +2119,17 @@ namespace MarathonRandomiser
                 }
             }
 
-            // Event T-Posing.
+            // Animation T-Posing.
             if (animEventTPose == true)
             {
+                UpdateLogger($"Asserting dominance.");
                 foreach (string archive in archives)
                 {
-                    if (Path.GetFileName(archive).ToLower() == "event_data.arc")
+                    if (Path.GetFileName(archive).ToLower() == "event_data.arc" || archive.ToLower().Contains("player_"))
                     {
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
 
-                        UpdateLogger($"Asserting dominance.");
-                        await Task.Run(() => AnimationRandomiser.RemoveEventAnimations(unpackedArchive, animEventTPoseChance));
+                        await Task.Run(() => AnimationRandomiser.AssertDominance(unpackedArchive, animEventTPoseChance));
                     }
                 }
             }

@@ -255,9 +255,9 @@
                         <Label x:Name="Label_Anim_Framerate_Max" Content="Maximum:" Background="{x:Null}" BorderBrush="{x:Null}" IsEnabled="False"/>
                         <hc:NumericUpDown x:Name="NumericUpDown_Anim_Framerate_Max" Value="300" SelectionBrush="#FFB146C2" IsEnabled="False" Minimum="1"/>
                         <CheckBox x:Name="CheckBox_Anim_Framerate_NoLights" Content="Exclude Lights" IsChecked="True" IsEnabled="False" Click="Dependency_CheckBox_Changed"/>
-                        <CheckBox x:Name="CheckBox_Anim_EventTPose" Content="Remove Event Animations" Click="Dependency_CheckBox_Changed"/>
-                        <Label x:Name="Label_Anim_EventTPose_Chance" Content="Chance:" Background="{x:Null}" BorderBrush="{x:Null}" IsEnabled="False"/>
-                        <hc:NumericUpDown x:Name="NumericUpDown_Anim_EventTPose_Chance" Minimum="1" Maximum="100" Value="25" Margin="10,0,10,0" SelectionBrush="#FFB146C2" IsEnabled="False"/>
+                        <CheckBox x:Name="CheckBox_Anim_TPose" Content="T-Pose Animations" Click="Dependency_CheckBox_Changed"/>
+                        <Label x:Name="Label_Anim_TPose_Chance" Content="Chance:" Background="{x:Null}" BorderBrush="{x:Null}" IsEnabled="False"/>
+                        <hc:NumericUpDown x:Name="NumericUpDown_Anim_TPose_Chance" Minimum="1" Maximum="100" Value="50" Margin="10,0,10,0" SelectionBrush="#FFB146C2" IsEnabled="False"/>
                     </StackPanel>
                 </Grid>
             </hc:TabItem>

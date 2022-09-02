@@ -220,16 +220,21 @@ namespace MarathonRandomiser
         /// </summary>
         /// <param name="archivePath">The path to the extracted event_data.arc.</param>
         /// <param name="chance">How likely it is for the randomiser to actually erase this XNM's animations.</param>
-        public static async Task RemoveEventAnimations(string archivePath, int chance)
+        public static async Task AssertDominance(string archivePath, int chance)
         {
+            // Get the XNM files, if we're processing event_data.arc, then only get ones with a _Root name.
+            string[] xnmFiles = Directory.GetFiles(archivePath, "*.xnm", SearchOption.AllDirectories);
+            if (archivePath.Contains("event_data"))
+                xnmFiles = Directory.GetFiles(archivePath, "*_Root.xnm", SearchOption.AllDirectories);
+
             // Loop through each XNM.
-            foreach (string XNMFile in Directory.GetFiles(archivePath, "*_Root.xnm", SearchOption.AllDirectories))
+            foreach (string xnmFile in xnmFiles)
             {
                 // Check if the randomiesr generates a number lower than or equal to our chance number. Continue if it does.
                 if (MainWindow.Randomiser.Next(0, 101) <= chance)
                 {
                     // Load the XNM.
-                    NinjaNext xnm = new(XNMFile);
+                    NinjaNext xnm = new(xnmFile);
 
                     // Loop backwards through the submotions and remove ones that aren't animating Node 0, 1 or 2.
                     for (int i = xnm.Data.Motion.SubMotions.Count - 1; i >= 0; i--)
