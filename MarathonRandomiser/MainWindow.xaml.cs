@@ -596,6 +596,14 @@ namespace MarathonRandomiser
                     Label_SET_Jumpboards_Chance.IsEnabled = NewCheckedStatus;
                     NumericUpDown_SET_Jumpboards_Chance.IsEnabled = NewCheckedStatus;
                     break;
+                case "CheckBox_SET_PlacementShuffle":
+                    CheckBox_SET_DoubleTrouble.IsEnabled = !NewCheckedStatus;
+                    CheckBox_SET_DoubleTrouble.IsChecked = false;
+                    break;
+                case "CheckBox_SET_DoubleTrouble":
+                    CheckBox_SET_PlacementShuffle.IsEnabled = !NewCheckedStatus;
+                    CheckBox_SET_PlacementShuffle.IsChecked = false;
+                    break;
 
                 case "CheckBox_Event_Voices":
                     CheckBox_Event_Voices_Japanese.IsEnabled = NewCheckedStatus;
@@ -1766,10 +1774,11 @@ namespace MarathonRandomiser
             int setMaxDrawDistance = (int)NumericUpDown_SET_DrawDistance_Max.Value;
             int setJumpboardsChance = (int)NumericUpDown_SET_Jumpboards_Chance.Value;
             bool? setTransform = CheckBox_SET_PlacementShuffle.IsChecked;
+            bool? setDoubleTrouble = CheckBox_SET_DoubleTrouble.IsChecked;
 
             // Check if we actually need to do SET stuff.
             if (setEnemies == true || setBehaviour == true || setCharacters == true || setItemCapsules == true || setCommonProps == true || setPathProps == true || setHints == true || setDoors == true||
-                setDrawDistance == true || setCosmetic == true || setParticles == true || setJumpboards == true || setTransform == true)
+                setDrawDistance == true || setCosmetic == true || setParticles == true || setJumpboards == true || setTransform == true || setDoubleTrouble == true)
             {
                 foreach (string archive in archives)
                 {
@@ -1784,7 +1793,7 @@ namespace MarathonRandomiser
                             await Task.Run(() => ObjectPlacementRandomiser.Process(setFile, setEnemies, setEnemiesNoBosses, setBehaviour, setBehaviourNoEnforce, setCharacters, setItemCapsules,
                                                                                    setCommonProps, setPathProps, setHints, setDoors, setDrawDistance, setCosmetic, setParticles, setJumpboards, SetEnemies,
                                                                                    SetCharacters, SetItemCapsules, SetCommonProps, SetPathProps, SetHints, SetDoors, SetParticleBanks, setMinDrawDistance,
-                                                                                   setMaxDrawDistance, setJumpboardsChance, setTransform, SetShuffleBlacklist));
+                                                                                   setMaxDrawDistance, setJumpboardsChance, setTransform, SetShuffleBlacklist, setDoubleTrouble));
                         }
 
                         // Patch enemy luas if they need patching.

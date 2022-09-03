@@ -6,6 +6,9 @@ namespace MarathonRandomiser
 {
     internal class ObjectPlacementRandomiser
     {
+        // Set up a list of duplicated enemy objects.
+        private static List<SetObject> DuplicatedEnemies = new();
+
         /// <summary>
         /// Process and randomise elements in a set file.
         /// </summary>
@@ -40,13 +43,21 @@ namespace MarathonRandomiser
         public static async Task Process(string setFile, bool? enemies, bool? enemiesNoBosses, bool? behaviour, bool? behaviourNoEnforce, bool? characters, bool? itemCapsules, bool? commonProps,
                                       bool? pathProps, bool? hints, bool? doors, bool? drawDistance, bool? cosmetic, bool? particle, bool? jumpboards, List<string> SetEnemies,
                                       List<string> SetCharacters, List<string> SetItemCapsules, List<string> SetCommonProps, List<string> SetPathProps, List<string> SetHints, List<string> SetDoors,
-                                      List<string> SetParticleBanks, int minDrawDistance, int maxDrawDistance, int jumpboardChance, bool? shuffleTransform, List<string> shuffleBlacklist)
+                                      List<string> SetParticleBanks, int minDrawDistance, int maxDrawDistance, int jumpboardChance, bool? shuffleTransform, List<string> shuffleBlacklist,
+                                      bool? doubleTrouble)
         {
+            // Clear the enemy list.
+            DuplicatedEnemies.Clear();
+
+            // Set up position and rotation lists for the object shuffler.
             List<Vector3> Positions = new();
             List<Quaternion> Rotations = new();
 
             // Load this set file.
             using ObjectPlacement set = new(setFile);
+
+            // Set up the index of the object we're working with.
+            int objectIndex = 0;
 
             // Loop through all the objects in this set file.
             foreach (SetObject setObject in set.Data.Objects)
@@ -73,13 +84,15 @@ namespace MarathonRandomiser
                 // Check this object's type to see if we need to do anything with it.
                 switch (setObject.Type)
                 {
-                    // Randomise enemy types and/or their behaviours if we need to.
+                    // Randomise enemy types and/or their behaviours and/or dupe them if we need to.
                     case "enemy":
                     case "enemyextra":
                         if (enemies == true)
                             await Task.Run(() => EnemyTypeRandomiser(setObject, SetEnemies, enemiesNoBosses));
                         if (behaviour == true)
                             await Task.Run(() => EnemyBehaviourRandomiser(setObject, behaviourNoEnforce, enemiesNoBosses));
+                        if (doubleTrouble == true)
+                            await Task.Run(() => DuplicateEnemy(set, setObject, objectIndex));
                         break;
 
                     // Randomise character types if we need to.
@@ -141,6 +154,8 @@ namespace MarathonRandomiser
 
                 }
 
+                // Increment objectIndex.
+                objectIndex++;
             }
 
             // If we're using this cursed option, then shuffle positions and rotations around.
@@ -218,6 +233,10 @@ namespace MarathonRandomiser
                     }
                 }
             }
+
+            // Add our duplicated enemies to the SET.
+            foreach (SetObject duplicatedEnemy in DuplicatedEnemies)
+                set.Data.Objects.Add(duplicatedEnemy);
 
             // Save the updated set file.
             set.Save();
@@ -426,6 +445,47 @@ namespace MarathonRandomiser
                 // Pick a random parameter from the list to use on this enemy.
                 setObject.Parameters[2].Data = Parameters[MainWindow.Randomiser.Next(Parameters.Count)];
             }
+        }
+
+        static async Task DuplicateEnemy(ObjectPlacement set, SetObject setObject, int objectIndex)
+        {
+            // Don't dupe the Egg Wyvern, as the boss completely breaks.
+            if (setObject.Parameters[0].Data.ToString() == "eWyvern")
+                return;
+
+            // Create our duplicated enemy.
+            SetObject newSetObject = new()
+            {
+                Name = $"{setObject.Name}_dupe",
+                Type = setObject.Type,
+                StartInactive = setObject.StartInactive,
+                DrawDistance = setObject.DrawDistance,
+                Rotation = setObject.Rotation,
+                Parameters = setObject.Parameters
+            };
+
+            // Offset the object positions.
+            if (setObject.Parameters[0].Data.ToString() != "eCerberus" && setObject.Parameters[0].Data.ToString() != "eGenesis" &&
+                setObject.Parameters[0].Data.ToString() != "firstiblis" && setObject.Parameters[0].Data.ToString() != "secondiblis" && setObject.Parameters[0].Data.ToString() != "thirdiblis" &&
+                setObject.Parameters[0].Data.ToString() != "firstmefiress" && setObject.Parameters[0].Data.ToString() != "secondmefiress" && setObject.Parameters[0].Data.ToString() != "kyozoress" &&
+                setObject.Parameters[0].Data.ToString() != "solaris01" && setObject.Parameters[0].Data.ToString() != "solaris02")
+            {
+                setObject.Position = new(setObject.Position.X + 250, setObject.Position.Y, setObject.Position.Z + 250);
+                newSetObject.Position = new(setObject.Position.X - 250, setObject.Position.Y, setObject.Position.Z - 250);
+            }
+            else
+            {
+                setObject.Position = new(setObject.Position.X + 1500, setObject.Position.Y, setObject.Position.Z + 1500);
+                newSetObject.Position = new(setObject.Position.X - 1500, setObject.Position.Y, setObject.Position.Z - 1500);
+            }
+
+            // Update any groups that use the original enemy.
+            foreach (var group in set.Data.Groups)
+                if (group.Objects.Contains((ulong)objectIndex))
+                    group.Objects.Add((ulong)(set.Data.Objects.Count + DuplicatedEnemies.Count));
+
+            // Add this object to the list of objects to add in after the rest of the randomisation.
+            DuplicatedEnemies.Add(newSetObject);
         }
 
         /// <summary>
