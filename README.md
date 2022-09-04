@@ -47,6 +47,8 @@ Randomisation of various elements within '06's Object Placement (.set) files, th
 
 * Shuffling object positions
 
+* Duplicating enemies
+
 A lot of the Object Placement features can be further randomised, see the Wiki for more information.
 
 ### Event Randomisation
@@ -87,7 +89,17 @@ Randomisation of various values within the game's scene lua binaries (.lub) file
 
 <img src="https://raw.githubusercontent.com/wiki/Knuxfan24/Sonic-06-Randomiser-Suite/images/tab_animations.png">
 
-Shuffling of both Gameplay and Event Animations, as well as Event Cameras; alongside being able to change the framerate of all Ninja Animations.
+Randomisation of various animation elements, such as:
+
+* Shuffling animations between states.
+
+* Shuffling animations between cutscenes.
+
+* Shuffling cameras between cutscenes.
+
+* Randomising the framerate of animations.
+
+* T-Posing animations.
 
 ### Model Randomisation
 
@@ -161,7 +173,7 @@ Randomisation of miscellaneous elements across one off files, these are:
 
 Allows the user to add custom elements to the Randomisation, these being:
 
-* Custom Music, supporting basically any format that [vgmstream](https://github.com/vgmstream/vgmstream) can convert.
+* Custom Music and Hint Voice Lines, supporting basically any format that [vgmstream](https://github.com/vgmstream/vgmstream) can convert.
 
 * Textures
 
