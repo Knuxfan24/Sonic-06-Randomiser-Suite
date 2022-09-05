@@ -688,6 +688,12 @@ namespace MarathonRandomiser
                     NumericUpDown_Misc_EnemyHealth_Max.IsEnabled = NewCheckedStatus;
                     CheckBox_Misc_EnemyHealth_Bosses.IsEnabled = NewCheckedStatus;
                     break;
+                case "CheckBox_Misc_EnemyWaitTimers":
+                    Label_Misc_EnemyWaitTimers_Min.IsEnabled = NewCheckedStatus;
+                    NumericUpDown_Misc_EnemyWaitTimers_Min.IsEnabled = NewCheckedStatus;
+                    Label_Misc_EnemyWaitTimers_Max.IsEnabled = NewCheckedStatus;
+                    NumericUpDown_Misc_EnemyWaitTimers_Max.IsEnabled = NewCheckedStatus;
+                    break;
                 case "CheckBox_Misc_PropPSIBehaviour":
                     CheckBox_Misc_PropPSIBehaviour_NoGrab.IsEnabled = NewCheckedStatus;
                     CheckBox_Misc_PropPSIBehaviour_NoDebris.IsEnabled = NewCheckedStatus;
@@ -2549,6 +2555,9 @@ namespace MarathonRandomiser
             bool? miscEnemyHealthBosses = CheckBox_Misc_EnemyHealth_Bosses.IsChecked;
             int miscEnemyHealthMin = (int)NumericUpDown_Misc_EnemyHealth_Min.Value;
             int miscEnemyHealthMax = (int)NumericUpDown_Misc_EnemyHealth_Max.Value;
+            bool? miscEnemyWaitTimers = CheckBox_Misc_EnemyWaitTimers.IsChecked;
+            double miscEnemyWaitTimersMin = NumericUpDown_Misc_EnemyWaitTimers_Min.Value;
+            double miscEnemyWaitTimersMax = NumericUpDown_Misc_EnemyWaitTimers_Max.Value;
             bool? miscCollision = CheckBox_Misc_Collision.IsChecked;
             bool? miscCollisionPerFace = CheckBox_Misc_Collision_PerFace.IsChecked;
             bool? miscPatches = CheckBox_Misc_Patches.IsChecked;
@@ -2569,6 +2578,27 @@ namespace MarathonRandomiser
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
                         UpdateLogger($"Randomising enemy health values.");
                         await Task.Run(() => MiscellaneousRandomisers.EnemyHealthRandomiser(unpackedArchive, corePath, miscEnemyHealthMin, miscEnemyHealthMax, miscEnemyHealthBosses));
+                    }
+                }
+            }
+
+            // Check if we need to actually do enemy wait timer randomisation.
+            if (miscEnemyWaitTimers == true)
+            {
+                foreach (string archive in archives)
+                {
+                    if (Path.GetFileName(archive).ToLower() == "scripts.arc")
+                    {
+                        string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+                        foreach (string luaFile in Directory.GetFiles($"{unpackedArchive}\\{corePath}\\scripts\\enemy", "*.lub", SearchOption.TopDirectoryOnly))
+                        {
+                            // Skip Mephiles Phase 2 for patching as decompiling his Lua breaks the fight and Mephiles Phase 1 crashes with these edits.
+                            if (Path.GetFileNameWithoutExtension(luaFile) != "firstmefiress" || Path.GetFileNameWithoutExtension(luaFile) != "secondmefiress")
+                            {
+                                UpdateLogger($"Randomising wait timers in '{luaFile}'.");
+                                await Task.Run(() => MiscellaneousRandomisers.RandomiseEnemyWaitTimes(luaFile, miscEnemyWaitTimersMin, miscEnemyWaitTimersMax));
+                            }
+                        }
                     }
                 }
             }

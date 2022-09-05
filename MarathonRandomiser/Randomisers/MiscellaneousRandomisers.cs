@@ -4,7 +4,6 @@ using Marathon.Formats.Package;
 using Marathon.Formats.Text;
 using Marathon.Helpers;
 using Marathon.IO;
-using Marathon.IO.Interfaces;
 using System.Linq;
 
 namespace MarathonRandomiser
@@ -1037,6 +1036,43 @@ namespace MarathonRandomiser
 
                 luaInfo.Close();
             }
+        }
+
+        public static async Task RandomiseEnemyWaitTimes(string luaFile, double min, double max)
+        {
+            // replace shit with math.random() + math.random(min, max)
+            // Decompile this lua file.
+            await Task.Run(() => Helpers.LuaDecompile(luaFile));
+
+            // Read the decompiled lua file into a string array.
+            string[] lua = File.ReadAllLines(luaFile);
+
+            for (int i = 0; i < lua.Length; i++)
+            {
+                if (lua[i].Contains("DeathBallWaitTime = ") || lua[i].Contains("HoldExplosionWaitTime =") || lua[i].Contains("FootBrokenWait ="))
+                {
+                    string[] split = lua[i].Split("= ");
+                    split[1] = $"math.random() + math.random({min}, {max}),";
+                    lua[i] = string.Join("= ", split);
+                }
+
+                if (lua[i].Contains("WaitFixed") || lua[i].Contains("WaitLevel") || lua[i].Contains("WaitRotate"))
+                {
+                    string[] split = lua[i].Split(", ");
+                    split[1] = $"math.random() + math.random({min}, {max}))";
+                    lua[i] = string.Join(", ", split);
+                }
+
+                if (lua[i].Contains("WaitPosAdjustment"))
+                {
+                    string[] split = lua[i].Split(", ");
+                    split[4] = $"math.random() + math.random({min}, {max}))";
+                    lua[i] = string.Join(", ", split);
+                }
+            }
+
+            // Save the updated lua binary.
+            File.WriteAllLines(luaFile, lua);
         }
     }
 }

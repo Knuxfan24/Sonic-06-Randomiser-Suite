@@ -7,7 +7,7 @@
         xmlns:hc="https://handyorg.github.io/handycontrol"
         x:Class="MarathonRandomiser.MainWindow"
         mc:Ignorable="d"
-        Title="Sonic '06 Randomiser Suite" Height="736" Width="1520" MinHeight="736" MinWidth="1520">
+        Title="Sonic '06 Randomiser Suite" Height="750" Width="1520" MinHeight="750" MinWidth="1520">
     <Grid Background="#FF181818">
         <hc:TabControl Style="{StaticResource TabControlInLine}" Margin="0,0,0,50" x:Name="TabControl_Main">
             <!--General Tab-->
@@ -435,10 +435,15 @@
                         </StackPanel.Resources>
                         <CheckBox x:Name="CheckBox_Misc_EnemyHealth" Content="Randomise Enemy Health" Foreground="Firebrick" Click="Dependency_CheckBox_Changed"/>
                         <Label x:Name="Label_Misc_EnemyHealth_Min" Content="Minimum:" Background="{x:Null}" BorderBrush="{x:Null}" IsEnabled="False"/>
-                        <hc:NumericUpDown x:Name="NumericUpDown_Misc_EnemyHealth_Min" Value="1" Margin="10,0,10,0" SelectionBrush="#FFB146C2" IsEnabled="False"/>
+                        <hc:NumericUpDown x:Name="NumericUpDown_Misc_EnemyHealth_Min" Value="1" Margin="10,0,10,0" SelectionBrush="#FFB146C2" IsEnabled="False" Minimum="1"/>
                         <Label x:Name="Label_Misc_EnemyHealth_Max" Content="Maximum:" Background="{x:Null}" BorderBrush="{x:Null}" IsEnabled="False"/>
-                        <hc:NumericUpDown x:Name="NumericUpDown_Misc_EnemyHealth_Max" Value="4" Margin="10,0,10,0" SelectionBrush="#FFB146C2" IsEnabled="False"/>
+                        <hc:NumericUpDown x:Name="NumericUpDown_Misc_EnemyHealth_Max" Value="4" Margin="10,0,10,0" SelectionBrush="#FFB146C2" IsEnabled="False" Minimum="1"/>
                         <CheckBox x:Name="CheckBox_Misc_EnemyHealth_Bosses" Content="Include Bosses" Foreground="Firebrick" IsEnabled="False"/>
+                        <CheckBox x:Name="CheckBox_Misc_EnemyWaitTimers" Content="Randomise Enemy Wait Times" Click="Dependency_CheckBox_Changed"/>
+                        <Label x:Name="Label_Misc_EnemyWaitTimers_Min" Content="Minimum:" Background="{x:Null}" BorderBrush="{x:Null}" IsEnabled="False"/>
+                        <hc:NumericUpDown x:Name="NumericUpDown_Misc_EnemyWaitTimers_Min" Value="0.5" Margin="10,0,10,0" SelectionBrush="#FFB146C2" IsEnabled="False" Increment="0.1" Minimum="0" DecimalPlaces="2"/>
+                        <Label x:Name="Label_Misc_EnemyWaitTimers_Max" Content="Maximum:" Background="{x:Null}" BorderBrush="{x:Null}" IsEnabled="False"/>
+                        <hc:NumericUpDown x:Name="NumericUpDown_Misc_EnemyWaitTimers_Max" Value="5" Margin="10,0,10,0" SelectionBrush="#FFB146C2" IsEnabled="False" Increment="0.1" Minimum="0" DecimalPlaces="2"/>
                         <CheckBox x:Name="CheckBox_Misc_Collision" Content="Randomise Surface Types" IsChecked="True" Click="Dependency_CheckBox_Changed"/>
                         <CheckBox x:Name="CheckBox_Misc_Collision_PerFace" Content="Randomise Per Face" IsChecked="True"/>
                         <CheckBox x:Name="CheckBox_Misc_Patches" Content="Use Random Patches" Foreground="Firebrick" Click="Dependency_CheckBox_Changed"/>
