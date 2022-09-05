@@ -33,7 +33,7 @@ namespace MarathonRandomiser
             {
                 // Check if this file exists in the XMA Cache and copy it if the cache is enabled.
                 if (File.Exists($@"{Environment.CurrentDirectory}\Cache\XMA\Music\{origName}") && EnableCache == true)
-                    File.Copy($@"{Environment.CurrentDirectory}\Cache\XMA\Music\{origName}", $@"{ModDirectory}\xenon\sound\Music\custom{index}.xma");
+                    File.Copy($@"{Environment.CurrentDirectory}\Cache\XMA\Music\{origName}", $@"{ModDirectory}\xenon\sound\custom{index}.xma");
 
                 // If not, then convert it.
                 else
