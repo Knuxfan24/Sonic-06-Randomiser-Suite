@@ -7,7 +7,7 @@
         xmlns:hc="https://handyorg.github.io/handycontrol"
         x:Class="MarathonRandomiser.MainWindow"
         mc:Ignorable="d"
-        Title="Sonic '06 Randomiser Suite" Height="750" Width="1520" MinHeight="750" MinWidth="1520">
+        Title="Sonic '06 Randomiser Suite" Height="750" Width="1750" MinHeight="750" MinWidth="1750">
     <Grid Background="#FF181818">
         <hc:TabControl Style="{StaticResource TabControlInLine}" Margin="0,0,0,50" x:Name="TabControl_Main">
             <!--General Tab-->
@@ -421,6 +421,65 @@
                     </StackPanel>
                 </Grid>
             </hc:TabItem>
+            
+            <!--Random Episode Tab-->
+            <hc:TabItem Header="Generated Episode" BorderBrush="#B146C2" >
+                <Grid Background="#FF181818" Name="Grid_Episode">
+                    <!--Random Episode Configuration Checkboxes/Controls-->
+                    <StackPanel HorizontalAlignment="Left" Width="210" Name="StackPanel_Episode">
+                        <StackPanel.Resources>
+                            <Style BasedOn="{StaticResource CheckBoxBaseStyle}" TargetType="{x:Type CheckBox}">
+                                <Setter Property="Margin" Value="10,10,0,0" />
+                                <Setter Property="HorizontalAlignment" Value="Left"/>
+                            </Style>
+                        </StackPanel.Resources>
+                        <CheckBox x:Name="CheckBox_Episode_Generate" Content="Generate Random Episode"/>
+                        <CheckBox x:Name="CheckBox_Episode_TownMissions" Content="Include Town Missions"/>
+                        <Label x:Name="Label_Episode_TownMissionCount" Content="Amount:" Background="{x:Null}" BorderBrush="{x:Null}"/>
+                        <hc:NumericUpDown x:Name="NumericUpDown_Episode_TownMissionCount" Margin="10,0,10,0" SelectionBrush="#FFB146C2" Increment="1" Minimum="1" Maximum="53" Value="53"/>
+                        <CheckBox x:Name="CheckBox_Episode_SonicVH" Content="Enable Very Hard ~ Sonic"/>
+                        <CheckBox x:Name="CheckBox_Episode_ShadowVH" Content="Enable Very Hard ~ Shadow"/>
+                        <CheckBox x:Name="CheckBox_Episode_SilverVH" Content="Enable Very Hard ~ Silver"/>
+                    </StackPanel>
+                    
+                    <hc:TabControl Style="{StaticResource TabControlInLine}" Margin="210,0,0,60" HorizontalAlignment="Stretch" Name="TabControl_Episode">
+                        <hc:TabItem Header="Very Hard DLC Paths" BorderBrush="#B146C2">
+                            <Grid>
+                                <!--Very Hard Mode ~ Sonic-->
+                                <Label x:Name="Label_Misc_SonicVHLocation" Content="Very Hard Mode ~ Sonic" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}"/>
+                                <Label x:Name="Label_Misc_SonicVHLocation_Desc" Content="The .arc file containing the content for Sonic's Very Hard Mode." HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" FontStyle="Italic">
+                                    <Label.Foreground>
+                                        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlDarkColorKey}}"/>
+                                    </Label.Foreground>
+                                </Label>
+                                <hc:TextBox x:Name="TextBox_Episode_SonicVHLocation" Margin="10,40,53,0" TextWrapping="NoWrap" VerticalAlignment="Top" SelectionBrush="#FFB146C2" TextChanged="SonicVHLocation_Update"/>
+                                <Button x:Name="Button_Misc_SonicVHLocation_Browse" HorizontalAlignment="Right" Margin="0,40,10,0" VerticalAlignment="Top" hc:IconElement.Geometry="{StaticResource DragHorizontalGeometry}" Width="38" Click="SonicVHLocation_Browse"/>
+
+                                <!--Very Hard Mode ~ Shadow-->
+                                <Label x:Name="Label_Misc_ShadowVHLocation" Content="Very Hard Mode ~ Shadow" HorizontalAlignment="Left" Margin="10,80,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}"/>
+                                <Label x:Name="Label_Misc_ShadowVHLocation_Desc" Content="The .arc file containing the content for Shadow's Very Hard Mode." HorizontalAlignment="Right" Margin="0,80,10,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" FontStyle="Italic">
+                                    <Label.Foreground>
+                                        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlDarkColorKey}}"/>
+                                    </Label.Foreground>
+                                </Label>
+                                <hc:TextBox x:Name="TextBox_Episode_ShadowVHLocation" Margin="10,115,53,0" TextWrapping="NoWrap" VerticalAlignment="Top" SelectionBrush="#FFB146C2" TextChanged="ShadowVHLocation_Update"/>
+                                <Button x:Name="Button_Misc_ShadowVHLocation_Browse" HorizontalAlignment="Right" Margin="0,115,10,0" VerticalAlignment="Top" hc:IconElement.Geometry="{StaticResource DragHorizontalGeometry}" Width="38" Click="ShadowVHLocation_Browse"/>
+
+                                <!--Very Hard Mode ~ Silver-->
+                                <Label x:Name="Label_Misc_SilverVHLocation" Content="Very Hard Mode ~ Silver" HorizontalAlignment="Left" Margin="10,150,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}"/>
+                                <Label x:Name="Label_Misc_SilverVHLocation_Desc" Content="The .arc file containing the content for Silver's Very Hard Mode." HorizontalAlignment="Right" Margin="0,150,10,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" FontStyle="Italic">
+                                    <Label.Foreground>
+                                        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlDarkColorKey}}"/>
+                                    </Label.Foreground>
+                                </Label>
+                                <hc:TextBox x:Name="TextBox_Episode_SilverVHLocation" Margin="10,185,53,0" TextWrapping="NoWrap" VerticalAlignment="Top" SelectionBrush="#FFB146C2" TextChanged="SilverVHLocation_Update"/>
+                                <Button x:Name="Button_Misc_SilverVHLocation_Browse" HorizontalAlignment="Right" Margin="0,185,10,0" VerticalAlignment="Top" hc:IconElement.Geometry="{StaticResource DragHorizontalGeometry}" Width="38" Click="SilverVHLocation_Browse"/>
+
+                            </Grid>
+                        </hc:TabItem>
+                    </hc:TabControl>
+                </Grid>
+            </hc:TabItem>
 
             <!--Miscellaneous Tab-->
             <hc:TabItem Header="Miscellaneous" BorderBrush="#B146C2" x:Name="TabItem_Misc" >
@@ -454,7 +513,6 @@
                         <CheckBox x:Name="CheckBox_Misc_PropPSIBehaviour_NoGrab" Content="Don't Disable Grabbing" IsEnabled="False"/>
                         <CheckBox x:Name="CheckBox_Misc_PropPSIBehaviour_NoDebris" Content="Ignore Debris" IsEnabled="False"/>
                         <CheckBox x:Name="CheckBox_Misc_PropDebris" Content="Randomise Prop Debris"/>
-                        <CheckBox x:Name="CheckBox_Misc_RandomEpisode" Content="Generate Random Episode"/>
                     </StackPanel>
 
                     <!--Miscellaneous Configuration Toggles-->
@@ -464,43 +522,6 @@
                         <hc:TabItem Header="Patches" BorderBrush="#B146C2">
                             <Grid>
                                 <local:CheckedListBox x:Name="CheckedList_Misc_Patches" MultiColumn="True" Margin="0,0,0,0"/>
-                            </Grid>
-                        </hc:TabItem>
-                        <hc:TabItem Header="Random Episode DLC" BorderBrush="#B146C2">
-                            <Grid>
-                                <!--Very Hard Mode ~ Sonic-->
-                                <Label x:Name="Label_Misc_SonicVHLocation" Content="Very Hard Mode ~ Sonic" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}"/>
-                                <Label x:Name="Label_Misc_SonicVHLocation_Desc" Content="The .arc file containing the content for Sonic's Very Hard Mode." HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" FontStyle="Italic">
-                                    <Label.Foreground>
-                                        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlDarkColorKey}}"/>
-                                    </Label.Foreground>
-                                </Label>
-                                <hc:TextBox x:Name="TextBox_Misc_SonicVHLocation" Margin="10,40,53,0" TextWrapping="NoWrap" VerticalAlignment="Top" SelectionBrush="#FFB146C2" TextChanged="SonicVHLocation_Update"/>
-                                <Button x:Name="Button_Misc_SonicVHLocation_Browse" HorizontalAlignment="Right" Margin="0,40,10,0" VerticalAlignment="Top" hc:IconElement.Geometry="{StaticResource DragHorizontalGeometry}" Width="38" Click="SonicVHLocation_Browse"/>
-                                <CheckBox x:Name="CheckBox_Misc_SonicVH" Content="Enable Very Hard Mode ~ Sonic" Margin="10,75,10,0" VerticalAlignment="Top" Height="30"/>
-
-                                <!--Very Hard Mode ~ Shadow-->
-                                <Label x:Name="Label_Misc_ShadowVHLocation" Content="Very Hard Mode ~ Shadow" HorizontalAlignment="Left" Margin="10,110,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}"/>
-                                <Label x:Name="Label_Misc_ShadowVHLocation_Desc" Content="The .arc file containing the content for Shadow's Very Hard Mode." HorizontalAlignment="Right" Margin="0,110,10,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" FontStyle="Italic">
-                                    <Label.Foreground>
-                                        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlDarkColorKey}}"/>
-                                    </Label.Foreground>
-                                </Label>
-                                <hc:TextBox x:Name="TextBox_Misc_ShadowVHLocation" Margin="10,145,53,0" TextWrapping="NoWrap" VerticalAlignment="Top" SelectionBrush="#FFB146C2" TextChanged="ShadowVHLocation_Update"/>
-                                <Button x:Name="Button_Misc_ShadowVHLocation_Browse" HorizontalAlignment="Right" Margin="0,145,10,0" VerticalAlignment="Top" hc:IconElement.Geometry="{StaticResource DragHorizontalGeometry}" Width="38" Click="ShadowVHLocation_Browse"/>
-                                <CheckBox x:Name="CheckBox_Misc_ShadowVH" Content="Enable Very Hard Mode ~ Shadow" Margin="10,180,10,0" VerticalAlignment="Top" Height="30" />
-
-                                <!--Very Hard Mode ~ Silver-->
-                                <Label x:Name="Label_Misc_SilverVHLocation" Content="Very Hard Mode ~ Silver" HorizontalAlignment="Left" Margin="10,215,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}"/>
-                                <Label x:Name="Label_Misc_SilverVHLocation_Desc" Content="The .arc file containing the content for Silver's Very Hard Mode." HorizontalAlignment="Right" Margin="0,210,10,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" FontStyle="Italic">
-                                    <Label.Foreground>
-                                        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlDarkColorKey}}"/>
-                                    </Label.Foreground>
-                                </Label>
-                                <hc:TextBox x:Name="TextBox_Misc_SilverVHLocation" Margin="10,245,53,0" TextWrapping="NoWrap" VerticalAlignment="Top" SelectionBrush="#FFB146C2" TextChanged="SilverVHLocation_Update"/>
-                                <Button x:Name="Button_Misc_SilverVHLocation_Browse" HorizontalAlignment="Right" Margin="0,245,10,0" VerticalAlignment="Top" hc:IconElement.Geometry="{StaticResource DragHorizontalGeometry}" Width="38" Click="SilverVHLocation_Browse"/>
-                                <CheckBox x:Name="CheckBox_Misc_SilverVH" Content="Enable Very Hard Mode ~ Silver" Margin="10,280,10,0" VerticalAlignment="Top" Height="30" />
-
                             </Grid>
                         </hc:TabItem>
                     </hc:TabControl>

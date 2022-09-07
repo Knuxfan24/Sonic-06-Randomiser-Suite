@@ -113,9 +113,9 @@ namespace MarathonRandomiser
             }
 
             // Saved DLC locations.
-            TextBox_Misc_SonicVHLocation.Text = Properties.Settings.Default.SonicVeryHard;
-            TextBox_Misc_ShadowVHLocation.Text = Properties.Settings.Default.ShadowVeryHard;
-            TextBox_Misc_SilverVHLocation.Text = Properties.Settings.Default.SilverVeryHard;
+            TextBox_Episode_SonicVHLocation.Text = Properties.Settings.Default.SonicVeryHard;
+            TextBox_Episode_ShadowVHLocation.Text = Properties.Settings.Default.ShadowVeryHard;
+            TextBox_Episode_SilverVHLocation.Text = Properties.Settings.Default.SilverVeryHard;
 
             // Generate a seed to use.
             TextBox_General_Seed.Text = Randomiser.Next().ToString();
@@ -502,7 +502,7 @@ namespace MarathonRandomiser
             };
 
             if (OpenFileDialog.ShowDialog() == true)
-                TextBox_Misc_SonicVHLocation.Text = OpenFileDialog.FileName;
+                TextBox_Episode_SonicVHLocation.Text = OpenFileDialog.FileName;
         }
 
         /// <summary>
@@ -510,7 +510,7 @@ namespace MarathonRandomiser
         /// </summary>
         private void SonicVHLocation_Update(object sender, TextChangedEventArgs e)
         {
-            Properties.Settings.Default.SonicVeryHard = TextBox_Misc_SonicVHLocation.Text;
+            Properties.Settings.Default.SonicVeryHard = TextBox_Episode_SonicVHLocation.Text;
             Properties.Settings.Default.Save();
         }
 
@@ -527,7 +527,7 @@ namespace MarathonRandomiser
             };
 
             if (OpenFileDialog.ShowDialog() == true)
-                TextBox_Misc_ShadowVHLocation.Text = OpenFileDialog.FileName;
+                TextBox_Episode_ShadowVHLocation.Text = OpenFileDialog.FileName;
         }
 
         /// <summary>
@@ -535,7 +535,7 @@ namespace MarathonRandomiser
         /// </summary>
         private void ShadowVHLocation_Update(object sender, TextChangedEventArgs e)
         {
-            Properties.Settings.Default.ShadowVeryHard = TextBox_Misc_ShadowVHLocation.Text;
+            Properties.Settings.Default.ShadowVeryHard = TextBox_Episode_ShadowVHLocation.Text;
             Properties.Settings.Default.Save();
         }
 
@@ -552,7 +552,7 @@ namespace MarathonRandomiser
             };
 
             if (OpenFileDialog.ShowDialog() == true)
-                TextBox_Misc_SilverVHLocation.Text = OpenFileDialog.FileName;
+                TextBox_Episode_SilverVHLocation.Text = OpenFileDialog.FileName;
         }
 
         /// <summary>
@@ -560,7 +560,7 @@ namespace MarathonRandomiser
         /// </summary>
         private void SilverVHLocation_Update(object sender, TextChangedEventArgs e)
         {
-            Properties.Settings.Default.SilverVeryHard = TextBox_Misc_SilverVHLocation.Text;
+            Properties.Settings.Default.SilverVeryHard = TextBox_Episode_SilverVHLocation.Text;
             Properties.Settings.Default.Save();
         }
         #endregion
@@ -815,9 +815,9 @@ namespace MarathonRandomiser
                     {
                         case 0: Helpers.InvalidateCheckedListBox(CheckedList_Misc_Patches, true, selectAll); break;
                         case 1:
-                            CheckBox_Misc_SonicVH.IsChecked = selectAll;
-                            CheckBox_Misc_ShadowVH.IsChecked = selectAll;
-                            CheckBox_Misc_SilverVH.IsChecked = selectAll;
+                            CheckBox_Episode_SonicVH.IsChecked = selectAll;
+                            CheckBox_Episode_ShadowVH.IsChecked = selectAll;
+                            CheckBox_Episode_SilverVH.IsChecked = selectAll;
                             break;
                         default: throw new NotImplementedException();
                     }
@@ -1056,12 +1056,12 @@ namespace MarathonRandomiser
             // Misc Block.
             ConfigTabRead(configInfo, "Misc", StackPanel_Misc);
             ConfigCheckedListBoxRead(configInfo, CheckedList_Misc_Patches);
-            configInfo.WriteLine($"TextBox_Misc_SonicVHLocation={TextBox_Misc_SonicVHLocation.Text}");
-            configInfo.WriteLine($"{CheckBox_Misc_SonicVH.Name}={CheckBox_Misc_SonicVH.IsChecked}");
-            configInfo.WriteLine($"TextBox_Misc_ShadowVHLocation={TextBox_Misc_ShadowVHLocation.Text}");
-            configInfo.WriteLine($"{CheckBox_Misc_ShadowVH.Name}={CheckBox_Misc_ShadowVH.IsChecked}");
-            configInfo.WriteLine($"TextBox_Misc_SilverVHLocation={TextBox_Misc_SilverVHLocation.Text}");
-            configInfo.WriteLine($"{CheckBox_Misc_SilverVH.Name}={CheckBox_Misc_SilverVH.IsChecked}");
+            configInfo.WriteLine($"TextBox_Misc_SonicVHLocation={TextBox_Episode_SonicVHLocation.Text}");
+            configInfo.WriteLine($"{CheckBox_Episode_SonicVH.Name}={CheckBox_Episode_SonicVH.IsChecked}");
+            configInfo.WriteLine($"TextBox_Misc_ShadowVHLocation={TextBox_Episode_ShadowVHLocation.Text}");
+            configInfo.WriteLine($"{CheckBox_Episode_ShadowVH.Name}={CheckBox_Episode_ShadowVH.IsChecked}");
+            configInfo.WriteLine($"TextBox_Misc_SilverVHLocation={TextBox_Episode_SilverVHLocation.Text}");
+            configInfo.WriteLine($"{CheckBox_Episode_SilverVH.Name}={CheckBox_Episode_SilverVH.IsChecked}");
             configInfo.WriteLine();
 
             // Custom Block.
@@ -1728,13 +1728,15 @@ namespace MarathonRandomiser
 
             #region Random Episode Generation
             // This has to be done up here or the Very Hard mode content won't be randomised.
-            bool? miscRandomEpisode = CheckBox_Misc_RandomEpisode.IsChecked;
+            bool? episodeGenerate = CheckBox_Episode_Generate.IsChecked;
+            bool? episodeTownMissions = CheckBox_Episode_TownMissions.IsChecked;
+            int episodeTownMissionCount = (int)NumericUpDown_Episode_TownMissionCount.Value;
 
             // Set up a level order for later.
             Dictionary<string, int> LevelOrder = new();
 
             // Check if the Random Episode needs to be generated.
-            if (miscRandomEpisode == true)
+            if (episodeGenerate == true)
             {
                 foreach (string archive in archives)
                 {
@@ -1745,16 +1747,16 @@ namespace MarathonRandomiser
                         string? shadowVH = null;
                         string? silverVH = null;
 
-                        if (Path.GetExtension(TextBox_Misc_SonicVHLocation.Text) == ".arc" && CheckBox_Misc_SonicVH.IsChecked == true)
-                            sonicVH = TextBox_Misc_SonicVHLocation.Text;
-                        if (Path.GetExtension(TextBox_Misc_ShadowVHLocation.Text) == ".arc" && CheckBox_Misc_ShadowVH.IsChecked == true)
-                            shadowVH = TextBox_Misc_ShadowVHLocation.Text;
-                        if (Path.GetExtension(TextBox_Misc_SilverVHLocation.Text) == ".arc" && CheckBox_Misc_SilverVH.IsChecked == true)
-                            silverVH = TextBox_Misc_SilverVHLocation.Text;
+                        if (Path.GetExtension(TextBox_Episode_SonicVHLocation.Text) == ".arc" && CheckBox_Episode_SonicVH.IsChecked == true)
+                            sonicVH = TextBox_Episode_SonicVHLocation.Text;
+                        if (Path.GetExtension(TextBox_Episode_ShadowVHLocation.Text) == ".arc" && CheckBox_Episode_ShadowVH.IsChecked == true)
+                            shadowVH = TextBox_Episode_ShadowVHLocation.Text;
+                        if (Path.GetExtension(TextBox_Episode_SilverVHLocation.Text) == ".arc" && CheckBox_Episode_SilverVH.IsChecked == true)
+                            silverVH = TextBox_Episode_SilverVHLocation.Text;
 
                         UpdateLogger($"Generating random episode.");
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
-                        LevelOrder = await Task.Run(() => MiscellaneousRandomisers.EpisodeGenerator(unpackedArchive, corePath, sonicVH, shadowVH, silverVH, true, 53));
+                        LevelOrder = await Task.Run(() => MiscellaneousRandomisers.EpisodeGenerator(unpackedArchive, corePath, sonicVH, shadowVH, silverVH, episodeTownMissions, episodeTownMissionCount));
                     }
                 }
             }
@@ -2657,7 +2659,7 @@ namespace MarathonRandomiser
 
             // Make the Random Episode's MST and HUB.
             // We do this down here so the Text and SET Randomisers can't interfere with it.
-            if (miscRandomEpisode == true)
+            if (episodeGenerate == true)
             {
                 foreach (string archive in archives)
                 {
