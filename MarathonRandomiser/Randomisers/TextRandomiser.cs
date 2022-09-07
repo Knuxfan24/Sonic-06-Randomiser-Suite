@@ -77,6 +77,10 @@ namespace MarathonRandomiser
             // Loop through each Message Entry in this MST.
             foreach (Message? message in mst.Data.Messages)
             {
+                // Skip hints added from the Custom Voice Lines option (Voice Packs are OK though).
+                if (message.Name.Contains("hint_custom"))
+                    continue;
+
                 // Edit the New Lines, New Text Boxes and Placeholder Calls so they can be preserved.
                 message.Text = message.Text.Replace("\n", " \n ");
                 message.Text = message.Text.Replace("\f", " \f ");
