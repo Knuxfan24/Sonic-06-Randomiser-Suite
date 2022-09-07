@@ -404,6 +404,43 @@ namespace MarathonRandomiser
         }
 
         /// <summary>
+        /// Takes a lits of strings and shuffles their order.
+        /// </summary>
+        /// <param name="list">The list to shuffle.</param>
+        /// <returns>The shuffled list.</returns>
+        public static async Task<List<string>> ShuffleList(List<string> list)
+        {
+            // Set up our list of numbers.
+            List<int> usedNumbers = new();
+
+            // Set up our new list.
+            List<string> newList = new();
+
+            // Loop through all the messages in the list.
+            for (int i = 0; i < list.Count; i++)
+            {
+                // Pick a random message.
+                int index = MainWindow.Randomiser.Next(list.Count);
+
+                // If it's used, keep picking new ones until it's not.
+                if (usedNumbers.Contains(index))
+                {
+                    do { index = MainWindow.Randomiser.Next(list.Count); }
+                    while (usedNumbers.Contains(index));
+                }
+
+                // Mark the selected numbers as used.
+                usedNumbers.Add(index);
+
+                // Add the selected message to the new list.
+                newList.Add(list[index]);
+            }
+
+            // Return the new list.
+            return newList;
+        }
+
+        /// <summary>
         /// Looks through an archive and extracts all the render scripts from it.
         /// </summary>
         /// <param name="archive">The loaded archive.</param>

@@ -222,7 +222,7 @@ namespace MarathonRandomiser
                 CheckedList_Textures_Arcs.Items.Clear();
                 string[] archives = Directory.GetFiles(Path.GetDirectoryName(TextBox_General_GameExecutable.Text), "*.arc", SearchOption.AllDirectories);
 
-                foreach(string archive in archives)
+                foreach (string archive in archives)
                 {
                     // Load a list of the files in this archive.
                     U8Archive arc = new(archive, ReadMode.IndexOnly);
@@ -1206,7 +1206,7 @@ namespace MarathonRandomiser
                     {
                         Helpers.InvalidateCheckedListBox(checkedlist, true, false);
 
-                        foreach(string value in split[1].Split(','))
+                        foreach (string value in split[1].Split(','))
                             foreach (CheckedListBoxItem item in checkedlist.Items)
                                 if (item.Tag == value)
                                     item.Checked = true;
@@ -1754,7 +1754,7 @@ namespace MarathonRandomiser
 
                         UpdateLogger($"Generating random episode.");
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
-                        LevelOrder = await Task.Run(() => MiscellaneousRandomisers.EpisodeGenerator(unpackedArchive, corePath, sonicVH, shadowVH, silverVH));
+                        LevelOrder = await Task.Run(() => MiscellaneousRandomisers.EpisodeGenerator(unpackedArchive, corePath, sonicVH, shadowVH, silverVH, true, 53));
                     }
                 }
             }

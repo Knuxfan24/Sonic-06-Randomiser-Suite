@@ -1,9 +1,11 @@
 ﻿using Marathon.Formats.Archive;
 using Marathon.Formats.Mesh;
 using Marathon.Formats.Package;
+using Marathon.Formats.Script.Lua.Decompiler.Blocks;
 using Marathon.Formats.Text;
 using Marathon.Helpers;
 using Marathon.IO;
+using System;
 using System.Linq;
 
 namespace MarathonRandomiser
@@ -258,7 +260,9 @@ namespace MarathonRandomiser
         /// <param name="sonicVH">The path to Sonic's Very Hard Mode Arc.</param>
         /// <param name="shadowVH">The path to Shadow's Very Hard Mode Arc.</param>
         /// <param name="silverVH">The path to Silver's Very Hard Mode Arc.</param>
-        public static async Task<Dictionary<string, int>> EpisodeGenerator(string archivePath, string corePath, string? sonicVH, string? shadowVH, string? silverVH)
+        /// <param name="townMissions">Whether or not to use Town Missions in the Generated Episode.</param>
+        /// <param name="townMissionCount">How many Town Missions should be included in the Generated Episode.</param>
+        public static async Task<Dictionary<string, int>> EpisodeGenerator(string archivePath, string corePath, string? sonicVH, string? shadowVH, string? silverVH, bool? townMissions, int townMissionCount)
         {
             Dictionary<string, int> LevelOrder = new();
 
@@ -495,6 +499,28 @@ namespace MarathonRandomiser
             File.Copy($@"{archivePath}\{corePath}\scripts\mission\2300\mission_2311.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_solaris.lub");
             #endregion
 
+            #region Town Missions
+            // Shuffle a list of all the used town missions.
+            List<string> TownMissions = await Task.Run(() => Helpers.ShuffleList(new() { "1001", "1003", "1004", "1005", "1008", "1010", "1011", "1012", "1013", "1014", "1018", "1019", "1024", "1025", "1027", "1029", "1030", "1031", "1032", "1033", "1103", "1104", "1107", "1108", "1109", "1112", "1114", "1117", "1118", "1119", "1126", "1128", "1130", "1131", "1132", "1201", "1203", "1208", "1211", "1212", "1214", "1215", "1216", "1218", "1219", "1220", "1221", "1226", "1232", "1237", "1238", "1239", "1240" }));
+            
+            // Trim the list down to the specified count.
+            while (TownMissions.Count > townMissionCount)
+                TownMissions.RemoveAt(TownMissions.Count - 1);
+
+            // Copy the mission luas.
+            foreach (var TownMission in TownMissions)
+            {
+                // Determine which character this mission is for so we can name the mission lua.
+                string hedgehog = "sonic";
+                if (TownMission.StartsWith("11"))
+                    hedgehog = "shadow";
+                if (TownMission.StartsWith("12"))
+                    hedgehog = "silver";
+
+                File.Copy($@"{archivePath}\{corePath}\scripts\mission\{TownMission}\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_{hedgehog}_town{TownMission}.lub");
+            }
+            #endregion
+
             #region DLC
             // Load DLC archives if needed.
             if (sonicVH != null)
@@ -652,9 +678,17 @@ namespace MarathonRandomiser
 
                 for (int i = 0; i < lua.Length; i++)
                 {
-                    // Add a next mission redirect to lastLua, pointing to nextLua
+                    // Add a next mission redirect to lastLua.
                     if (lua[i].Contains("MissionClear("))
-                        lua[i] = $"    SetNextMission(a1, \"scripts/mission/rando/{Path.GetFileNameWithoutExtension(nextLua)}.lua\")\r\n{lua[i]}";
+                    {
+                        // If this is a failed mission, point to itself as a hack to restart the mission rather than booting the player out to the menu.
+                        if (lua[i].Contains("failed"))
+                            lua[i] = $"    SetNextMission(a1, \"scripts/mission/rando/{Path.GetFileNameWithoutExtension(lastLua)}.lua\")\r\n{lua[i]}";
+
+                        // If it's a regular completion, then point to the nextLua instead so we can advance to the next stage.
+                        else
+                            lua[i] = $"    SetNextMission(a1, \"scripts/mission/rando/{Path.GetFileNameWithoutExtension(nextLua)}.lua\")\r\n{lua[i]}";
+                    }
 
                     // Select a random cutscene to start the mission with.
                     if (lua[i].Contains("mission_event_start = "))
@@ -725,8 +759,8 @@ namespace MarathonRandomiser
                             lua[i] += ",";
                     }
 
-                    // Set the mission text to our MST.
-                    if (lua[i].Contains("mission_text = "))
+                    // Set the mission text to our MST if it's not a Town Mission one.
+                    if (lua[i].Contains("mission_text = ") && !fileName.Contains("_town"))
                     {
                         // Determine if we need to add a comma.
                         bool hasComma = lua[i].Contains(',');
@@ -785,7 +819,33 @@ namespace MarathonRandomiser
                     Name = $"{entry.Key.Replace("mission", "msg")}",
                     Text = $"Stage {entry.Value}/{LevelOrder.Count}"
                 };
-                mst.Data.Messages.Add(msg);
+
+                // If this is a stage entry, then add it to our custom MST, if not, add it to the approriate Town Mission one.
+                if (!entry.Key.Contains("_town"))
+                {
+                    // Replace stage with boss just to make it obvious on loading that it's a... Well... Boss.
+                    if (entry.Key.Contains("eCerberus") || entry.Key.Contains("eGenesis") || entry.Key.Contains("eWyvern") ||
+                        entry.Key.Contains("iblis01") || entry.Key.Contains("iblis02") || entry.Key.Contains("iblis03") ||
+                        entry.Key.Contains("mephiles01") || entry.Key.Contains("mephiles02") || entry.Key.Contains("solaris") ||
+                        entry.Key.EndsWith("_sonic") || entry.Key.EndsWith("_shadow") || entry.Key.EndsWith("_silver"))
+                            msg.Text = msg.Text.Replace("Stage", "Boss");
+
+                    mst.Data.Messages.Add(msg);
+                }
+                else
+                {
+                    // Replace stage with mission just to make it obvious on loading that it's a Town Mission.
+                    msg.Text = msg.Text.Replace("Stage", "Mission");
+
+                    // Load the Town Mission MST based on the hedgehog name.
+                    MessageTable missionMST = new($@"{archivePath}\{corePath}\text\english\msg_town_mission_{((string[]?)entry.Key.Split('_'))[1]}.e.mst");
+                    
+                    // Add our message to it.
+                    missionMST.Data.Messages.Add(msg);
+
+                    // Resave it.
+                    missionMST.Save();
+                }
             }
 
             // Save our new MST.
@@ -830,33 +890,98 @@ namespace MarathonRandomiser
                     split[1] = Helpers.FirstLetterToUpper(split[1]);
 
                     // Swap out the stage shorthand for its proper name.
+                    // Also swap out the character name for the few stages that don't involve the main hedgehog.
                     switch (split[2])
                     {
+                        // Stages.
                         case "aqa": split[2] = "Aquatic Base"; break;
                         case "csc": split[2] = "Crisis City"; break;
                         case "dtd": split[2] = "Dusty Desert"; break;
                         case "flc": split[2] = "Flame Core"; break;
                         case "kdv": split[2] = "Kingdom Valley"; break;
                         case "rct": split[2] = "Radical Train"; break;
-                        case "tpj": split[2] = "Tropical Jungle"; break;
+                        case "tpj": split[2] = "Tropical Jungle"; if (split[1] == "Shadow") split[1] = "Rouge"; break;
                         case "wap": split[2] = "White Acropolis"; break;
-                        case "wvo": split[2] = "Wave Ocean"; break;
-                        case "wvoT": split[2] = "Wave Ocean (Tails)"; break;
+                        case "wvo": split[2] = "Wave Ocean"; if (split[1] == "Silver") split[1] = "Blaze"; break;
+                        case "wvoT": split[2] = "Wave Ocean"; split[1] = "Tails"; break;
 
+                        // Eggman Bosses.
                         case "eCerberus": split[2] = "Egg Cerberus"; break;
                         case "eGenesis": split[2] = "Egg Genesis"; break;
                         case "eWyvern": split[2] = "Egg Wyvern"; break;
 
+                        // Iblis Bosses
                         case "iblis01": split[2] = "Iblis Phase 1"; break;
                         case "iblis02": split[2] = "Iblis Phase 2"; break;
                         case "iblis03": split[2] = "Iblis Phase 3"; break;
 
+                        // Mephiles Bosses
                         case "mephiles01": split[2] = "Mephiles Phase 1"; break;
                         case "mephiles02": split[2] = "Mephiles Phase 2"; break;
 
+                        // Character Battles
                         case "silver": split[2] = "Silver The Hedgehog"; break;
                         case "sonic": split[2] = "Sonic The Hedgehog"; break;
                         case "shadow": split[2] = "Shadow The Hedgehog"; break;
+
+                        // Sonic's Town Missions.
+                        case "town1001": split[2] = "The winder of a Shoemaker"; break;
+                        case "town1003": split[2] = "Shadows of\nEggman's Mechs"; break;
+                        case "town1004": split[2] = "Find Pele,\nthe Beloved Dog"; break;
+                        case "town1005": split[2] = "The Soleanna Boys'\nChallenge"; break;
+                        case "town1008": split[2] = "Mels, the Soleanna\nRunning Legend"; break;
+                        case "town1010": split[2] = "The 100 Forgotten Rings"; break;
+                        case "town1011": split[2] = "Who is the Captain?"; break;
+                        case "town1012": split[2] = "Chase the Fleeing Car!"; break;
+                        case "town1013": split[2] = "VS Sonic Man"; break;
+                        case "town1014": split[2] = "Aristo's Challenge"; break;
+                        case "town1018": split[2] = "The Hotel's Festival\nof Rings"; break;
+                        case "town1019": split[2] = "Acrobatic Circus Scout"; break;
+                        case "town1024": split[2] = "Destroy all Enemies\nin the New City!"; break;
+                        case "town1025": split[2] = "Battle at the Warehouse!"; break;
+                        case "town1027": split[2] = "Open the Cave Gate!"; break;
+                        case "town1029": split[2] = "Take the Lady-in-Waiting\nto Town!"; break;
+                        case "town1030": split[2] = "The Test of Intelligence"; break;
+                        case "town1031": split[2] = "The Test of Love"; break;
+                        case "town1032": split[2] = "The Test of Courage"; break;
+                        case "town1033": split[2] = "The Legend of\nthe Three Musketeers"; break;
+
+                        // Shadow's Town Missions.
+                        case "town1103": split[2] = "Request from the\nRimlight Employee"; break;
+                        case "town1104": split[2] = "Defeat the Enemies\non the Shopping Street"; break;
+                        case "town1107": split[2] = "Motorcycle License Test"; break;
+                        case "town1108": split[2] = "Protect the Professor's Car"; break;
+                        case "town1109": split[2] = "Car Festival"; break;
+                        case "town1112": split[2] = "Agent Test: Intelligence"; break;
+                        case "town1114": split[2] = "Lord Regis' Daughter,\nSabrina"; break;
+                        case "town1117": split[2] = "Agent Test: Strength"; break;
+                        case "town1118": split[2] = "The Mathematician's Training"; break;
+                        case "town1119": split[2] = "Stolen Rimlight Information"; break;
+                        case "town1126": split[2] = "Buggy Ring Race"; break;
+                        case "town1128": split[2] = "The Mystery of the Ghost"; break;
+                        case "town1130": split[2] = "Emergency Order:\nCapture the Thieves' Cars!"; break;
+                        case "town1131": split[2] = "Destroy the Enemies\ninvading from the Desert!"; break;
+                        case "town1132": split[2] = "Save the Archaeologist!"; break;
+
+                        // Silver's Town Missions.
+                        case "town1201": split[2] = "Soleanna's Apple Festival"; break;
+                        case "town1203": split[2] = "The Training Grounds"; break;
+                        case "town1208": split[2] = "Protect Anna\nShe Knows the Secret!"; break;
+                        case "town1211": split[2] = "The Stolen Bronze Medals"; break;
+                        case "town1212": split[2] = "The Airplane Tournament"; break;
+                        case "town1214": split[2] = "Protect the Coastline!"; break;
+                        case "town1215": split[2] = "Sonic Man Returns!"; break;
+                        case "town1216": split[2] = "The Soleanna\nWater Target Tournament!"; break;
+                        case "town1218": split[2] = "Catch the Soleanna Boys!"; break;
+                        case "town1219": split[2] = "Raid: Evil Monster"; break;
+                        case "town1220": split[2] = "Defeat the Pursuers\nand Escort Elise!"; split[1] = "Amy"; break;
+                        case "town1221": split[2] = "Protect the Gate to\nthe Castle Town"; break;
+                        case "town1226": split[2] = "Lost Company Property"; break;
+                        case "town1232": split[2] = "The Test of Memory"; break;
+                        case "town1237": split[2] = "The Test of Friendship"; break;
+                        case "town1238": split[2] = "The Test of Heart"; break;
+                        case "town1239": split[2] = "Protect the Barrels\nin the Warehouse District!"; break;
+                        case "town1240": split[2] = "Get into the station!"; break;
 
                         default: System.Diagnostics.Debug.WriteLine($"Unhandled stage shorthand '{split[2]}'"); break;
                     }
@@ -865,7 +990,7 @@ namespace MarathonRandomiser
                     msg = new()
                     {
                         Name = $"msg_shop_25{entry.Value.ToString().PadLeft(2, '0')}",
-                        Text = $"{split[2]}\n{split[1]}"
+                        Text = $"{split[2]}\n---\n{split[1]}"
                     };
                     mst.Data.Messages.Add(msg);
                 }
@@ -1038,15 +1163,21 @@ namespace MarathonRandomiser
             }
         }
 
+        /// <summary>
+        /// Randomises how long various enemy wait timers are.
+        /// </summary>
+        /// <param name="luaFile">The enemy lua to process.</param>
+        /// <param name="min">The minimum waiting time.</param>
+        /// <param name="max">The maximum waiting time.</param>
         public static async Task RandomiseEnemyWaitTimes(string luaFile, double min, double max)
         {
-            // replace shit with math.random() + math.random(min, max)
             // Decompile this lua file.
             await Task.Run(() => Helpers.LuaDecompile(luaFile));
 
             // Read the decompiled lua file into a string array.
             string[] lua = File.ReadAllLines(luaFile);
 
+            // Loop through each line, if one contains a value we need, split the line and replace the end part with the random function in lua.
             for (int i = 0; i < lua.Length; i++)
             {
                 if (lua[i].Contains("DeathBallWaitTime = ") || lua[i].Contains("HoldExplosionWaitTime =") || lua[i].Contains("FootBrokenWait ="))

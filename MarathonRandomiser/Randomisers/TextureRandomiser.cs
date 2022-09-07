@@ -135,7 +135,7 @@
             string[] ddsFiles = Directory.GetFiles(archivePath, "*.dds", SearchOption.AllDirectories);
 
             // Freaking yeet 'em.
-            foreach(string ddsFile in ddsFiles)
+            foreach (string ddsFile in ddsFiles)
                 File.Delete(ddsFile);
         }
     }
