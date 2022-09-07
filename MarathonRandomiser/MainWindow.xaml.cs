@@ -1756,7 +1756,7 @@ namespace MarathonRandomiser
 
                         UpdateLogger($"Generating random episode.");
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
-                        LevelOrder = await Task.Run(() => MiscellaneousRandomisers.EpisodeGenerator(unpackedArchive, corePath, sonicVH, shadowVH, silverVH, episodeTownMissions, episodeTownMissionCount));
+                        LevelOrder = await Task.Run(() => EpisodeGenerator.Process(unpackedArchive, corePath, sonicVH, shadowVH, silverVH, episodeTownMissions, episodeTownMissionCount));
                     }
                 }
             }
@@ -2656,7 +2656,9 @@ namespace MarathonRandomiser
                     }
                 }
             }
+            #endregion
 
+            #region Random Episode Step 2
             // Make the Random Episode's MST and HUB.
             // We do this down here so the Text and SET Randomisers can't interfere with it.
             if (episodeGenerate == true)
@@ -2667,10 +2669,10 @@ namespace MarathonRandomiser
                     {
                         UpdateLogger($"Generating random episode message table.");
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
-                        await Task.Run(() => MiscellaneousRandomisers.RandomEpisodeMST(unpackedArchive, corePath, LevelOrder));
+                        await Task.Run(() => EpisodeGenerator.MessageTableBuilder(unpackedArchive, corePath, LevelOrder));
 
                         UpdateLogger($"Creating stage select hub.");
-                        await Task.Run(() => MiscellaneousRandomisers.RandomEpisodeShopMST(unpackedArchive, corePath, LevelOrder));
+                        await Task.Run(() => EpisodeGenerator.ShopMessageTableBuilder(unpackedArchive, corePath, LevelOrder));
                     }
                 }
 
@@ -2679,7 +2681,7 @@ namespace MarathonRandomiser
                     if (Path.GetFileName(archive).ToLower() == "scripts.arc")
                     {
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
-                        await Task.Run(() => MiscellaneousRandomisers.GenerateRandomEpisodeTown(unpackedArchive, corePath, LevelOrder));
+                        await Task.Run(() => EpisodeGenerator.StageSelectBuilder(unpackedArchive, corePath, LevelOrder));
                     }
                 }
             }
