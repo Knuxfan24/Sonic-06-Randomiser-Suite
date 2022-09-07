@@ -40,12 +40,22 @@ namespace MarathonRandomiser
         /// <param name="jumpboardChance">The chance that a Jump Panel will be switched for a Jump Board.</param>
         /// <param name="shuffleTransform">Whether or not objects will have their positions shuffled around.</param>
         /// <param name="shuffleBlacklist">The list of objects we should ignore for the position shuffling process.</param>
+        /// <param name="doubleTrouble">Whether enemies should be duplicated.</param>
         public static async Task Process(string setFile, bool? enemies, bool? enemiesNoBosses, bool? behaviour, bool? behaviourNoEnforce, bool? characters, bool? itemCapsules, bool? commonProps,
                                       bool? pathProps, bool? hints, bool? doors, bool? drawDistance, bool? cosmetic, bool? particle, bool? jumpboards, List<string> SetEnemies,
                                       List<string> SetCharacters, List<string> SetItemCapsules, List<string> SetCommonProps, List<string> SetPathProps, List<string> SetHints, List<string> SetDoors,
                                       List<string> SetParticleBanks, int minDrawDistance, int maxDrawDistance, int jumpboardChance, bool? shuffleTransform, List<string> shuffleBlacklist,
                                       bool? doubleTrouble)
         {
+            // Wildcard Failsafe.
+            if (shuffleTransform == true && doubleTrouble == true)
+            {
+                if (MainWindow.Randomiser.Next(0, 2) == 0)
+                    shuffleTransform = false;
+                else
+                    doubleTrouble = false;
+            }
+
             // Clear the enemy list.
             DuplicatedEnemies.Clear();
 
