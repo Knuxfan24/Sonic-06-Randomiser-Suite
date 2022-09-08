@@ -11,6 +11,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -870,14 +871,14 @@ namespace MarathonRandomiser
                     if (Randomiser.Next(0, 1001) == 24)
                     {
                         ProgressLogger.Add("Reticulating splines");
-                        ListView_ProgressLogger.ScrollIntoView(ListView_ProgressLogger.Items[ListView_ProgressLogger.Items.Count - 1]);
+                        ListView_ProgressLogger.ScrollIntoView(ListView_ProgressLogger.Items[^1]);
                         return;
                     }
                 }
             }
 
             ProgressLogger.Add(text);
-            ListView_ProgressLogger.ScrollIntoView(ListView_ProgressLogger.Items[ListView_ProgressLogger.Items.Count - 1]);
+            ListView_ProgressLogger.ScrollIntoView(ListView_ProgressLogger.Items[^1]);
         }
         
         /// <summary>
@@ -911,7 +912,7 @@ namespace MarathonRandomiser
         /// </summary>
         private void Button_Documentation(object sender, RoutedEventArgs e)
         {
-            ProcessStartInfo psi = new ProcessStartInfo
+            ProcessStartInfo psi = new()
             {
                 FileName = @"https://github.com/Knuxfan24/Sonic-06-Randomiser-Suite/wiki",
                 UseShellExecute = true
@@ -1053,15 +1054,19 @@ namespace MarathonRandomiser
             ConfigTabRead(configInfo, "UI", StackPanel_XNCP);
             configInfo.WriteLine();
 
-            // Misc Block.
-            ConfigTabRead(configInfo, "Misc", StackPanel_Misc);
-            ConfigCheckedListBoxRead(configInfo, CheckedList_Misc_Patches);
+            // Episode Block.
+            ConfigTabRead(configInfo, "Episode", StackPanel_Episode);
             configInfo.WriteLine($"TextBox_Misc_SonicVHLocation={TextBox_Episode_SonicVHLocation.Text}");
             configInfo.WriteLine($"{CheckBox_Episode_SonicVH.Name}={CheckBox_Episode_SonicVH.IsChecked}");
             configInfo.WriteLine($"TextBox_Misc_ShadowVHLocation={TextBox_Episode_ShadowVHLocation.Text}");
             configInfo.WriteLine($"{CheckBox_Episode_ShadowVH.Name}={CheckBox_Episode_ShadowVH.IsChecked}");
             configInfo.WriteLine($"TextBox_Misc_SilverVHLocation={TextBox_Episode_SilverVHLocation.Text}");
             configInfo.WriteLine($"{CheckBox_Episode_SilverVH.Name}={CheckBox_Episode_SilverVH.IsChecked}");
+            configInfo.WriteLine();
+
+            // Misc Block.
+            ConfigTabRead(configInfo, "Misc", StackPanel_Misc);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_Misc_Patches);
             configInfo.WriteLine();
 
             // Custom Block.
@@ -1314,7 +1319,7 @@ namespace MarathonRandomiser
             }
 
             // Set up a new Randomiser variable with the new seed.
-            Randomiser = new Random(TextBox_General_Seed.Text.GetHashCode());
+            Randomiser = new Random(TextBox_General_Seed.Text.GetStableHashCode());
 
             // Get a list of all the archives based on the location of the game executable.
             string[] archives = Directory.GetFiles($@"{Path.GetDirectoryName(TextBox_General_GameExecutable.Text)}", "*.arc", SearchOption.AllDirectories);
