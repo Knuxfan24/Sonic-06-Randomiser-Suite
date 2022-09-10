@@ -11,6 +11,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,7 +24,7 @@ namespace MarathonRandomiser
     public partial class MainWindow : Window
     {
         // Version Number.
-        public static readonly string GlobalVersionNumber = $"Version 2.1.17";
+        public static readonly string GlobalVersionNumber = $"Version 2.1.18";
 
         #if !DEBUG
         public static readonly string VersionNumber = GlobalVersionNumber;
@@ -2664,12 +2665,13 @@ namespace MarathonRandomiser
             #endregion
 
             #region Random Episode Step 2
-            // Make the Random Episode's MST and HUB.
-            // We do this down here so the Text and SET Randomisers can't interfere with it.
+            // Make the rest of the Generated Episode's stuff.
+            // We do this down here so the other Randomisers can't interfere with it.
             if (episodeGenerate == true)
             {
                 foreach (string archive in archives)
                 {
+                    // Handle Message Table stuff.
                     if (Path.GetFileName(archive).ToLower() == "text.arc")
                     {
                         UpdateLogger($"Generating random episode message table.");
@@ -2679,16 +2681,83 @@ namespace MarathonRandomiser
                         UpdateLogger($"Creating stage select hub.");
                         await Task.Run(() => EpisodeGenerator.ShopMessageTableBuilder(unpackedArchive, corePath, LevelOrder));
                     }
-                }
 
-                foreach (string archive in archives)
-                {
+                    // Handle building the mission file and copying things to scripts.arc.
                     if (Path.GetFileName(archive).ToLower() == "scripts.arc")
                     {
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
                         await Task.Run(() => EpisodeGenerator.StageSelectBuilder(unpackedArchive, corePath, LevelOrder));
                     }
+
+                    // Handle copying the Garden of Assemblage's collision.
+                    if (Path.GetFileName(archive).ToLower() == "stage.arc")
+                    {
+                        string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+                        Directory.CreateDirectory($@"{unpackedArchive}\{corePath}\stage\goa\khii");
+                        File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\GeneratedEpisodeHUB\collision.bin", $@"{unpackedArchive}\{corePath}\stage\goa\khii\collision.bin", true);
+                    }
+
+                    // Add a music reference to bgm.sbk if we're on the 360.
+                    // TODO: Test if the PS3 will just ignore an XMA or freaking die if it's made to play one.
+                    if (Path.GetFileName(archive).ToLower() == "sound.arc" && corePath == "xenon")
+                    {
+                        string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+                        await Task.Run(() => EpisodeGenerator.PatchBGM(unpackedArchive, corePath));
+                    }
                 }
+
+                // Copy the stage archive.
+                if (!Directory.Exists($@"{ModDirectory}\win32\archives"))
+                    Directory.CreateDirectory($@"{ModDirectory}\win32\archives");
+
+                File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\GeneratedEpisodeHUB\stage_goa_khii.arc", $@"{ModDirectory}\win32\archives\stage_goa_khii.arc", true);
+
+                // Copy the music XMA.
+                if (!Directory.Exists($@"{ModDirectory}\xenon\sound"))
+                    Directory.CreateDirectory($@"{ModDirectory}\xenon\sound");
+
+                File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\GeneratedEpisodeHUB\stg_goa_khii.xma", $@"{ModDirectory}\xenon\sound\stg_goa_khii.xma", true);
+
+                // Edit the mod ini to include the custom stuff.
+                // Setup a check in chase we already have Custom Files.
+                bool alreadyHasCustom = false;
+
+                // Set the initial path.
+                string archivePath = "Custom=\"stage_goa_khii.arc,stg_goa_khii.xma\"";
+
+                // Load the mod configuration ini to see if we already have custom content. If we do, then read the custom files line.
+                string[] modConfig = File.ReadAllLines(Path.Combine($@"{ModDirectory}", "mod.ini"));
+                if (modConfig[9].Contains("True") || modConfig.Length == 11)
+                {
+                    alreadyHasCustom = true;
+                    archivePath = modConfig[10].Remove(modConfig[10].LastIndexOf('\"'));
+                    archivePath += ",stage_goa_khii.arc,stage_goa_khii.xma\"";
+                }
+
+                // If we aren't already using custom files, then write the custom list the same way as the custom music function does.
+                if (!alreadyHasCustom)
+                {
+                    using StreamWriter configInfo = File.AppendText(Path.Combine($@"{ModDirectory}", "mod.ini"));
+                    configInfo.WriteLine(archivePath);
+                    configInfo.Close();
+                }
+                // If not, then patch the expanded list over the top of the existing one.
+                else
+                {
+                    modConfig[10] = archivePath;
+                    File.WriteAllLines(Path.Combine($@"{ModDirectory}", "mod.ini"), modConfig);
+                }
+
+                // Update the mod.ini array.
+                modConfig = File.ReadAllLines(Path.Combine($@"{ModDirectory}", "mod.ini"));
+
+                // Find and flip the CustomFilesystem flag to true.
+                for (int i = 0; i < modConfig.Length; i++)
+                    if (modConfig[i] == "CustomFilesystem=\"False\"")
+                        modConfig[i] = "CustomFilesystem=\"True\"";
+
+                // Update the mod.ini file.
+                File.WriteAllLines(Path.Combine($@"{ModDirectory}", "mod.ini"), modConfig);
             }
             #endregion
 

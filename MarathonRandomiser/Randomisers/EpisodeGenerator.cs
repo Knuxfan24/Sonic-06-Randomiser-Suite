@@ -1,4 +1,5 @@
 ﻿using Marathon.Formats.Archive;
+using Marathon.Formats.Audio;
 using Marathon.Formats.Text;
 using Marathon.Helpers;
 using Marathon.IO;
@@ -788,7 +789,13 @@ namespace MarathonRandomiser
         public static async Task StageSelectBuilder(string archivePath, string corePath, Dictionary<string, int> LevelOrder)
         {
             // Copy the HUB set.
-            File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\set_rando_hub.set", $@"{archivePath}\{corePath}\scripts\mission\rando\set_rando_hub.set", true);
+            File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\GeneratedEpisodeHUB\set_rando_hub.set", $@"{archivePath}\{corePath}\scripts\mission\rando\set_rando_hub.set", true);
+            
+            // Copy the HUB scene file.
+            File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\GeneratedEpisodeHUB\scene_goa_khii.lub", $@"{archivePath}\{corePath}\scripts\stage\other\scene_goa_khii.lub", true);
+            
+            // Copy the HUB area file.
+            File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\GeneratedEpisodeHUB\test_design.lub", $@"{archivePath}\{corePath}\scripts\stage\other\test_design.lub", true);
 
             // Write the mission lua.
             using (Stream luaCreate = File.Open($@"{archivePath}\{corePath}\scripts\mission\rando\mission_start.lub", FileMode.Create))
@@ -797,8 +804,8 @@ namespace MarathonRandomiser
                 // Mission Header.
                 luaInfo.WriteLine("g_mission_information = {");
                 luaInfo.WriteLine("  mission_string = \"stage_select\",");
-                luaInfo.WriteLine("  mission_area = \"twn/sonic/a\",");
-                luaInfo.WriteLine("  mission_terrain = \"stage/twn/a/\",");
+                luaInfo.WriteLine("  mission_area = \"test_design\",");
+                luaInfo.WriteLine("  mission_terrain = \"stage/goa/khii/\",");
                 luaInfo.WriteLine("  mission_set_default = \"scripts/mission/rando/set_rando_hub.XML\",");
                 luaInfo.WriteLine("  mission_event_start = \"\",");
                 luaInfo.WriteLine("  mission_event_end = \"\",");
@@ -920,6 +927,31 @@ namespace MarathonRandomiser
 
                 luaInfo.Close();
             }
+        }
+
+        /// <summary>
+        /// Adds a reference to the Garden of Assemblage XMA to bgm.sbk.
+        /// </summary>
+        /// <param name="archivePath">The path to the extracted sound.arc.</param>
+        /// <param name="corePath">The platform path (ps3 or xenon)</param>
+        public static async Task PatchBGM(string archivePath, string corePath)
+        {
+            // Load voice_all_e.sbk.
+            SoundBank bgm = new($@"{archivePath}\{corePath}\sound\bgm.sbk");
+
+            // Add the cue for the music.
+            Cue goaMusic = new()
+            {
+                Category = 1,
+                Name = "stg_goa_khii",
+                Radius = 6000,
+                Stream = $"sound/stg_goa_khii.xma",
+                UnknownSingle = 500
+            };
+            bgm.Data.Cues.Add(goaMusic);
+
+            // Save the updated bgm.sbk.
+            bgm.Save();
         }
     }
 }
