@@ -426,7 +426,7 @@
             <hc:TabItem Header="Generated Episode" BorderBrush="#B146C2" >
                 <Grid Background="#FF181818" Name="Grid_Episode">
                     <!--Random Episode Configuration Checkboxes/Controls-->
-                    <StackPanel HorizontalAlignment="Left" Width="210" Name="StackPanel_Episode">
+                    <StackPanel HorizontalAlignment="Left" Width="226" Name="StackPanel_Episode">
                         <StackPanel.Resources>
                             <Style BasedOn="{StaticResource CheckBoxBaseStyle}" TargetType="{x:Type CheckBox}">
                                 <Setter Property="Margin" Value="10,10,0,0" />
@@ -434,16 +434,19 @@
                             </Style>
                         </StackPanel.Resources>
                         <CheckBox x:Name="CheckBox_Episode_Generate" Content="Generate Random Episode" Click="Dependency_CheckBox_Changed"/>
-                        <CheckBox x:Name="CheckBox_Episode_TownMissions" Content="Include Town Missions" IsEnabled="False"/>
+                        <CheckBox x:Name="CheckBox_Episode_TownMissions" Content="Include Town Missions" IsEnabled="False" Click="Dependency_CheckBox_Changed"/>
                         <Label x:Name="Label_Episode_TownMissionCount" Content="Amount:" Background="{x:Null}" BorderBrush="{x:Null}" IsEnabled="False"/>
                         <hc:NumericUpDown x:Name="NumericUpDown_Episode_TownMissionCount" Margin="10,0,10,0" SelectionBrush="#FFB146C2" Increment="1" Minimum="1" Maximum="53" Value="53" IsEnabled="False"/>
+                        <Label x:Name="Label_Episode_CutsceneChance" Content="Cutscene Chance:" Background="{x:Null}" BorderBrush="{x:Null}" IsEnabled="False"/>
+                        <hc:NumericUpDown x:Name="NumericUpDown_Episode_CutsceneChance" Margin="10,0,10,0" SelectionBrush="#FFB146C2" Increment="1" Minimum="0" Maximum="100" Value="100" IsEnabled="False"/>
+                        <CheckBox x:Name="CheckBox_Episode_CutsceneTownMissions" Content="Allow Cutscenes in Town Missions" IsEnabled="False"/>
                         <CheckBox x:Name="CheckBox_Episode_SonicVH" Content="Enable Very Hard ~ Sonic" IsEnabled="False"/>
                         <CheckBox x:Name="CheckBox_Episode_ShadowVH" Content="Enable Very Hard ~ Shadow" IsEnabled="False"/>
                         <CheckBox x:Name="CheckBox_Episode_SilverVH" Content="Enable Very Hard ~ Silver" IsEnabled="False"/>
                         <CheckBox x:Name="CheckBox_Episode_GoAMusic" Content="Use GoA Music in Randomisation" IsEnabled="False"/>
                     </StackPanel>
 
-                    <hc:TabControl Style="{StaticResource TabControlInLine}" Margin="210,0,0,60" HorizontalAlignment="Stretch" Name="TabControl_Episode" IsEnabled="False">
+                    <hc:TabControl Style="{StaticResource TabControlInLine}" Margin="226,0,0,60" HorizontalAlignment="Stretch" Name="TabControl_Episode" IsEnabled="False">
                         <hc:TabItem Header="Very Hard DLC Paths" BorderBrush="#B146C2">
                             <Grid>
                                 <!--Very Hard Mode ~ Sonic-->

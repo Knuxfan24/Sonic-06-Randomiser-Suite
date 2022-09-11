@@ -19,7 +19,9 @@ namespace MarathonRandomiser
         /// <param name="silverVH">The path to Silver's Very Hard Mode Arc.</param>
         /// <param name="townMissions">Whether or not to use Town Missions in the Generated Episode.</param>
         /// <param name="townMissionCount">How many Town Missions should be included in the Generated Episode.</param>
-        public static async Task<Dictionary<string, int>> Process(string archivePath, string corePath, string? sonicVH, string? shadowVH, string? silverVH, bool? townMissions, int townMissionCount)
+        /// <param name="cutsceneChance">Percentage chance to add a cutscene at the start of a stage.</param>
+        /// <param name="missionCutscene">Whether or not Town Missions can have cutscenes too.</param>
+        public static async Task<Dictionary<string, int>> Process(string archivePath, string corePath, string? sonicVH, string? shadowVH, string? silverVH, bool? townMissions, int townMissionCount, int cutsceneChance, bool? missionCutscene)
         {
             Dictionary<string, int> LevelOrder = new();
 
@@ -257,9 +259,9 @@ namespace MarathonRandomiser
             #endregion
 
             #region Town Missions
-            // Shuffle a list of all the used town missions.
             if (townMissions == true)
             {
+                // Shuffle a list of all the used town missions.
                 List<string> TownMissions = await Task.Run(() => Helpers.ShuffleList(new() { "1001", "1003", "1004", "1005", "1008", "1010", "1011", "1012", "1013", "1014", "1018", "1019", "1024", "1025", "1027", "1029", "1030", "1031", "1032", "1033", "1103", "1104", "1107", "1108", "1109", "1112", "1114", "1117", "1118", "1119", "1126", "1128", "1130", "1131", "1132", "1201", "1203", "1208", "1211", "1212", "1214", "1215", "1216", "1218", "1219", "1220", "1221", "1226", "1232", "1237", "1238", "1239", "1240" }));
 
                 // Trim the list down to the specified count.
@@ -450,9 +452,13 @@ namespace MarathonRandomiser
                             lua[i] = $"    SetNextMission(a1, \"scripts/mission/rando/{Path.GetFileNameWithoutExtension(nextLua)}.lua\")\r\n{lua[i]}";
                     }
 
-                    // Select a random cutscene to start the mission with.
-                    if (lua[i].Contains("mission_event_start = "))
+                    // Select a random cutscene to start the mission with if the number rolled meets the chance criteria.
+                    if (lua[i].Contains("mission_event_start = ") && (MainWindow.Randomiser.Next(0, 101) <= cutsceneChance))
                     {
+                        // If this is a Town Mission and we're not allowing cutscenes in them, then skip this one.
+                        if (lastLua.Contains("_town") && missionCutscene == false)
+                            continue;
+
                         // Determine if we need to add a comma.
                         bool hasComma = lua[i].Contains(',');
 

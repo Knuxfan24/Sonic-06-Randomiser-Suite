@@ -685,13 +685,22 @@ namespace MarathonRandomiser
 
                 case "CheckBox_Episode_Generate":
                     CheckBox_Episode_TownMissions.IsEnabled = NewCheckedStatus;
-                    Label_Episode_TownMissionCount.IsEnabled = NewCheckedStatus;
-                    NumericUpDown_Episode_TownMissionCount.IsEnabled = NewCheckedStatus;
+                    Label_Episode_CutsceneChance.IsEnabled = NewCheckedStatus;
+                    NumericUpDown_Episode_CutsceneChance.IsEnabled = NewCheckedStatus;
                     CheckBox_Episode_SonicVH.IsEnabled = NewCheckedStatus;
                     CheckBox_Episode_ShadowVH.IsEnabled = NewCheckedStatus;
                     CheckBox_Episode_SilverVH.IsEnabled = NewCheckedStatus;
                     CheckBox_Episode_GoAMusic.IsEnabled = NewCheckedStatus;
                     TabControl_Episode.IsEnabled = NewCheckedStatus;
+                    // Hack to make the town mission stuff disable in chain.
+                    CheckBox_Episode_TownMissions.IsChecked = false;
+                    NumericUpDown_Episode_TownMissionCount.IsEnabled = false;
+                    CheckBox_Episode_CutsceneTownMissions.IsEnabled = false;
+                    break;
+                case "CheckBox_Episode_TownMissions":
+                    Label_Episode_TownMissionCount.IsEnabled = NewCheckedStatus;
+                    NumericUpDown_Episode_TownMissionCount.IsEnabled = NewCheckedStatus;
+                    CheckBox_Episode_CutsceneTownMissions.IsEnabled = NewCheckedStatus;
                     break;
 
                 case "CheckBox_Misc_EnemyHealth":
@@ -1748,6 +1757,8 @@ namespace MarathonRandomiser
             bool? episodeGenerate = CheckBox_Episode_Generate.IsChecked;
             bool? episodeTownMissions = CheckBox_Episode_TownMissions.IsChecked;
             int episodeTownMissionCount = (int)NumericUpDown_Episode_TownMissionCount.Value;
+            int episodeCutsceneChance = (int)NumericUpDown_Episode_CutsceneChance.Value;
+            bool? episodeTownMissionsCutscene = CheckBox_Episode_CutsceneTownMissions.IsChecked;
             bool? episodeGoAMusic = CheckBox_Episode_GoAMusic.IsChecked;
 
             // Set up a level order for later.
@@ -1774,7 +1785,7 @@ namespace MarathonRandomiser
 
                         UpdateLogger($"Generating random episode.");
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
-                        LevelOrder = await Task.Run(() => EpisodeGenerator.Process(unpackedArchive, corePath, sonicVH, shadowVH, silverVH, episodeTownMissions, episodeTownMissionCount));
+                        LevelOrder = await Task.Run(() => EpisodeGenerator.Process(unpackedArchive, corePath, sonicVH, shadowVH, silverVH, episodeTownMissions, episodeTownMissionCount, episodeCutsceneChance, episodeTownMissionsCutscene));
                     }
                 }
             }
