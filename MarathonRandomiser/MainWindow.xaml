@@ -440,6 +440,7 @@
                         <CheckBox x:Name="CheckBox_Episode_SonicVH" Content="Enable Very Hard ~ Sonic" IsEnabled="False"/>
                         <CheckBox x:Name="CheckBox_Episode_ShadowVH" Content="Enable Very Hard ~ Shadow" IsEnabled="False"/>
                         <CheckBox x:Name="CheckBox_Episode_SilverVH" Content="Enable Very Hard ~ Silver" IsEnabled="False"/>
+                        <CheckBox x:Name="CheckBox_Episode_GoAMusic" Content="Use GoA Music in Randomisation" IsEnabled="False"/>
                     </StackPanel>
 
                     <hc:TabControl Style="{StaticResource TabControlInLine}" Margin="210,0,0,60" HorizontalAlignment="Stretch" Name="TabControl_Episode" IsEnabled="False">

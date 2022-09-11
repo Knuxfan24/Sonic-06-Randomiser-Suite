@@ -78,6 +78,9 @@
     <None Update="ExternalResources\GeneratedEpisodeHUB\stage_goa_khii.arc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ExternalResources\GeneratedEpisodeHUB\stg_goa_khii.at3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ExternalResources\GeneratedEpisodeHUB\stg_goa_khii.xma">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

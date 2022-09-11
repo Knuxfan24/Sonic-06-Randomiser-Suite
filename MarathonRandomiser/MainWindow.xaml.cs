@@ -690,6 +690,7 @@ namespace MarathonRandomiser
                     CheckBox_Episode_SonicVH.IsEnabled = NewCheckedStatus;
                     CheckBox_Episode_ShadowVH.IsEnabled = NewCheckedStatus;
                     CheckBox_Episode_SilverVH.IsEnabled = NewCheckedStatus;
+                    CheckBox_Episode_GoAMusic.IsEnabled = NewCheckedStatus;
                     TabControl_Episode.IsEnabled = NewCheckedStatus;
                     break;
 
@@ -1725,7 +1726,7 @@ namespace MarathonRandomiser
             if (TexturesArchives.Count == 0)
                 CheckBox_Textures_Textures.IsChecked = false;
 
-            if (AudioMusic.Count == 0)
+            if (AudioMusic.Count == 0 && CheckBox_Episode_Generate.IsChecked == false && CheckBox_Episode_GoAMusic.IsChecked == false)
                 CheckBox_Audio_Music.IsChecked = false;
             if (AudioCSBs.Count == 0)
                 CheckBox_Audio_SFX.IsChecked = false;
@@ -1747,6 +1748,7 @@ namespace MarathonRandomiser
             bool? episodeGenerate = CheckBox_Episode_Generate.IsChecked;
             bool? episodeTownMissions = CheckBox_Episode_TownMissions.IsChecked;
             int episodeTownMissionCount = (int)NumericUpDown_Episode_TownMissionCount.Value;
+            bool? episodeGoAMusic = CheckBox_Episode_GoAMusic.IsChecked;
 
             // Set up a level order for later.
             Dictionary<string, int> LevelOrder = new();
@@ -1776,6 +1778,10 @@ namespace MarathonRandomiser
                     }
                 }
             }
+
+            // Add the Garden of Assemblage's music to the Music Randomiser if the option for it is checked.
+            if (episodeGoAMusic == true)
+                AudioMusic.Add("stg_goa_khii");
             #endregion
 
             #region Object Placement
@@ -2708,7 +2714,7 @@ namespace MarathonRandomiser
                         File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\GeneratedEpisodeHUB\collision.bin", $@"{unpackedArchive}\{corePath}\stage\goa\khii\collision.bin", true);
                     }
 
-                    // Add a music reference to bgm.sbk if we're on the 360.
+                    // Add a music reference to bgm.sbk.
                     if (Path.GetFileName(archive).ToLower() == "sound.arc")
                     {
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
@@ -2722,21 +2728,23 @@ namespace MarathonRandomiser
 
                 File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\GeneratedEpisodeHUB\stage_goa_khii.arc", $@"{ModDirectory}\win32\archives\stage_goa_khii.arc", true);
 
-                // Copy the music XMA.
-                if (corePath == "xenon")
-                {
-                    if (!Directory.Exists($@"{ModDirectory}\xenon\sound"))
-                        Directory.CreateDirectory($@"{ModDirectory}\xenon\sound");
+                // Set up the extension type for the Garden of Assemblage's music.
+                string musicExtension = ".xma";
+                if (corePath == "ps3")
+                    musicExtension = ".at3";
 
-                    File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\GeneratedEpisodeHUB\stg_goa_khii.xma", $@"{ModDirectory}\xenon\sound\stg_goa_khii.xma", true);
-                }
+                // Copy the music XMA/AT3.
+                if (!Directory.Exists($@"{ModDirectory}\{corePath}\sound"))
+                    Directory.CreateDirectory($@"{ModDirectory}\{corePath}\sound");
+
+                File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\GeneratedEpisodeHUB\stg_goa_khii{musicExtension}", $@"{ModDirectory}\{corePath}\sound\stg_goa_khii{musicExtension}", true);
 
                 // Edit the mod ini to include the custom stuff.
                 // Setup a check in chase we already have Custom Files.
                 bool alreadyHasCustom = false;
 
                 // Set the initial path.
-                string archivePath = "Custom=\"stage_goa_khii.arc,stg_goa_khii.xma\"";
+                string archivePath = $"Custom=\"stage_goa_khii.arc,stg_goa_khii{musicExtension}\"";
 
                 // Load the mod configuration ini to see if we already have custom content. If we do, then read the custom files line.
                 string[] modConfig = File.ReadAllLines(Path.Combine($@"{ModDirectory}", "mod.ini"));
@@ -2744,7 +2752,7 @@ namespace MarathonRandomiser
                 {
                     alreadyHasCustom = true;
                     archivePath = modConfig[10].Remove(modConfig[10].LastIndexOf('\"'));
-                    archivePath += ",stage_goa_khii.arc,stage_goa_khii.xma\"";
+                    archivePath += $",stage_goa_khii.arc,stage_goa_khii{musicExtension}\"";
                 }
 
                 // If we aren't already using custom files, then write the custom list the same way as the custom music function does.
