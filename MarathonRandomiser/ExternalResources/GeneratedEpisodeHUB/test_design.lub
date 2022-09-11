@@ -1,10 +1,10 @@
 Other.TestDesign = inherits_from(ActionArea)
-function Other.TestDesign.constructor(_ARG_0_)
-  ActionArea.constructor(_ARG_0_)
+function Other.TestDesign.constructor(a1)
+  ActionArea.constructor(a1)
 end
-function Other.TestDesign.Setup(_ARG_0_)
-  ActionArea.Setup(_ARG_0_)
-  _ARG_0_:AddComponent({
+function Other.TestDesign.Setup(a1)
+  ActionArea.Setup(a1)
+  a1:AddComponent({
     Game.LoadRenderScript("scripts/render/render_gamemode.lua"),
     Game.LoadTerrain("stage/goa/khii/"),
     Game.LoadSceneParams("scripts/stage/other/scene_goa_khii.lua"),

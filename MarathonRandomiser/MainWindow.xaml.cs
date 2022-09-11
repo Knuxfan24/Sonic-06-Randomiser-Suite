@@ -2014,7 +2014,7 @@ namespace MarathonRandomiser
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
                         foreach (string skyLua in Directory.GetFiles(unpackedArchive, "*.lub", SearchOption.AllDirectories))
                         {
-                            if (await Task.Run(() => Helpers.NeededLua(skyLua, new List<string>() { "AddComponent" })))
+                            if (skyLua != @$"{unpackedArchive}\{corePath}\scripts\stage\other\other.lub" && await Task.Run(() => Helpers.NeededLua(skyLua, new List<string>() { "AddComponent" })))
                             {
                                 UpdateLogger($"Randomising skybox in '{skyLua}'.");
                                 await Task.Run(() => SceneRandomiser.SkyboxRandomisation(skyLua, SceneSkyboxes));
@@ -2667,6 +2667,7 @@ namespace MarathonRandomiser
             #region Random Episode Step 2
             // Make the rest of the Generated Episode's stuff.
             // We do this down here so the other Randomisers can't interfere with it.
+            // TODO: Figure out the PS3 version.
             if (episodeGenerate == true)
             {
                 foreach (string archive in archives)
@@ -2698,8 +2699,7 @@ namespace MarathonRandomiser
                     }
 
                     // Add a music reference to bgm.sbk if we're on the 360.
-                    // TODO: Test if the PS3 will just ignore an XMA or freaking die if it's made to play one.
-                    if (Path.GetFileName(archive).ToLower() == "sound.arc" && corePath == "xenon")
+                    if (Path.GetFileName(archive).ToLower() == "sound.arc")
                     {
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
                         await Task.Run(() => EpisodeGenerator.PatchBGM(unpackedArchive, corePath));
@@ -2713,10 +2713,13 @@ namespace MarathonRandomiser
                 File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\GeneratedEpisodeHUB\stage_goa_khii.arc", $@"{ModDirectory}\win32\archives\stage_goa_khii.arc", true);
 
                 // Copy the music XMA.
-                if (!Directory.Exists($@"{ModDirectory}\xenon\sound"))
-                    Directory.CreateDirectory($@"{ModDirectory}\xenon\sound");
+                if (corePath == "xenon")
+                {
+                    if (!Directory.Exists($@"{ModDirectory}\xenon\sound"))
+                        Directory.CreateDirectory($@"{ModDirectory}\xenon\sound");
 
-                File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\GeneratedEpisodeHUB\stg_goa_khii.xma", $@"{ModDirectory}\xenon\sound\stg_goa_khii.xma", true);
+                    File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\GeneratedEpisodeHUB\stg_goa_khii.xma", $@"{ModDirectory}\xenon\sound\stg_goa_khii.xma", true);
+                }
 
                 // Edit the mod ini to include the custom stuff.
                 // Setup a check in chase we already have Custom Files.
