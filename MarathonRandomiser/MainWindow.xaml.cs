@@ -645,7 +645,7 @@ namespace MarathonRandomiser
                     NumericUpDown_Anim_Framerate_Max.IsEnabled = NewCheckedStatus;
                     CheckBox_Anim_Framerate_NoLights.IsEnabled = NewCheckedStatus;
                     break;
-                case "CheckBox_Anim_EventTPose":
+                case "CheckBox_Anim_TPose":
                     Label_Anim_TPose_Chance.IsEnabled = NewCheckedStatus;
                     NumericUpDown_Anim_TPose_Chance.IsEnabled = NewCheckedStatus;
                     break;
