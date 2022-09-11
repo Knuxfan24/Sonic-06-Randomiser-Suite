@@ -683,6 +683,16 @@ namespace MarathonRandomiser
                     NumericUpDown_Text_Colour_Weight.IsEnabled = NewCheckedStatus;
                     break;
 
+                case "CheckBox_Episode_Generate":
+                    CheckBox_Episode_TownMissions.IsEnabled = NewCheckedStatus;
+                    Label_Episode_TownMissionCount.IsEnabled = NewCheckedStatus;
+                    NumericUpDown_Episode_TownMissionCount.IsEnabled = NewCheckedStatus;
+                    CheckBox_Episode_SonicVH.IsEnabled = NewCheckedStatus;
+                    CheckBox_Episode_ShadowVH.IsEnabled = NewCheckedStatus;
+                    CheckBox_Episode_SilverVH.IsEnabled = NewCheckedStatus;
+                    TabControl_Episode.IsEnabled = NewCheckedStatus;
+                    break;
+
                 case "CheckBox_Misc_EnemyHealth":
                     Label_Misc_EnemyHealth_Min.IsEnabled = NewCheckedStatus;
                     NumericUpDown_Misc_EnemyHealth_Min.IsEnabled = NewCheckedStatus;
