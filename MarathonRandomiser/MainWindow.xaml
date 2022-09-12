@@ -73,9 +73,9 @@
                         <CheckBox x:Name="CheckBox_SET_Enemies_NoBosses" Content="Exclude Bosses" IsChecked="True"/>
                         <CheckBox x:Name="CheckBox_SET_Enemies_Behaviour" Content="Randomise Enemy Behaviour" Click="Dependency_CheckBox_Changed" IsChecked="True"/>
                         <CheckBox x:Name="CheckBox_SET_Enemies_Behaviour_NoEnforce" Content="Don't Enforce Behaviour Types" Foreground="Firebrick"/>
-                        <CheckBox x:Name="CheckBox_SET_Characters" Content="Randomise Characters"/>
+                        <CheckBox x:Name="CheckBox_SET_Characters" Content="Randomise Characters" Foreground="Firebrick"/>
                         <CheckBox x:Name="CheckBox_SET_ItemCapsules" Content="Randomise Item Capsules" IsChecked="True"/>
-                        <CheckBox x:Name="CheckBox_SET_CommonProps" Content="Randomise Standard Props"/>
+                        <CheckBox x:Name="CheckBox_SET_CommonProps" Content="Randomise Standard Props" Foreground="Firebrick"/>
                         <CheckBox x:Name="CheckBox_SET_PathProps" Content="Randomise Detail Props" IsChecked="True"/>
                         <CheckBox x:Name="CheckBox_SET_Hints" Content="Randomise Voice Triggers" IsChecked="True"/>
                         <CheckBox x:Name="CheckBox_SET_Doors" Content="Randomise Door Types" IsChecked="True"/>
