@@ -2763,7 +2763,7 @@ namespace MarathonRandomiser
                 {
                     alreadyHasCustom = true;
                     archivePath = modConfig[10].Remove(modConfig[10].LastIndexOf('\"'));
-                    archivePath += $",stage_goa_khii.arc,stage_goa_khii{musicExtension}\"";
+                    archivePath += $",stage_goa_khii.arc,stg_goa_khii{musicExtension}\"";
                 }
 
                 // If we aren't already using custom files, then write the custom list the same way as the custom music function does.
