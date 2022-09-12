@@ -1,12 +1,5 @@
-﻿using Marathon.Formats.Archive;
-using Marathon.Formats.Mesh;
+﻿using Marathon.Formats.Mesh;
 using Marathon.Formats.Package;
-using Marathon.Formats.Script.Lua.Decompiler.Blocks;
-using Marathon.Formats.Text;
-using Marathon.Helpers;
-using Marathon.IO;
-using System;
-using System.Linq;
 
 namespace MarathonRandomiser
 {

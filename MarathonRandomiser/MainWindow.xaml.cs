@@ -1,5 +1,4 @@
 ﻿global using System;
-global using System.Collections;
 global using System.Collections.Generic;
 global using System.IO;
 global using System.Threading.Tasks;
@@ -11,8 +10,6 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -1571,28 +1568,12 @@ namespace MarathonRandomiser
                     Directory.CreateDirectory($@"{TemporaryDirectory}\tempWavs");
                     Directory.CreateDirectory($@"{ModDirectory}\xenon\sound");
 
-                    // Set up the string for the custom files in the mod.ini
-                    string songs = "Custom=\"";
-
                     // Loops through the custom songs and process them.
                     for (int i = 0; i < CustomMusic.Count; i++)
                     {
                         UpdateLogger($"Importing: '{CustomMusic[i]}' as custom music.");
                         await Task.Run(() => Custom.Music(CustomMusic[i], ModDirectory, i, EnableCache));
-                        songs += $"custom{i}.xma,";
                         AudioMusic.Add($"custom{i}");
-                    }
-
-                    // Add all the songs to the mod configuration ini.
-                    // Remove the last comma and replace it with a closing quote.
-                    songs = songs.Remove(songs.LastIndexOf(','));
-                    songs += "\"";
-
-                    // Write the list of custom files to the mod configuration ini.
-                    using (StreamWriter configInfo = File.AppendText(Path.Combine($@"{ModDirectory}", "mod.ini")))
-                    {
-                        configInfo.WriteLine(songs);
-                        configInfo.Close();
                     }
 
                     // Add all the songs to bgm.sbk in sound.arc
@@ -2750,46 +2731,9 @@ namespace MarathonRandomiser
 
                 File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\GeneratedEpisodeHUB\stg_goa_khii{musicExtension}", $@"{ModDirectory}\{corePath}\sound\stg_goa_khii{musicExtension}", true);
 
-                // Edit the mod ini to include the custom stuff.
-                // Setup a check in chase we already have Custom Files.
-                bool alreadyHasCustom = false;
-
-                // Set the initial path.
-                string archivePath = $"Custom=\"stage_goa_khii.arc,stg_goa_khii{musicExtension}\"";
-
-                // Load the mod configuration ini to see if we already have custom content. If we do, then read the custom files line.
-                string[] modConfig = File.ReadAllLines(Path.Combine($@"{ModDirectory}", "mod.ini"));
-                if (modConfig[9].Contains("True") || modConfig.Length == 11)
-                {
-                    alreadyHasCustom = true;
-                    archivePath = modConfig[10].Remove(modConfig[10].LastIndexOf('\"'));
-                    archivePath += $",stage_goa_khii.arc,stg_goa_khii{musicExtension}\"";
-                }
-
-                // If we aren't already using custom files, then write the custom list the same way as the custom music function does.
-                if (!alreadyHasCustom)
-                {
-                    using StreamWriter configInfo = File.AppendText(Path.Combine($@"{ModDirectory}", "mod.ini"));
-                    configInfo.WriteLine(archivePath);
-                    configInfo.Close();
-                }
-                // If not, then patch the expanded list over the top of the existing one.
-                else
-                {
-                    modConfig[10] = archivePath;
-                    File.WriteAllLines(Path.Combine($@"{ModDirectory}", "mod.ini"), modConfig);
-                }
-
-                // Update the mod.ini array.
-                modConfig = File.ReadAllLines(Path.Combine($@"{ModDirectory}", "mod.ini"));
-
-                // Find and flip the CustomFilesystem flag to true.
-                for (int i = 0; i < modConfig.Length; i++)
-                    if (modConfig[i] == "CustomFilesystem=\"False\"")
-                        modConfig[i] = "CustomFilesystem=\"True\"";
-
-                // Update the mod.ini file.
-                File.WriteAllLines(Path.Combine($@"{ModDirectory}", "mod.ini"), modConfig);
+                // Update the mod.ini Custom file list.
+                await Task.Run(() => Helpers.UpdateCustomFiles($"stage_goa_khii.arc", ModDirectory, true));
+                await Task.Run(() => Helpers.UpdateCustomFiles($"stg_goa_khii{musicExtension}", ModDirectory));
             }
             #endregion
 

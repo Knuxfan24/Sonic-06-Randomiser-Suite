@@ -308,7 +308,7 @@
                         </StackPanel.Resources>
                         <CheckBox x:Name="CheckBox_Textures_Textures" Content="Randomise Textures" Foreground="Firebrick" Click="Dependency_CheckBox_Changed"/>
                         <CheckBox x:Name="CheckBox_Textures_PerArc" Content="Randomise Per Archive" IsEnabled="False"/>
-                        <CheckBox x:Name="CheckBox_Textures_AllowDupes" Content="Allow Duplicates" IsEnabled="False"/>
+                        <CheckBox x:Name="CheckBox_Textures_AllowDupes" Content="Allow Duplicates" IsEnabled="False" IsChecked="True"/>
                         <CheckBox x:Name="CheckBox_Textures_OnlyCustom" Content="Only Use Custom Textures" IsEnabled="False"/>
                         <CheckBox x:Name="CheckBox_Textures_DeleteStages" Content="Delete Stage Textures" Foreground="Firebrick"/>
                     </StackPanel>

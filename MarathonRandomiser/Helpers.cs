@@ -6,6 +6,7 @@ using Marathon.IO;
 using Marathon.IO.Interfaces;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
@@ -490,6 +491,62 @@ namespace MarathonRandomiser
                 return char.ToUpper(str[0]) + str.Substring(1);
 
             return str.ToUpper();
+        }
+
+        /// <summary>
+        /// Adds a file to the Custom parameter in mod.ini
+        /// </summary>
+        /// <param name="file">The name of the file to add to the Custom parameter.</param>
+        /// <param name="ModDirectory">The path to the randomisation's mod directory.</param>
+        /// <param name="CustomFilesystem">Whether we also need to flip the CustomFilesystem flag.</param>
+        public static async Task UpdateCustomFiles(string file, string ModDirectory, bool CustomFilesystem = false)
+        {
+            // Setup a check in chase we already have Custom Files.
+            bool alreadyHasCustom = false;
+
+            // Set up the initial Custom line.
+            string customLine = $"Custom=\"{file}\"";
+
+            // Load the mod configuration ini to see if we already have custom content. If we do, then read the custom files line and patch our addition onto it.
+            string[] modConfig = File.ReadAllLines(Path.Combine($@"{ModDirectory}", "mod.ini"));
+            if (modConfig.Length == 11)
+            {
+                alreadyHasCustom = true;
+                customLine = modConfig[10].Remove(modConfig[10].LastIndexOf('\"'));
+                customLine += $",{file}\"";
+            }
+
+            // If we aren't already using custom files, then write the custom list.
+            if (!alreadyHasCustom)
+            {
+                using StreamWriter configInfo = File.AppendText(Path.Combine($@"{ModDirectory}", "mod.ini"));
+                configInfo.WriteLine(customLine);
+                configInfo.Close();
+            }
+            // If not, then patch the expanded list over the top of the existing one.
+            else
+            {
+                modConfig[10] = customLine;
+                File.WriteAllLines(Path.Combine($@"{ModDirectory}", "mod.ini"), modConfig);
+            }
+
+            // Enable the Custom Filesystem flag.
+            if (CustomFilesystem)
+            {
+                // Update modConfig just to be safe.
+                modConfig = File.ReadAllLines(Path.Combine($@"{ModDirectory}", "mod.ini"));
+
+                // Loop through each line in modConfig.
+                for (int i = 0; i < modConfig.Length; i++)
+                {
+                    // If this line is the CustomFilesystem one and is set to false, then set it to true and resave the config.
+                    if (modConfig[i] == "CustomFilesystem=\"False\"")
+                    {
+                        modConfig[i] = "CustomFilesystem=\"True\"";
+                        File.WriteAllLines(Path.Combine($@"{ModDirectory}", "mod.ini"), modConfig);
+                    }
+                }
+            }
         }
     }
 

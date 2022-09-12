@@ -1,8 +1,6 @@
 ﻿using Marathon.Formats.Audio;
 using Marathon.Formats.Text;
-using System;
 using System.Diagnostics;
-using System.Reflection;
 
 namespace MarathonRandomiser
 {
@@ -17,6 +15,9 @@ namespace MarathonRandomiser
         /// <param name="EnableCache">Whether or not we need to store the generated XMA file.</param>
         public static async Task Music(string CustomSong, string ModDirectory, int index, bool? EnableCache)
         {
+            // Update the mod.ini Custom file list.
+            await Task.Run(() => Helpers.UpdateCustomFiles($"custom{index}", ModDirectory));
+
             // Get the name of the file with the extension replaced with .xma (used for the XMA Cache system).
             string origName = $"{Path.GetFileNameWithoutExtension(CustomSong)}.xma";
 
@@ -155,18 +156,8 @@ namespace MarathonRandomiser
         /// <param name="EnableCache">Whether or not we need to store the generated XMA file.</param>
         public static async Task VoiceLines(string CustomSound, string ModDirectory, int index, bool? EnableCache)
         {
-            // Setup a check in chase we already have Custom Files (as the Custom Music function always runs before this one).
-            bool alreadyHasCustom = false;
-            string sounds = $"Custom=\"custom_hint{index}.xma\"";
-
-            // Load the mod configuration ini to see if we already have custom content. If we do, then read the custom files line.
-            string[] modConfig = File.ReadAllLines(Path.Combine($@"{ModDirectory}", "mod.ini"));
-            if (modConfig[9].Contains("True") || modConfig.Length == 11)
-            {
-                alreadyHasCustom = true;
-                sounds = modConfig[10].Remove(modConfig[10].LastIndexOf('\"'));
-                sounds += $",custom_hint{index}.xma\"";
-            }
+            // Update the mod.ini Custom file list.
+            await Task.Run(() => Helpers.UpdateCustomFiles($"custom_hint{index}.xma", ModDirectory));
 
             // Get the name of the file with the extension replaced with .xma (used for the XMA Cache system).
             string origName = $"{Path.GetFileNameWithoutExtension(CustomSound)}.xma";
@@ -226,20 +217,6 @@ namespace MarathonRandomiser
                     if (EnableCache == true)
                         File.Copy($@"{ModDirectory}\xenon\sound\voice\e\custom_hint{index}.xma", $@"{Environment.CurrentDirectory}\Cache\XMA\Voice\{origName}");
                 }
-            }
-
-            // If we aren't already using custom files, then write the custom list the same way as the custom music function does.
-            if (!alreadyHasCustom)
-            {
-                using StreamWriter configInfo = File.AppendText(Path.Combine($@"{ModDirectory}", "mod.ini"));
-                configInfo.WriteLine(sounds);
-                configInfo.Close();
-            }
-            // If not, then patch the expanded list over the top of the existing one.
-            else
-            {
-                modConfig[10] = sounds;
-                File.WriteAllLines(Path.Combine($@"{ModDirectory}", "mod.ini"), modConfig);
             }
         }
 
@@ -307,21 +284,8 @@ namespace MarathonRandomiser
         /// <returns>A boolean used by the ProgressLogger to report if the process was aborted.</returns>
         public static async Task<bool> VoicePacks(string VoxPack, string ModDirectory, string[] archives, List<string> setHints)
         {
-            // Setup a check in chase we already have Custom Files (as the Custom Music function always runs before this one).
-            bool alreadyHasCustom = false;
-            string sounds = "Custom=\"";
-
             // Ensure the folders needed for this voice pack exist.
             Directory.CreateDirectory($@"{MainWindow.TemporaryDirectory}\tempVox\{VoxPack}");
-
-            // Load the mod configuration ini to see if we already have custom content. If we do, then read the custom files line.
-            string[] modConfig = File.ReadAllLines(Path.Combine($@"{ModDirectory}", "mod.ini"));
-            if (modConfig[9].Contains("True") || modConfig.Length == 11)
-            {
-                alreadyHasCustom = true;
-                sounds = modConfig[10].Remove(modConfig[10].LastIndexOf('\"'));
-                sounds += ",";
-            }
 
             // Extract the voice pack zip archive.
             using (Process process = new())
@@ -341,30 +305,16 @@ namespace MarathonRandomiser
             if (!File.Exists($@"{MainWindow.TemporaryDirectory}\tempVox\{VoxPack}\messageTable.mst"))
                 return false;
 
-            // Copy XMAs to the Mod Directory and add them to the list of custom files.
+            // Get all the XMAs in this voice pack.
             string[] voiceXmas = Directory.GetFiles($@"{MainWindow.TemporaryDirectory}\tempVox\{VoxPack}", "*.xma", SearchOption.TopDirectoryOnly);
+            
             foreach (string voiceXma in voiceXmas)
             {
+                // Copy this XMA to the Mod's directory.
                 File.Copy(voiceXma, $@"{ModDirectory}\xenon\sound\voice\e\{Path.GetFileNameWithoutExtension(voiceXma)}.xma");
-                sounds += $"{Path.GetFileNameWithoutExtension(voiceXma)}.xma,";
-            }
 
-            // Add all the sounds to the mod ini.
-            sounds = sounds.Remove(sounds.LastIndexOf(','));
-            sounds += "\"";
-
-            // If we aren't already using custom files, then write the custom list the same way as the custom music function does.
-            if (!alreadyHasCustom)
-            {
-                using StreamWriter configInfo = File.AppendText(Path.Combine($@"{ModDirectory}", "mod.ini"));
-                configInfo.WriteLine(sounds);
-                configInfo.Close();
-            }
-            // If not, then patch the expanded list over the top of the existing one.
-            else
-            {
-                modConfig[10] = sounds;
-                File.WriteAllLines(Path.Combine($@"{ModDirectory}", "mod.ini"), modConfig);
+                // Update the mod.ini Custom file list.
+                await Task.Run(() => Helpers.UpdateCustomFiles($"{Path.GetFileNameWithoutExtension(voiceXma)}.xma", ModDirectory));
             }
 
             // Add all the voice lines to voice_all_e.sbk in sound.arc
