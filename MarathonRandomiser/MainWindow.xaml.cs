@@ -967,6 +967,7 @@ namespace MarathonRandomiser
             VistaSaveFileDialog configSaveBrowser = new()
             {
                 Filter = "Randomiser Config (*.ini)|*.ini",
+                DefaultExt = ".ini",
                 RestoreDirectory = true
             };
 
@@ -999,10 +1000,6 @@ namespace MarathonRandomiser
         /// <param name="location">The filepath we're saving to.</param>
         private void SaveConfig(string location)
         {
-            // Append a .ini if that or .log isn't present. Thanks Winderps.
-            if (!location.EndsWith(".ini") && !location.EndsWith(".log"))
-                location += ".ini";
-
             // Set up our StreamWriter.
             StreamWriter configInfo = new(File.Open(location, FileMode.Create));
 
