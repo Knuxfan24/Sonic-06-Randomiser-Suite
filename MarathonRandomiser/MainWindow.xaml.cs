@@ -1389,6 +1389,9 @@ namespace MarathonRandomiser
                 configInfo.Close();
             }
 
+            // Change the Window Title.
+            Title = $"Generating Randomisation with seed '{Seed}'";
+
             // Display the Progress Logger elements and disable bottom buttons that shouldn't be useable during the process.
             ProgressLogger.Clear();
             TabControl_Main.Visibility = Visibility.Hidden;
@@ -2784,6 +2787,9 @@ namespace MarathonRandomiser
                 LoadConfig(Path.Combine(ModDirectory, "wildcard.bak"));
                 File.Delete(Path.Combine(ModDirectory, "wildcard.bak"));
             }
+
+            // Reset the Window Title.
+            Title = $"Sonic '06 Randomiser Suite ({VersionNumber})";
 
             // Restore Form Visiblity.
             TabControl_Main.Visibility = Visibility.Visible;
