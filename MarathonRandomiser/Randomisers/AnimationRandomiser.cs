@@ -229,6 +229,10 @@ namespace MarathonRandomiser
             // Loop through each XNM.
             foreach (string xnmFile in xnmFiles)
             {
+                // Skip Silver's style animation and Elise's hair animations, as they crash the game.
+                if (Path.GetFileName(xnmFile) == "silver_style_Root.xnm" || Path.GetFileName(xnmFile).Contains("_hair"))
+                    continue;
+
                 // Check if the randomiesr generates a number lower than or equal to our chance number. Continue if it does.
                 if (MainWindow.Randomiser.Next(0, 101) <= chance)
                 {
