@@ -16,7 +16,7 @@ namespace MarathonRandomiser
         public static async Task Music(string CustomSong, string ModDirectory, int index, bool? EnableCache)
         {
             // Update the mod.ini Custom file list.
-            await Task.Run(() => Helpers.UpdateCustomFiles($"custom{index}", ModDirectory));
+            await Task.Run(() => Helpers.UpdateCustomFiles($"custom{index}.xma", ModDirectory));
 
             // Get the name of the file with the extension replaced with .xma (used for the XMA Cache system).
             string origName = $"{Path.GetFileNameWithoutExtension(CustomSong)}.xma";
