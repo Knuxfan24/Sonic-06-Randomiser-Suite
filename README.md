@@ -91,15 +91,15 @@ Randomisation of various values within the game's scene lua binaries (.lub) file
 
 Randomisation of various animation elements, such as:
 
-* Shuffling animations between states.
+* Shuffling animations between states
 
-* Shuffling animations between cutscenes.
+* Shuffling animations between cutscenes
 
-* Shuffling cameras between cutscenes.
+* Shuffling cameras between cutscenes
 
-* Randomising the framerate of animations.
+* Randomising the framerate of animations
 
-* T-Posing animations.
+* T-Posing animations
 
 ### Model Randomisation
 
@@ -139,13 +139,19 @@ Modification of various attributes relating to the game's text within the messag
 
 Randomisation of various bits of data within the game's User Interface (.xncp) files. These are:
 
-* Randomisation of the UI Element Colours.
+* Randomisation of the UI Element Colours
 
-* Randomisation of the UI Element's Scale.
+* Randomisation of the UI Element's Scale
 
-* Shuffling of the UI Element's Depth.
+* Shuffling of the UI Element's Depth
 
-* Randomisation of the texture coordinates used by elements on the UI.
+* Randomisation of the texture coordinates used by elements on the UI
+
+### Random Episode Generation
+
+<img src="https://raw.githubusercontent.com/wiki/Knuxfan24/Sonic-06-Randomiser-Suite/images/tab_episode.png">
+
+Generates an episode that plays through all 45 stages in a random order (A configurable amount of Town Missions can also be included in this episode), starting from a custom stage select. If the Very Hard Mode DLC archives are provided, then there is a 1/3 chance for each stage to swap its DLC version in.
 
 ### Miscellaneous Randomisation
 
@@ -165,15 +171,13 @@ Randomisation of miscellaneous elements across one off files, these are:
 
 * Randomising the debris spawned when a prop breaks
 
-* Randomly generating an episode that plays through every stage in a random order
-
 ### Custom Elements
 
 <img src="https://raw.githubusercontent.com/wiki/Knuxfan24/Sonic-06-Randomiser-Suite/images/tab_custom.png">
 
 Allows the user to add custom elements to the Randomisation, these being:
 
-* Custom Music and Hint Voice Lines, supporting basically any format that [vgmstream](https://github.com/vgmstream/vgmstream) can convert.
+* Custom Music and Hint Voice Lines, supporting basically any format that [vgmstream](https://github.com/vgmstream/vgmstream) can convert
 
 * Textures
 
