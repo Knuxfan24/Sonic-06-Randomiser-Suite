@@ -1,6 +1,7 @@
 ﻿using Marathon.Formats.Archive;
 using Marathon.Formats.Audio;
 using Marathon.Formats.Script.Lua;
+using Marathon.Formats.Text;
 using Marathon.Helpers;
 using Marathon.IO;
 using Marathon.IO.Interfaces;
@@ -546,6 +547,35 @@ namespace MarathonRandomiser
                         File.WriteAllLines(Path.Combine($@"{ModDirectory}", "mod.ini"), modConfig);
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Changes the Main Menu header to show the Randomiser's version number.
+        /// </summary>
+        /// <param name="archivePath">The path to an extracted text.arc.</param>
+        /// <param name="corePath">The platform path (ps3 or xenon)</param>
+        public static async Task VersionNumberMST(string archivePath, string corePath)
+        {
+            // Loop through all the msg_mainmenu message tables.
+            foreach (string mstFile in Directory.GetFiles($@"{archivePath}\{corePath}\text", "msg_mainmenu.*.mst", SearchOption.AllDirectories))
+            {
+                // Load this message table.
+                MessageTable mst = new(mstFile);
+
+                // Loop through all the messages in this table.
+                foreach (Message? message in mst.Data.Messages)
+                {
+                    // If this is the msg_mainmenu message, then replace its text with the Rando's version number and null out the Placeholders (just in case).
+                    if (message.Name == "msg_mainmenu")
+                    {
+                        message.Text = $"Randomiser Suite {MainWindow.VersionNumber}";
+                        message.Placeholders = null;
+                    }
+                }
+
+                // Resave this message table.
+                mst.Save();
             }
         }
     }

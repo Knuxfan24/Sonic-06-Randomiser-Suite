@@ -21,7 +21,7 @@ namespace MarathonRandomiser
     public partial class MainWindow : Window
     {
         // Version Number.
-        public static readonly string GlobalVersionNumber = $"Version 2.1.19";
+        public static readonly string GlobalVersionNumber = $"Version 2.1.20";
 
         #if !DEBUG
         public static readonly string VersionNumber = GlobalVersionNumber;
@@ -2737,9 +2737,9 @@ namespace MarathonRandomiser
             }
             #endregion
 
-            // Patch voice_all_e.sbk if we've done something to need it.
             foreach (string archive in archives)
             {
+                // Patch voice_all_e.sbk if we've done something to need it.
                 if (setHints == true || (setEnemies == true && (SetEnemies.Contains("eCerberus") || SetEnemies.Contains("eGenesis") || SetEnemies.Contains("eWyvern") ||
                     SetEnemies.Contains("firstiblis") || SetEnemies.Contains("secondiblis") || SetEnemies.Contains("thirdiblis") || SetEnemies.Contains("firstmefiress") ||
                     SetEnemies.Contains("secondmefiress") || SetEnemies.Contains("solaris01") || SetEnemies.Contains("solaris02"))) || textShuffle == true)
@@ -2750,6 +2750,14 @@ namespace MarathonRandomiser
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
                         await Task.Run(() => Helpers.VoiceBankPatcher(unpackedArchive, corePath));
                     }
+                }
+
+                // Replace the MAIN MENU string with the Randomiser's version number.
+                if (Path.GetFileName(archive).ToLower() == "text.arc")
+                {
+                    UpdateLogger($"Writing version number.");
+                    string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+                    await Task.Run(() => Helpers.VersionNumberMST(unpackedArchive, corePath));
                 }
             }
 
