@@ -16,6 +16,7 @@
     <PackageReference Include="BE32.Marathon" Version="1.0.64" />
     <PackageReference Include="HandyControls" Version="3.3.11" />
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
+    <PackageReference Include="SharpCompress" Version="0.32.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -54,9 +55,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="ExternalResources\7z.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="ExternalResources\crate_iron_normal.dds">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -1,6 +1,10 @@
 ﻿using Marathon.Formats.Audio;
 using Marathon.Formats.Text;
+using SharpCompress.Archives;
+using SharpCompress.Archives.Zip;
+using SharpCompress.Common;
 using System.Diagnostics;
+using System.Linq;
 
 namespace MarathonRandomiser
 {
@@ -287,18 +291,17 @@ namespace MarathonRandomiser
             // Ensure the folders needed for this voice pack exist.
             Directory.CreateDirectory($@"{MainWindow.TemporaryDirectory}\tempVox\{VoxPack}");
 
-            // Extract the voice pack zip archive.
-            using (Process process = new())
+            // Extract the Voice Pack zip.
+            using (ZipArchive archive = ZipArchive.Open($@"{Environment.CurrentDirectory}\VoicePacks\{VoxPack}.zip"))
             {
-                process.StartInfo.FileName = $"\"{Environment.CurrentDirectory}\\ExternalResources\\7z.exe\"";
-                process.StartInfo.Arguments = $"x \"{Environment.CurrentDirectory}\\VoicePacks\\{VoxPack}.zip\" -o\"{MainWindow.TemporaryDirectory}\\tempVox\"";
-                process.StartInfo.UseShellExecute = false;
-                process.StartInfo.RedirectStandardOutput = true;
-                process.StartInfo.CreateNoWindow = true;
-
-                process.Start();
-                process.BeginOutputReadLine();
-                process.WaitForExit();
+                foreach (ZipArchiveEntry? entry in archive.Entries.Where(entry => !entry.IsDirectory))
+                {
+                    entry.WriteToDirectory($@"{MainWindow.TemporaryDirectory}\tempVox", new ExtractionOptions()
+                    {
+                        ExtractFullPath = true,
+                        Overwrite = true
+                    });
+                }
             }
 
             // If there isn't a messageTable.mst file, abort and return false so the logger can report it.
