@@ -2795,6 +2795,10 @@ namespace MarathonRandomiser
                 LoadConfig(Path.Combine(ModDirectory, "wildcard.bak"));
                 File.Delete(Path.Combine(ModDirectory, "wildcard.bak"));
             }
+            else
+            {
+                SaveConfig(Path.Combine(ModDirectory, $"{VersionNumber}.ini"));
+            }
 
             // Reset the Window Title.
             Title = $"Sonic '06 Randomiser Suite ({VersionNumber})";
