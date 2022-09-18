@@ -2788,13 +2788,14 @@ namespace MarathonRandomiser
             if (Directory.Exists(TemporaryDirectory))
                 Directory.Delete(TemporaryDirectory, true);
 
-            // Clean up the Wildcard's settings tampering.
+            // Clean up the Wildcard's settings tampering and save a log.
             if (CheckBox_Wildcard_Enable.IsChecked == true)
             {
                 SaveConfig(Path.Combine(ModDirectory, "wildcard.log"));
                 LoadConfig(Path.Combine(ModDirectory, "wildcard.bak"));
                 File.Delete(Path.Combine(ModDirectory, "wildcard.bak"));
             }
+            // Save a log of the user's settings with the version number of the Rando' that generated it if the Wildcard isn't in use.
             else
             {
                 SaveConfig(Path.Combine(ModDirectory, $"{VersionNumber}.ini"));
