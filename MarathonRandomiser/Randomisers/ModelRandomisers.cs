@@ -5,9 +5,9 @@ namespace MarathonRandomiser
     internal class ModelRandomisers
     {
         /// <summary>
-     /// Randomises the Vertex Colours in an XNO.
-     /// </summary>
-     /// <param name="xnoFile">The XNO to process.</param>
+        /// Randomises the Vertex Colours in an XNO.
+        /// </summary>
+        /// <param name="xnoFile">The XNO to process.</param>
         public static async Task RandomiseVertexColours(string xnoFile)
         {
             // This try catch is needed due to a couple of XNOs using a chunk that isn't supported in Marathon as of yet.
