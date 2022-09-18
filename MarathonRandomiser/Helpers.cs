@@ -7,7 +7,6 @@ using Marathon.IO;
 using Marathon.IO.Interfaces;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
