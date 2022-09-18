@@ -210,7 +210,7 @@
             bool foundSky = false;
             for (int i = 0; i < lua.Length; i++)
             {
-                if(lua[i].Contains("Game.LoadSky"))
+                if (lua[i].Contains("Game.LoadSky"))
                 {
                     // Set our indicator that this lua already had skybox set.
                     foundSky = true;
@@ -227,7 +227,7 @@
             }
 
             // If we haven't found an existing Game.LoadSky() function, then loop through and create one.
-            if(!foundSky)
+            if (!foundSky)
             {
                 for (int i = 0; i < lua.Length; i++)
                 {

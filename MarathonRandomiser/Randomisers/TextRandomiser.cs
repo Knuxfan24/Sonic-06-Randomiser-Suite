@@ -109,7 +109,7 @@ namespace MarathonRandomiser
                             int remainingAttempts = 1000000;
 
                             // If the string is longer and we have attempts left, try again and deduct an attempt.
-                            while(remainingAttempts != 0 && chosenString.Length != split[i].Length)
+                            while (remainingAttempts != 0 && chosenString.Length != split[i].Length)
                             {
                                 chosenString = wordList[MainWindow.Randomiser.Next(wordList.Length)].ToUpper();
                                 remainingAttempts--;

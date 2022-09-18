@@ -616,12 +616,12 @@ namespace MarathonRandomiser
                 case "CheckBox_Scene_Light_Ambient":
                 case "CheckBox_Scene_Light_Main":
                 case "CheckBox_Scene_Light_Sub":
-                    if(NewCheckedStatus == true)
+                    if (NewCheckedStatus == true)
                     {
                         Label_Scene_MinStrength.IsEnabled = true;
                         NumericUpDown_Scene_MinStrength.IsEnabled = true;
                     }
-                    else if(CheckBox_Scene_Light_Ambient.IsChecked == false && CheckBox_Scene_Light_Main.IsChecked == false && CheckBox_Scene_Light_Sub.IsChecked == false)
+                    else if (CheckBox_Scene_Light_Ambient.IsChecked == false && CheckBox_Scene_Light_Main.IsChecked == false && CheckBox_Scene_Light_Sub.IsChecked == false)
                     {
                         Label_Scene_MinStrength.IsEnabled = false;
                         NumericUpDown_Scene_MinStrength.IsEnabled = false;
@@ -1799,7 +1799,7 @@ namespace MarathonRandomiser
             bool? setDoubleTrouble = CheckBox_SET_DoubleTrouble.IsChecked;
 
             // Check if we actually need to do SET stuff.
-            if (setEnemies == true || setBehaviour == true || setCharacters == true || setItemCapsules == true || setCommonProps == true || setPathProps == true || setHints == true || setDoors == true||
+            if (setEnemies == true || setBehaviour == true || setCharacters == true || setItemCapsules == true || setCommonProps == true || setPathProps == true || setHints == true || setDoors == true ||
                 setDrawDistance == true || setCosmetic == true || setParticles == true || setJumpboards == true || setTransform == true || setDoubleTrouble == true)
             {
                 foreach (string archive in archives)
