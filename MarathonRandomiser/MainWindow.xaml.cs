@@ -2545,7 +2545,7 @@ namespace MarathonRandomiser
                 if (textShuffle == true)
                 {
                     UpdateLogger($"Shuffling text.");
-                    await Task.Run(() => TextRandomiser.ShuffleText(mstFiles, TextLanguages));
+                    await Task.Run(() => TextRandomiser.ShuffleText(mstFiles));
                 }
             }
             #endregion
