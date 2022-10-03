@@ -15,8 +15,10 @@
   <ItemGroup>
     <PackageReference Include="BE32.Marathon" Version="1.0.64" />
     <PackageReference Include="HandyControls" Version="3.3.11" />
+    <PackageReference Include="NAudio" Version="2.1.0" />
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
     <PackageReference Include="SharpCompress" Version="0.32.2" />
+    <PackageReference Include="System.Speech" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -82,18 +82,7 @@ namespace MarathonRandomiser
                     }
 
                     // Convert WAV file to XMA.
-                    using (Process process = new())
-                    {
-                        process.StartInfo.FileName = $"\"{Environment.CurrentDirectory}\\ExternalResources\\xmaencode.exe\"";
-                        process.StartInfo.Arguments = $"\"{CustomSong}\" /b 64 /t \"{ModDirectory}\\xenon\\sound\\custom{index}.xma\"";
-                        process.StartInfo.UseShellExecute = false;
-                        process.StartInfo.RedirectStandardOutput = true;
-                        process.StartInfo.CreateNoWindow = true;
-
-                        process.Start();
-                        process.BeginOutputReadLine();
-                        process.WaitForExit();
-                    }
+                    await Task.Run(() => Helpers.XMAEncode($@"{CustomSong}", $@"{ModDirectory}\xenon\sound\custom{index}.xma"));
 
                     // If vgmstream didn't find any loop points, then patch in a start to end loop.
                     if (startLoop == 0 && endLoop == 0)
@@ -204,18 +193,7 @@ namespace MarathonRandomiser
                     }
 
                     // Convert WAV file to XMA.
-                    using (Process process = new())
-                    {
-                        process.StartInfo.FileName = $"\"{Environment.CurrentDirectory}\\ExternalResources\\xmaencode.exe\"";
-                        process.StartInfo.Arguments = $"\"{CustomSound}\" /b 64 /t \"{ModDirectory}\\xenon\\sound\\voice\\e\\custom_hint{index}.xma\"";
-                        process.StartInfo.UseShellExecute = false;
-                        process.StartInfo.RedirectStandardOutput = true;
-                        process.StartInfo.CreateNoWindow = true;
-
-                        process.Start();
-                        process.BeginOutputReadLine();
-                        process.WaitForExit();
-                    }
+                    await Task.Run(() => Helpers.XMAEncode($@"{CustomSound}", $@"{ModDirectory}\xenon\sound\voice\e\custom_hint{index}.xma"));
 
                     // If the cache is enabled, copy the newly converted file to the XMA cache folder.
                     if (EnableCache == true)

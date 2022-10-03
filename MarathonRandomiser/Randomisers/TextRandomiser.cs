@@ -1,5 +1,7 @@
 ﻿using Marathon.Formats.Text;
 using System.Linq;
+using System.Speech.AudioFormat;
+using System.Speech.Synthesis;
 
 namespace MarathonRandomiser
 {
@@ -134,6 +136,66 @@ namespace MarathonRandomiser
 
             // Save the MST.
             mst.Save();
+        }
+
+        /// <summary>
+        /// Generates a text to speech audio file for a message table entry.
+        /// </summary>
+        /// <param name="messageEntry">The message table entry we're processing.</param>
+        /// <param name="ModDirectory">The mod directory to place the generated XMAs into.</param>
+        public static async Task GenerateTTS(Message messageEntry, string ModDirectory)
+        {
+            // Keep track of what sound we're one.
+            int sounds = 0;
+
+            // Set up the text that needs to be TTS'd.
+            string[] messages = messageEntry.Text.Split("\f");
+            for (int i = 0; i < messages.Length; i++)
+            {
+                messages[i] = messages[i].Replace('\n', ' ');
+                messages[i] = messages[i].Replace("$", "");
+            }
+
+            // Loop through each placeholder in this message.
+            foreach (string placeholder in messageEntry.Placeholders)
+            {
+                // Only do anything to sound placeholders.
+                if (placeholder.Contains("sound"))
+                {
+                    // Get the name of the sound file.
+                    string name = placeholder.Replace("sound(", "");
+                    name = name.Replace(")", "");
+
+                    // Initialize a new instance of the SpeechSynthesizer.  
+                    SpeechSynthesizer synth = new();
+
+                    // Select a random voice from the installed voices.
+                    var voices = synth.GetInstalledVoices();
+                    synth.SelectVoice(voices[MainWindow.Randomiser.Next(voices.Count)].VoiceInfo.Name);
+
+                    // Configure the audio output.   
+                    synth.SetOutputToWaveFile($@"{MainWindow.TemporaryDirectory}\tempWavs\tts\{name}.wav", new SpeechAudioFormatInfo(48000, AudioBitsPerSample.Sixteen, AudioChannel.Mono));
+
+                    // Set up the PromptBuilder.
+                    PromptBuilder builder = new();
+                    builder.AppendText(messages[sounds]);
+
+                    // Do the actual Text to Speech process.
+                    synth.Speak(builder);
+
+                    // Dispose of the now useless SpeechSynthesizer
+                    synth.Dispose();
+
+                    // Increment our sound tracker.
+                    sounds++;
+
+                    // Normalise the generated WAV. Still feels quiet but oh well...
+                    await Task.Run(() => Helpers.WavNormalise($@"{MainWindow.TemporaryDirectory}\tempWavs\tts\{name}.wav"));
+
+                    // Convert WAV file to XMA.
+                    await Task.Run(() => Helpers.XMAEncode($@"{MainWindow.TemporaryDirectory}\tempWavs\tts\{name}.wav", $@"{ModDirectory}\xenon\sound\voice\e\{name}.xma"));
+                }
+            }
         }
 
         /// <summary>

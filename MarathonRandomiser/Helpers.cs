@@ -5,8 +5,10 @@ using Marathon.Formats.Text;
 using Marathon.Helpers;
 using Marathon.IO;
 using Marathon.IO.Interfaces;
+using NAudio.Wave;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Diagnostics;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
@@ -575,6 +577,63 @@ namespace MarathonRandomiser
 
                 // Resave this message table.
                 mst.Save();
+            }
+        }
+
+        // https://markheath.net/post/normalize-audio-naudio
+        public static async Task WavNormalise(string file)
+        {
+            float max = 0;
+
+            using (var reader = new AudioFileReader(file))
+            {
+                // find the max peak
+                float[] buffer = new float[reader.WaveFormat.SampleRate];
+                int read;
+                do
+                {
+                    read = reader.Read(buffer, 0, buffer.Length);
+                    for (int n = 0; n < read; n++)
+                    {
+                        var abs = Math.Abs(buffer[n]);
+                        if (abs > max) max = abs;
+                    }
+                } while (read > 0);
+                Console.WriteLine($"Max sample value: {max}");
+
+                if (max == 0 || max > 1.0f)
+                    throw new InvalidOperationException("File cannot be normalized");
+
+                // rewind and amplify
+                reader.Position = 0;
+                reader.Volume = 1.0f / max;
+
+                // write out to a new WAV file
+                WaveFileWriter.CreateWaveFile16($@"{Path.GetDirectoryName(file)}\{Path.GetFileNameWithoutExtension(file)}_norm.wav", reader);
+            }
+
+            File.Delete(file);
+            File.Move($@"{Path.GetDirectoryName(file)}\{Path.GetFileNameWithoutExtension(file)}_norm.wav", file);
+        }
+
+        /// <summary>
+        /// Uses XMAEncode to convert a WAV file to an XMA file.
+        /// </summary>
+        /// <param name="inputFile">The path to the WAV file to convert.</param>
+        /// <param name="outputFile">Where to save the XMA file.</param>
+        public static async Task XMAEncode(string inputFile, string outputFile)
+        {
+            using (Process process = new())
+            {
+                process.StartInfo.FileName = $"\"{Environment.CurrentDirectory}\\ExternalResources\\xmaencode.exe\"";
+                process.StartInfo.Arguments = $"\"{inputFile}\" /b 64 /t \"{outputFile}\"";
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.CreateNoWindow = true;
+
+                process.Start();
+                process.BeginOutputReadLine();
+                process.WaitForExit();
             }
         }
     }

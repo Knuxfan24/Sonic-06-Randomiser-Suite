@@ -3,6 +3,7 @@ global using System.Collections.Generic;
 global using System.IO;
 global using System.Threading.Tasks;
 using Marathon.Formats.Archive;
+using Marathon.Formats.Text;
 using Marathon.Helpers;
 using Marathon.IO;
 using Ookii.Dialogs.Wpf;
@@ -662,6 +663,8 @@ namespace MarathonRandomiser
 
                 case "CheckBox_Text_Generate":
                     CheckBox_Text_Generate_Enforce.IsEnabled = NewCheckedStatus;
+                    if (TextBox_General_GameExecutable.Text.EndsWith(".xex"))
+                        CheckBox_Text_Generate_TTS.IsEnabled = NewCheckedStatus;
                     break;
 
                 case "CheckBox_XNCP_Colours":
@@ -953,7 +956,8 @@ namespace MarathonRandomiser
                                                   "HandyControl: WPF Form Controls.\n" +
                                                   "Skyth: Sonic Audio Tools.\n" +
                                                   "dwyl: Plain Text List of English Words.\n" +
-                                                  "crash5band: XNCPLib.",
+                                                  "crash5band: XNCPLib.\n" +
+                                                  "Mark Heath: NAudio.",
                                                   "Sonic '06 Randomiser Suite",
                                                   MessageBoxButton.OK,
                                                   MessageBoxImage.Information);
@@ -2428,6 +2432,7 @@ namespace MarathonRandomiser
             bool? textButtons = CheckBox_Text_Buttons.IsChecked;
             bool? textGenerate = CheckBox_Text_Generate.IsChecked;
             bool? textGenerateEnforce = CheckBox_Text_Generate_Enforce.IsChecked;
+            bool? textGenerateTTS = CheckBox_Text_Generate_TTS.IsChecked;
             bool? textColour = CheckBox_Text_Colour.IsChecked;
             int textColourWeight = (int)NumericUpDown_Text_Colour_Weight.Value;
             bool? textShuffle = CheckBox_Text_Shuffle.IsChecked;
@@ -2499,6 +2504,29 @@ namespace MarathonRandomiser
                     {
                         UpdateLogger($"Generating random text for '{mstFile}'.");
                         await Task.Run(() => TextRandomiser.TextGenerator(mstFile, wordList, textGenerateEnforce));
+
+                        // If this is a Hint MST and we're using the TTS, then generate the audio.
+                        // Also make sure this is a 360 target, just in case.
+                        if (mstFile.Contains("msg_hint") && textGenerateTTS == true && corePath == "xenon")
+                        {
+                            // Create the directory for the process and the voice folder.
+                            Directory.CreateDirectory($@"{TemporaryDirectory}\tempWavs\tts");
+                            Directory.CreateDirectory($@"{ModDirectory}\xenon\sound\voice\e");
+
+                            // Load the MST
+                            MessageTable ttsMST = new(mstFile);
+
+                            // Loop through each message in the MST.
+                            foreach (var message in ttsMST.Data.Messages)
+                            {
+                                // If this is a custom hint (not a voice pack one) or has no placeholders then skip it.
+                                if (message.Name.Contains("hint_custom") || message.Placeholders == null)
+                                    continue;
+
+                                UpdateLogger($"Generating Text to Speech for random dialog in '{message.Name}'.");
+                                await Task.Run(() => TextRandomiser.GenerateTTS(message, ModDirectory));
+                            }
+                        }
                     }
                 }
 
