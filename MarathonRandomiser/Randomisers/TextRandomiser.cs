@@ -11,10 +11,7 @@ namespace MarathonRandomiser
         /// Shuffles all the text entries in all the game's message table files around.
         /// </summary>
         /// <param name="mstFiles">Array of all the message table files.</param>
-        /// <param name="eventArc">The path to the already unpacked event.arc.</param>
-        /// <param name="textArc">The path to the already unpacked text.arc.</param>
-        /// <param name="languages">The list of valid language codes to include.</param>
-        public static async Task ShuffleText(string[] mstFiles, string eventArc, string textArc, List<string> languages)
+        public static async Task ShuffleText(string[] mstFiles)
         {
             // Set up a list so we can track which messages have already been used.
             List<int> usedNumbers = new();
