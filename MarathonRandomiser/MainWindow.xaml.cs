@@ -654,6 +654,12 @@ namespace MarathonRandomiser
                     CheckBox_Models_MaterialSpecular.IsEnabled = NewCheckedStatus;
                     CheckBox_Models_MaterialEmissive.IsEnabled = NewCheckedStatus;
                     break;
+                case "CheckBox_Models_PlayerScale":
+                    Label_Models_PlayerScale_Min.IsEnabled = NewCheckedStatus;
+                    NumericUpDown_Models_PlayerScale_Min.IsEnabled = NewCheckedStatus;
+                    Label_Models_PlayerScale_Max.IsEnabled = NewCheckedStatus;
+                    NumericUpDown_Models_PlayerScale_Max.IsEnabled = NewCheckedStatus;
+                    break;
 
                 case "CheckBox_Textures_Textures":
                     CheckBox_Textures_PerArc.IsEnabled = NewCheckedStatus;
@@ -2178,6 +2184,9 @@ namespace MarathonRandomiser
             bool? modelsMaterialAmbient = CheckBox_Models_MaterialAmbient.IsChecked;
             bool? modelsMaterialSpecular = CheckBox_Models_MaterialSpecular.IsChecked;
             bool? modelsMaterialEmissive = CheckBox_Models_MaterialEmissive.IsChecked;
+            bool? modelsPlayerScale = CheckBox_Models_PlayerScale.IsChecked;
+            double modelsPlayerScaleMin = NumericUpDown_Models_PlayerScale_Min.Value;
+            double modelsPlayerScaleMax = NumericUpDown_Models_PlayerScale_Max.Value;
 
             // Check if we need to do vertex colour randomisation.
             if (modelsVertexColours == true)
@@ -2209,6 +2218,26 @@ namespace MarathonRandomiser
                         {
                             UpdateLogger($"Randomising material colours in '{xnoFile}'.");
                             await Task.Run(() => ModelRandomisers.RandomiseMaterialColours(xnoFile, modelsMaterialDiffuse, modelsMaterialAmbient, modelsMaterialSpecular, modelsMaterialEmissive));
+                        }
+                    }
+                }
+            }
+            
+            // Check if we need to do model scaling.
+            if (modelsPlayerScale == true)
+            {
+                foreach (string archive in archives)
+                {
+                    if (Path.GetFileName(archive).ToLower() == "player.arc")
+                    {
+                        string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+                        foreach (string luaFile in Directory.GetFiles(unpackedArchive, "*.lub", SearchOption.AllDirectories))
+                        {
+                            if (File.ReadAllText(luaFile).Contains("c_model_package"))
+                            {
+                                UpdateLogger($"Randomising model scale in '{luaFile}'.");
+                                await Task.Run(() => ModelRandomisers.RandomisePlayerModelScale(luaFile, modelsPlayerScaleMin, modelsPlayerScaleMax));
+                            }
                         }
                     }
                 }
