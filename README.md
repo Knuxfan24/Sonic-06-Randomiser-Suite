@@ -105,7 +105,7 @@ Randomisation of various animation elements, such as:
 
 <img src="https://raw.githubusercontent.com/wiki/Knuxfan24/Sonic-06-Randomiser-Suite/images/tab_models.png">
 
-Randomisation of colouring elements within Ninja models.
+Randomisation of colouring elements within Ninja models, alongside the option to apply a random cosmetic scale value to player models.
 
 ### Texture Randomisation
 
@@ -127,7 +127,7 @@ Modification of various attributes relating to the game's text within the messag
 
 * Randomisation of Button Icons
 
-* Random text generation, with optional word length enforcement
+* Random text generation, with optional word length enforcement and text to speech
 
 * Random text colouration, with configurable chance
 
