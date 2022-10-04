@@ -2233,7 +2233,7 @@ namespace MarathonRandomiser
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
                         foreach (string luaFile in Directory.GetFiles(unpackedArchive, "*.lub", SearchOption.AllDirectories))
                         {
-                            if (File.ReadAllText(luaFile).Contains("c_model_package"))
+                            if (File.ReadAllText(luaFile).Contains("c_model_package") && Path.GetFileName(luaFile) != "common.lub")
                             {
                                 UpdateLogger($"Randomising model scale in '{luaFile}'.");
                                 await Task.Run(() => ModelRandomisers.RandomisePlayerModelScale(luaFile, modelsPlayerScaleMin, modelsPlayerScaleMax));
