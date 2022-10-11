@@ -24,6 +24,52 @@ namespace MarathonRandomiser
     internal class Helpers
     {
         /// <summary>
+        /// Gets the version number from the GitHub.
+        /// </summary>
+        public static string GetVersionNumber()
+        {
+            // Set up the HTTPClient.
+            HttpClient? httpClient = new();
+            httpClient.DefaultRequestHeaders.UserAgent.Add(
+                new ProductInfoHeaderValue("MyApplication", "1"));
+            string? repo = "Knuxfan24/Sonic-06-Randomiser-Suite";
+            string? contentsUrl = $"https://api.github.com/repos/{repo}/contents";
+
+            // Try to get the list of files in the repo's root as a JSON.
+            Task<string> task = Task.Run(() => httpClient.GetStringAsync(contentsUrl));
+            try { task.Wait(); }
+            catch { return ""; }
+            string? contentsJson = task.Result;
+
+            JArray? contents = (JArray)JsonConvert.DeserializeObject(contentsJson);
+
+            // Loop through each file to find version.txt.
+            foreach (JToken? file in contents)
+            {
+                string? fileName = (string)file["name"];
+
+                if (fileName == "version.txt")
+                {
+                    // Temporarily download the version text file.
+                    using WebClient? client = new();
+                    client.DownloadFile((string)file["download_url"], $@"{Environment.CurrentDirectory}\version.txt");
+
+                    // Read from it.
+                    string ret = File.ReadAllText($@"{Environment.CurrentDirectory}\version.txt");
+
+                    // Delete it.
+                    File.Delete($@"{Environment.CurrentDirectory}\version.txt");
+
+                    // Return what we read.
+                    return ret;
+                }
+            }
+
+            // Return an empty string if we haven't found version.txt.
+            return "";
+        }
+
+        /// <summary>
         /// Fills out the custom CheckedListBox elements from text files containing comma seperated values.
         /// </summary>
         /// <param name="file">Text file containing comma seperated values.</param>
@@ -304,20 +350,12 @@ namespace MarathonRandomiser
             // Loop through each file.
             foreach (JToken? file in contents)
             {
-                // Whether this is a file or a directory, as I don't plan to use directories I can ignore those.
-                string? fileType = (string)file["type"];
-                if (fileType == "file")
-                {
-                    // Get the actual url.
-                    string? downloadUrl = (string)file["download_url"];
+                // Get this file's name.
+                string? fileName = (string)file["name"];
 
-                    // Strip the url down to the file name and decode its HTML.
-                    string decodedFilename = Path.GetFileName(HttpUtility.UrlDecode(downloadUrl));
-
-                    // Only add this file to the dictionary if it's a ZIP (so ignore the README basically).
-                    if (decodedFilename.EndsWith(".zip"))
-                        packs.Add(downloadUrl, decodedFilename);
-                }
+                // If it's a zip archive, add it to our dictionary.
+                if (Path.GetExtension(fileName) == ".zip")
+                    packs.Add((string)file["download_url"], fileName);
             }
 
             // Return our dictionary.
@@ -490,7 +528,7 @@ namespace MarathonRandomiser
                 return null;
 
             if (str.Length > 1)
-                return char.ToUpper(str[0]) + str.Substring(1);
+                return char.ToUpper(str[0]) + str[1..];
 
             return str.ToUpper();
         }

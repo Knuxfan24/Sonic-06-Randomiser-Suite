@@ -22,13 +22,15 @@ namespace MarathonRandomiser
     public partial class MainWindow : Window
     {
         // Version Number.
-        public static readonly string GlobalVersionNumber = $"Version 2.1.20";
+        public static readonly int GlobalVersionNumber_Rewrite = 2;
+        public static readonly int GlobalVersionNumber_Revision = 1;
+        public static readonly int GlobalVersionNumber_Release = 20;
 
-        #if !DEBUG
+#if !DEBUG
         public static readonly string VersionNumber = GlobalVersionNumber;
-        #else
-        public static readonly string VersionNumber = $"{GlobalVersionNumber}-indev-{File.GetLastAccessTime(Environment.CurrentDirectory):ddMMyy}";
-        #endif
+#else
+        public static readonly string VersionNumber = $"Version {GlobalVersionNumber_Rewrite}.{GlobalVersionNumber_Revision}.{GlobalVersionNumber_Release}-indev-{File.GetLastAccessTime(Environment.CurrentDirectory):ddMMyy}";
+#endif
         
         // Generate the path to a temp directory we can use for the Randomisation process.
         public static readonly string TemporaryDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
@@ -63,12 +65,24 @@ namespace MarathonRandomiser
             CultureInfo.DefaultThreadCurrentCulture = CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("en-GB");
 
             // If this is a debug build, set the seed to WPF Test for the sake of consistent testing and list the Temporary Directory path.
-            #if DEBUG
+#if DEBUG
             TextBox_General_Seed.Text = "Development Testing";
             Debug.WriteLine($"Current temporary path is: {TemporaryDirectory}.");
-            #endif
+#endif
 
             DataContext = this;
+
+            // Update checking if in release.
+#if !DEBUG
+            // Could probably do automatic updates if I tried but I really can't be bothered. Nor do I want to pop it up every time, so I'll just change the title bar.
+            string[] versionCheck = Helpers.GetVersionNumber().Split('.');
+            if (GlobalVersionNumber_Rewrite  < int.Parse(versionCheck[0]) ||
+                GlobalVersionNumber_Revision < int.Parse(versionCheck[1]) ||
+                GlobalVersionNumber_Release  < int.Parse(versionCheck[2]))
+            {
+                Title = $"Sonic '06 Randomiser Suite ({VersionNumber}) - Version {versionCheck[0]}.{versionCheck[1]}.{versionCheck[2]} update available";
+            }
+#endif
         }
 
         /// <summary>
@@ -160,7 +174,7 @@ namespace MarathonRandomiser
             Helpers.FillWildcardCheckedListBox(Grid_Miscellaneous, CheckedList_Wildcard_Miscellaneous);
         }
 
-        #region Text Box/Button Functions
+#region Text Box/Button Functions
         /// <summary>
         /// Opens a Folder Browser to select our Mods Directory.
         /// </summary>
@@ -563,9 +577,9 @@ namespace MarathonRandomiser
             Properties.Settings.Default.SilverVeryHard = TextBox_Episode_SilverVHLocation.Text;
             Properties.Settings.Default.Save();
         }
-        #endregion
+#endregion
 
-        #region Form Helper Functions
+#region Form Helper Functions
         /// <summary>
         /// Disables and enables certain other elements based on the toggled status of a CheckBox
         /// </summary>
@@ -931,9 +945,9 @@ namespace MarathonRandomiser
                 CheckedList_Custom_Vox.Items.Add(item);
             }
         }
-        #endregion
+#endregion
 
-        #region Bottom Buttons
+#region Bottom Buttons
         /// <summary>
         /// Opens the GitHub wiki for the Randomiser in the user's default Web Browser.
         /// </summary>
@@ -1001,9 +1015,9 @@ namespace MarathonRandomiser
             if (OpenFileDialog.ShowDialog() == true)
                 LoadConfig(OpenFileDialog.FileName);
         }
-        #endregion
+#endregion
 
-        #region Config Saving/Loading
+#region Config Saving/Loading
         /// <summary>
         /// Saves a configuration ini.
         /// </summary>
@@ -1254,9 +1268,9 @@ namespace MarathonRandomiser
                 }
             }
         }
-        #endregion
+#endregion
 
-        #region Wildcard
+#region Wildcard
         /// <summary>
         /// Scans through a Tab and checks elements based on the Wildcard weight and wether the element is valid.
         /// </summary>
@@ -1326,7 +1340,7 @@ namespace MarathonRandomiser
             double range = max - min;
             updown.Value = (Randomiser.NextDouble() * range) + min;
         }
-        #endregion
+#endregion
 
         /// <summary>
         /// Actual main Randomisation process.
@@ -1743,7 +1757,7 @@ namespace MarathonRandomiser
             if (MiscPatches.Count == 0)
                 CheckBox_Misc_Patches.IsChecked = false;
 
-            #region Random Episode Generation
+#region Random Episode Generation
             // This has to be done up here or the Very Hard mode content won't be randomised.
             bool? episodeGenerate = CheckBox_Episode_Generate.IsChecked;
             bool? episodeTownMissions = CheckBox_Episode_TownMissions.IsChecked;
@@ -1784,9 +1798,9 @@ namespace MarathonRandomiser
             // Add the Garden of Assemblage's music to the Music Randomiser if the option for it is checked.
             if (episodeGoAMusic == true)
                 AudioMusic.Add("stg_goa_khii");
-            #endregion
+#endregion
 
-            #region Object Placement
+#region Object Placement
             // Set up values.
             bool? setEnemies = CheckBox_SET_Enemies.IsChecked;
             bool? setEnemiesNoBosses = CheckBox_SET_Enemies_NoBosses.IsChecked;
@@ -1936,9 +1950,9 @@ namespace MarathonRandomiser
                     }
                 }
             }
-            #endregion
+#endregion
 
-            #region Event Randomisation
+#region Event Randomisation
             // Set up values.
             bool? eventLighting = CheckBox_Event_Lighting.IsChecked;
             bool? eventRotX = CheckBox_Event_XRotation.IsChecked;
@@ -1988,9 +2002,9 @@ namespace MarathonRandomiser
                     }
                 }
             }
-            #endregion
+#endregion
 
-            #region Scene Randomisation
+#region Scene Randomisation
             // Set up values.
             bool? sceneLightAmbient = CheckBox_Scene_Light_Ambient.IsChecked;
             bool? sceneLightMain = CheckBox_Scene_Light_Main.IsChecked;
@@ -2041,9 +2055,9 @@ namespace MarathonRandomiser
                     }
                 }
             }
-            #endregion
+#endregion
 
-            #region Animation Randomisers
+#region Animation Randomisers
             // Set up values.
             bool? animGameplay = CheckBox_Anim_Gameplay.IsChecked;
             bool? animGameplayUseAll = CheckBox_Anim_GameplayUseAll.IsChecked;
@@ -2174,9 +2188,9 @@ namespace MarathonRandomiser
                     }
                 }
             }
-            #endregion
+#endregion
 
-            #region Model Randomisers
+#region Model Randomisers
             // Set up values.
             bool? modelsVertexColours = CheckBox_Models_VertexColour.IsChecked;
             bool? modelsMaterialColours = CheckBox_Models_MaterialColour.IsChecked;
@@ -2242,9 +2256,9 @@ namespace MarathonRandomiser
                     }
                 }
             }
-            #endregion
+#endregion
 
-            #region Texture Randomisation
+#region Texture Randomisation
             // Set up values.
             bool? texturesTextures = CheckBox_Textures_Textures.IsChecked;
             bool? texturesPerArc = CheckBox_Textures_PerArc.IsChecked;
@@ -2325,9 +2339,9 @@ namespace MarathonRandomiser
                     }
                 }
             }
-            #endregion
+#endregion
 
-            #region Audio Randomisers
+#region Audio Randomisers
             // Set up values.
             bool? audioMusic = CheckBox_Audio_Music.IsChecked;
             bool? audioSFX = CheckBox_Audio_SFX.IsChecked;
@@ -2455,9 +2469,9 @@ namespace MarathonRandomiser
                     }
                 }
             }
-            #endregion
+#endregion
 
-            #region Text Randomisers
+#region Text Randomisers
             bool? textButtons = CheckBox_Text_Buttons.IsChecked;
             bool? textGenerate = CheckBox_Text_Generate.IsChecked;
             bool? textGenerateEnforce = CheckBox_Text_Generate_Enforce.IsChecked;
@@ -2577,9 +2591,9 @@ namespace MarathonRandomiser
                     await Task.Run(() => TextRandomiser.ShuffleText(mstFiles));
                 }
             }
-            #endregion
+#endregion
 
-            #region UI Randomisers
+#region UI Randomisers
             bool? xncpColours = CheckBox_XNCP_Colours.IsChecked;
             bool? xncpColoursSame = CheckBox_XNCP_Colours_Same.IsChecked;
             bool? xncpColoursAlpha = CheckBox_XNCP_Colours_Alpha.IsChecked;
@@ -2620,9 +2634,9 @@ namespace MarathonRandomiser
                     }
                 }
             }
-            #endregion
+#endregion
 
-            #region Misc. Randomisers
+#region Misc. Randomisers
             // Set up values.
             bool? miscEnemyHealth = CheckBox_Misc_EnemyHealth.IsChecked;
             bool? miscEnemyHealthBosses = CheckBox_Misc_EnemyHealth_Bosses.IsChecked;
@@ -2727,9 +2741,9 @@ namespace MarathonRandomiser
                     }
                 }
             }
-            #endregion
+#endregion
 
-            #region Random Episode Step 2
+#region Random Episode Step 2
             // Make the rest of the Generated Episode's stuff.
             // We do this down here so the other Randomisers can't interfere with it.
             // TODO: Figure out the PS3 version.
@@ -2792,7 +2806,7 @@ namespace MarathonRandomiser
                 await Task.Run(() => Helpers.UpdateCustomFiles($"stage_goa_khii.arc", ModDirectory, true));
                 await Task.Run(() => Helpers.UpdateCustomFiles($"stg_goa_khii{musicExtension}", ModDirectory));
             }
-            #endregion
+#endregion
 
             foreach (string archive in archives)
             {
