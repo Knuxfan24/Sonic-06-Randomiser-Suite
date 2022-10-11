@@ -1364,7 +1364,7 @@ namespace MarathonRandomiser
             string[] archives = Directory.GetFiles($@"{Path.GetDirectoryName(TextBox_General_GameExecutable.Text)}", "*.arc", SearchOption.AllDirectories);
 
             // Set up our variables for the Mod Directory and Game Executable.
-            string ModDirectory = $@"{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({Helpers.UseSafeFormattedCharacters(TextBox_General_Seed.Text)})";
+            string ModDirectory = $@"{TextBox_General_ModsDirectory.Text}\Randomisation - {Helpers.UseSafeFormattedCharacters(TextBox_General_Seed.Text)}";
             string GameExecutable = TextBox_General_GameExecutable.Text;
             string Seed = TextBox_General_Seed.Text;
             bool? DisableEasterEggs = CheckBox_General_NoFun.IsChecked;
@@ -1395,7 +1395,7 @@ namespace MarathonRandomiser
             using (StreamWriter configInfo = new(configCreate))
             {
                 configInfo.WriteLine("[Details]");
-                configInfo.WriteLine($"Title=\"Sonic '06 Randomised ({TextBox_General_Seed.Text})\"");
+                configInfo.WriteLine($"Title=\"Randomisation - {TextBox_General_Seed.Text}\"");
                 configInfo.WriteLine($"Version=\"{VersionNumber.Replace("Version ", "")}\"");
                 configInfo.WriteLine($"Date=\"{DateTime.Now:dd/MM/yyyy}\"");
                 configInfo.WriteLine($"Author=\"Sonic '06 Randomiser Suite\"");
@@ -1879,7 +1879,7 @@ namespace MarathonRandomiser
                             using Stream patchCreate = File.Open(Path.Combine(ModDirectory, "patch.mlua"), FileMode.Create);
                             using StreamWriter patchInfo = new(patchCreate);
                             patchInfo.WriteLine("--[Patch]--");
-                            patchInfo.WriteLine($"Title(\"Sonic '06 Randomised ({TextBox_General_Seed.Text})\")");
+                            patchInfo.WriteLine($"Title(\"Randomisation - {TextBox_General_Seed.Text}\")");
                             patchInfo.WriteLine($"Author(\"Sonic '06 Randomiser Suite\")");
                             patchInfo.WriteLine($"Platform(\"Xbox 360\")");
 
@@ -2846,7 +2846,7 @@ namespace MarathonRandomiser
             {
                 if (Directory.Exists($@"{TemporaryDirectory}{archive[0..^4].Replace(Path.GetDirectoryName(TextBox_General_GameExecutable.Text), "")}"))
                 {
-                    string saveDir = $@"{TextBox_General_ModsDirectory.Text}\Sonic '06 Randomised ({Helpers.UseSafeFormattedCharacters(TextBox_General_Seed.Text)}){archive[0..^4].Replace(Path.GetDirectoryName(TextBox_General_GameExecutable.Text), "")}";
+                    string saveDir = $@"{TextBox_General_ModsDirectory.Text}\Randomisation - {Helpers.UseSafeFormattedCharacters(TextBox_General_Seed.Text)}{archive[0..^4].Replace(Path.GetDirectoryName(TextBox_General_GameExecutable.Text), "")}";
                     saveDir = saveDir.Remove(saveDir.LastIndexOf('\\'));
 
                     Directory.CreateDirectory(saveDir);
