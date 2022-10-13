@@ -68,7 +68,7 @@ namespace MarathonRandomiser
         /// <param name="mstFile">The path to the MST to process.</param>
         /// <param name="wordList">The list of English words.</param>
         /// <param name="enforce">Whether or not we need to enforce the word length.</param>
-        public static async Task TextGenerator(string mstFile, string[] wordList, bool? enforce)
+        public static async Task TextGenerator(string mstFile, string[] wordList, bool? enforce, bool? vox)
         {
             // Load the MST.
             MessageTable mst = new(mstFile);
@@ -76,8 +76,8 @@ namespace MarathonRandomiser
             // Loop through each Message Entry in this MST.
             foreach (Message? message in mst.Data.Messages)
             {
-                // Skip hints added from the Custom Voice Lines option (Voice Packs are OK though).
-                if (message.Name.Contains("hint_custom"))
+                // Skip hints added from the Custom Voice Lines option and Voice Pack ones if they're disabled.
+                if (message.Name.Contains("hint_custom") || (message.Name.StartsWith("vox_") && vox == false))
                     continue;
 
                 // Edit the New Lines, New Text Boxes and Placeholder Calls so they can be preserved.

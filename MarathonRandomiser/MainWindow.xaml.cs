@@ -687,7 +687,45 @@ namespace MarathonRandomiser
                 case "CheckBox_Text_Generate":
                     CheckBox_Text_Generate_Enforce.IsEnabled = NewCheckedStatus;
                     if (TextBox_General_GameExecutable.Text.EndsWith(".xex"))
+                    {
+                        CheckBox_Text_Generate_Vox.IsEnabled = NewCheckedStatus;
                         CheckBox_Text_Generate_TTS.IsEnabled = NewCheckedStatus;
+                        if (!NewCheckedStatus)
+                        {
+                            CheckBox_Text_Generate_TTSVox.IsEnabled = false;
+                        }
+                        else
+                        {
+                            if (CheckBox_Text_Generate_TTS.IsChecked == true)
+                            {
+                                CheckBox_Text_Generate_TTSVox.IsEnabled = true;
+                            }
+                        }
+                    }
+                    break;
+                case "CheckBox_Text_Generate_Vox":
+                    if (!NewCheckedStatus)
+                    {
+                        CheckBox_Text_Generate_TTSVox.IsEnabled = false;
+                    }
+                    else
+                    {
+                        if (CheckBox_Text_Generate_TTS.IsChecked == true)
+                        {
+                            CheckBox_Text_Generate_TTSVox.IsEnabled = true;
+                        }
+                    }
+                    break;
+                case "CheckBox_Text_Generate_TTS":
+                    CheckBox_Text_Generate_TTSVox.IsChecked = false;
+                    if (CheckBox_Text_Generate_Vox.IsChecked == false)
+                        CheckBox_Text_Generate_TTSVox.IsEnabled = false;
+                    else
+                        CheckBox_Text_Generate_TTSVox.IsEnabled = NewCheckedStatus;
+                    break;
+                case "CheckBox_Text_Colour":
+                    Label_Text_Colour_Weight.IsEnabled = NewCheckedStatus;
+                    NumericUpDown_Text_Colour_Weight.IsEnabled = NewCheckedStatus;
                     break;
 
                 case "CheckBox_XNCP_Colours":
@@ -699,11 +737,6 @@ namespace MarathonRandomiser
                     NumericUpDown_XNCP_Scale_Min.IsEnabled = NewCheckedStatus;
                     Label_XNCP_Scale_Max.IsEnabled = NewCheckedStatus;
                     NumericUpDown_XNCP_Scale_Max.IsEnabled = NewCheckedStatus;
-                    break;
-
-                case "CheckBox_Text_Colour":
-                    Label_Text_Colour_Weight.IsEnabled = NewCheckedStatus;
-                    NumericUpDown_Text_Colour_Weight.IsEnabled = NewCheckedStatus;
                     break;
 
                 case "CheckBox_Episode_Generate":
@@ -2488,7 +2521,9 @@ namespace MarathonRandomiser
             bool? textButtons = CheckBox_Text_Buttons.IsChecked;
             bool? textGenerate = CheckBox_Text_Generate.IsChecked;
             bool? textGenerateEnforce = CheckBox_Text_Generate_Enforce.IsChecked;
+            bool? textGenerateVox = CheckBox_Text_Generate_Vox.IsChecked;
             bool? textGenerateTTS = CheckBox_Text_Generate_TTS.IsChecked;
+            bool? textGenerateTTSVox = CheckBox_Text_Generate_TTSVox.IsChecked;
             bool? textColour = CheckBox_Text_Colour.IsChecked;
             int textColourWeight = (int)NumericUpDown_Text_Colour_Weight.Value;
             bool? textShuffle = CheckBox_Text_Shuffle.IsChecked;
@@ -2559,7 +2594,7 @@ namespace MarathonRandomiser
                     foreach (string mstFile in mstFiles)
                     {
                         UpdateLogger($"Generating random text for '{mstFile}'.");
-                        await Task.Run(() => TextRandomiser.TextGenerator(mstFile, wordList, textGenerateEnforce));
+                        await Task.Run(() => TextRandomiser.TextGenerator(mstFile, wordList, textGenerateEnforce, textGenerateVox));
 
                         // If this is a Hint MST and we're using the TTS, then generate the audio.
                         // Also make sure this is a 360 target, just in case.
@@ -2576,7 +2611,7 @@ namespace MarathonRandomiser
                             foreach (var message in ttsMST.Data.Messages)
                             {
                                 // If this is a custom hint or has no placeholders then skip it.
-                                if (message.Name.Contains("hint_custom") || message.Name.StartsWith("vox_") || message.Placeholders == null)
+                                if (message.Name.Contains("hint_custom") || (message.Name.StartsWith("vox_") && textGenerateVox == false) || message.Placeholders == null)
                                     continue;
 
                                 UpdateLogger($"Generating Text to Speech for random dialog in '{message.Name}'.");
