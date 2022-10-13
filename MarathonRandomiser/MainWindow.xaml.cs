@@ -2575,8 +2575,8 @@ namespace MarathonRandomiser
                             // Loop through each message in the MST.
                             foreach (var message in ttsMST.Data.Messages)
                             {
-                                // If this is a custom hint (not a voice pack one) or has no placeholders then skip it.
-                                if (message.Name.Contains("hint_custom") || message.Placeholders == null)
+                                // If this is a custom hint or has no placeholders then skip it.
+                                if (message.Name.Contains("hint_custom") || message.Name.StartsWith("vox_") || message.Placeholders == null)
                                     continue;
 
                                 UpdateLogger($"Generating Text to Speech for random dialog in '{message.Name}'.");

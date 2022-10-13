@@ -348,6 +348,7 @@ namespace MarathonRandomiser
                     // Copy each entry from the voice pack's message table to the original game's message table.
                     foreach (Message entry in customMST.Data.Messages)
                     {
+                        entry.Name = $"vox_{entry.Name}";
                         origMST.Data.Messages.Add(entry);
                         setHints.Add(entry.Name);
                     }
