@@ -61,21 +61,21 @@ namespace MarathonRandomiser
                 if (lua[i].Contains("DeathBallWaitTime = ") || lua[i].Contains("HoldExplosionWaitTime =") || lua[i].Contains("FootBrokenWait ="))
                 {
                     string[] split = lua[i].Split("= ");
-                    split[1] = $"math.random() + math.random({min}, {max}),";
+                    split[1] = $"math.random() * ({max} - {min}) + {min}";
                     lua[i] = string.Join("= ", split);
                 }
 
                 if (lua[i].Contains("WaitFixed") || lua[i].Contains("WaitLevel") || lua[i].Contains("WaitRotate"))
                 {
                     string[] split = lua[i].Split(", ");
-                    split[1] = $"math.random() + math.random({min}, {max}))";
+                    split[1] = $"math.random() * ({max} - {min}) + {min})";
                     lua[i] = string.Join(", ", split);
                 }
 
                 if (lua[i].Contains("WaitPosAdjustment"))
                 {
                     string[] split = lua[i].Split(", ");
-                    split[4] = $"math.random() + math.random({min}, {max}))";
+                    split[4] = $"math.random() * ({max} - {min}) + {min})";
                     lua[i] = string.Join(", ", split);
                 }
             }
