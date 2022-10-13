@@ -627,6 +627,9 @@ namespace MarathonRandomiser
                     CheckBox_Event_SkipFMVs.IsEnabled = NewCheckedStatus;
                     CheckBox_Event_SkipFMVs.IsEnabled = NewCheckedStatus;
                     break;
+                case "CheckBox_Event_Music":
+                    CheckBox_Event_MusicTSRNull.IsEnabled = NewCheckedStatus;
+                    break;
 
                 case "CheckBox_Scene_Light_Ambient":
                 case "CheckBox_Scene_Light_Main":
@@ -1967,10 +1970,12 @@ namespace MarathonRandomiser
             bool? eventTerrain = CheckBox_Event_Terrain.IsChecked;
             bool? eventOrder = CheckBox_Event_Order.IsChecked;
             bool? eventSkipFMVs = CheckBox_Event_SkipFMVs.IsChecked;
+            bool? eventMusic = CheckBox_Event_Music.IsChecked;
+            bool? eventMusicTSRNull = CheckBox_Event_MusicTSRNull.IsChecked;
 
-            // Check if we actually need to do event stuff.
-            if (eventLighting == true || eventRotX == true || eventRotY == true || eventRotZ == true || eventPosX == true || eventPosY == true || eventPosZ == true || eventTerrain == true ||
-                eventOrder == true)
+            // Check if we actually need to do eventplaybook stuff.
+            if (eventLighting == true || eventRotX == true || eventRotY == true || eventRotZ == true || eventPosX == true || eventPosY == true || eventPosZ == true ||
+                eventTerrain == true || eventOrder == true)
             {
                 foreach (string archive in archives)
                 {
@@ -1979,7 +1984,8 @@ namespace MarathonRandomiser
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
 
                         // Main eventplaybook parameter randomisation.
-                        if (eventLighting == true || eventRotX == true || eventRotY == true || eventRotZ == true || eventPosX == true || eventPosY == true || eventPosZ == true || eventTerrain == true)
+                        if (eventLighting == true || eventRotX == true || eventRotY == true || eventRotZ == true || eventPosX == true || eventPosY == true ||
+                            eventPosZ == true || eventTerrain == true)
                         {
                             UpdateLogger($"Randomising 'eventplaybook.epb' parameters.");
                             await Task.Run(() => EventRandomiser.Process(unpackedArchive, corePath, eventLighting, EventLighting, eventTerrain, EventTerrain, eventRotX, eventRotY, eventRotZ, eventPosX, eventPosY,
@@ -1992,15 +1998,22 @@ namespace MarathonRandomiser
                             UpdateLogger($"Shuffling event order.");
                             await Task.Run(() => EventRandomiser.EventShuffler(unpackedArchive, corePath, ModDirectory, GameExecutable, eventSkipFMVs));
                         }
-
-                        // Event Voice Line Shuffling.
-                        if (eventVoice == true)
-                        {
-                            UpdateLogger($"Shuffling event voice files.");
-                            await Task.Run(() => EventRandomiser.ShuffleVoiceLines(GameExecutable, corePath, eventVoiceJpn, eventVoiceGame, CustomVoxPacks.Count != 0, ModDirectory));
-                        }
                     }
                 }
+            }
+
+            // Check if we need to do event voice line shuffling.
+            if (eventVoice == true)
+            {
+                UpdateLogger($"Shuffling event voice files.");
+                await Task.Run(() => EventRandomiser.ShuffleVoiceLines(GameExecutable, corePath, eventVoiceJpn, eventVoiceGame, CustomVoxPacks.Count != 0, ModDirectory));
+            }
+
+            // Check if we need to do the music shuffle.
+            if (eventMusic == true)
+            {
+                UpdateLogger($"Randomising event music.");
+                await Task.Run(() => EventRandomiser.RandomiseEventMusic(GameExecutable, corePath, ModDirectory, CustomMusic.Count != 0, eventMusicTSRNull));
             }
 #endregion
 

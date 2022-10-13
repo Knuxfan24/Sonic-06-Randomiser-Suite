@@ -296,5 +296,41 @@ namespace MarathonRandomiser
                 File.Copy(eventXMAs[index], $@"{ModDirectory}{shuffleArray[i].Substring(0, shuffleArray[i].Length).Replace(Path.GetDirectoryName(GameExecutable), "")}");
             }
         }
+
+        /// <summary>
+        /// Replaces the music track files for events with files from the game, including any custom music the user has added.
+        /// </summary>
+        /// <param name="GameExecutable">The path to the game executable (so we can get the original game music and the event songs).</param>
+        /// <param name="corePath">The platform path (ps3 or xenon)</param>
+        /// <param name="ModDirectory">The path to the randomisation's mod directory.</param>
+        /// <param name="hasCustomMusic">Whether or not any custom music is included.</param>
+        /// <param name="nullSTRMusic">Whether or not the music has chosen to stop songs from overlapping in a single cutscene.</param>
+        public static async Task RandomiseEventMusic(string GameExecutable, string corePath, string ModDirectory, bool hasCustomMusic, bool? nullSTRMusic)
+        {
+            // Determine which audio format we need to look for.
+            string fileType = ".xma";
+            if (corePath == "ps3")
+                fileType = ".at3";
+
+            // Create the event directory in the mod's sound folder.
+            Directory.CreateDirectory($@"{ModDirectory}\{corePath}\sound\event");
+
+            // Get the list of valid songs.
+            string[] songs = Directory.GetFiles($@"{Path.GetDirectoryName(GameExecutable)}\{corePath}\sound", $"*{fileType}", SearchOption.TopDirectoryOnly);
+            if (hasCustomMusic)
+                songs = songs.Concat(Directory.GetFiles($@"{ModDirectory}\{corePath}\sound", $"*{fileType}", SearchOption.TopDirectoryOnly).ToArray()).ToArray();
+
+            // Loop through all the sound files in the game's event folder and copy a random song to the mod's version.
+            foreach (string file in Directory.GetFiles($@"{Path.GetDirectoryName(GameExecutable)}\{corePath}\sound\event", $"*{fileType}", SearchOption.TopDirectoryOnly))
+                File.Copy(songs[MainWindow.Randomiser.Next(songs.Length)], $@"{ModDirectory}\{corePath}\sound\event\{Path.GetFileName(file)}");
+
+            // Replace the three additional tracks in The Time Space Rift with blank files to prevent music overlapping.
+            if (nullSTRMusic == true)
+            {
+                File.Create($@"{ModDirectory}\{corePath}\sound\event\e0304_3195{fileType}");
+                File.Create($@"{ModDirectory}\{corePath}\sound\event\e0304_9120{fileType}");
+                File.Create($@"{ModDirectory}\{corePath}\sound\event\e0304_11940{fileType}");
+            }
+        }
     }
 }

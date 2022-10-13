@@ -170,6 +170,8 @@
                         <CheckBox x:Name="CheckBox_Event_Terrain" Content="Randomise Terrain" IsChecked="True"/>
                         <CheckBox x:Name="CheckBox_Event_Order" Content="Shuffle Event Order" IsChecked="True" Click="Dependency_CheckBox_Changed"/>
                         <CheckBox x:Name="CheckBox_Event_SkipFMVs" Content="Ignore Prerendered Scenes" IsChecked="False"/>
+                        <CheckBox x:Name="CheckBox_Event_Music" Content="Randomise Event Music" IsChecked="False" Click="Dependency_CheckBox_Changed"/>
+                        <CheckBox x:Name="CheckBox_Event_MusicTSRNull" Content="Prevent Music Overlap" IsChecked="True" IsEnabled="False"/>
                     </StackPanel>
 
                     <!--Event Configuration Toggles-->
