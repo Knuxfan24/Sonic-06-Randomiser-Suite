@@ -90,10 +90,6 @@ namespace MarathonRandomiser
         /// <param name="max">The maximum scale value.</param>
         public static async Task RandomisePlayerModelScale(string luaFile, double min, double max)
         {
-            // Calculate the range.
-            // Based on this: https://www.delftstack.com/howto/csharp/generate-a-random-float-in-csharp/#generate-random-float-within-a-specific-range-with-the-random-nextdouble-function-in-c
-            double range = max - min;
-
             // Decompile this lua file.
             await Task.Run(() => Helpers.LuaDecompile(luaFile));
 
@@ -102,7 +98,7 @@ namespace MarathonRandomiser
 
             // Set the model scale.
             // We don't check for this line as it doesn't actually get used by default so it won't be there.
-            lua[^1] += $"\nc_model_scale = {(MainWindow.Randomiser.NextDouble() * range) + min}";
+            lua[^1] += $"\nc_model_scale = math.random() * ({max} - {min}) + {min}";
 
             // Save the updated lua binary.
             File.WriteAllLines(luaFile, lua);
