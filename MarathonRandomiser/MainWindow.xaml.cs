@@ -3,6 +3,7 @@ global using System.Collections.Generic;
 global using System.IO;
 global using System.Threading.Tasks;
 using Marathon.Formats.Archive;
+using Marathon.Formats.Mesh.Ninja;
 using Marathon.Formats.Text;
 using Marathon.Helpers;
 using Marathon.IO;
@@ -2928,6 +2929,59 @@ namespace MarathonRandomiser
                 await Task.Run(() => Helpers.UpdateCustomFiles($"stage_goa_khii.arc", ModDirectory, true));
                 await Task.Run(() => Helpers.UpdateCustomFiles($"stg_goa_khii{musicExtension}", ModDirectory));
             }
+            #endregion
+
+#region RHS Easter Egg
+            if (Seed.Contains("BDIWORH") && DisableEasterEggs == false)
+            {
+                string sonicArchive = await Task.Run(() => Helpers.ArchiveHandler($@"{Path.GetDirectoryName(GameExecutable)}\win32\archives\player_sonic.arc"));
+                string eventDataArchive = await Task.Run(() => Helpers.ArchiveHandler($@"{Path.GetDirectoryName(GameExecutable)}\win32\archives\event_data.arc"));
+
+                // Replace Sonic's models.
+                U8Archive arc = new($@"{Path.GetDirectoryName(GameExecutable)}\win32\archives\player_sonic.arc", ReadMode.IndexOnly);
+                foreach (Marathon.IO.Interfaces.IArchiveFile file in arc.Root.GetFiles())
+                {
+                    if (file.Name == "sonic_Root.xno")
+                        file.Extract($@"{TemporaryDirectory}\win32\archives\player_sonic\win32\player\sonic_new\sonic_Root.xno");
+
+                    if (file.Name == "sonic_shoes_Root.xno")
+                        file.Extract($@"{TemporaryDirectory}\win32\archives\player_sonic\win32\player\sonic_new\sonic_shoes_Root.xno");
+
+                    if (file.Name == "sonic_Head01.xno")
+                        file.Extract($@"{TemporaryDirectory}\win32\archives\player_sonic\win32\player\sonic_new\sonic_Head01.xno");
+                }
+                arc = new($@"{Path.GetDirectoryName(GameExecutable)}\win32\archives\event_data.arc", ReadMode.IndexOnly);
+                foreach (Marathon.IO.Interfaces.IArchiveFile file in arc.Root.GetFiles())
+                {
+                    if (file.Name == "sonic_evf_head.xno")
+                        file.Extract($@"{TemporaryDirectory}\win32\archives\event_data\win32\event\eventobj\eventface\sonic\sonic_evf_head.xno");
+                }
+                arc.Dispose();
+
+                // sonic_Root
+                NinjaNext sonicRoot = new($@"{TemporaryDirectory}\win32\archives\player_sonic\win32\player\sonic_new\sonic_Root.xno");
+                sonicRoot.Data.Object.MaterialColours[0].Diffuse = new(0.85f, 0.1f, 0.1f, 1);
+                sonicRoot.Data.Object.MaterialColours[0].Ambient = new(1, 0.25f, 0.25f, 1);
+                sonicRoot.Save();
+
+                // sonic_shoes_Root
+                NinjaNext sonicShoesRoot = new($@"{TemporaryDirectory}\win32\archives\player_sonic\win32\player\sonic_new\sonic_shoes_Root.xno");
+                sonicShoesRoot.Data.Object.MaterialColours[0].Diffuse = new(0.85f, 0.1f, 0.1f, 1);
+                sonicShoesRoot.Data.Object.MaterialColours[0].Ambient = new(1, 0.25f, 0.25f, 1);
+                sonicShoesRoot.Save();
+
+                // sonic_Head01
+                NinjaNext sonicHead01 = new($@"{TemporaryDirectory}\win32\archives\player_sonic\win32\player\sonic_new\sonic_Head01.xno");
+                sonicHead01.Data.Object.MaterialColours[1].Diffuse = new(0.85f, 0.1f, 0.1f, 1);
+                sonicHead01.Data.Object.MaterialColours[1].Ambient = new(1, 0.25f, 0.25f, 1);
+                sonicHead01.Save();
+
+                // sonic_evf_head
+                NinjaNext sonic_evf_head = new($@"{TemporaryDirectory}\win32\archives\event_data\win32\event\eventobj\eventface\sonic\sonic_evf_head.xno");
+                sonic_evf_head.Data.Object.MaterialColours[1].Diffuse = new(0.85f, 0.1f, 0.1f, 1);
+                sonic_evf_head.Data.Object.MaterialColours[1].Ambient = new(1, 0.25f, 0.25f, 1);
+                sonic_evf_head.Save();
+            }
 #endregion
 
             foreach (string archive in archives)
@@ -3061,6 +3115,14 @@ namespace MarathonRandomiser
                                                           "Sonic '06 Randomiser Suite",
                                                           MessageBoxButton.OK,
                                                           MessageBoxImage.Information);
+                }
+
+                if (Seed.Contains("BDIWORH"))
+                {
+                    HandyControl.Controls.MessageBox.Show("No it doesn't.",
+                                                          "Sonic '06 Randomiser Suite",
+                                                          MessageBoxButton.OK,
+                                                          MessageBoxImage.Error);
                 }
             }
         }
