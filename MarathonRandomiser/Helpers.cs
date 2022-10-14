@@ -1,5 +1,6 @@
 ﻿using Marathon.Formats.Archive;
 using Marathon.Formats.Audio;
+using Marathon.Formats.Mesh.Ninja;
 using Marathon.Formats.Script.Lua;
 using Marathon.Formats.Text;
 using Marathon.Helpers;
@@ -21,6 +22,28 @@ using System.Windows.Media;
 
 namespace MarathonRandomiser
 {
+    public class CriwareAcroarts
+    {
+        public uint ABRSOffset { get; set; }
+
+        public byte[] Bytes { get; set; }
+
+        public List<CriwareFileRef> Files { get; set; } = new();
+
+        public uint FooterLength { get; set; }
+
+        public byte[] EndBytes { get; set; }
+    }
+
+    public class CriwareFileRef
+    {
+        public uint OffsetPadding { get; set; }
+
+        public string ID { get; set; }
+
+        public string Name { get; set; }
+    }
+
     internal class Helpers
     {
         /// <summary>
@@ -673,6 +696,215 @@ namespace MarathonRandomiser
                 process.BeginOutputReadLine();
                 process.WaitForExit();
             }
+        }
+
+        public static Dictionary<string, string> FindPlayer(string archive, string targetFile, string character, Dictionary<string, string> modelLocations)
+        {
+            U8Archive arc = new(archive, ReadMode.IndexOnly);
+            foreach (IArchiveFile file in arc.Root.GetFiles())
+            {
+                if (file.Name == targetFile)
+                {
+                    file.Extract($@"{MainWindow.TemporaryDirectory}\playerXNOs\{file.Name}");
+                    modelLocations.Add(character, $@"{MainWindow.TemporaryDirectory}\playerXNOs\{file.Name}");
+                }
+            }
+            return modelLocations;
+        }
+
+        // Fucking terrible hacks to load and save a Criware Acroarts MAB File's file table.
+        // This is all awful and really needs to be replaced with a proper implementation in Marathon.
+        public static CriwareAcroarts LoadMAB(string mabFile)
+        {
+            CriwareAcroarts mab = new();
+
+            BinaryReaderEx reader = new(File.OpenRead(mabFile), true);
+
+            reader.JumpTo(0x4);
+            uint mrabChunkSize = reader.ReadUInt32();
+            reader.JumpTo(0x34);
+            mab.ABRSOffset = reader.ReadUInt32() + mrabChunkSize + 0x20;
+            reader.JumpTo(0x00);
+
+            mab.Bytes = reader.ReadBytes((int)mab.ABRSOffset);
+
+            uint storedOffset = (uint)reader.BaseStream.Position;
+            reader.Offset = storedOffset;
+
+            reader.ReadSignature(4, "ABRS");
+            uint dataLength = reader.ReadUInt32(); // Length of the data in this chunk from the first sub(?) chunk.
+            uint chunkSize = reader.ReadUInt32();
+            uint UnknownUInt32_1 = reader.ReadUInt32(); // Always zero.
+
+            uint UnknownUInt32_2 = reader.ReadUInt32(); // Always hex 77 91 73 25.
+            uint OffsetCount = reader.ReadUInt32();
+            uint OffsetTableOffset = reader.ReadUInt32(); // At least I think it it's an offset table? Chunk type is POF0, like Ninja's NOF0. Seems more like a BINA Offset Table than a Ninja one.
+
+            for (int i = 0; i < OffsetCount; i++)
+            {
+                CriwareFileRef file = new();
+
+                uint OffsetEntryOffset = reader.ReadUInt32();
+                file.OffsetPadding = reader.ReadUInt32(); // Frequently hex FF FF FF FF, but not always.
+
+                long pos = reader.BaseStream.Position;
+                reader.JumpTo(OffsetEntryOffset, true);
+
+                reader.Offset = (uint)reader.BaseStream.Position;
+                file.ID = new(reader.ReadChars(0x04)); // Seems to be the first four bytes of the target file?
+                uint chunkLength = reader.ReadUInt32(); // Not including chunk header.
+                uint chunkOffset = reader.ReadUInt32();
+                uint unknownChunkData = reader.ReadUInt32(); // Always hex 00 40 00 00.
+
+                reader.JumpTo(chunkOffset, true);
+                file.Name = reader.ReadNullTerminatedString();
+                mab.Files.Add(file);
+
+                reader.Offset = storedOffset;
+                reader.JumpTo(pos);
+            }
+
+            reader.JumpTo(OffsetTableOffset, true);
+            reader.JumpAhead(0x4);
+            mab.FooterLength = reader.ReadUInt32();
+            reader.JumpBehind(0x8);
+
+            mab.EndBytes = reader.ReadBytes((int)(reader.BaseStream.Length - reader.BaseStream.Position));
+
+            reader.Dispose();
+            reader.Close();
+
+            return mab;
+        }
+
+        public static void SaveMAB(CriwareAcroarts mab, string filepath)
+        {
+            BinaryWriterEx writer = new(File.Create(filepath), true);
+            writer.Offset = mab.ABRSOffset;
+
+            writer.Write(mab.Bytes);
+
+            long arbsSize = writer.BaseStream.Position;
+            writer.Write("ABRS");
+            long arbsDataSizePos = writer.BaseStream.Position;
+            writer.Write("SIZE");
+            long arbsSizePos = writer.BaseStream.Position;
+            writer.Write("SIZE");
+            writer.WriteNulls(0x4);
+            writer.Write((byte)0x77);
+            writer.Write((byte)0x91);
+            writer.Write((byte)0x73);
+            writer.Write((byte)0x25);
+            writer.Write(mab.Files.Count);
+            writer.AddOffset("offsettable");
+
+            for (int i = 0; i < mab.Files.Count; i++)
+            {
+                writer.AddOffset($"file{i}offset");
+                writer.Write(mab.Files[i].OffsetPadding);
+            }
+
+            writer.FixPadding(0x10);
+            arbsSize = writer.BaseStream.Position - arbsSize;
+
+            long pos = writer.BaseStream.Position;
+            writer.BaseStream.Position = arbsSizePos;
+            writer.Write((uint)arbsSize);
+            writer.BaseStream.Position = pos;
+
+            uint dataSize = mab.FooterLength + 0x10;
+
+            for (int i = 0; i < mab.Files.Count; i++)
+            {
+                writer.FillOffset($"file{i}offset", true);
+                writer.Write(mab.Files[i].ID);
+                long sizePos = writer.BaseStream.Position;
+                writer.Write("SIZE");
+                writer.Write(0x10);
+                writer.Write((byte)0x00);
+                writer.Write((byte)0x40);
+                writer.Write((byte)0x00);
+                writer.Write((byte)0x00);
+
+                long chunkSize = writer.BaseStream.Position;
+                if (!mab.Files[i].Name.Contains('@'))
+                    writer.WriteNullTerminatedString(mab.Files[i].Name);
+                else
+                {
+                    mab.Files[i].Name = mab.Files[i].Name.Replace("@", "");
+                    writer.WriteNullPaddedString(mab.Files[i].Name, 0x21);
+                }
+                writer.FixPadding(0x10);
+                chunkSize = writer.BaseStream.Position - chunkSize;
+
+                dataSize += (uint)chunkSize + 0x10;
+
+                pos = writer.BaseStream.Position;
+                writer.BaseStream.Position = sizePos;
+                writer.Write((uint)chunkSize);
+                writer.BaseStream.Position = pos;
+            }
+
+            writer.FillOffset("offsettable", true);
+            writer.Write(mab.EndBytes);
+
+            writer.BaseStream.Position = arbsDataSizePos;
+            writer.Write(dataSize);
+
+            writer.Flush();
+            writer.Close();
+        }
+
+        /// <summary>
+        /// Cheaply retargets an animation from one model to another.
+        /// </summary>
+        /// <param name="xnm">The animation to retarget.</param>
+        /// <param name="srcXNO">The model this animation is originally from.</param>
+        /// <param name="tgtXNO">The model this animation should be retargeted onto.</param>
+        public static void RetargetAnimation(string xnm, string srcXNO, string tgtXNO)
+        {
+            // Load the XNM and XNOs.
+            NinjaNext anim = new(xnm);
+            NinjaNext srcMdl = new(srcXNO);
+            NinjaNext tgtMdl = new(tgtXNO);
+
+            // Create a list to store the Sub Motions that use a node that doesn't exist on the target model.
+            List<int> Unused = new();
+
+            // Loop through all the Sub Motions in the animation.
+            for (int s = 0; s < anim.Data.Motion.SubMotions.Count; s++)
+            {
+                // Set a flag to tell if we've retargeted this Sub Motion.
+                bool retargeted = false;
+
+                // Get the name of the node this Sub Motion is for.
+                string nodeName = srcMdl.Data.NodeNameList.NinjaNodeNames[anim.Data.Motion.SubMotions[s].NodeIndex];
+
+                // Loop through the target model's Ninja Node Name List.
+                for (int i = 0; i < tgtMdl.Data.NodeNameList.NinjaNodeNames.Count; i++)
+                {
+                    // If we've found a Node with the same name as the one from the source model, then update the Sub Motion Node Index and set our flag to true.
+                    if (tgtMdl.Data.NodeNameList.NinjaNodeNames[i] == nodeName)
+                    {
+                        anim.Data.Motion.SubMotions[s].NodeIndex = i;
+                        retargeted = true;
+                    }
+                }
+
+                // If our flag is still false, mark this Sub Motion for removal.
+                if (!retargeted)
+                    Unused.Add(s);
+            }
+
+            // Flip the list of Sub Motions to be removed.
+            Unused.Reverse();
+
+            // Remove all the Sub Motions that have a Node Index that has been added to our list.
+            foreach (int node in Unused)
+                anim.Data.Motion.SubMotions.RemoveAt(node);
+
+            // Save the retargeted animation. If a path wasn't specified, just use the original with a .retargeted extension tacked on.
+            anim.Save(xnm);
         }
     }
 

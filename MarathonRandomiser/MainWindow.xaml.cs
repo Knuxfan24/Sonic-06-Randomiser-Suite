@@ -24,16 +24,16 @@ namespace MarathonRandomiser
         // Version Number.
         public static readonly int GlobalVersionNumber_Rewrite = 2;
         public static readonly int GlobalVersionNumber_Revision = 1;
-        public static readonly int GlobalVersionNumber_Release = 20;
+        public static readonly int GlobalVersionNumber_Release = 21;
 
 #if !DEBUG
-        public static readonly string VersionNumber = GlobalVersionNumber;
+        public static readonly string VersionNumber = $"Version {GlobalVersionNumber_Rewrite}.{GlobalVersionNumber_Revision}.{GlobalVersionNumber_Release}";
 #else
         public static readonly string VersionNumber = $"Version {GlobalVersionNumber_Rewrite}.{GlobalVersionNumber_Revision}.{GlobalVersionNumber_Release}-indev-{File.GetLastAccessTime(Environment.CurrentDirectory):ddMMyy}";
 #endif
-        
+
         // Generate the path to a temp directory we can use for the Randomisation process.
-        public static readonly string TemporaryDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+        public static readonly string TemporaryDirectory = Path.Combine(Path.GetTempPath(), $"MarathonRandomiser_{Path.GetRandomFileName()}");
 
         // Set up the Randomiser.
         public static Random Randomiser = new();
@@ -663,6 +663,9 @@ namespace MarathonRandomiser
                 case "CheckBox_Anim_TPose":
                     Label_Anim_TPose_Chance.IsEnabled = NewCheckedStatus;
                     NumericUpDown_Anim_TPose_Chance.IsEnabled = NewCheckedStatus;
+                    break;
+                case "CheckBox_Anim_Retarget":
+                    CheckBox_Anim_RetargetEnforce.IsEnabled = NewCheckedStatus;
                     break;
 
                 case "CheckBox_Models_MaterialColour":
@@ -2048,7 +2051,7 @@ namespace MarathonRandomiser
                 UpdateLogger($"Randomising event music.");
                 await Task.Run(() => EventRandomiser.RandomiseEventMusic(GameExecutable, corePath, ModDirectory, CustomMusic.Count != 0, eventMusicTSRNull));
             }
-#endregion
+            #endregion
 
 #region Scene Randomisation
             // Set up values.
@@ -2117,6 +2120,8 @@ namespace MarathonRandomiser
             bool? animFramerateNoLights = CheckBox_Anim_Framerate_NoLights.IsChecked;
             bool? animEventTPose = CheckBox_Anim_TPose.IsChecked;
             int animEventTPoseChance = (int)NumericUpDown_Anim_TPose_Chance.Value;
+            bool? animEventRetarget = CheckBox_Anim_Retarget.IsChecked;
+            bool? animEventRetargetEnforceNewModel = CheckBox_Anim_RetargetEnforce.IsChecked;
 
             // Gameplay.
             if (animGameplay == true)
@@ -2232,6 +2237,75 @@ namespace MarathonRandomiser
 
                         await Task.Run(() => AnimationRandomiser.AssertDominance(unpackedArchive, animEventTPoseChance));
                     }
+                }
+            }
+
+            if (animEventRetarget == true)
+            {
+                UpdateLogger($"Retargeting event animations and randomising event models.");
+
+                // Create a temporary directory for the models so we don't have to unpack a load of extra archives.
+                Directory.CreateDirectory($@"{TemporaryDirectory}\playerXNOs");
+
+                // Set up a dictonary for model names and paths.
+                Dictionary<string, string> modelLocations = new();
+
+                // Find all the models.
+                foreach (string archive in archives)
+                {
+                    if (Path.GetFileName(archive).ToLower() == "player_amy.arc") { modelLocations = Helpers.FindPlayer(archive, "amy_Root.xno", "amy_Root", modelLocations); }
+                    if (Path.GetFileName(archive).ToLower() == "player_blaze.arc") { modelLocations = Helpers.FindPlayer(archive, "blaze_Root.xno", "blaze_Root", modelLocations); }
+                    if (Path.GetFileName(archive).ToLower() == "player_knuckles.arc") { modelLocations = Helpers.FindPlayer(archive, "knuckles_Root.xno", "knuckles_Root", modelLocations); }
+                    if (Path.GetFileName(archive).ToLower() == "player_omega.arc") { modelLocations = Helpers.FindPlayer(archive, "omega_Root.xno", "omega_Root", modelLocations); }
+                    if (Path.GetFileName(archive).ToLower() == "player_rouge.arc") { modelLocations = Helpers.FindPlayer(archive, "rouge_Root.xno", "rouge_Root", modelLocations); }
+                    if (Path.GetFileName(archive).ToLower() == "player_shadow.arc") { modelLocations = Helpers.FindPlayer(archive, "shadow_Root.xno", "shadow_Root", modelLocations); }
+                    if (Path.GetFileName(archive).ToLower() == "player_silver.arc") { modelLocations = Helpers.FindPlayer(archive, "silver_Root.xno", "silver_Root", modelLocations); }
+                    if (Path.GetFileName(archive).ToLower() == "player_sonic.arc") { modelLocations = Helpers.FindPlayer(archive, "sonic_Root.xno", "sonic_Root", modelLocations); }
+                    if (Path.GetFileName(archive).ToLower() == "player_supershadow.arc") { modelLocations = Helpers.FindPlayer(archive, "sshadow_Root.xno", "sshadow_Root", modelLocations); }
+                    if (Path.GetFileName(archive).ToLower() == "player_supersilver.arc") { modelLocations = Helpers.FindPlayer(archive, "ssilver_Root.xno", "ssilver_Root", modelLocations); }
+                    if (Path.GetFileName(archive).ToLower() == "player_supersonic.arc") { modelLocations = Helpers.FindPlayer(archive, "ssonic_Root.xno", "ssonic_Root", modelLocations); }
+                    if (Path.GetFileName(archive).ToLower() == "player_tails.arc") { modelLocations = Helpers.FindPlayer(archive, "tails_Root.xno", "tails_Root", modelLocations); }
+                    if (Path.GetFileName(archive).ToLower() == "event_data.arc")
+                    {
+                        modelLocations = Helpers.FindPlayer(archive, "ch_eggman.xno", "ch_eggman", modelLocations);
+                        modelLocations = Helpers.FindPlayer(archive, "evilshadow_Root.xno", "evilshadow_Root", modelLocations);
+                        modelLocations = Helpers.FindPlayer(archive, "ch_maidmaster.xno", "ch_maidmaster", modelLocations);
+                        modelLocations = Helpers.FindPlayer(archive, "ev_princess01.xno", "ev_princess01", modelLocations);
+                        modelLocations = Helpers.FindPlayer(archive, "ch_childelis.xno", "ch_childelis", modelLocations);
+                        modelLocations = Helpers.FindPlayer(archive, "ch_soleana.xno", "ch_soleana", modelLocations);
+                    }
+                    if (Path.GetFileName(archive).ToLower() == "enemy_data.arc") { modelLocations = Helpers.FindPlayer(archive, "en_fmef_Root.xno", "en_fmef_Root", modelLocations); }
+                }
+                
+                // Unpack event_data.arc and event.arc.
+                string eventDataArchive = "";
+                string eventArchive = "";
+                foreach (string archive in archives)
+                {
+                    if (Path.GetFileName(archive).ToLower() == "event_data.arc")
+                        eventDataArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+
+                    if (Path.GetFileName(archive).ToLower() == "event.arc")
+                        eventArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+                }
+
+                // Loop through the MAB files in event.arc.
+                foreach (var mabFile in Directory.GetFiles($@"{eventArchive}\{corePath}\event", "*.mab"))
+                {
+                    // Load the mab file.
+                    CriwareAcroarts mab = Helpers.LoadMAB(mabFile);
+
+                    // Skip this mab file if it's for a prerendered scene.
+                    if (mab.Files.Count == 0)
+                        continue;
+
+                    // Loop through each file and do the retarget process if we need to.
+                    foreach (CriwareFileRef file in mab.Files)
+                        if (modelLocations.ContainsKey(Path.GetFileNameWithoutExtension(file.Name)))
+                            AnimationRandomiser.RetargetAnimations($@"{eventDataArchive}\win32\event\{Path.GetFileNameWithoutExtension(mabFile)}", Path.GetFileNameWithoutExtension(file.Name), modelLocations, file, animEventRetargetEnforceNewModel);
+                    
+                    // Resave the MAB file.
+                    Helpers.SaveMAB(mab, mabFile);
                 }
             }
 #endregion

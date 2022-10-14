@@ -2,6 +2,8 @@
 using Marathon.Formats.Mesh.Ninja;
 using Marathon.Formats.Package;
 using Marathon.Helpers;
+using System.Diagnostics;
+using System.Linq;
 
 namespace MarathonRandomiser
 {
@@ -247,6 +249,90 @@ namespace MarathonRandomiser
                     // Resave the XNM.
                     xnm.Save();
                 }
+            }
+        }
+
+        public static async Task RetargetAnimations(string eventID, string srcCharacter, Dictionary<string, string> models, CriwareFileRef file, bool? enforceNewModel)
+        {
+            // Store the original file name.
+            string originalFile = file.Name;
+
+            // Set up a goto so we can jump back.
+            retry:
+
+            // Get a model value.
+            int value = MainWindow.Randomiser.Next(models.Count);
+
+            // Set the model name.
+            switch (value)
+            {
+                case 0: file.Name = "enemy/firstmefiress/en_fmef_Root.xno"; break;
+                case 1: file.Name = "event/eventobj/eggman/ch_eggman.xno"; break;
+                case 2: file.Name = "event/eventobj/evilshadow/evilshadow_Root.xno"; break;
+                case 3: file.Name = "event/eventobj/maidmaster/ch_maidmaster.xno"; break;
+                case 4: file.Name = "event/eventobj/princess/ev_princess01.xno"; break;
+                case 5: file.Name = "event/eventobj/princess_child/ch_childelis.xno"; break;
+                case 6: file.Name = "event/eventobj/soleana/ch_soleana.xno"; break;
+                case 7: file.Name = "player/amy/amy_Root.xno"; break;
+                case 8: file.Name = "player/blaze/blaze_Root.xno"; break;
+                case 9: file.Name = "player/knuckles/knuckles_Root.xno"; break;
+                case 10: file.Name = "player/omega/omega_Root.xno"; break;
+                case 11: file.Name = "player/rouge/rouge_Root.xno"; break;
+                case 12: file.Name = "player/shadow/shadow_Root.xno"; break;
+                case 13: file.Name = "player/silver/silver_Root.xno"; break;
+                case 14: file.Name = "player/sonic_new/sonic_Root.xno"; break;
+                case 15: file.Name = "player/supershadow/sshadow_Root.xno"; break;
+                case 16: file.Name = "player/supersilver/ssilver_Root.xno"; break;
+                case 17: file.Name = "player/supersonic/ssonic_Root.xno"; break;
+                case 18: file.Name = "player/tails/tails_Root.xno"; break;
+            }
+
+            // If this model is too long for a short space, or need to be a different one than the original by enforcement, then go back.
+            if ((originalFile.Length <= 0x1F && file.Name.Length > 0x1F) || (originalFile == file.Name && enforceNewModel == true))
+                goto retry;
+
+            // If this model is too short, then pad its name.
+            if (originalFile.Length > 0x1F && file.Name.Length <= 0x1F)
+                file.Name = file.Name.PadRight(0x21, '@');
+
+            // Do the retargeting stuff based on names.
+            switch (srcCharacter)
+            {
+                default:
+                    foreach (var xnmFile in Directory.GetFiles(eventID, $"*_{srcCharacter}*.xnm", SearchOption.AllDirectories))
+                        Helpers.RetargetAnimation(xnmFile, models.FirstOrDefault(x => x.Key == srcCharacter).Value, models.ElementAt(value).Value);
+                    break;
+
+                case "ev_princess01":
+                    foreach (var xnmFile in Directory.GetFiles(eventID, "*_princess_Root*.xnm", SearchOption.AllDirectories))
+                        Helpers.RetargetAnimation(xnmFile, models.FirstOrDefault(x => x.Key == srcCharacter).Value, models.ElementAt(value).Value);
+                    break;
+
+                case "ch_eggman":
+                    foreach (var xnmFile in Directory.GetFiles(eventID, "*_eggman_Root*.xnm", SearchOption.AllDirectories))
+                        Helpers.RetargetAnimation(xnmFile, models.FirstOrDefault(x => x.Key == srcCharacter).Value, models.ElementAt(value).Value);
+                    break;
+
+                case "evilshadow_Root":
+                case "en_fmef_Root":
+                    foreach (var xnmFile in Directory.GetFiles(eventID, "*_mefiress_Root*.xnm", SearchOption.AllDirectories))
+                        Helpers.RetargetAnimation(xnmFile, models.FirstOrDefault(x => x.Key == srcCharacter).Value, models.ElementAt(value).Value);
+                    break;
+
+                case "ch_maidmaster":
+                    foreach (var xnmFile in Directory.GetFiles(eventID, "*_maidmaster_Root*.xnm", SearchOption.AllDirectories))
+                        Helpers.RetargetAnimation(xnmFile, models.FirstOrDefault(x => x.Key == srcCharacter).Value, models.ElementAt(value).Value);
+                    break;
+
+                case "ch_childelis":
+                    foreach (var xnmFile in Directory.GetFiles(eventID, "*_princess_child_Root*.xnm", SearchOption.AllDirectories))
+                        Helpers.RetargetAnimation(xnmFile, models.FirstOrDefault(x => x.Key == srcCharacter).Value, models.ElementAt(value).Value);
+                    break;
+
+                case "ch_soleana":
+                    foreach (var xnmFile in Directory.GetFiles(eventID, "*_soleana_Root*.xnm", SearchOption.AllDirectories))
+                        Helpers.RetargetAnimation(xnmFile, models.FirstOrDefault(x => x.Key == srcCharacter).Value, models.ElementAt(value).Value);
+                    break;
             }
         }
     }

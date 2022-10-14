@@ -261,6 +261,8 @@
                         <CheckBox x:Name="CheckBox_Anim_TPose" Content="T-Pose Animations" Click="Dependency_CheckBox_Changed"/>
                         <Label x:Name="Label_Anim_TPose_Chance" Content="Chance:" Background="{x:Null}" BorderBrush="{x:Null}" IsEnabled="False"/>
                         <hc:NumericUpDown x:Name="NumericUpDown_Anim_TPose_Chance" Minimum="1" Maximum="100" Value="50" Margin="10,0,10,0" SelectionBrush="#FFB146C2" IsEnabled="False"/>
+                        <CheckBox x:Name="CheckBox_Anim_Retarget" Content="Retarget Event Animations" IsChecked="False" Click="Dependency_CheckBox_Changed"/>
+                        <CheckBox x:Name="CheckBox_Anim_RetargetEnforce" Content="Force Different Model" IsChecked="False" IsEnabled="False"/>
                     </StackPanel>
                 </Grid>
             </hc:TabItem>
