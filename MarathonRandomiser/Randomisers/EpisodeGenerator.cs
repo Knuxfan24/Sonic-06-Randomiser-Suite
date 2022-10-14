@@ -31,7 +31,7 @@ namespace MarathonRandomiser
             // Create the Randomised Episode scripts directory.
             Directory.CreateDirectory($@"{archivePath}\{corePath}\scripts\mission\rando");
 
-            #region Copy Sonic's Luas
+#region Copy Sonic's Luas
             // Wave Ocean
             if (MainWindow.Randomiser.Next(0, 2) == 0)
                 File.Copy($@"{archivePath}\{corePath}\scripts\mission\2000\mission_2001.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_sonic_wvo.lub");
@@ -106,9 +106,9 @@ namespace MarathonRandomiser
 
             // Egg Wyvern
             File.Copy($@"{archivePath}\{corePath}\scripts\mission\2000\mission_20E1.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_sonic_eWyvern.lub");
-            #endregion
+#endregion
 
-            #region Copy Shadow's Luas
+#region Copy Shadow's Luas
             // White Acropolis
             if (MainWindow.Randomiser.Next(0, 2) == 0)
                 File.Copy($@"{archivePath}\{corePath}\scripts\mission\2100\mission_2101.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_shadow_wap.lub");
@@ -177,9 +177,9 @@ namespace MarathonRandomiser
 
             // Mephiles Phase 2
             File.Copy($@"{archivePath}\{corePath}\scripts\mission\2100\mission_21D1.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_shadow_mephiles02.lub");
-            #endregion
+#endregion
 
-            #region Copy Silver's Luas
+#region Copy Silver's Luas
             // Crisis City
             if (MainWindow.Randomiser.Next(0, 2) == 0)
                 File.Copy($@"{archivePath}\{corePath}\scripts\mission\2200\mission_2201.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_silver_csc.lub");
@@ -248,17 +248,17 @@ namespace MarathonRandomiser
 
             // Iblis Phase 3
             File.Copy($@"{archivePath}\{corePath}\scripts\mission\2200\mission_22D1.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_silver_iblis03.lub");
-            #endregion
+#endregion
 
-            #region Copy End of the World Luas
+#region Copy End of the World Luas
             // End of the World
             File.Copy($@"{archivePath}\{corePath}\scripts\mission\2300\mission_2301.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_eotw.lub");
 
             // Solaris
             File.Copy($@"{archivePath}\{corePath}\scripts\mission\2300\mission_2311.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_solaris.lub");
-            #endregion
+#endregion
 
-            #region Town Missions
+#region Town Missions
             if (townMissions == true)
             {
                 // Shuffle a list of all the used town missions.
@@ -281,9 +281,9 @@ namespace MarathonRandomiser
                     File.Copy($@"{archivePath}\{corePath}\scripts\mission\{TownMission}\mission.lub", $@"{archivePath}\{corePath}\scripts\mission\rando\mission_{hedgehog}_town{TownMission}.lub");
                 }
             }
-            #endregion
+#endregion
 
-            #region DLC
+#region DLC
             // Load DLC archives if needed.
             if (sonicVH != null)
             {
@@ -404,7 +404,7 @@ namespace MarathonRandomiser
                 if (MainWindow.Randomiser.Next(0, 3) == 0)
                     await Task.Run(() => Helpers.VeryHardModeExtractor(corePath, silverVeryHard, "flc", archivePath, "4134", "silver"));
             }
-            #endregion
+#endregion
 
             // Get a list of all the mission luas we have.
             List<string> luas = Directory.GetFiles($@"{archivePath}\{corePath}\scripts\mission\rando\", "*.lub").ToList();
