@@ -2042,7 +2042,7 @@ namespace MarathonRandomiser
             if (eventVoice == true)
             {
                 UpdateLogger($"Shuffling event voice files.");
-                await Task.Run(() => EventRandomiser.ShuffleVoiceLines(GameExecutable, corePath, eventVoiceJpn, eventVoiceGame, CustomVoxPacks.Count != 0, ModDirectory));
+                await Task.Run(() => EventRandomiser.ShuffleVoiceLines(GameExecutable, corePath, eventVoiceJpn, eventVoiceGame, CustomVoxPacks.Count != 0 || CustomVoices.Count != 0, ModDirectory));
             }
 
             // Check if we need to do the music shuffle.
