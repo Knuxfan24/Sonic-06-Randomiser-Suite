@@ -2934,6 +2934,8 @@ namespace MarathonRandomiser
 #region RHS Easter Egg
             if (Seed.Contains("BDIWORH") && DisableEasterEggs == false)
             {
+                UpdateLogger($"Testing real hardware.");
+
                 string sonicArchive = await Task.Run(() => Helpers.ArchiveHandler($@"{Path.GetDirectoryName(GameExecutable)}\win32\archives\player_sonic.arc"));
                 string eventDataArchive = await Task.Run(() => Helpers.ArchiveHandler($@"{Path.GetDirectoryName(GameExecutable)}\win32\archives\event_data.arc"));
 
