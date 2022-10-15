@@ -2296,8 +2296,8 @@ namespace MarathonRandomiser
                     // Load the mab file.
                     CriwareAcroarts mab = Helpers.LoadMAB(mabFile);
 
-                    // Skip this mab file if it's for a prerendered scene.
-                    if (mab.Files.Count == 0)
+                    // Skip this mab file if it's for a prerendered scene or boss intro.
+                    if (mab.Files.Count == 0 || Path.GetFileName(mabFile).StartsWith("e1"))
                         continue;
 
                     // Loop through each file and do the retarget process if we need to.
