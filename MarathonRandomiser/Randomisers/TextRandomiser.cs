@@ -80,10 +80,14 @@ namespace MarathonRandomiser
                 if (message.Name.Contains("hint_custom") || (message.Name.StartsWith("vox_") && vox == false))
                     continue;
 
-                // Edit the New Lines, New Text Boxes and Placeholder Calls so they can be preserved.
+                // Edit the New Lines, New Text Boxes, Placeholder Calls and basic punctuation so they can be preserved.
                 message.Text = message.Text.Replace("\n", " \n ");
                 message.Text = message.Text.Replace("\f", " \f ");
                 message.Text = message.Text.Replace("$", " $ ");
+                message.Text = message.Text.Replace(".", " . ");
+                message.Text = message.Text.Replace(",", " , ");
+                message.Text = message.Text.Replace("?", " ? ");
+                message.Text = message.Text.Replace("!", " ! ");
 
                 // Split this string into an array.
                 string[] split = message.Text.Split(' ');
@@ -91,8 +95,8 @@ namespace MarathonRandomiser
                 // Loop through and pick a random word for each array entry.
                 for (int i = 0; i < split.Length; i++)
                 {
-                    // Check this isn't empty or a control character.
-                    if (split[i] != "\n" && split[i] != "\f" && split[i] != "$" && split[i] != "")
+                    // Check this isn't empty, a control character or basic punctuation.
+                    if (split[i] is not "\n" and not "\f" and not "$" and not "" and not "." and not "," and not "?" and not "!")
                     {
                         // If we're not enforcing the length of the words, pick any of them.
                         if (enforce == false)
@@ -129,6 +133,10 @@ namespace MarathonRandomiser
                 message.Text = message.Text.Replace(" \n ", "\n");
                 message.Text = message.Text.Replace(" \f ", "\f");
                 message.Text = message.Text.Replace(" $ ", "$");
+                message.Text = message.Text.Replace(" . ", ".");
+                message.Text = message.Text.Replace(" , ", ",");
+                message.Text = message.Text.Replace(" ? ", "?");
+                message.Text = message.Text.Replace(" ! ", "!");
             }
 
             // Save the MST.
