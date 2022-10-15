@@ -84,6 +84,9 @@ namespace MarathonRandomiser
                 Title = $"Sonic '06 Randomiser Suite ({VersionNumber}) - Version {versionCheck[0]}.{versionCheck[1]}.{versionCheck[2]} update available";
             }
 #endif
+            // Clear out any temporary directories previously aborted randomisations left behind, as they can very quickly get large.
+            foreach (string tempDirectory in Directory.GetDirectories(Path.GetTempPath(), "MarathonRandomiser_*"))
+                Directory.Delete(tempDirectory, true);
         }
 
         /// <summary>
