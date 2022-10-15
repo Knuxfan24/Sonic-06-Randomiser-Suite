@@ -100,6 +100,20 @@ namespace MarathonRandomiser
             // We don't check for this line as it doesn't actually get used by default so it won't be there.
             lua[^1] += $"\nc_model_scale = math.random() * ({max} - {min}) + {min}";
 
+            // If this is Sonic's lua, then find the Purple Gem's scale value and change that too.
+            if (Path.GetFileName(luaFile) == "sonic_new.lub")
+            {
+                for (int i = 0; i < lua.Length; i++)
+                {
+                    if (lua[i].StartsWith("c_custom_action_scale"))
+                    {
+                        string[] split = lua[i].Split("= ");
+                        split[1] = $"math.random() * ({max} - {min}) + {min}";
+                        lua[i] = string.Join("= ", split);
+                    }
+                }
+            }
+
             // Save the updated lua binary.
             File.WriteAllLines(luaFile, lua);
         }
