@@ -2,7 +2,6 @@
 using Marathon.Formats.Mesh.Ninja;
 using Marathon.Formats.Package;
 using Marathon.Helpers;
-using System.Diagnostics;
 using System.Linq;
 
 namespace MarathonRandomiser
