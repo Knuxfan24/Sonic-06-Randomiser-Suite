@@ -149,6 +149,7 @@ namespace MarathonRandomiser
                 "DoNotUseTheSnowboard.mlua",
                 "EnableDebugMode.mlua",
                 "OmegaBlurFix.mlua",
+                "RestoreScrappedBattleActs.mlua",
                 "TGS2006Menu.mlua"
             };
 
