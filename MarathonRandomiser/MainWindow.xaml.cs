@@ -25,7 +25,7 @@ namespace MarathonRandomiser
         // Version Number.
         public static readonly int GlobalVersionNumber_Rewrite = 2;
         public static readonly int GlobalVersionNumber_Revision = 1;
-        public static readonly int GlobalVersionNumber_Release = 21;
+        public static readonly int GlobalVersionNumber_Release = 22;
 
 #if !DEBUG
         public static readonly string VersionNumber = $"Version {GlobalVersionNumber_Rewrite}.{GlobalVersionNumber_Revision}.{GlobalVersionNumber_Release}";
@@ -230,9 +230,17 @@ namespace MarathonRandomiser
             Properties.Settings.Default.Save();
 
             if (TextBox_General_GameExecutable.Text.ToLower().EndsWith(".bin"))
+            {
+                CheckBox_Misc_IntroVideos.IsEnabled = false;
+                CheckBox_Misc_IntroVideos.IsChecked = false;
                 TabItem_Custom.IsEnabled = false;
+            }
             else
+            {
                 TabItem_Custom.IsEnabled = true;
+                CheckBox_Misc_IntroVideos.IsEnabled = true;
+                CheckBox_Misc_IntroVideos.IsChecked = true;
+            }
 
             // If the selected executable exists, populate the Texture Randomiser and Model Randomiser's archives lists.
             if (File.Exists(TextBox_General_GameExecutable.Text))
@@ -2780,6 +2788,7 @@ namespace MarathonRandomiser
             bool? miscPropPSINoGrab = CheckBox_Misc_PropPSIBehaviour_NoGrab.IsChecked;
             bool? miscPropPSINoDebris = CheckBox_Misc_PropPSIBehaviour_NoDebris.IsChecked;
             bool? miscPropDebris = CheckBox_Misc_PropDebris.IsChecked;
+            bool? miscIntroLogos = CheckBox_Misc_IntroVideos.IsChecked;
 
             // Check if we need to actually do enemy health randomisation.
             if (miscEnemyHealth == true)
@@ -2864,6 +2873,52 @@ namespace MarathonRandomiser
                         UpdateLogger($"Randomising prop attributes.");
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
                         await Task.Run(() => MiscellaneousRandomisers.PropAttributes(unpackedArchive, corePath, miscPropPSI, miscPropPSINoGrab, miscPropPSINoDebris, miscPropDebris));
+                    }
+                }
+            }
+
+            // Check if we need to do the Intro Logo randomisation.
+            if (miscIntroLogos == true)
+            {
+                UpdateLogger($"Randomising intro logos.");
+                bool needToDoXNCPFuckery = await Task.Run(() => MiscellaneousRandomisers.IntroLogos(ModDirectory));
+
+                // If we've replaced a title screen we need to do some additional things.
+                if (needToDoXNCPFuckery)
+                {
+                    foreach (string archive in archives)
+                    {
+                        if (Path.GetFileName(archive).ToLower() == "sprite.arc")
+                        {
+                            string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+                            await Task.Run(() => XNCPRandomisation.RemoveTitleScene(unpackedArchive));
+                        }
+                    }
+
+                    // Hybrid patch to change intro video wait time.
+                    if (!File.Exists(Path.Combine(ModDirectory, "patch.mlua")))
+                    {
+                        using Stream patchCreate = File.Open(Path.Combine(ModDirectory, "patch.mlua"), FileMode.Create);
+                        using StreamWriter patchInfo = new(patchCreate);
+                        patchInfo.WriteLine("--[Patch]--");
+                        patchInfo.WriteLine($"Title(\"Randomisation - {TextBox_General_Seed.Text}\")");
+                        patchInfo.WriteLine($"Author(\"Sonic '06 Randomiser Suite\")");
+                        patchInfo.WriteLine($"Platform(\"Xbox 360\")");
+
+                        patchInfo.WriteLine("\n--[Functions]--");
+                        patchInfo.WriteLine("--Replace Title Screen Duration--");
+                        patchInfo.WriteLine($"DecryptExecutable()");
+                        patchInfo.WriteLine($"WriteVirtualBytes(0x820087D4|\"{await Task.Run(() => Helpers.GetWMVDuration($@"{ModDirectory}\xenon\sound\title_loop_GBn.wmv"))}\")");
+
+                        patchInfo.Close();
+                    }
+                    else
+                    {
+                        using StreamWriter patchInfo = new(Path.Combine(ModDirectory, "patch.mlua"), true);
+                        patchInfo.WriteLine("\n--Replace Title Screen Duration--");
+                        patchInfo.WriteLine($"WriteVirtualBytes(0x820087D4|\"{await Task.Run(() => Helpers.GetWMVDuration($@"{ModDirectory}\xenon\sound\title_loop_GBn.wmv"))}\")");
+
+                        patchInfo.Close();
                     }
                 }
             }

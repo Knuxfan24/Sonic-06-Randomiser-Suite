@@ -1,4 +1,6 @@
-﻿using Marathon.Formats.Archive;
+﻿using DirectShowLib.DES;
+using DirectShowLib;
+using Marathon.Formats.Archive;
 using Marathon.Formats.Audio;
 using Marathon.Formats.Mesh.Ninja;
 using Marathon.Formats.Script.Lua;
@@ -15,10 +17,10 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Web;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Text;
 
 namespace MarathonRandomiser
 {
@@ -906,6 +908,44 @@ namespace MarathonRandomiser
 
             // Save the retargeted animation. If a path wasn't specified, just use the original with a .retargeted extension tacked on.
             anim.Save(xnm);
+        }
+
+        // https://stackoverflow.com/questions/6215185/getting-length-of-video
+        public static async Task<string> GetWMVDuration(string wmvFile)
+        {
+            var mediaDet = (IMediaDet)new MediaDet();
+            DsError.ThrowExceptionForHR(mediaDet.put_Filename(wmvFile));
+
+            // find the video stream in the file
+            int index;
+            var type = Guid.Empty;
+            for (index = 0; index < 1000 && type != MediaType.Video; index++)
+            {
+                mediaDet.put_CurrentStream(index);
+                mediaDet.get_StreamType(out type);
+            }
+
+            // retrieve some measurements from the video
+            double frameRate;
+            mediaDet.get_FrameRate(out frameRate);
+
+            double mediaLength;
+            mediaDet.get_StreamLength(out mediaLength);
+            var frameCount = (int)(frameRate * mediaLength);
+            float duration = (float)(frameCount / frameRate);
+
+
+            // https://stackoverflow.com/questions/73160913/float-to-hexadecimal-using-bitconverter-in-c-sharp
+            byte[] ba = BitConverter.GetBytes(duration - 3f);
+
+            StringBuilder sb = new();
+
+            for (int i = ba.Length - 1; i >= 0; i--)
+                sb.Append($"{ba[i].ToString("X2")} ");
+
+            sb.Length--;
+
+            return sb.ToString();
         }
     }
 

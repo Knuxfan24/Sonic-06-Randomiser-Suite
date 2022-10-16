@@ -201,5 +201,30 @@ namespace MarathonRandomiser
             // Return the RGBA byte array.
             return rgba;
         }
+
+        /// <summary>
+        /// Removes the scene from the title XNCPs so they don't overlap randomised ones.
+        /// TODO: This causes nonfatal debug assertions, test in release just in case.
+        /// </summary>
+        /// <param name="archivePath">The extracted sprite.arc.</param>
+        public static async Task RemoveTitleScene(string archivePath)
+        {
+            foreach (string xncpFile in Directory.GetFiles($@"{archivePath}\win32\sprite\title", "*.xncp"))
+            {
+                // Load this XNCP file.
+                FAPCFile? xncp = new();
+                xncp.Load(xncpFile);
+
+                // Loop through a massive nest to find the casts.
+                foreach (FAPCEmbeddedRes? resource in xncp.Resources)
+                {
+                    // Clear out the scenes if the CsdmProject exists.
+                    resource.Content.CsdmProject?.Root.Scenes.Clear();
+                }
+
+                // Save the modified XNCP.
+                xncp.Save(xncpFile);
+            }
+        }
     }
 }

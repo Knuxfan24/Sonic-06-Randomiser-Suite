@@ -287,5 +287,50 @@ namespace MarathonRandomiser
             // Save the updated Common.bin
             commonBIN.Save();
         }
+    
+        /// <summary>
+        /// Randomly selects a Sega Logo and Title Screen from the External Resources.
+        /// </summary>
+        /// <param name="ModDirectory">The path to the randomisation's mod directory.</param>
+        public static async Task<bool> IntroLogos(string ModDirectory)
+        {
+            // Find all the Sega logos.
+            string[] files = Directory.GetFiles($@"{Environment.CurrentDirectory}\ExternalResources\SegaLogos");
+
+            // Roll a number with a max of one higher than the amount of logos.
+            int value = MainWindow.Randomiser.Next(files.Length + 1);
+
+            // If we're higher, then leave the '06 Sega logo intact.
+            if (value != files.Length)
+            {
+                // Create the sound directory just in case.
+                Directory.CreateDirectory($@"{ModDirectory}\xenon\sound");
+
+                // Copy a random Sega logo.
+                File.Copy(files[value], $@"{ModDirectory}\xenon\sound\HD_SEGA.wmv", true);
+            }
+
+            // Find all the title screens.
+            files = Directory.GetFiles($@"{Environment.CurrentDirectory}\ExternalResources\TitleLogos");
+
+            // Roll a number with a max of one higher than the amount of title screens.
+            value = MainWindow.Randomiser.Next(files.Length + 1);
+
+            // If we're higher, then leave the '06 title screen intact.
+            if (value != files.Length)
+            {
+                // Create the sound directory just in case.
+                Directory.CreateDirectory($@"{ModDirectory}\xenon\sound");
+
+                // Copy a random Sega logo.
+                File.Copy(files[value], $@"{ModDirectory}\xenon\sound\title_loop_GBn.wmv", true);
+
+                // Tell the rando that we've replaced the title screen and need to edit the XNCP and Hybrid Patch.
+                return true;
+            }
+
+            // Tell the rando that we haven't replaced the title screen and can leave the XNCP alone.
+            return false;
+        }
     }
 }
