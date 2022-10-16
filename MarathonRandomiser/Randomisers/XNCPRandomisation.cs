@@ -204,7 +204,7 @@ namespace MarathonRandomiser
 
         /// <summary>
         /// Removes the scene from the title XNCPs so they don't overlap randomised ones.
-        /// TODO: This causes nonfatal debug assertions, test in release just in case.
+        /// This causes nonfatal debug assertions, but seems fine in Release.
         /// </summary>
         /// <param name="archivePath">The extracted sprite.arc.</param>
         public static async Task RemoveTitleScene(string archivePath)
