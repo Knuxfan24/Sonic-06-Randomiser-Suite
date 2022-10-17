@@ -701,6 +701,13 @@ namespace MarathonRandomiser
             }
         }
 
+        /// <summary>
+        /// Finds a specific XNO in the target archive.
+        /// </summary>
+        /// <param name="archive">The archive to serach.</param>
+        /// <param name="targetFile">The XNO file to find.</param>
+        /// <param name="character">The character name to store this under.</param>
+        /// <param name="modelLocations">The dictonary of XNOs to add this to.</param>
         public static Dictionary<string, string> FindPlayer(string archive, string targetFile, string character, Dictionary<string, string> modelLocations)
         {
             U8Archive arc = new(archive, ReadMode.IndexOnly);

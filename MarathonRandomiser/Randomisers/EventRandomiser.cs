@@ -20,8 +20,8 @@ namespace MarathonRandomiser
         /// <param name="posX">Whether or not we're randomising the X position for the events.</param>
         /// <param name="posY">Whether or not we're randomising the Y position for the events.</param>
         /// <param name="posZ">Whether or not we're randomising the Z position for the events.</param>
-        public static async Task Process(string archivePath, string corePath, bool? lighting, List<string> EventLighting, bool? terrain, List<string> EventTerrain, bool? rotX, bool? rotY, bool? rotZ, bool? posX, bool? posY,
-                                      bool? posZ)
+        public static async Task Process(string archivePath, string corePath, bool? lighting, List<string> EventLighting, bool? terrain, List<string> EventTerrain,
+                                         bool? rotX, bool? rotY, bool? rotZ, bool? posX, bool? posY, bool? posZ)
         {
             // Load eventplaybook.epb.
             EventPlaybook epb = new($@"{archivePath}\{corePath}\eventplaybook.epb");

@@ -457,6 +457,12 @@ namespace MarathonRandomiser
             }
         }
 
+        /// <summary>
+        /// Duplicates an enemy object.
+        /// </summary>
+        /// <param name="set">The file to process.</param>
+        /// <param name="setObject">The object to duplicate.</param>
+        /// <param name="objectIndex">The index of the object we're duplicating (for groups).</param>
         static async Task DuplicateEnemy(ObjectPlacement set, SetObject setObject, int objectIndex)
         {
             // Don't dupe the Egg Wyvern, as the boss completely breaks.

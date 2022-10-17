@@ -251,6 +251,14 @@ namespace MarathonRandomiser
             }
         }
 
+        /// <summary>
+        /// Retarget event animations.
+        /// </summary>
+        /// <param name="eventID">The event index we're using.</param>
+        /// <param name="srcCharacter">The original character for this animation.</param>
+        /// <param name="models">The list of models to choose from.</param>
+        /// <param name="file">The MAB File Entry we're randomising.</param>
+        /// <param name="enforceNewModel">Whether or not we HAVE to change this model.</param>
         public static async Task RetargetAnimations(string eventID, string srcCharacter, Dictionary<string, string> models, CriwareFileRef file, bool? enforceNewModel)
         {
             // Store the original file name.
@@ -295,6 +303,7 @@ namespace MarathonRandomiser
                 file.Name = file.Name.PadRight(0x21, '@');
 
             // Do the retargeting stuff based on names.
+            // TODO: This falls apart slightly in scenes where the same character uses more than one animation file.
             switch (srcCharacter)
             {
                 default:
