@@ -133,6 +133,15 @@
     <None Update="ExternalResources\texconv.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ExternalResources\TitleLogos\battle.wmv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\TitleLogos\blackknight.wmv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\TitleLogos\colours.wmv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ExternalResources\TitleLogos\generations.wmv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -154,10 +163,19 @@
     <None Update="ExternalResources\TitleLogos\sadx.wmv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ExternalResources\TitleLogos\secretrings.wmv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\TitleLogos\shth.wmv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ExternalResources\TitleLogos\slw.wmv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ExternalResources\TitleLogos\unleashed.wmv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\TitleLogos\unwiished.wmv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ExternalResources\vgmstream\avcodec-vgmstream-58.dll">
