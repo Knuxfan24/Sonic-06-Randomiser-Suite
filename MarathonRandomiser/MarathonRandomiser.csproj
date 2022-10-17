@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="ExternalResources\easterEgg2.knx" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="ExternalResources\Logo.ico" />
   </ItemGroup>
 
@@ -35,6 +39,12 @@
     <Reference Include="SonicAudioLib">
       <HintPath>ExternalResources\SonicAudioLib.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="ExternalResources\easterEgg2.knx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -65,6 +75,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ExternalResources\DLC_RandomEpisode.lub">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\easterEgg1.knx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ExternalResources\GeneratedEpisodeHUB\collision.bin">

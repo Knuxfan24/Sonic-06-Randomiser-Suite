@@ -2883,6 +2883,14 @@ namespace MarathonRandomiser
                 UpdateLogger($"Randomising intro logos.");
                 bool needToDoXNCPFuckery = await Task.Run(() => MiscellaneousRandomisers.IntroLogos(ModDirectory));
 
+                // Copy the RHS easter egg Sega logo and title screen.
+                if (Seed.Contains("BDIWORH") && DisableEasterEggs == false)
+                {
+                    needToDoXNCPFuckery = true;
+                    File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\easterEgg1.knx", $@"{ModDirectory}\xenon\sound\HD_SEGA.wmv", true);
+                    File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\easterEgg2.knx", $@"{ModDirectory}\xenon\sound\title_loop_GBn.wmv", true);
+                }
+
                 // If we've replaced a title screen we need to do some additional things.
                 if (needToDoXNCPFuckery)
                 {
@@ -2920,6 +2928,16 @@ namespace MarathonRandomiser
 
                         patchInfo.Close();
                     }
+                }
+
+                // Skip over the Sonic Team and Criware Logos.
+                if (Seed.Contains("BDIWORH") && DisableEasterEggs == false)
+                {
+                    using StreamWriter patchInfo = new(Path.Combine(ModDirectory, "patch.mlua"), true);
+                    patchInfo.WriteLine("\n--Skip Sonic Team and Criware Logos--");
+                    patchInfo.WriteLine("WriteNullBytes(Executable|0x36600|20)");
+                    patchInfo.WriteLine("WriteNullBytes(Executable|0x36624|26)");
+                    patchInfo.Close();
                 }
             }
 #endregion
