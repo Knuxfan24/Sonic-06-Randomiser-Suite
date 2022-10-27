@@ -104,6 +104,12 @@
     <None Update="ExternalResources\rando_obj_indicator.xno">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ExternalResources\SegaLogos\Generic %28Mega Drive%29.wmv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\SegaLogos\Generic %28Modern%29.wmv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ExternalResources\SegaLogos\md_generic.wmv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -126,6 +132,30 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ExternalResources\SegaLogos\sadv.wmv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\SegaLogos\Sonic 3D Blast.wmv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\SegaLogos\Sonic Advance.wmv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\SegaLogos\Sonic R.wmv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\SegaLogos\Sonic Spinball.wmv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\SegaLogos\Sonic The Hedgehog 1.wmv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\SegaLogos\Sonic The Hedgehog 2.wmv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\SegaLogos\Sonic The Hedgehog 4 Episode 1.wmv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\SegaLogos\Sonic The Hedgehog 4 Episode 2.wmv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ExternalResources\SegaLogos\sonicR.wmv">
@@ -179,10 +209,55 @@
     <None Update="ExternalResources\TitleLogos\secretrings.wmv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ExternalResources\TitleLogos\Shadow the Hedgehog.wmv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ExternalResources\TitleLogos\shth.wmv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ExternalResources\TitleLogos\slw.wmv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\TitleLogos\Sonic Adventure 2 Battle.wmv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\TitleLogos\Sonic Adventure DX.wmv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\TitleLogos\Sonic and the Black Knight.wmv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\TitleLogos\Sonic and the Secret Rings.wmv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\TitleLogos\Sonic Battle.wmv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\TitleLogos\Sonic Colours.wmv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\TitleLogos\Sonic Generations.wmv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\TitleLogos\Sonic Lost World.wmv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\TitleLogos\Sonic The Hedgehog 1.wmv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\TitleLogos\Sonic The Hedgehog 2.wmv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\TitleLogos\Sonic The Hedgehog 4 Episode 1.wmv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\TitleLogos\Sonic The Hedgehog 4 Episode 2.wmv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\TitleLogos\Sonic Unleashed HD.wmv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\TitleLogos\Sonic Unleashed SD.wmv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ExternalResources\TitleLogos\unleashed.wmv">

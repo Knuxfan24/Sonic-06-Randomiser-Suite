@@ -541,6 +541,16 @@
                                 <local:CheckedListBox x:Name="CheckedList_Misc_Patches" MultiColumn="True" Margin="0,0,0,0"/>
                             </Grid>
                         </hc:TabItem>
+                        <hc:TabItem Header="Sega Logos" BorderBrush="#B146C2">
+                            <Grid>
+                                <local:CheckedListBox x:Name="CheckedList_Misc_SegaLogos" MultiColumn="True" Margin="0,0,0,0"/>
+                            </Grid>
+                        </hc:TabItem>
+                        <hc:TabItem Header="Title Screens" BorderBrush="#B146C2">
+                            <Grid>
+                                <local:CheckedListBox x:Name="CheckedList_Misc_TitleScreens" MultiColumn="True" Margin="0,0,0,0"/>
+                            </Grid>
+                        </hc:TabItem>
                     </hc:TabControl>
                 </Grid>
             </hc:TabItem>

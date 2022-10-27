@@ -162,6 +162,8 @@ namespace MarathonRandomiser
             Helpers.FillCheckedListBox(Properties.Resources.TextButtonIcons, CheckedList_Text_Buttons);
 
             Helpers.FetchPatches(TextBox_General_Patches.Text, CheckedList_Misc_Patches);
+            Helpers.FetchVideos("SegaLogos", CheckedList_Misc_SegaLogos);
+            Helpers.FetchVideos("TitleLogos", CheckedList_Misc_TitleScreens);
 
             RefreshVoicePacks();
 
@@ -907,11 +909,8 @@ namespace MarathonRandomiser
                     switch (TabControl_Miscellaneous.SelectedIndex)
                     {
                         case 0: Helpers.InvalidateCheckedListBox(CheckedList_Misc_Patches, true, selectAll); break;
-                        case 1:
-                            CheckBox_Episode_SonicVH.IsChecked = selectAll;
-                            CheckBox_Episode_ShadowVH.IsChecked = selectAll;
-                            CheckBox_Episode_SilverVH.IsChecked = selectAll;
-                            break;
+                        case 1: Helpers.InvalidateCheckedListBox(CheckedList_Misc_SegaLogos, true, selectAll); break;
+                        case 2: Helpers.InvalidateCheckedListBox(CheckedList_Misc_TitleScreens, true, selectAll); break;
                         default: throw new NotImplementedException();
                     }
                     break;
@@ -1157,6 +1156,8 @@ namespace MarathonRandomiser
             // Misc Block.
             ConfigTabRead(configInfo, "Misc", StackPanel_Misc);
             ConfigCheckedListBoxRead(configInfo, CheckedList_Misc_Patches);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_Misc_SegaLogos);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_Misc_TitleScreens);
             configInfo.WriteLine();
 
             // Custom Block.
@@ -1475,7 +1476,7 @@ namespace MarathonRandomiser
             Button_Randomise.IsEnabled = false;
             Button_LoadConfig.IsEnabled = false;
 
-            // Wildcard Setup
+#region Wildcard Setup
             if (CheckBox_Wildcard_Enable.IsChecked == true)
             {
                 // Save user's config so we can make it seemlessTM.
@@ -1573,6 +1574,7 @@ namespace MarathonRandomiser
                     WildcardNumericUpDown(NumericUpDown_Misc_Patches_Weight, 0, 100);
                 }
             }
+#endregion
 
             // Enumerate the Checked List Boxes for the user's settings on lists.
             List<string> SetEnemies = Helpers.EnumerateCheckedListBox(CheckedList_SET_EnemyTypes);
@@ -1602,6 +1604,8 @@ namespace MarathonRandomiser
             List<string> TextButtons = Helpers.EnumerateCheckedListBox(CheckedList_Text_Buttons);
 
             List<string> MiscPatches = Helpers.EnumerateCheckedListBox(CheckedList_Misc_Patches);
+            List<string> MiscSegaLogos = Helpers.EnumerateCheckedListBox(CheckedList_Misc_SegaLogos);
+            List<string> MiscTitleScreens = Helpers.EnumerateCheckedListBox(CheckedList_Misc_TitleScreens);
 
             List<string> CustomMusic = new();
             foreach (string item in ListBox_Custom_Music.Items)
@@ -2881,7 +2885,7 @@ namespace MarathonRandomiser
             if (miscIntroLogos == true)
             {
                 UpdateLogger($"Randomising intro logos.");
-                bool needToDoXNCPFuckery = await Task.Run(() => MiscellaneousRandomisers.IntroLogos(ModDirectory));
+                bool needToDoXNCPFuckery = await Task.Run(() => MiscellaneousRandomisers.IntroLogos(ModDirectory, MiscSegaLogos, MiscTitleScreens));
 
                 // Copy the RHS easter egg Sega logo and title screen.
                 if (Seed.Contains("BDIWORH") && DisableEasterEggs == false)

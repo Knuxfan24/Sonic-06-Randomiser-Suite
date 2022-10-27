@@ -176,6 +176,27 @@ namespace MarathonRandomiser
                 listBox.Items.Add(item);
             }
         }
+        
+        /// <summary>
+        /// Used to fill out two lists in the form with the contents of the SegaLogos and TitleLogos folders.
+        /// </summary>
+        /// <param name="type">Which folder we're looking for.</param>
+        /// <param name="listBox">The listbox to fill out.</param>
+        public static void FetchVideos(string type, CheckedListBox listBox)
+        {
+            // Loop through and add the videos to the approriate listbox element
+            foreach (string patch in Directory.GetFiles($@"{Environment.CurrentDirectory}\ExternalResources\{type}", "*.wmv", SearchOption.TopDirectoryOnly))
+            {
+                CheckedListBoxItem item = new()
+                {
+                    DisplayName = Path.GetFileNameWithoutExtension(patch),
+                    Tag = patch,
+                    Checked = true
+                };
+
+                listBox.Items.Add(item);
+            }
+        }
 
         /// <summary>
         /// Automatically fills in a custom CheckedListBox element based on the Checkboxes in a tab.
