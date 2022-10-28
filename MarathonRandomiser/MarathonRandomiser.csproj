@@ -105,10 +105,37 @@
     <None Update="ExternalResources\InvincibilityJingles\Shadow The Hedgehog.xma">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ExternalResources\InvincibilityJingles\Sonic Adventure 2.xma">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\InvincibilityJingles\Sonic Adventure.xma">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\InvincibilityJingles\Sonic Colours Ultimate.xma">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\InvincibilityJingles\Sonic Forces.xma">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\InvincibilityJingles\Sonic Heroes.xma">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\InvincibilityJingles\Sonic Lost World.xma">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ExternalResources\rando_obj_indicator.xno">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ExternalResources\ResultsThemes\Sonic and the Black Knight.xma">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\ResultsThemes\Sonic Colours.xma">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ExternalResources\ResultsThemes\Sonic Generations.xma">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\ResultsThemes\Sonic Lost World.xma">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ExternalResources\SegaLogos\Generic %28Mega Drive%29.wmv">
@@ -327,7 +354,31 @@
     <None Update="ExternalResources\vgmstream\xmp-vgmstream.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ExternalResources\VictoryFanfares\Shadow The Hedgehog.xma">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\VictoryFanfares\Sonic Adventure 2.xma">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\VictoryFanfares\Sonic Adventure.xma">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\VictoryFanfares\Sonic and the Black Knight.xma">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\VictoryFanfares\Sonic and the Secret Rings.xma">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\VictoryFanfares\Sonic Colours.xma">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ExternalResources\VictoryFanfares\Sonic Forces.xma">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\VictoryFanfares\Sonic Generations.xma">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\VictoryFanfares\Sonic Lost World.xma">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ExternalResources\xmaencode.exe">
