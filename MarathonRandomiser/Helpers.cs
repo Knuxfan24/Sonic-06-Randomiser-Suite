@@ -178,19 +178,20 @@ namespace MarathonRandomiser
         }
         
         /// <summary>
-        /// Used to fill out two lists in the form with the contents of the SegaLogos and TitleLogos folders.
+        /// Used to fill out lists in the form with stuff from the External Resources folder.
         /// </summary>
         /// <param name="type">Which folder we're looking for.</param>
         /// <param name="listBox">The listbox to fill out.</param>
-        public static void FetchVideos(string type, CheckedListBox listBox)
+        /// <param name="fileType">The file extension we're looking for.</param>
+        public static void FetchListFiles(string type, CheckedListBox listBox, string fileType)
         {
-            // Loop through and add the videos to the approriate listbox element
-            foreach (string patch in Directory.GetFiles($@"{Environment.CurrentDirectory}\ExternalResources\{type}", "*.wmv", SearchOption.TopDirectoryOnly))
+            // Loop through and add the files to the approriate listbox element
+            foreach (string file in Directory.GetFiles($@"{Environment.CurrentDirectory}\ExternalResources\{type}", $"*.{fileType}", SearchOption.TopDirectoryOnly))
             {
                 CheckedListBoxItem item = new()
                 {
-                    DisplayName = Path.GetFileNameWithoutExtension(patch),
-                    Tag = patch,
+                    DisplayName = Path.GetFileNameWithoutExtension(file),
+                    Tag = file,
                     Checked = true
                 };
 

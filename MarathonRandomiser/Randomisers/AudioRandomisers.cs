@@ -326,5 +326,66 @@ namespace MarathonRandomiser
                 File.Move($"{Files[index]}.rnd", Files[i]);
             }
         }
+
+        /// <summary>
+        /// Randomises the Victory Fanfare.
+        /// </summary>
+        /// <param name="ModDirectory">The directory of the mod.</param>
+        /// <param name="Fanfares">The list of fanfare file paths.</param>
+        /// <param name="canUseOriginal">Whether or not we can use the original fanfares.</param>
+        /// <returns>The file name of the chosen fanfare, or null if the original.</returns>
+        public static async Task<string> VictoryFanfares(string ModDirectory, List<string> Fanfares, bool? canUseOriginal)
+        {
+            // Roll a number with a max of one higher than the amount of fanfares.
+            int value = MainWindow.Randomiser.Next(Fanfares.Count + 1);
+
+            // Set whether the original jingles can be selected or not.
+            if (canUseOriginal == false)
+                value = MainWindow.Randomiser.Next(Fanfares.Count);
+
+            // If we're higher, then leave the '06 fanfares intact.
+            if (value != Fanfares.Count)
+            {
+                // Create the sound directory just in case.
+                Directory.CreateDirectory($@"{ModDirectory}\xenon\sound");
+
+                // Copy a random fanfare.
+                File.Copy(Fanfares[value], $@"{ModDirectory}\xenon\sound\roundclear.xma", true);
+                File.Copy(Fanfares[value], $@"{ModDirectory}\xenon\sound\twn_clear.xma", true);
+
+                // Return the file name of the chosen fanfare so we can find the approriate results theme.
+                return Path.GetFileName(Fanfares[value]);
+            }
+
+            // Return null so the Randomiser knows we haven't changed the fanfare.
+            return null;
+        }
+
+        /// <summary>
+        /// Randomises the Invincibility Jingle.
+        /// </summary>
+        /// <param name="ModDirectory">The directory of the mod.</param>
+        /// <param name="Jingles">The list of jingle file paths.</param>
+        /// <param name="canUseOriginal">Whether or not we can use the original jingle.</param>
+        /// <returns>The file name of the chosen jingle, or null if the original.</returns>
+        public static async Task InvincibilityJingle(string ModDirectory, List<string> Jingles, bool? canUseOriginal)
+        {
+            // Roll a number with a max of one higher than the amount of jingles.
+            int value = MainWindow.Randomiser.Next(Jingles.Count + 1);
+
+            // Set whether the original jingle can be selected or not.
+            if (canUseOriginal == false)
+                value = MainWindow.Randomiser.Next(Jingles.Count);
+
+            // If we're higher, then leave the '06 jingle intact.
+            if (value != Jingles.Count)
+            {
+                // Create the sound directory just in case.
+                Directory.CreateDirectory($@"{ModDirectory}\xenon\sound");
+
+                // Copy a random jingle.
+                File.Copy(Jingles[value], $@"{ModDirectory}\xenon\sound\speed_up.xma", true);
+            }
+        }
     }
 }

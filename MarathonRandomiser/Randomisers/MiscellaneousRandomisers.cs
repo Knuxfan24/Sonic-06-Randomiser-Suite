@@ -294,10 +294,14 @@ namespace MarathonRandomiser
         /// <param name="ModDirectory">The path to the randomisation's mod directory.</param>
         /// <param name="SegaLogos">The list of Sega logo file paths.</param>
         /// <param name="TitleLogos">The list of title screen file paths.</param>
-        public static async Task<bool> IntroLogos(string ModDirectory, List<string> SegaLogos, List<string> TitleLogos)
+        public static async Task<bool> IntroLogos(string ModDirectory, List<string> SegaLogos, List<string> TitleLogos, bool? canUseOriginal)
         {
             // Roll a number with a max of one higher than the amount of logos.
             int value = MainWindow.Randomiser.Next(SegaLogos.Count + 1);
+
+            // Set whether the original Sega logos can be selected or not.
+            if (canUseOriginal == false)
+                value = MainWindow.Randomiser.Next(SegaLogos.Count);
 
             // If we're higher, then leave the '06 Sega logo intact.
             if (value != SegaLogos.Count)
@@ -311,6 +315,10 @@ namespace MarathonRandomiser
 
             // Roll a number with a max of one higher than the amount of title screens.
             value = MainWindow.Randomiser.Next(TitleLogos.Count + 1);
+
+            // Set whether the original title screen can be selected or not.
+            if (canUseOriginal == false)
+                value = MainWindow.Randomiser.Next(TitleLogos.Count);
 
             // If we're higher, then leave the '06 title screen intact.
             if (value != TitleLogos.Count)

@@ -7,7 +7,7 @@
         xmlns:hc="https://handyorg.github.io/handycontrol"
         x:Class="MarathonRandomiser.MainWindow"
         mc:Ignorable="d"
-        Title="Sonic '06 Randomiser Suite" Height="750" Width="1750" MinHeight="750" MinWidth="1750">
+        Title="Sonic '06 Randomiser Suite" Height="775" Width="1750" MinHeight="775" MinWidth="1750">
     <Grid Background="#FF181818">
         <hc:TabControl Style="{StaticResource TabControlInLine}" Margin="0,0,0,50" x:Name="TabControl_Main">
             <!--General Tab-->
@@ -348,6 +348,10 @@
                         </StackPanel.Resources>
                         <CheckBox x:Name="CheckBox_Audio_Music" Content="Randomise Stage Music" IsChecked="True"/>
                         <CheckBox x:Name="CheckBox_Audio_SFX" Content="Randomise Sound Effects" Foreground="Firebrick"/>
+                        <CheckBox x:Name="CheckBox_Audio_Fanfares" Content="Randomise Victory Fanfares" IsChecked="True" Click="Dependency_CheckBox_Changed"/>
+                        <CheckBox x:Name="CheckBox_Audio_Fanfares_Orig" Content="Allow Original Fanfares" IsChecked="False" IsEnabled="True"/>
+                        <CheckBox x:Name="CheckBox_Audio_Jingle" Content="Randomise Invincibility Jingle" IsChecked="True" Click="Dependency_CheckBox_Changed"/>
+                        <CheckBox x:Name="CheckBox_Audio_Jingle_Orig" Content="Allow Original Jingle" IsChecked="False" IsEnabled="True"/>
                     </StackPanel>
 
                     <!--Audio Configuration Toggles-->
@@ -362,6 +366,16 @@
                         <hc:TabItem Header="Sound Effect Banks" BorderBrush="#B146C2" x:Name="TabItem_Audio_SFX" >
                             <Grid>
                                 <local:CheckedListBox x:Name="CheckedList_Audio_SFX" MultiColumn="True" Margin="0,0,0,0"/>
+                            </Grid>
+                        </hc:TabItem>
+                        <hc:TabItem Header="Victory Fanfares" BorderBrush="#B146C2" x:Name="TabItem_Audio_Fanfares" >
+                            <Grid>
+                                <local:CheckedListBox x:Name="CheckedList_Audio_Fanfares" MultiColumn="True" Margin="0,0,0,0"/>
+                            </Grid>
+                        </hc:TabItem>
+                        <hc:TabItem Header="Invincibility Jingles" BorderBrush="#B146C2" x:Name="TabItem_Audio_Jingle" >
+                            <Grid>
+                                <local:CheckedListBox x:Name="CheckedList_Audio_Jingle" MultiColumn="True" Margin="0,0,0,0"/>
                             </Grid>
                         </hc:TabItem>
                     </hc:TabControl>
@@ -529,7 +543,8 @@
                         <CheckBox x:Name="CheckBox_Misc_PropPSIBehaviour_NoGrab" Content="Don't Disable Grabbing" IsEnabled="False"/>
                         <CheckBox x:Name="CheckBox_Misc_PropPSIBehaviour_NoDebris" Content="Ignore Debris" IsEnabled="False"/>
                         <CheckBox x:Name="CheckBox_Misc_PropDebris" Content="Randomise Prop Debris"/>
-                        <CheckBox x:Name="CheckBox_Misc_IntroVideos" Content="Randomise Intro Videos" IsChecked="True"/>
+                        <CheckBox x:Name="CheckBox_Misc_IntroVideos" Content="Randomise Intro Videos" IsChecked="True" Click="Dependency_CheckBox_Changed"/>
+                        <CheckBox x:Name="CheckBox_Misc_IntroVideos_Orig" Content="Allow Original Videos" IsChecked="False" IsEnabled="True"/>
                     </StackPanel>
 
                     <!--Miscellaneous Configuration Toggles-->

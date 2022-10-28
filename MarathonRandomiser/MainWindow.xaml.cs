@@ -157,13 +157,15 @@ namespace MarathonRandomiser
 
             Helpers.FillCheckedListBox(Properties.Resources.AudioSongs, CheckedList_Audio_Songs);
             Helpers.FillCheckedListBox(Properties.Resources.AudioCSBs, CheckedList_Audio_SFX);
-            
+            Helpers.FetchListFiles("VictoryFanfares", CheckedList_Audio_Fanfares, "xma");
+            Helpers.FetchListFiles("InvincibilityJingles", CheckedList_Audio_Jingle, "xma");
+
             Helpers.FillCheckedListBox(Properties.Resources.TextLanguages, CheckedList_Text_Languages);
             Helpers.FillCheckedListBox(Properties.Resources.TextButtonIcons, CheckedList_Text_Buttons);
 
             Helpers.FetchPatches(TextBox_General_Patches.Text, CheckedList_Misc_Patches);
-            Helpers.FetchVideos("SegaLogos", CheckedList_Misc_SegaLogos);
-            Helpers.FetchVideos("TitleLogos", CheckedList_Misc_TitleScreens);
+            Helpers.FetchListFiles("SegaLogos", CheckedList_Misc_SegaLogos, "wmv");
+            Helpers.FetchListFiles("TitleLogos", CheckedList_Misc_TitleScreens, "wmv");
 
             RefreshVoicePacks();
 
@@ -231,18 +233,13 @@ namespace MarathonRandomiser
             Properties.Settings.Default.GameExecutable = TextBox_General_GameExecutable.Text;
             Properties.Settings.Default.Save();
 
-            if (TextBox_General_GameExecutable.Text.ToLower().EndsWith(".bin"))
-            {
-                CheckBox_Misc_IntroVideos.IsEnabled = false;
-                CheckBox_Misc_IntroVideos.IsChecked = false;
-                TabItem_Custom.IsEnabled = false;
-            }
-            else
-            {
-                TabItem_Custom.IsEnabled = true;
-                CheckBox_Misc_IntroVideos.IsEnabled = true;
-                CheckBox_Misc_IntroVideos.IsChecked = true;
-            }
+            CheckBox_Misc_IntroVideos.IsEnabled = !TextBox_General_GameExecutable.Text.ToLower().EndsWith(".bin");
+            CheckBox_Misc_IntroVideos.IsChecked = !TextBox_General_GameExecutable.Text.ToLower().EndsWith(".bin");
+            CheckBox_Audio_Fanfares.IsEnabled = !TextBox_General_GameExecutable.Text.ToLower().EndsWith(".bin");
+            CheckBox_Audio_Fanfares.IsChecked = !TextBox_General_GameExecutable.Text.ToLower().EndsWith(".bin");
+            CheckBox_Audio_Jingle.IsEnabled = !TextBox_General_GameExecutable.Text.ToLower().EndsWith(".bin");
+            CheckBox_Audio_Jingle.IsChecked = !TextBox_General_GameExecutable.Text.ToLower().EndsWith(".bin");
+            TabItem_Custom.IsEnabled = !TextBox_General_GameExecutable.Text.ToLower().EndsWith(".bin");
 
             // If the selected executable exists, populate the Texture Randomiser and Model Randomiser's archives lists.
             if (File.Exists(TextBox_General_GameExecutable.Text))
@@ -701,6 +698,13 @@ namespace MarathonRandomiser
                     CheckBox_Textures_OnlyCustom.IsEnabled = NewCheckedStatus;
                     break;
 
+                case "CheckBox_Audio_Fanfares":
+                    CheckBox_Audio_Fanfares_Orig.IsEnabled = NewCheckedStatus;
+                    break;
+                case "CheckBox_Audio_Jingle":
+                    CheckBox_Audio_Jingle_Orig.IsEnabled = NewCheckedStatus;
+                    break;
+
                 case "CheckBox_Text_Generate":
                     CheckBox_Text_Generate_Enforce.IsEnabled = NewCheckedStatus;
                     if (TextBox_General_GameExecutable.Text.EndsWith(".xex"))
@@ -799,6 +803,9 @@ namespace MarathonRandomiser
                 case "CheckBox_Misc_Patches":
                     Label_Misc_Patches_Weight.IsEnabled = NewCheckedStatus;
                     NumericUpDown_Misc_Patches_Weight.IsEnabled = NewCheckedStatus;
+                    break;
+                case "CheckBox_Misc_IntroVideos":
+                    CheckBox_Misc_IntroVideos_Orig.IsEnabled = NewCheckedStatus;
                     break;
 
                 case "CheckBox_Wildcard_Enable":
@@ -1131,6 +1138,8 @@ namespace MarathonRandomiser
             ConfigTabRead(configInfo, "Audio", StackPanel_Audio);
             ConfigCheckedListBoxRead(configInfo, CheckedList_Audio_Songs);
             ConfigCheckedListBoxRead(configInfo, CheckedList_Audio_SFX);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_Audio_Fanfares);
+            ConfigCheckedListBoxRead(configInfo, CheckedList_Audio_Jingle);
             configInfo.WriteLine();
 
             // Text Block.
@@ -1599,6 +1608,8 @@ namespace MarathonRandomiser
 
             List<string> AudioMusic = Helpers.EnumerateCheckedListBox(CheckedList_Audio_Songs);
             List<string> AudioCSBs = Helpers.EnumerateCheckedListBox(CheckedList_Audio_SFX);
+            List<string> AudioFanfares = Helpers.EnumerateCheckedListBox(CheckedList_Audio_Fanfares);
+            List<string> AudioJingles = Helpers.EnumerateCheckedListBox(CheckedList_Audio_Jingle);
 
             List<string> TextLanguages = Helpers.EnumerateCheckedListBox(CheckedList_Text_Languages);
             List<string> TextButtons = Helpers.EnumerateCheckedListBox(CheckedList_Text_Buttons);
@@ -2481,6 +2492,10 @@ namespace MarathonRandomiser
             // Set up values.
             bool? audioMusic = CheckBox_Audio_Music.IsChecked;
             bool? audioSFX = CheckBox_Audio_SFX.IsChecked;
+            bool? audioFanfares = CheckBox_Audio_Fanfares.IsChecked;
+            bool? audioFanfaresOrig = CheckBox_Audio_Fanfares_Orig.IsChecked;
+            bool? audioJingle = CheckBox_Audio_Jingle.IsChecked;
+            bool? audioJingleOrig = CheckBox_Audio_Jingle_Orig.IsChecked;
 
             // Check if we actually need to do music randomisation.
             if (audioMusic == true)
@@ -2583,6 +2598,26 @@ namespace MarathonRandomiser
                     }
                 }
             }
+
+            // Check if we need to do Victory Fanfare randomisation.
+            if (audioFanfares == true)
+            {
+                // Copy a fanfare, getting the name of the copied one. This will be null if it chooses the OG game's fanfare.
+                string returned = await Task.Run(() => AudioRandomisers.VictoryFanfares(ModDirectory, AudioFanfares, audioFanfaresOrig));
+
+                // If we have changed the file, then check if there's a corrosponding results theme, copy it if so, create a blank one if not.
+                if (returned != null)
+                {
+                    if (File.Exists($@"{Environment.CurrentDirectory}\ExternalResources\ResultsThemes\{returned}"))
+                        File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\ResultsThemes\{returned}", $@"{ModDirectory}\xenon\sound\result.xma", true);
+                    else
+                        File.Create($@"{ModDirectory}\xenon\sound\result.xma");
+                }
+            }
+
+            // Check if we need to do the Invincibility Jingle randomisation.
+            if (audioJingle == true)
+                await Task.Run(() => AudioRandomisers.InvincibilityJingle(ModDirectory, AudioJingles, audioJingleOrig));
 
             // Amogus Easter Egg Seed
             if (Seed.Contains("Amogus") && DisableEasterEggs == false)
@@ -2793,6 +2828,7 @@ namespace MarathonRandomiser
             bool? miscPropPSINoDebris = CheckBox_Misc_PropPSIBehaviour_NoDebris.IsChecked;
             bool? miscPropDebris = CheckBox_Misc_PropDebris.IsChecked;
             bool? miscIntroLogos = CheckBox_Misc_IntroVideos.IsChecked;
+            bool? miscIntroLogosOrig = CheckBox_Misc_IntroVideos_Orig.IsChecked;
 
             // Check if we need to actually do enemy health randomisation.
             if (miscEnemyHealth == true)
@@ -2885,7 +2921,7 @@ namespace MarathonRandomiser
             if (miscIntroLogos == true)
             {
                 UpdateLogger($"Randomising intro logos.");
-                bool needToDoXNCPFuckery = await Task.Run(() => MiscellaneousRandomisers.IntroLogos(ModDirectory, MiscSegaLogos, MiscTitleScreens));
+                bool needToDoXNCPFuckery = await Task.Run(() => MiscellaneousRandomisers.IntroLogos(ModDirectory, MiscSegaLogos, MiscTitleScreens, miscIntroLogosOrig));
 
                 // Copy the RHS easter egg Sega logo and title screen.
                 if (Seed.Contains("BDIWORH") && DisableEasterEggs == false)
