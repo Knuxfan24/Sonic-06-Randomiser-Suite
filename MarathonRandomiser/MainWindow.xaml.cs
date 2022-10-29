@@ -899,6 +899,8 @@ namespace MarathonRandomiser
                     {
                         case 0: Helpers.InvalidateCheckedListBox(CheckedList_Audio_Songs, true, selectAll); break;
                         case 1: Helpers.InvalidateCheckedListBox(CheckedList_Audio_SFX, true, selectAll); break;
+                        case 2: Helpers.InvalidateCheckedListBox(CheckedList_Audio_Fanfares, true, selectAll); break;
+                        case 3: Helpers.InvalidateCheckedListBox(CheckedList_Audio_Jingle, true, selectAll); break;
                         default: throw new NotImplementedException();
                     }
                     break;
