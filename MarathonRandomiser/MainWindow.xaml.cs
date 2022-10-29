@@ -2604,6 +2604,8 @@ namespace MarathonRandomiser
             // Check if we need to do Victory Fanfare randomisation.
             if (audioFanfares == true)
             {
+                UpdateLogger("Randomising victory fanfares.");
+
                 // Copy a fanfare, getting the name of the copied one. This will be null if it chooses the OG game's fanfare.
                 string returned = await Task.Run(() => AudioRandomisers.VictoryFanfares(ModDirectory, AudioFanfares, audioFanfaresOrig));
 
@@ -2619,7 +2621,10 @@ namespace MarathonRandomiser
 
             // Check if we need to do the Invincibility Jingle randomisation.
             if (audioJingle == true)
+            {
+                UpdateLogger("Randomising invincibility jingle.");
                 await Task.Run(() => AudioRandomisers.InvincibilityJingle(ModDirectory, AudioJingles, audioJingleOrig));
+            }
 
             // Amogus Easter Egg Seed
             if (Seed.Contains("Amogus") && DisableEasterEggs == false)
