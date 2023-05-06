@@ -7,7 +7,7 @@
         xmlns:hc="https://handyorg.github.io/handycontrol"
         x:Class="MarathonRandomiser.MainWindow"
         mc:Ignorable="d"
-        Title="Sonic '06 Randomiser Suite" Height="775" Width="1750" MinHeight="775" MinWidth="1750">
+        Title="Sonic '06 Randomiser Suite" Height="820" Width="1750" MinHeight="820" MinWidth="1750">
     <Grid Background="#FF181818">
         <hc:TabControl Style="{StaticResource TabControlInLine}" Margin="0,0,0,50" x:Name="TabControl_Main">
             <!--General Tab-->
@@ -91,6 +91,9 @@
                         <hc:NumericUpDown x:Name="NumericUpDown_SET_Jumpboards_Chance" Value="50" SelectionBrush="#FFB146C2" IsEnabled="False" Minimum="0"/>
                         <CheckBox x:Name="CheckBox_SET_PlacementShuffle" Content="Shuffle Object Positions" Foreground="Firebrick" Click="Dependency_CheckBox_Changed"/>
                         <CheckBox x:Name="CheckBox_SET_DoubleTrouble" Content="Duplicate Enemies" Foreground="Firebrick" Click="Dependency_CheckBox_Changed"/>
+                        <Label x:Name="Label_SET_DoubleTrouble_Count" Content="Duplication Amount:" Background="{x:Null}" BorderBrush="{x:Null}" IsEnabled="False"/>
+                        <hc:NumericUpDown x:Name="NumericUpDown_SET_DoubleTrouble_Amount" Value="1" SelectionBrush="#FFB146C2" IsEnabled="False" Minimum="1"/>
+                        <CheckBox x:Name="CheckBox_SET_DoubleTrouble_Rando" Content="Randomise Duplicated Enemies" Foreground="Firebrick" IsEnabled="False"/>
                     </StackPanel>
 
                     <!--Object Placement Configuration Toggles-->

@@ -65,7 +65,7 @@ namespace MarathonRandomiser
             // Force culture info 'en-GB' to prevent errors with values altered by language-specific differences.
             CultureInfo.DefaultThreadCurrentCulture = CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("en-GB");
 
-            // If this is a debug build, set the seed to WPF Test for the sake of consistent testing and list the Temporary Directory path.
+            // If this is a debug build, set the seed to Development Testing for the sake of consistent testing and list the Temporary Directory path.
 #if DEBUG
             TextBox_General_Seed.Text = "Development Testing";
             Debug.WriteLine($"Current temporary path is: {TemporaryDirectory}.");
@@ -628,6 +628,9 @@ namespace MarathonRandomiser
                 case "CheckBox_SET_DoubleTrouble":
                     CheckBox_SET_PlacementShuffle.IsEnabled = !NewCheckedStatus;
                     CheckBox_SET_PlacementShuffle.IsChecked = false;
+                    Label_SET_DoubleTrouble_Count.IsEnabled = NewCheckedStatus;
+                    NumericUpDown_SET_DoubleTrouble_Amount.IsEnabled = NewCheckedStatus;
+                    CheckBox_SET_DoubleTrouble_Rando.IsEnabled = NewCheckedStatus;
                     break;
 
                 case "CheckBox_Event_Voices":
@@ -1889,6 +1892,8 @@ namespace MarathonRandomiser
             int setJumpboardsChance = (int)NumericUpDown_SET_Jumpboards_Chance.Value;
             bool? setTransform = CheckBox_SET_PlacementShuffle.IsChecked;
             bool? setDoubleTrouble = CheckBox_SET_DoubleTrouble.IsChecked;
+            int setDoubleTroubleAmount = (int)NumericUpDown_SET_DoubleTrouble_Amount.Value;
+            bool? setDoubleTroubleRando = CheckBox_SET_DoubleTrouble_Rando.IsChecked;
 
             // Check if we actually need to do SET stuff.
             if (setEnemies == true || setBehaviour == true || setCharacters == true || setItemCapsules == true || setCommonProps == true || setPathProps == true || setHints == true || setDoors == true ||
@@ -1907,7 +1912,8 @@ namespace MarathonRandomiser
                             await Task.Run(() => ObjectPlacementRandomiser.Process(setFile, setEnemies, setEnemiesNoBosses, setBehaviour, setBehaviourNoEnforce, setCharacters, setItemCapsules,
                                                                                    setCommonProps, setPathProps, setHints, setDoors, setDrawDistance, setCosmetic, setParticles, setJumpboards, SetEnemies,
                                                                                    SetCharacters, SetItemCapsules, SetCommonProps, SetPathProps, SetHints, SetDoors, SetParticleBanks, setMinDrawDistance,
-                                                                                   setMaxDrawDistance, setJumpboardsChance, setTransform, SetShuffleBlacklist, setDoubleTrouble));
+                                                                                   setMaxDrawDistance, setJumpboardsChance, setTransform, SetShuffleBlacklist, setDoubleTrouble, setDoubleTroubleAmount,
+                                                                                   setDoubleTroubleRando));
                         }
 
                         // Patch enemy luas if they need patching.

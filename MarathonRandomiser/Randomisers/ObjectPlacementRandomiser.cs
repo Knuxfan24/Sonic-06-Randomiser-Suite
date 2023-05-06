@@ -41,11 +41,13 @@ namespace MarathonRandomiser
         /// <param name="shuffleTransform">Whether or not objects will have their positions shuffled around.</param>
         /// <param name="shuffleBlacklist">The list of objects we should ignore for the position shuffling process.</param>
         /// <param name="doubleTrouble">Whether enemies should be duplicated.</param>
+        /// <param name="doubleTroubleAmount">How many enemies to add when duplicating.</param>
+        /// <param name="doubleTroubleRando">Whether or not to apply enemy randomisation to the duplicated enemies.</param>
         public static async Task Process(string setFile, bool? enemies, bool? enemiesNoBosses, bool? behaviour, bool? behaviourNoEnforce, bool? characters, bool? itemCapsules, bool? commonProps,
                                       bool? pathProps, bool? hints, bool? doors, bool? drawDistance, bool? cosmetic, bool? particle, bool? jumpboards, List<string> SetEnemies,
                                       List<string> SetCharacters, List<string> SetItemCapsules, List<string> SetCommonProps, List<string> SetPathProps, List<string> SetHints, List<string> SetDoors,
                                       List<string> SetParticleBanks, int minDrawDistance, int maxDrawDistance, int jumpboardChance, bool? shuffleTransform, List<string> shuffleBlacklist,
-                                      bool? doubleTrouble)
+                                      bool? doubleTrouble, int doubleTroubleAmount, bool? doubleTroubleRando)
         {
             // Wildcard Failsafe.
             if (shuffleTransform == true && doubleTrouble == true)
@@ -102,7 +104,7 @@ namespace MarathonRandomiser
                         if (behaviour == true)
                             await Task.Run(() => EnemyBehaviourRandomiser(setObject, behaviourNoEnforce, enemiesNoBosses));
                         if (doubleTrouble == true)
-                            await Task.Run(() => DuplicateEnemy(set, setObject, objectIndex));
+                            await Task.Run(() => DuplicateEnemy(set, setObject, objectIndex, doubleTroubleAmount, doubleTroubleRando, enemies, enemiesNoBosses, behaviour, behaviourNoEnforce, SetEnemies));
                         break;
 
                     // Randomise character types if we need to.
@@ -463,45 +465,87 @@ namespace MarathonRandomiser
         /// <param name="set">The file to process.</param>
         /// <param name="setObject">The object to duplicate.</param>
         /// <param name="objectIndex">The index of the object we're duplicating (for groups).</param>
-        static async Task DuplicateEnemy(ObjectPlacement set, SetObject setObject, int objectIndex)
+        /// <param name="dupeCount">How many times the enemy should be duped.</param>
+        /// <param name="changeDupedTypes">Whether the enemy randomiser should be applied to duplicated enemies.</param>
+        /// <param name="enemies">Whether or not enemy types should be randomised.</param>
+        /// <param name="enemiesNoBosses">Whether or not bosses should be excluded from enemy randomisation/</param>
+        /// <param name="behaviour">Whether or not enemy behaviours should be randomised.</param>
+        /// <param name="behaviourNoEnforce">Whether or not enemy behaviours can be from another enemy type.</param>
+        /// <param name="SetEnemies">The list of valid enemies.</param>
+        static async Task DuplicateEnemy(ObjectPlacement set, SetObject setObject, int objectIndex, int dupeCount, bool? changeDupedTypes, bool? enemies, bool? enemiesNoBosses, bool? behaviour, bool? behaviourNoEnforce, List<string> SetEnemies)
         {
             // Don't dupe the Egg Wyvern, as the boss completely breaks.
             if (setObject.Parameters[0].Data.ToString() == "eWyvern")
                 return;
 
-            // Create our duplicated enemy.
-            SetObject newSetObject = new()
+            // Loop through depending on the duplication count.
+            for (int i = 0; i < dupeCount; i++)
             {
-                Name = $"{setObject.Name}_dupe",
-                Type = setObject.Type,
-                StartInactive = setObject.StartInactive,
-                DrawDistance = setObject.DrawDistance,
-                Rotation = setObject.Rotation,
-                Parameters = setObject.Parameters
-            };
+                // Set up a list of the original object parameters (need to do it this way so we can change them if the enemy randomiser needs to be used too).
+                List<SetParameter> paramList = new();
+                foreach (var param in setObject.Parameters)
+                {
+                    paramList.Add(new()
+                    {
+                        Data = param.Data,
+                        Type = param.Type
+                    });
+                }
 
-            // Offset the object positions.
-            if (setObject.Parameters[0].Data.ToString() != "eCerberus" && setObject.Parameters[0].Data.ToString() != "eGenesis" &&
-                setObject.Parameters[0].Data.ToString() != "firstiblis" && setObject.Parameters[0].Data.ToString() != "secondiblis" && setObject.Parameters[0].Data.ToString() != "thirdiblis" &&
-                setObject.Parameters[0].Data.ToString() != "firstmefiress" && setObject.Parameters[0].Data.ToString() != "secondmefiress" && setObject.Parameters[0].Data.ToString() != "kyozoress" &&
-                setObject.Parameters[0].Data.ToString() != "solaris01" && setObject.Parameters[0].Data.ToString() != "solaris02")
-            {
-                setObject.Position = new(setObject.Position.X + 250, setObject.Position.Y, setObject.Position.Z + 250);
-                newSetObject.Position = new(setObject.Position.X - 250, setObject.Position.Y, setObject.Position.Z - 250);
+                // Create our duplicated enemy.
+                SetObject newSetObject = new()
+                {
+                    Name = $"{setObject.Name}_dupe{i}",
+                    Type = setObject.Type,
+                    StartInactive = setObject.StartInactive,
+                    DrawDistance = setObject.DrawDistance,
+                    Rotation = setObject.Rotation,
+                    Parameters = paramList
+                };
+
+                // Offset the object positions.
+                // Calculcate the normal X offset.
+                float xPosOffset = (float)MainWindow.Randomiser.NextDouble() * 500;
+                if (MainWindow.Randomiser.Next(0, 2) == 1)
+                    xPosOffset = -xPosOffset;
+
+                // Calculcate the normal Z offset.
+                float zPosOffset = (float)MainWindow.Randomiser.NextDouble() * 500;
+                if (MainWindow.Randomiser.Next(0, 2) == 1)
+                    zPosOffset = -zPosOffset;
+
+                // If this object is a boss, then calculate a larger offset.
+                if (setObject.Parameters[0].Data.ToString() is "eCerberus" or "eGenesis" or "firstiblis" or "secondiblis" or "thirdiblis" or "firstmefiress" or "secondmefiress" or "kyozoress" or "solaris01" or "solaris02")
+                {
+                    xPosOffset = (float)MainWindow.Randomiser.NextDouble() * 5000;
+                    if (MainWindow.Randomiser.Next(0, 2) == 1)
+                        xPosOffset = -xPosOffset;
+
+                    zPosOffset = (float)MainWindow.Randomiser.NextDouble() * 5000;
+                    if (MainWindow.Randomiser.Next(0, 2) == 1)
+                        zPosOffset = -zPosOffset;
+                }
+
+                // Set the duplicated object's position.
+                newSetObject.Position = new(setObject.Position.X + xPosOffset, setObject.Position.Y, setObject.Position.Z + zPosOffset);
+
+                // Update any groups that use the original enemy.
+                foreach (var group in set.Data.Groups)
+                    if (group.Objects.Contains((ulong)objectIndex))
+                        group.Objects.Add((ulong)(set.Data.Objects.Count + DuplicatedEnemies.Count));
+
+                // If the option to change duplicated enemies is on, then apply the normal enemy randomiser checks to them.
+                if (changeDupedTypes == true)
+                {
+                    if (enemies == true)
+                        await Task.Run(() => EnemyTypeRandomiser(newSetObject, SetEnemies, enemiesNoBosses));
+                    if (behaviour == true)
+                        await Task.Run(() => EnemyBehaviourRandomiser(newSetObject, behaviourNoEnforce, enemiesNoBosses));
+                }
+
+                // Add this object to the list of objects to add in after the rest of the randomisation.
+                DuplicatedEnemies.Add(newSetObject);
             }
-            else
-            {
-                setObject.Position = new(setObject.Position.X + 1500, setObject.Position.Y, setObject.Position.Z + 1500);
-                newSetObject.Position = new(setObject.Position.X - 1500, setObject.Position.Y, setObject.Position.Z - 1500);
-            }
-
-            // Update any groups that use the original enemy.
-            foreach (var group in set.Data.Groups)
-                if (group.Objects.Contains((ulong)objectIndex))
-                    group.Objects.Add((ulong)(set.Data.Objects.Count + DuplicatedEnemies.Count));
-
-            // Add this object to the list of objects to add in after the rest of the randomisation.
-            DuplicatedEnemies.Add(newSetObject);
         }
 
         /// <summary>
