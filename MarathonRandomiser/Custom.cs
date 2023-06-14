@@ -155,9 +155,9 @@ namespace MarathonRandomiser
             // Get the name of the file with the extension replaced with .xma (used for the XMA Cache system).
             string origName = $"{Path.GetFileNameWithoutExtension(CustomSound)}.xma";
 
-            // If this song is already an XMA we can just copy it straight over.
+            // If this voice line is already an XMA we can just copy it straight over.
             if (Path.GetExtension(CustomSound) == ".xma")
-                File.Copy(CustomSound, $@"{ModDirectory}\xenon\sound\custom_hint{index}.xma");
+                File.Copy(CustomSound, $@"{ModDirectory}\xenon\sound\voice\e\custom_hint{index}.xma");
 
             // If not, we need to check for it in the cache if we're using it, or convert it.
             else
@@ -188,7 +188,7 @@ namespace MarathonRandomiser
                         if (output.Length == 1)
                             throw new Exception($"Failed to convert '{CustomSound}', this may be due to a character in the filename or an unsupported filetype?");
 
-                        // Set the path to the song to our wav for the rest of the function.
+                        // Set the path to the voice line to our wav for the rest of the function.
                         CustomSound = $@"{MainWindow.TemporaryDirectory}\tempWavs\custom_hint{index}.wav";
                     }
 
