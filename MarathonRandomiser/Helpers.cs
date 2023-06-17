@@ -976,6 +976,102 @@ namespace MarathonRandomiser
 
             return sb.ToString();
         }
+    
+        /// <summary>
+        /// Copy's and edits a modified lua script for character battle duplication.
+        /// </summary>
+        /// <param name="src">The path to the edited lua file.</param>
+        /// <param name="tgt">Where to save the modified lua file</param>
+        /// <param name="dupeCount">How many times we're duping the opposing character.</param>
+        public static async Task CopyAndEditDupeLua(string src, string tgt, int dupeCount)
+        {
+            // Read the template lua file into a string.
+            string lua = File.ReadAllText(src);
+
+            // Replace the randomizerVal placeholder with our duplication count.
+            lua = lua.Replace("randomizerVal", dupeCount.ToString());
+
+            // Replace the original script with the edited file.
+            File.WriteAllText(tgt, lua);
+        }
+
+        /// <summary>
+        /// Duplicated the player starts in a character battle stage.
+        /// </summary>
+        /// <param name="luaFile">The stage lua script to modify.</param>
+        /// <param name="dupeCount">How many times we need to dupe the boss.</param>
+        /// <returns></returns>
+        public static async Task DuplicateCharacterBattleSpawns(string luaFile, int dupeCount)
+        {
+            // Decompile this lua file.
+            await Task.Run(() => Helpers.LuaDecompile(luaFile));
+
+            // Read the decompiled lua file into a string array.
+            string[] lua = File.ReadAllLines(luaFile);
+
+            // Set up a value to hold the index of the boss's spawn position line.
+            int bossSpawnLineIndex = -1;
+
+            // Set up a value to hold the boss type.
+            string bossType = "boss_sonic.lua";
+
+            // Set up an array to hold the duplicated spawns.
+            string[] dupes = new string[dupeCount];
+
+            // Loop through each line in the lua.
+            for (int i = 0; i < lua.Length; i++)
+            {
+                // Check for one of the three boss players.
+                if (lua[i].Contains("boss_sonic.lua") || lua[i].Contains("boss_shadow.lua") || lua[i].Contains("boss_silver.lua"))
+                {
+                    // Set this index as the boss spawn line index.
+                    bossSpawnLineIndex = i;
+
+                    // Set the boss type to Shadow if that's the exisiting character.
+                    if (lua[i].Contains("boss_shadow.lua"))
+                        bossType = "boss_shadow.lua";
+
+                    // Set the boss type to Silver if that's the exisiting character.
+                    if (lua[i].Contains("boss_silver.lua"))
+                        bossType = "boss_silver.lua";
+                }
+            }
+
+            // Loop through by the amount of times we're duplicating the boss.
+            for (int i = 0; i < dupeCount; i++)
+            {
+                // Split up the original line so we can get the coordinates for the spawn point.
+                string[] split = lua[bossSpawnLineIndex][(lua[bossSpawnLineIndex].IndexOf('(') + 1)..].Split(',');
+
+                // Parse the X and Z position of the original boss.
+                float xPos = float.Parse(split[0]);
+                float zPos = float.Parse(split[2]);
+
+                // Offset the object positions.
+                // Calculcate the normal X offset.
+                float xPosOffset = (float)MainWindow.Randomiser.NextDouble() * 500;
+                if (MainWindow.Randomiser.Next(0, 2) == 1)
+                    xPosOffset = -xPosOffset;
+
+                // Calculcate the normal Z offset.
+                float zPosOffset = (float)MainWindow.Randomiser.NextDouble() * 500;
+                if (MainWindow.Randomiser.Next(0, 2) == 1)
+                    zPosOffset = -zPosOffset;
+
+                // Add the offsets for the X and Z positions.
+                xPos += xPosOffset;
+                zPos += zPosOffset;
+
+                // Add a dupe entry for this new entry.
+                dupes[i] = $"  Game.SetPlayer({xPos}, {split[1]}, {zPos}, {split[3]}, \"{bossType}\", {i + 2})";
+            }
+
+            // Join the original line with the duplications.
+            lua[bossSpawnLineIndex] = $"{lua[bossSpawnLineIndex]}\r\n{string.Join("\r\n", dupes)}";
+
+            // Save the updated lua binary.
+            File.WriteAllLines(luaFile, lua);
+        }
     }
 
     // https://stackoverflow.com/questions/36845430/persistent-hashcode-for-strings/36845864#36845864

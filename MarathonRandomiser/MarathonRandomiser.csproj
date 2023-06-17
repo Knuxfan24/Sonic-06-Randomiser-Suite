@@ -69,6 +69,30 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="ExternalResources\CharacterBattleDupes\mission_0001.lub">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\CharacterBattleDupes\mission_0105.lub">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\CharacterBattleDupes\mission_0203.lub">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\CharacterBattleDupes\mission_0210.lub">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\CharacterBattleDupes\mission_2031.lub">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\CharacterBattleDupes\mission_2191.lub">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\CharacterBattleDupes\mission_2251.lub">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\CharacterBattleDupes\mission_2291.lub">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ExternalResources\crate_iron_normal.dds">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

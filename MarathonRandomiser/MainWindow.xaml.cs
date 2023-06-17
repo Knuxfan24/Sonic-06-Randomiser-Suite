@@ -1828,6 +1828,43 @@ namespace MarathonRandomiser
             if (MiscPatches.Count == 0)
                 CheckBox_Misc_Patches.IsChecked = false;
 
+#region Character Battle Duplication
+            // Set up values.
+            bool? setDoubleTrouble = CheckBox_SET_DoubleTrouble.IsChecked;
+            int setDoubleTroubleAmount = (int)NumericUpDown_SET_DoubleTrouble_Amount.Value;
+            bool? setDoubleTroubleRando = CheckBox_SET_DoubleTrouble_Rando.IsChecked;
+
+            // Do the Character Battle Duplication Stuff here if we need to.
+            if (setDoubleTrouble == true)
+            {
+                foreach (string archive in archives)
+                {
+                    if (Path.GetFileName(archive).ToLower() == "scripts.arc")
+                    {
+                        string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+
+                        // Copy the edited Story Mode mission files.
+                        await Task.Run(() => Helpers.CopyAndEditDupeLua($@"{Environment.CurrentDirectory}\ExternalResources\CharacterBattleDupes\mission_0001.lub", $@"{unpackedArchive}\{corePath}\scripts\mission\0001\mission.lub", setDoubleTroubleAmount));
+                        await Task.Run(() => Helpers.CopyAndEditDupeLua($@"{Environment.CurrentDirectory}\ExternalResources\CharacterBattleDupes\mission_0105.lub", $@"{unpackedArchive}\{corePath}\scripts\mission\0105\mission.lub", setDoubleTroubleAmount));
+                        await Task.Run(() => Helpers.CopyAndEditDupeLua($@"{Environment.CurrentDirectory}\ExternalResources\CharacterBattleDupes\mission_0203.lub", $@"{unpackedArchive}\{corePath}\scripts\mission\0203\mission.lub", setDoubleTroubleAmount));
+                        await Task.Run(() => Helpers.CopyAndEditDupeLua($@"{Environment.CurrentDirectory}\ExternalResources\CharacterBattleDupes\mission_0210.lub", $@"{unpackedArchive}\{corePath}\scripts\mission\0210\mission.lub", setDoubleTroubleAmount));
+
+                        // Copy the edited Act Trial mission files.
+                        await Task.Run(() => Helpers.CopyAndEditDupeLua($@"{Environment.CurrentDirectory}\ExternalResources\CharacterBattleDupes\mission_2031.lub", $@"{unpackedArchive}\{corePath}\scripts\mission\2000\mission_2031.lub", setDoubleTroubleAmount));
+                        await Task.Run(() => Helpers.CopyAndEditDupeLua($@"{Environment.CurrentDirectory}\ExternalResources\CharacterBattleDupes\mission_2191.lub", $@"{unpackedArchive}\{corePath}\scripts\mission\2100\mission_2191.lub", setDoubleTroubleAmount));
+                        await Task.Run(() => Helpers.CopyAndEditDupeLua($@"{Environment.CurrentDirectory}\ExternalResources\CharacterBattleDupes\mission_2251.lub", $@"{unpackedArchive}\{corePath}\scripts\mission\2200\mission_2251.lub", setDoubleTroubleAmount));
+                        await Task.Run(() => Helpers.CopyAndEditDupeLua($@"{Environment.CurrentDirectory}\ExternalResources\CharacterBattleDupes\mission_2291.lub", $@"{unpackedArchive}\{corePath}\scripts\mission\2200\mission_2291.lub", setDoubleTroubleAmount));
+
+                        // Edit the stage lua files to duplicate the boss character.
+                        await Task.Run(() => Helpers.DuplicateCharacterBattleSpawns($@"{unpackedArchive}\{corePath}\scripts\stage\boss\sonic_vs_silver.lub", setDoubleTroubleAmount));
+                        await Task.Run(() => Helpers.DuplicateCharacterBattleSpawns($@"{unpackedArchive}\{corePath}\scripts\stage\boss\shadow_vs_silver.lub", setDoubleTroubleAmount));
+                        await Task.Run(() => Helpers.DuplicateCharacterBattleSpawns($@"{unpackedArchive}\{corePath}\scripts\stage\boss\silver_vs_shadow.lub", setDoubleTroubleAmount));
+                        await Task.Run(() => Helpers.DuplicateCharacterBattleSpawns($@"{unpackedArchive}\{corePath}\scripts\stage\boss\silver_vs_sonic.lub", setDoubleTroubleAmount));
+                    }
+                }
+            }
+#endregion
+
 #region Random Episode Generation
             // This has to be done up here or the Very Hard mode content won't be randomised.
             bool? episodeGenerate = CheckBox_Episode_Generate.IsChecked;
@@ -1891,9 +1928,6 @@ namespace MarathonRandomiser
             int setMaxDrawDistance = (int)NumericUpDown_SET_DrawDistance_Max.Value;
             int setJumpboardsChance = (int)NumericUpDown_SET_Jumpboards_Chance.Value;
             bool? setTransform = CheckBox_SET_PlacementShuffle.IsChecked;
-            bool? setDoubleTrouble = CheckBox_SET_DoubleTrouble.IsChecked;
-            int setDoubleTroubleAmount = (int)NumericUpDown_SET_DoubleTrouble_Amount.Value;
-            bool? setDoubleTroubleRando = CheckBox_SET_DoubleTrouble_Rando.IsChecked;
 
             // Check if we actually need to do SET stuff.
             if (setEnemies == true || setBehaviour == true || setCharacters == true || setItemCapsules == true || setCommonProps == true || setPathProps == true || setHints == true || setDoors == true ||
