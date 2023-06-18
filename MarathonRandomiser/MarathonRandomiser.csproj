@@ -72,6 +72,9 @@
     <None Update="ExternalResources\CharacterBattleDupes\mission_0001.lub">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ExternalResources\CharacterBattleDupes\mission_0004.lub">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ExternalResources\CharacterBattleDupes\mission_0105.lub">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

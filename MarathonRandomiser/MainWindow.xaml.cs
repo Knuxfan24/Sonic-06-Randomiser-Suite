@@ -1844,7 +1844,7 @@ namespace MarathonRandomiser
                         string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
 
                         // Copy the edited Story Mode mission files.
-                        await Task.Run(() => Helpers.CopyAndEditDupeLua($@"{Environment.CurrentDirectory}\ExternalResources\CharacterBattleDupes\mission_0001.lub", $@"{unpackedArchive}\{corePath}\scripts\mission\0001\mission.lub", setDoubleTroubleAmount));
+                        await Task.Run(() => Helpers.CopyAndEditDupeLua($@"{Environment.CurrentDirectory}\ExternalResources\CharacterBattleDupes\mission_0004.lub", $@"{unpackedArchive}\{corePath}\scripts\mission\0004\mission.lub", setDoubleTroubleAmount));
                         await Task.Run(() => Helpers.CopyAndEditDupeLua($@"{Environment.CurrentDirectory}\ExternalResources\CharacterBattleDupes\mission_0105.lub", $@"{unpackedArchive}\{corePath}\scripts\mission\0105\mission.lub", setDoubleTroubleAmount));
                         await Task.Run(() => Helpers.CopyAndEditDupeLua($@"{Environment.CurrentDirectory}\ExternalResources\CharacterBattleDupes\mission_0203.lub", $@"{unpackedArchive}\{corePath}\scripts\mission\0203\mission.lub", setDoubleTroubleAmount));
                         await Task.Run(() => Helpers.CopyAndEditDupeLua($@"{Environment.CurrentDirectory}\ExternalResources\CharacterBattleDupes\mission_0210.lub", $@"{unpackedArchive}\{corePath}\scripts\mission\0210\mission.lub", setDoubleTroubleAmount));
