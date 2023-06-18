@@ -1000,8 +1000,8 @@ namespace MarathonRandomiser
         /// </summary>
         /// <param name="luaFile">The stage lua script to modify.</param>
         /// <param name="dupeCount">How many times we need to dupe the boss.</param>
-        /// <returns></returns>
-        public static async Task DuplicateCharacterBattleSpawns(string luaFile, int dupeCount)
+        /// <param name="setDoubleTroubleRando">Whether or not we need to randomise the type of the duplications.</param>
+        public static async Task DuplicateCharacterBattleSpawns(string luaFile, int dupeCount, bool? setDoubleTroubleRando)
         {
             // Decompile this lua file.
             await Task.Run(() => Helpers.LuaDecompile(luaFile));
@@ -1061,6 +1061,17 @@ namespace MarathonRandomiser
                 // Add the offsets for the X and Z positions.
                 xPos += xPosOffset;
                 zPos += zPosOffset;
+
+                // If the Duplicated Enemy Randomiser is on, then randomise the boss types.
+                if (setDoubleTroubleRando == true)
+                {
+                    switch (MainWindow.Randomiser.Next(0, 3))
+                    {
+                        case 0: bossType = "boss_sonic.lua"; break;
+                        case 1: bossType = "boss_shadow.lua"; break;
+                        case 2: bossType = "boss_silver.lua"; break;
+                    }
+                }
 
                 // Add a dupe entry for this new entry.
                 dupes[i] = $"  Game.SetPlayer({xPos}, {split[1]}, {zPos}, {split[3]}, \"{bossType}\", {i + 2})";

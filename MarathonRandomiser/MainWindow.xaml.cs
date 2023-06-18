@@ -1856,10 +1856,10 @@ namespace MarathonRandomiser
                         await Task.Run(() => Helpers.CopyAndEditDupeLua($@"{Environment.CurrentDirectory}\ExternalResources\CharacterBattleDupes\mission_2291.lub", $@"{unpackedArchive}\{corePath}\scripts\mission\2200\mission_2291.lub", setDoubleTroubleAmount));
 
                         // Edit the stage lua files to duplicate the boss character.
-                        await Task.Run(() => Helpers.DuplicateCharacterBattleSpawns($@"{unpackedArchive}\{corePath}\scripts\stage\boss\sonic_vs_silver.lub", setDoubleTroubleAmount));
-                        await Task.Run(() => Helpers.DuplicateCharacterBattleSpawns($@"{unpackedArchive}\{corePath}\scripts\stage\boss\shadow_vs_silver.lub", setDoubleTroubleAmount));
-                        await Task.Run(() => Helpers.DuplicateCharacterBattleSpawns($@"{unpackedArchive}\{corePath}\scripts\stage\boss\silver_vs_shadow.lub", setDoubleTroubleAmount));
-                        await Task.Run(() => Helpers.DuplicateCharacterBattleSpawns($@"{unpackedArchive}\{corePath}\scripts\stage\boss\silver_vs_sonic.lub", setDoubleTroubleAmount));
+                        await Task.Run(() => Helpers.DuplicateCharacterBattleSpawns($@"{unpackedArchive}\{corePath}\scripts\stage\boss\sonic_vs_silver.lub", setDoubleTroubleAmount, setDoubleTroubleRando));
+                        await Task.Run(() => Helpers.DuplicateCharacterBattleSpawns($@"{unpackedArchive}\{corePath}\scripts\stage\boss\shadow_vs_silver.lub", setDoubleTroubleAmount, setDoubleTroubleRando));
+                        await Task.Run(() => Helpers.DuplicateCharacterBattleSpawns($@"{unpackedArchive}\{corePath}\scripts\stage\boss\silver_vs_shadow.lub", setDoubleTroubleAmount, setDoubleTroubleRando));
+                        await Task.Run(() => Helpers.DuplicateCharacterBattleSpawns($@"{unpackedArchive}\{corePath}\scripts\stage\boss\silver_vs_sonic.lub", setDoubleTroubleAmount, setDoubleTroubleRando));
                     }
                 }
             }
