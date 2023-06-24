@@ -150,6 +150,9 @@
     <None Update="ExternalResources\InvincibilityJingles\Sonic Lost World.xma">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ExternalResources\InvincibilityJingles\Sonic The Hedgehog 4.xma">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ExternalResources\rando_obj_indicator.xno">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -406,6 +409,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ExternalResources\VictoryFanfares\Sonic Lost World.xma">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExternalResources\VictoryFanfares\Sonic The Hedgehog 4.xma">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ExternalResources\xmaencode.exe">
