@@ -318,6 +318,9 @@
     <None Update="ExternalResources\TitleLogos\Sonic The Hedgehog 4 Episode 2.wmv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ExternalResources\TitleLogos\Sonic The Hedgehog CD.wmv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ExternalResources\TitleLogos\Sonic Unleashed HD.wmv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
