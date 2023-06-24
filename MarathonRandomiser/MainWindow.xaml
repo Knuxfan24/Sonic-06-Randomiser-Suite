@@ -589,6 +589,59 @@
                         <hc:TabItem Header="Voice Packs" BorderBrush="#B146C2">
                             <local:CheckedListBox x:Name="CheckedList_Custom_Vox" MultiColumn="True" Margin="0,0,0,0"/>
                         </hc:TabItem>
+                        <hc:TabItem Header="Miscellaneous" BorderBrush="#B146C2">
+                            <Grid Background="#FF181818" Name="Grid_Custom_Misc">                                
+                                <!--Sega Logo-->
+                                <Label Content="Sega Logo" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}"/>
+                                <Label Content="The WMV to replace the Sega Logo with." HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" FontStyle="Italic">
+                                    <Label.Foreground>
+                                        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlDarkColorKey}}"/>
+                                    </Label.Foreground>
+                                </Label>
+                                <hc:TextBox x:Name="TextBox_Custom_Misc_SegaLogo" Margin="10,45,53,0" TextWrapping="NoWrap" VerticalAlignment="Top" SelectionBrush="#FFB146C2"/>
+                                <Button HorizontalAlignment="Right" Margin="0,45,10,0" VerticalAlignment="Top" hc:IconElement.Geometry="{StaticResource DragHorizontalGeometry}" Grid.RowSpan="2" Width="38" Click="SegaLogo_Browse"/>
+
+                                <!--Title Screen-->
+                                <Label Content="Title Screen" HorizontalAlignment="Left" Margin="10,80,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}"/>
+                                <Label Content="The WMV to replace the Title Screen with." HorizontalAlignment="Right" Margin="0,80,10,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" FontStyle="Italic">
+                                    <Label.Foreground>
+                                        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlDarkColorKey}}"/>
+                                    </Label.Foreground>
+                                </Label>
+                                <hc:TextBox x:Name="TextBox_Custom_Misc_TitleScreen" Margin="10,115,53,0" TextWrapping="NoWrap" VerticalAlignment="Top" SelectionBrush="#FFB146C2"/>
+                                <Button HorizontalAlignment="Right" Margin="0,115,10,0" VerticalAlignment="Top" hc:IconElement.Geometry="{StaticResource DragHorizontalGeometry}" Grid.RowSpan="2" Width="38" Click="TitleScreen_Browse"/>
+
+                                <!--Invincibility-->
+                                <Label Content="Invincibility/Power Sneakers" HorizontalAlignment="Left" Margin="10,150,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}"/>
+                                <Label Content="The song to replace the Invincibility/Power Sneakers jingle." HorizontalAlignment="Right" Margin="0,150,10,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" FontStyle="Italic">
+                                    <Label.Foreground>
+                                        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlDarkColorKey}}"/>
+                                    </Label.Foreground>
+                                </Label>
+                                <hc:TextBox x:Name="TextBox_Custom_Misc_Invincibility" Margin="10,185,53,0" TextWrapping="NoWrap" VerticalAlignment="Top" SelectionBrush="#FFB146C2"/>
+                                <Button HorizontalAlignment="Right" Margin="0,185,10,0" VerticalAlignment="Top" hc:IconElement.Geometry="{StaticResource DragHorizontalGeometry}" Grid.RowSpan="2" Width="38" Click="Invincibility_Browse"/>
+
+                                <!--Act Clear-->
+                                <Label Content="Stage Clear" HorizontalAlignment="Left" Margin="10,220,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}"/>
+                                <Label Content="The song to replace the Stage Clear/Town Mission Clear jingles." HorizontalAlignment="Right" Margin="0,220,10,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" FontStyle="Italic">
+                                    <Label.Foreground>
+                                        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlDarkColorKey}}"/>
+                                    </Label.Foreground>
+                                </Label>
+                                <hc:TextBox x:Name="TextBox_Custom_Misc_StageClear" Margin="10,255,53,0" TextWrapping="NoWrap" VerticalAlignment="Top" SelectionBrush="#FFB146C2"/>
+                                <Button HorizontalAlignment="Right" Margin="0,255,10,0" VerticalAlignment="Top" hc:IconElement.Geometry="{StaticResource DragHorizontalGeometry}" Grid.RowSpan="2" Width="38" Click="StageClear_Browse"/>
+
+                                <!--Results-->
+                                <Label Content="Results" HorizontalAlignment="Left" Margin="10,290,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}"/>
+                                <Label Content="The song to replace the Results theme." HorizontalAlignment="Right" Margin="0,290,10,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" FontStyle="Italic">
+                                    <Label.Foreground>
+                                        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlDarkColorKey}}"/>
+                                    </Label.Foreground>
+                                </Label>
+                                <hc:TextBox x:Name="TextBox_Custom_Misc_Results" Margin="10,325,53,0" TextWrapping="NoWrap" VerticalAlignment="Top" SelectionBrush="#FFB146C2"/>
+                                <Button HorizontalAlignment="Right" Margin="0,325,10,0" VerticalAlignment="Top" hc:IconElement.Geometry="{StaticResource DragHorizontalGeometry}" Grid.RowSpan="2" Width="38" Click="Results_Browse"/>
+                            </Grid>
+                        </hc:TabItem>
                     </hc:TabControl>
                     <CheckBox x:Name="CheckBox_Custom_Audio_XMACache" Content="Cache Custom Audio" IsEnabled="True" IsChecked="True" Margin="10,0,0,22" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="Auto"/>
                     <Button Content="Add" HorizontalAlignment="Left" Margin="148,0,0,10" VerticalAlignment="Bottom" Height="40" Width="128" Click="Custom_Browse" x:Name="Button_Custom_AddSelectAll"/>

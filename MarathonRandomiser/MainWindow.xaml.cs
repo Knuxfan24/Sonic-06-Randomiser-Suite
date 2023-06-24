@@ -348,6 +348,20 @@ namespace MarathonRandomiser
         /// </summary>
         private void Custom_TabChange(object sender, SelectionChangedEventArgs e)
         {
+            // Invalidate the changes the Miscellaneous tab might have made.
+            CheckBox_Custom_Audio_XMACache.Visibility = Visibility.Visible;
+            CheckBox_Custom_Audio_XMACache.IsEnabled = true;
+            Button_Custom_AddSelectAll.Visibility = Visibility.Visible;
+            Button_Custom_AddSelectAll.IsEnabled = true;
+            Button_Custom_VoxFetch.Visibility = Visibility.Visible;
+            Button_Custom_VoxFetch.IsEnabled = true;
+            Button_Custom_VoxRefresh.Visibility = Visibility.Visible;
+            Button_Custom_VoxRefresh.IsEnabled = true;
+            Button_Custom_RemoveDeselectAll.Visibility = Visibility.Visible;
+            Button_Custom_RemoveDeselectAll.IsEnabled = true;
+            TabControl_Custom.Margin = new(0, 0, 0, 60);
+
+            // If we've selected the Voice Packs tab, then make the edits for that tab.
             if (TabControl_Custom.SelectedIndex == 3)
             {
                 Button_Custom_AddSelectAll.Content = "Select All";
@@ -357,6 +371,26 @@ namespace MarathonRandomiser
                 Button_Custom_VoxRefresh.Content = "Refresh";
                 Button_Custom_RemoveDeselectAll.Content = "Deselect All";
             }
+
+            // If we've selected the Miscellaneous tab, then hide all the buttons and resize the tab control.
+            else if (TabControl_Custom.SelectedIndex == 4)
+            {
+                CheckBox_Custom_Audio_XMACache.Visibility = Visibility.Hidden;
+                CheckBox_Custom_Audio_XMACache.IsEnabled = false;
+                Button_Custom_AddSelectAll.Visibility = Visibility.Hidden;
+                Button_Custom_AddSelectAll.IsEnabled = false;
+                Button_Custom_VoxFetch.Visibility = Visibility.Hidden;
+                Button_Custom_VoxFetch.IsEnabled = false;
+                Button_Custom_VoxRefresh.Visibility = Visibility.Hidden;
+                Button_Custom_VoxRefresh.IsEnabled = false;
+                Button_Custom_RemoveDeselectAll.Visibility = Visibility.Hidden;
+                Button_Custom_RemoveDeselectAll.IsEnabled = false;
+
+                TabControl_Custom.Margin = new(0, 0, 0, 0);
+            }
+
+            // If we haven't used either tab, then make sure the voice packs stuff is hidden properly.
+            // TODO: Stop being lazy and tidy this up as part of the first step.
             else
             {
                 Button_Custom_AddSelectAll.Content = "Add";
@@ -512,6 +546,87 @@ namespace MarathonRandomiser
                 case 3: RefreshVoicePacks(); break;
             }
 
+        }
+
+        // TODO: These ones could probably be merged down into just two functions rather than five if I bother.
+        /// <summary>
+        /// Opens a File Browser to select our custom Sega Logo.
+        /// </summary>
+        private void SegaLogo_Browse(object sender, RoutedEventArgs e)
+        {
+            VistaOpenFileDialog OpenFileDialog = new()
+            {
+                Title = "Select Sega Logo",
+                Multiselect = false,
+                Filter = "Windows Media Video|*.wmv"
+            };
+
+            if (OpenFileDialog.ShowDialog() == true)
+                TextBox_Custom_Misc_SegaLogo.Text = OpenFileDialog.FileName;
+        }
+
+        /// <summary>
+        /// Opens a File Browser to select our custom Title Screen.
+        /// </summary>
+        private void TitleScreen_Browse(object sender, RoutedEventArgs e)
+        {
+            VistaOpenFileDialog OpenFileDialog = new()
+            {
+                Title = "Select Title Screen",
+                Multiselect = false,
+                Filter = "Windows Media Video|*.wmv"
+            };
+
+            if (OpenFileDialog.ShowDialog() == true)
+                TextBox_Custom_Misc_TitleScreen.Text = OpenFileDialog.FileName;
+        }
+
+        /// <summary>
+        /// Opens a File Browser to select our custom Invincibility/Power Sneakers jingle.
+        /// </summary>
+        private void Invincibility_Browse(object sender, RoutedEventArgs e)
+        {
+            VistaOpenFileDialog OpenFileDialog = new()
+            {
+                Title = "Select Invincibility Jingle",
+                Multiselect = false,
+                Filter = "All Types|*.*"
+            };
+
+            if (OpenFileDialog.ShowDialog() == true)
+                TextBox_Custom_Misc_Invincibility.Text = OpenFileDialog.FileName;
+        }
+
+        /// <summary>
+        /// Opens a File Browser to select our custom Stage Clear jingle.
+        /// </summary>
+        private void StageClear_Browse(object sender, RoutedEventArgs e)
+        {
+            VistaOpenFileDialog OpenFileDialog = new()
+            {
+                Title = "Select Stage Clear Jingle",
+                Multiselect = false,
+                Filter = "All Types|*.*"
+            };
+
+            if (OpenFileDialog.ShowDialog() == true)
+                TextBox_Custom_Misc_StageClear.Text = OpenFileDialog.FileName;
+        }
+
+        /// <summary>
+        /// Opens a File Browser to select our custom Results theme.
+        /// </summary>
+        private void Results_Browse(object sender, RoutedEventArgs e)
+        {
+            VistaOpenFileDialog OpenFileDialog = new()
+            {
+                Title = "Select Stage Clear Jingle",
+                Multiselect = false,
+                Filter = "All Types|*.*"
+            };
+
+            if (OpenFileDialog.ShowDialog() == true)
+                TextBox_Custom_Misc_Results.Text = OpenFileDialog.FileName;
         }
 
         /// <summary>
@@ -1180,6 +1295,11 @@ namespace MarathonRandomiser
             ConfigListBoxRead(configInfo, ListBox_Custom_VoiceLines);
             ConfigListBoxRead(configInfo, ListBox_Custom_Textures);
             ConfigCheckedListBoxRead(configInfo, CheckedList_Custom_Vox);
+            configInfo.WriteLine($"TextBox_Custom_Misc_SegaLogo={TextBox_Custom_Misc_SegaLogo.Text}");
+            configInfo.WriteLine($"TextBox_Custom_Misc_TitleScreen={TextBox_Custom_Misc_TitleScreen.Text}");
+            configInfo.WriteLine($"TextBox_Custom_Misc_Invincibility={TextBox_Custom_Misc_Invincibility.Text}");
+            configInfo.WriteLine($"TextBox_Custom_Misc_StageClear={TextBox_Custom_Misc_StageClear.Text}");
+            configInfo.WriteLine($"TextBox_Custom_Misc_Results={TextBox_Custom_Misc_Results.Text}");
 
             // End Write.
             configInfo.Close();
@@ -2642,28 +2762,64 @@ namespace MarathonRandomiser
             }
 
             // Check if we need to do Victory Fanfare randomisation.
-            if (audioFanfares == true)
+            if (audioFanfares == true || TextBox_Custom_Misc_StageClear.Text != "" || TextBox_Custom_Misc_Results.Text != "")
             {
                 UpdateLogger("Randomising victory fanfares.");
 
-                // Copy a fanfare, getting the name of the copied one. This will be null if it chooses the OG game's fanfare.
-                string returned = await Task.Run(() => AudioRandomisers.VictoryFanfares(ModDirectory, AudioFanfares, audioFanfaresOrig));
-
-                // If we have changed the file, then check if there's a corrosponding results theme, copy it if so, create a blank one if not.
-                if (returned != null)
+                // If the user hasn't specified a custom stage clear jingle or results theme, then select a premade one.
+                if (TextBox_Custom_Misc_StageClear.Text == "" && TextBox_Custom_Misc_Results.Text == "")
                 {
-                    if (File.Exists($@"{Environment.CurrentDirectory}\ExternalResources\ResultsThemes\{returned}"))
-                        File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\ResultsThemes\{returned}", $@"{ModDirectory}\xenon\sound\result.xma", true);
-                    else
-                        File.Create($@"{ModDirectory}\xenon\sound\result.xma");
+                    // Copy a fanfare, getting the name of the copied one. This will be null if it chooses the OG game's fanfare.
+                    string returned = await Task.Run(() => AudioRandomisers.VictoryFanfares(ModDirectory, AudioFanfares, audioFanfaresOrig));
+
+                    // If we have changed the file, then check if there's a corrosponding results theme, copy it if so, create a blank one if not.
+                    if (returned != null)
+                    {
+                        if (File.Exists($@"{Environment.CurrentDirectory}\ExternalResources\ResultsThemes\{returned}"))
+                            File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\ResultsThemes\{returned}", $@"{ModDirectory}\xenon\sound\result.xma", true);
+                        else
+                            File.Create($@"{ModDirectory}\xenon\sound\result.xma");
+                    }
+                }
+                else
+                {
+                    // Create the directories for the process.
+                    Directory.CreateDirectory($@"{TemporaryDirectory}\tempWavs");
+                    Directory.CreateDirectory($@"{ModDirectory}\xenon\sound");
+
+                    // Store the custom text box strings.
+                    string customStageClear = TextBox_Custom_Misc_StageClear.Text;
+                    string customResults = TextBox_Custom_Misc_Results.Text;
+
+                    // Handle the user's custom stage clear jingle.
+                    if (TextBox_Custom_Misc_StageClear.Text != "")
+                    {
+                        await Task.Run(() => Custom.StageClear(customStageClear, ModDirectory));
+
+                        // If the user has specified a custom stage clear jingle but not a results jingle, then replace the original game's results jingle with silence.
+                        if (TextBox_Custom_Misc_Results.Text == "")
+                            File.Create($@"{ModDirectory}\xenon\sound\result.xma");
+                    }
+
+                    // Handle the user's custom results theme.
+                    if (TextBox_Custom_Misc_Results.Text != "")
+                        await Task.Run(() => Custom.Results(customResults, ModDirectory));
                 }
             }
 
             // Check if we need to do the Invincibility Jingle randomisation.
-            if (audioJingle == true)
+            if (audioJingle == true || TextBox_Custom_Misc_Invincibility.Text != "")
             {
                 UpdateLogger("Randomising invincibility jingle.");
-                await Task.Run(() => AudioRandomisers.InvincibilityJingle(ModDirectory, AudioJingles, audioJingleOrig));
+
+                // If the user hasn't specified a custom Invincibility jingle, then select a premade one
+                if (TextBox_Custom_Misc_Invincibility.Text == "")
+                    await Task.Run(() => AudioRandomisers.InvincibilityJingle(ModDirectory, AudioJingles, audioJingleOrig));
+                else
+                {
+                    string customInvincibility = TextBox_Custom_Misc_Invincibility.Text;
+                    await Task.Run(() => Custom.Invincibility(customInvincibility, ModDirectory));
+                }
             }
 
             // Amogus Easter Egg Seed
@@ -2965,66 +3121,114 @@ namespace MarathonRandomiser
             }
 
             // Check if we need to do the Intro Logo randomisation.
-            if (miscIntroLogos == true)
+            if (miscIntroLogos == true || TextBox_Custom_Misc_SegaLogo.Text != "" || TextBox_Custom_Misc_TitleScreen.Text != "")
             {
-                UpdateLogger($"Randomising intro logos.");
-                bool needToDoXNCPFuckery = await Task.Run(() => MiscellaneousRandomisers.IntroLogos(ModDirectory, MiscSegaLogos, MiscTitleScreens, miscIntroLogosOrig));
-
-                // Copy the RHS easter egg Sega logo and title screen.
-                if (Seed.Contains("BDIWORH") && DisableEasterEggs == false)
+                if (TextBox_Custom_Misc_SegaLogo.Text == "" && TextBox_Custom_Misc_TitleScreen.Text == "")
                 {
-                    needToDoXNCPFuckery = true;
-                    File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\easterEgg1.knx", $@"{ModDirectory}\xenon\sound\HD_SEGA.wmv", true);
-                    File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\easterEgg2.knx", $@"{ModDirectory}\xenon\sound\title_loop_GBn.wmv", true);
-                }
+                    UpdateLogger($"Randomising intro logos.");
+                    bool needToDoXNCPFuckery = await Task.Run(() => MiscellaneousRandomisers.IntroLogos(ModDirectory, MiscSegaLogos, MiscTitleScreens, miscIntroLogosOrig));
 
-                // If we've replaced a title screen we need to do some additional things.
-                if (needToDoXNCPFuckery)
-                {
-                    foreach (string archive in archives)
+                    // Copy the RHS easter egg Sega logo and title screen.
+                    if (Seed.Contains("BDIWORH") && DisableEasterEggs == false)
                     {
-                        if (Path.GetFileName(archive).ToLower() == "sprite.arc")
+                        needToDoXNCPFuckery = true;
+                        File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\easterEgg1.knx", $@"{ModDirectory}\xenon\sound\HD_SEGA.wmv", true);
+                        File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\easterEgg2.knx", $@"{ModDirectory}\xenon\sound\title_loop_GBn.wmv", true);
+                    }
+
+                    // If we've replaced a title screen we need to do some additional things.
+                    if (needToDoXNCPFuckery)
+                    {
+                        foreach (string archive in archives)
                         {
-                            string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
-                            await Task.Run(() => XNCPRandomisation.RemoveTitleScene(unpackedArchive));
+                            if (Path.GetFileName(archive).ToLower() == "sprite.arc")
+                            {
+                                string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+                                await Task.Run(() => XNCPRandomisation.RemoveTitleScene(unpackedArchive));
+                            }
+                        }
+
+                        // Hybrid patch to change intro video wait time.
+                        if (!File.Exists(Path.Combine(ModDirectory, "patch.mlua")))
+                        {
+                            using Stream patchCreate = File.Open(Path.Combine(ModDirectory, "patch.mlua"), FileMode.Create);
+                            using StreamWriter patchInfo = new(patchCreate);
+                            patchInfo.WriteLine("--[Patch]--");
+                            patchInfo.WriteLine($"Title(\"Randomisation - {TextBox_General_Seed.Text}\")");
+                            patchInfo.WriteLine($"Author(\"Sonic '06 Randomiser Suite\")");
+                            patchInfo.WriteLine($"Platform(\"Xbox 360\")");
+
+                            patchInfo.WriteLine("\n--[Functions]--");
+                            patchInfo.WriteLine("--Replace Title Screen Duration--");
+                            patchInfo.WriteLine($"DecryptExecutable()");
+                            patchInfo.WriteLine($"WriteVirtualBytes(0x820087D4|\"{await Task.Run(() => Helpers.GetWMVDuration($@"{ModDirectory}\xenon\sound\title_loop_GBn.wmv"))}\")");
+
+                            patchInfo.Close();
+                        }
+                        else
+                        {
+                            using StreamWriter patchInfo = new(Path.Combine(ModDirectory, "patch.mlua"), true);
+                            patchInfo.WriteLine("\n--Replace Title Screen Duration--");
+                            patchInfo.WriteLine($"WriteVirtualBytes(0x820087D4|\"{await Task.Run(() => Helpers.GetWMVDuration($@"{ModDirectory}\xenon\sound\title_loop_GBn.wmv"))}\")");
+
+                            patchInfo.Close();
                         }
                     }
 
-                    // Hybrid patch to change intro video wait time.
-                    if (!File.Exists(Path.Combine(ModDirectory, "patch.mlua")))
-                    {
-                        using Stream patchCreate = File.Open(Path.Combine(ModDirectory, "patch.mlua"), FileMode.Create);
-                        using StreamWriter patchInfo = new(patchCreate);
-                        patchInfo.WriteLine("--[Patch]--");
-                        patchInfo.WriteLine($"Title(\"Randomisation - {TextBox_General_Seed.Text}\")");
-                        patchInfo.WriteLine($"Author(\"Sonic '06 Randomiser Suite\")");
-                        patchInfo.WriteLine($"Platform(\"Xbox 360\")");
-
-                        patchInfo.WriteLine("\n--[Functions]--");
-                        patchInfo.WriteLine("--Replace Title Screen Duration--");
-                        patchInfo.WriteLine($"DecryptExecutable()");
-                        patchInfo.WriteLine($"WriteVirtualBytes(0x820087D4|\"{await Task.Run(() => Helpers.GetWMVDuration($@"{ModDirectory}\xenon\sound\title_loop_GBn.wmv"))}\")");
-
-                        patchInfo.Close();
-                    }
-                    else
+                    // Skip over the Sonic Team and Criware Logos.
+                    if (Seed.Contains("BDIWORH") && DisableEasterEggs == false)
                     {
                         using StreamWriter patchInfo = new(Path.Combine(ModDirectory, "patch.mlua"), true);
-                        patchInfo.WriteLine("\n--Replace Title Screen Duration--");
-                        patchInfo.WriteLine($"WriteVirtualBytes(0x820087D4|\"{await Task.Run(() => Helpers.GetWMVDuration($@"{ModDirectory}\xenon\sound\title_loop_GBn.wmv"))}\")");
-
+                        patchInfo.WriteLine("\n--Skip Sonic Team and Criware Logos--");
+                        patchInfo.WriteLine("WriteNullBytes(Executable|0x36600|20)");
+                        patchInfo.WriteLine("WriteNullBytes(Executable|0x36624|26)");
                         patchInfo.Close();
                     }
                 }
-
-                // Skip over the Sonic Team and Criware Logos.
-                if (Seed.Contains("BDIWORH") && DisableEasterEggs == false)
+                else
                 {
-                    using StreamWriter patchInfo = new(Path.Combine(ModDirectory, "patch.mlua"), true);
-                    patchInfo.WriteLine("\n--Skip Sonic Team and Criware Logos--");
-                    patchInfo.WriteLine("WriteNullBytes(Executable|0x36600|20)");
-                    patchInfo.WriteLine("WriteNullBytes(Executable|0x36624|26)");
-                    patchInfo.Close();
+                    if (TextBox_Custom_Misc_SegaLogo.Text != "")
+                        File.Copy(TextBox_Custom_Misc_SegaLogo.Text, $@"{ModDirectory}\xenon\sound\HD_SEGA.wmv", true);
+
+                    if (TextBox_Custom_Misc_TitleScreen.Text != "")
+                    {
+                        File.Copy(TextBox_Custom_Misc_TitleScreen.Text, $@"{ModDirectory}\xenon\sound\title_loop_GBn.wmv", true);
+
+                        foreach (string archive in archives)
+                        {
+                            if (Path.GetFileName(archive).ToLower() == "sprite.arc")
+                            {
+                                string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+                                await Task.Run(() => XNCPRandomisation.RemoveTitleScene(unpackedArchive));
+                            }
+                        }
+
+                        // Hybrid patch to change intro video wait time.
+                        if (!File.Exists(Path.Combine(ModDirectory, "patch.mlua")))
+                        {
+                            using Stream patchCreate = File.Open(Path.Combine(ModDirectory, "patch.mlua"), FileMode.Create);
+                            using StreamWriter patchInfo = new(patchCreate);
+                            patchInfo.WriteLine("--[Patch]--");
+                            patchInfo.WriteLine($"Title(\"Randomisation - {TextBox_General_Seed.Text}\")");
+                            patchInfo.WriteLine($"Author(\"Sonic '06 Randomiser Suite\")");
+                            patchInfo.WriteLine($"Platform(\"Xbox 360\")");
+
+                            patchInfo.WriteLine("\n--[Functions]--");
+                            patchInfo.WriteLine("--Replace Title Screen Duration--");
+                            patchInfo.WriteLine($"DecryptExecutable()");
+                            patchInfo.WriteLine($"WriteVirtualBytes(0x820087D4|\"{await Task.Run(() => Helpers.GetWMVDuration($@"{ModDirectory}\xenon\sound\title_loop_GBn.wmv"))}\")");
+
+                            patchInfo.Close();
+                        }
+                        else
+                        {
+                            using StreamWriter patchInfo = new(Path.Combine(ModDirectory, "patch.mlua"), true);
+                            patchInfo.WriteLine("\n--Replace Title Screen Duration--");
+                            patchInfo.WriteLine($"WriteVirtualBytes(0x820087D4|\"{await Task.Run(() => Helpers.GetWMVDuration($@"{ModDirectory}\xenon\sound\title_loop_GBn.wmv"))}\")");
+
+                            patchInfo.Close();
+                        }
+                    }
                 }
             }
 #endregion
