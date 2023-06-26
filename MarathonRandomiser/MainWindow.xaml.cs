@@ -1787,7 +1787,7 @@ namespace MarathonRandomiser
                     for (int i = 0; i < CustomMusic.Count; i++)
                     {
                         UpdateLogger($"Importing: '{CustomMusic[i]}' as custom music.");
-                        await Task.Run(() => Custom.Music(CustomMusic[i], ModDirectory, i, EnableCache));
+                        await Task.Run(() => Custom.Audio(false, true, $"custom{i}", CustomMusic[i], ModDirectory, "Music", true, EnableCache));
                         AudioMusic.Add($"custom{i}");
                     }
 
@@ -1818,7 +1818,7 @@ namespace MarathonRandomiser
                     for (int i = 0; i < CustomVoices.Count; i++)
                     {
                         UpdateLogger($"Importing: '{CustomVoices[i]}' as a custom hint voice line.");
-                        await Task.Run(() => Custom.VoiceLines(CustomVoices[i], ModDirectory, i, EnableCache));
+                        await Task.Run(() => Custom.Audio(true, true, $"custom_hint{i}", CustomVoices[i], ModDirectory, "Voice", false, EnableCache));
                     }
 
                     // Add all the voice lines to voice_all_e.sbk in sound.arc and add hint entries to msg_hint.e.mst in text.arc
@@ -2794,7 +2794,8 @@ namespace MarathonRandomiser
                     // Handle the user's custom stage clear jingle.
                     if (TextBox_Custom_Misc_StageClear.Text != "")
                     {
-                        await Task.Run(() => Custom.StageClear(customStageClear, ModDirectory));
+                        await Task.Run(() => Custom.Audio(false, false, "roundclear", customStageClear, ModDirectory, null, false, false));
+                        await Task.Run(() => Custom.Audio(false, false, "twn_clear", customStageClear, ModDirectory, null, false, false));
 
                         // If the user has specified a custom stage clear jingle but not a results jingle, then replace the original game's results jingle with silence.
                         if (TextBox_Custom_Misc_Results.Text == "")
@@ -2803,7 +2804,7 @@ namespace MarathonRandomiser
 
                     // Handle the user's custom results theme.
                     if (TextBox_Custom_Misc_Results.Text != "")
-                        await Task.Run(() => Custom.Results(customResults, ModDirectory));
+                        await Task.Run(() => Custom.Audio(false, false, "result", customResults, ModDirectory, null, true, false));
                 }
             }
 
@@ -2818,7 +2819,7 @@ namespace MarathonRandomiser
                 else
                 {
                     string customInvincibility = TextBox_Custom_Misc_Invincibility.Text;
-                    await Task.Run(() => Custom.Invincibility(customInvincibility, ModDirectory));
+                    await Task.Run(() => Custom.Audio(false, false, "speed_up", customInvincibility, ModDirectory, null, false, false));
                 }
             }
 

@@ -8,48 +8,59 @@ using System.Linq;
 
 namespace MarathonRandomiser
 {
-    // TODO: The audio functions are duplicated a LOT. Think about consolidating them down into one or two functions instead.
     internal class Custom
     {
         /// <summary>
         /// Converts and saves custom song XMAs to the randomisation's mod directory.
         /// </summary>
-        /// <param name="CustomSong">The filepath to the current song to process.</param>
+        /// <param name="isVoice">Whether or not this audio clip is a voice file.</param>
+        /// <param name="isCustom">Whether or not this audio clip needs to be added to the custom files list.</param>
+        /// <param name="audioName">The name of the XMA we should be saving (eg. custom0, custom_hint32, speed_up).</param>
+        /// <param name="audioPath">The path to the original audio file.</param>
         /// <param name="ModDirectory">The path to the randomisation's mod directory.</param>
-        /// <param name="index">The number in the list of custom songs of the one we're processing.</param>
-        /// <param name="EnableCache">Whether or not we need to store the generated XMA file.</param>
-        public static async Task Music(string CustomSong, string ModDirectory, int index, bool? EnableCache)
+        /// <param name="cacheName">The name of the cache folder (either Music or Voice).</param>
+        /// <param name="shouldAddLoop">Whether or not this file should have loop points added to it if none exist.</param>
+        /// <param name="EnableCache">Whether or not this audio should be cached.</param>
+        public static async Task Audio(bool isVoice, bool isCustom, string audioName, string audioPath, string ModDirectory, string cacheName, bool shouldAddLoop, bool? EnableCache)
         {
-            // Update the mod.ini Custom file list.
-            await Task.Run(() => Helpers.UpdateCustomFiles($"custom{index}.xma", ModDirectory));
+            // Set up the target directory.
+            string targetDirectory = $@"{ModDirectory}\xenon\sound";
+
+            // If this sound is a voice clip, then change the target directory to point to the voice folder.
+            if (isVoice)
+                targetDirectory = $@"{ModDirectory}\xenon\sound\voice\e";
+
+            // Update the mod.ini Custom file list if we need to.
+            if (isCustom)
+                await Task.Run(() => Helpers.UpdateCustomFiles($"{audioName}.xma", ModDirectory));
 
             // Get the name of the file with the extension replaced with .xma (used for the XMA Cache system).
-            string origName = $"{Path.GetFileNameWithoutExtension(CustomSong)}.xma";
+            string origName = $"{Path.GetFileNameWithoutExtension(audioPath)}.xma";
 
             // Set up values we'll use for looping.
             int startLoop = 0;
             int endLoop = 0;
 
             // If this song is already an XMA we can just copy it straight over.
-            if (Path.GetExtension(CustomSong) == ".xma")
-                File.Copy(CustomSong, $@"{ModDirectory}\xenon\sound\custom{index}.xma");
+            if (Path.GetExtension(audioPath) == ".xma")
+                File.Copy(audioPath, $@"{targetDirectory}\{audioName}.xma");
 
             // If not, we need to check for it in the cache if we're using it, or convert it.
             else
             {
                 // Check if this file exists in the XMA Cache and copy it if the cache is enabled.
-                if (File.Exists($@"{Environment.CurrentDirectory}\Cache\XMA\Music\{origName}") && EnableCache == true)
-                    File.Copy($@"{Environment.CurrentDirectory}\Cache\XMA\Music\{origName}", $@"{ModDirectory}\xenon\sound\custom{index}.xma");
+                if (File.Exists($@"{Environment.CurrentDirectory}\Cache\XMA\{cacheName}\{origName}") && EnableCache == true)
+                    File.Copy($@"{Environment.CurrentDirectory}\Cache\XMA\{cacheName}\{origName}", $@"{targetDirectory}\{audioName}.xma");
 
                 // If not, then convert it.
                 else
                 {
                     // If this file isn't a WAV, try convert it using vgmstream.
-                    if (Path.GetExtension(CustomSong) != ".wav")
+                    if (Path.GetExtension(audioPath) != ".wav")
                     {
                         Process process = new();
                         process.StartInfo.FileName = $"\"{Environment.CurrentDirectory}\\ExternalResources\\vgmstream\\vgmstream-cli.exe\"";
-                        process.StartInfo.Arguments = $"-o \"{MainWindow.TemporaryDirectory}\\tempWavs\\custom{index}.wav\" -L \"{CustomSong}\"";
+                        process.StartInfo.Arguments = $"-o \"{MainWindow.TemporaryDirectory}\\tempWavs\\{audioName}.wav\" -L \"{audioPath}\"";
                         process.StartInfo.UseShellExecute = false;
                         process.StartInfo.CreateNoWindow = true;
                         process.StartInfo.RedirectStandardOutput = true;
@@ -76,19 +87,19 @@ namespace MarathonRandomiser
 
                         // If we've failed to convert, throw a proper exception.
                         if (output.Length == 1)
-                            throw new Exception($"Failed to convert '{CustomSong}', this may be due to a character in the filename or an unsupported filetype?");
+                            throw new Exception($"Failed to convert '{audioPath}', this may be due to a character in the filename or an unsupported filetype?");
 
                         // Set the path to the song to our wav for the rest of the function.
-                        CustomSong = $@"{MainWindow.TemporaryDirectory}\tempWavs\custom{index}.wav";
+                        audioPath = $@"{MainWindow.TemporaryDirectory}\tempWavs\{audioName}.wav";
                     }
 
                     // Convert WAV file to XMA.
-                    await Task.Run(() => Helpers.XMAEncode($@"{CustomSong}", $@"{ModDirectory}\xenon\sound\custom{index}.xma"));
+                    await Task.Run(() => Helpers.XMAEncode($@"{audioPath}", $@"{targetDirectory}\{audioName}.xma"));
 
-                    // If vgmstream didn't find any loop points, then patch in a start to end loop.
-                    if (startLoop == 0 && endLoop == 0)
+                    // If vgmstream didn't find any loop points and the audio requires some, then patch in a start to end loop.
+                    if (startLoop == 0 && endLoop == 0 && shouldAddLoop)
                     {
-                        byte[] xma = File.ReadAllBytes($@"{ModDirectory}\xenon\sound\custom{index}.xma");
+                        byte[] xma = File.ReadAllBytes($@"{targetDirectory}\{audioName}.xma");
                         for (int x = 0; x < xma.Length; x += 4)
                         {
                             // Find the XMA2 Chunk Header
@@ -103,12 +114,12 @@ namespace MarathonRandomiser
                         }
 
                         // Save the updated XMA.
-                        File.WriteAllBytes($@"{ModDirectory}\xenon\sound\custom{index}.xma", xma);
+                        File.WriteAllBytes($@"{targetDirectory}\{audioName}.xma", xma);
                     }
 
                     // If the cache is enabled, copy the newly converted file to the XMA cache folder.
                     if (EnableCache == true)
-                        File.Copy($@"{ModDirectory}\xenon\sound\custom{index}.xma", $@"{Environment.CurrentDirectory}\Cache\XMA\Music\{origName}");
+                        File.Copy($@"{targetDirectory}\{audioName}.xma", $@"{Environment.CurrentDirectory}\Cache\XMA\Music\{origName}");
                 }
             }
         }
@@ -139,68 +150,6 @@ namespace MarathonRandomiser
 
             // Save the updated bgm.sbk.
             bgm.Save();
-        }
-
-        /// <summary>
-        /// Converts and saves custom voice line XMAs to the randomisation's mod directory.
-        /// </summary>
-        /// <param name="CustomSound">The filepath to the current voice file to process.</param>
-        /// <param name="ModDirectory">The path to the randomisation's mod directory.</param>
-        /// <param name="index">The number in the list of custom voice files of the one we're processing.</param>
-        /// <param name="EnableCache">Whether or not we need to store the generated XMA file.</param>
-        public static async Task VoiceLines(string CustomSound, string ModDirectory, int index, bool? EnableCache)
-        {
-            // Update the mod.ini Custom file list.
-            await Task.Run(() => Helpers.UpdateCustomFiles($"custom_hint{index}.xma", ModDirectory));
-
-            // Get the name of the file with the extension replaced with .xma (used for the XMA Cache system).
-            string origName = $"{Path.GetFileNameWithoutExtension(CustomSound)}.xma";
-
-            // If this voice line is already an XMA we can just copy it straight over.
-            if (Path.GetExtension(CustomSound) == ".xma")
-                File.Copy(CustomSound, $@"{ModDirectory}\xenon\sound\voice\e\custom_hint{index}.xma");
-
-            // If not, we need to check for it in the cache if we're using it, or convert it.
-            else
-            {
-                // Check if this file exists in the XMA Cache and copy it if the cache is enabled.
-                if (File.Exists($@"{Environment.CurrentDirectory}\Cache\XMA\Voice\{origName}") && EnableCache == true)
-                    File.Copy($@"{Environment.CurrentDirectory}\Cache\XMA\Voice\{origName}", $@"{ModDirectory}\xenon\sound\voice\e\custom_hint{index}.xma");
-
-                // If not, then convert it.
-                else
-                {
-                    // If this file isn't a WAV, try convert it using vgmstream.
-                    if (Path.GetExtension(CustomSound) != ".wav")
-                    {
-                        Process process = new();
-                        process.StartInfo.FileName = $"\"{Environment.CurrentDirectory}\\ExternalResources\\vgmstream\\vgmstream-cli.exe\"";
-                        process.StartInfo.Arguments = $"-o \"{MainWindow.TemporaryDirectory}\\tempWavs\\custom_hint{index}.wav\" \"{CustomSound}\"";
-                        process.StartInfo.UseShellExecute = false;
-                        process.StartInfo.CreateNoWindow = true;
-                        process.StartInfo.RedirectStandardOutput = true;
-                        process.Start();
-
-                        StreamReader sr = process.StandardOutput;
-                        string[] output = sr.ReadToEnd().Split("\r\n");
-                        process.WaitForExit();
-
-                        // If we've failed to convert, throw a proper exception.
-                        if (output.Length == 1)
-                            throw new Exception($"Failed to convert '{CustomSound}', this may be due to a character in the filename or an unsupported filetype?");
-
-                        // Set the path to the voice line to our wav for the rest of the function.
-                        CustomSound = $@"{MainWindow.TemporaryDirectory}\tempWavs\custom_hint{index}.wav";
-                    }
-
-                    // Convert WAV file to XMA.
-                    await Task.Run(() => Helpers.XMAEncode($@"{CustomSound}", $@"{ModDirectory}\xenon\sound\voice\e\custom_hint{index}.xma"));
-
-                    // If the cache is enabled, copy the newly converted file to the XMA cache folder.
-                    if (EnableCache == true)
-                        File.Copy($@"{ModDirectory}\xenon\sound\voice\e\custom_hint{index}.xma", $@"{Environment.CurrentDirectory}\Cache\XMA\Voice\{origName}");
-                }
-            }
         }
 
         /// <summary>
@@ -391,198 +340,7 @@ namespace MarathonRandomiser
 
             // Just return the filepath if it is already a DDS.
             else
-            {
                 return texture;
-            }
-        }
-
-        /// <summary>
-        /// Converts and saves a custom stage clear jingle randomisation's mod directory.
-        /// </summary>
-        /// <param name="CustomSong">The filepath to the current song to process.</param>
-        /// <param name="ModDirectory">The path to the randomisation's mod directory.</param>
-        public static async Task StageClear(string CustomSong, string ModDirectory)
-        {
-            // Set up values we'll use for looping.
-            int startLoop = 0;
-            int endLoop = 0;
-
-            // If this song is already an XMA we can just copy it straight over.
-            if (Path.GetExtension(CustomSong) == ".xma")
-                File.Copy(CustomSong, $@"{ModDirectory}\xenon\sound\roundclear.xma");
-
-            // If not, we need to check for it in the cache if we're using it, or convert it.
-            else
-            {
-                // If this file isn't a WAV, try convert it using vgmstream.
-                if (Path.GetExtension(CustomSong) != ".wav")
-                {
-                    Process process = new();
-                    process.StartInfo.FileName = $"\"{Environment.CurrentDirectory}\\ExternalResources\\vgmstream\\vgmstream-cli.exe\"";
-                    process.StartInfo.Arguments = $"-o \"{MainWindow.TemporaryDirectory}\\tempWavs\\roundclear.wav\" -L \"{CustomSong}\"";
-                    process.StartInfo.UseShellExecute = false;
-                    process.StartInfo.CreateNoWindow = true;
-                    process.StartInfo.RedirectStandardOutput = true;
-                    process.Start();
-
-                    StreamReader sr = process.StandardOutput;
-                    string[] output = sr.ReadToEnd().Split("\r\n");
-                    process.WaitForExit();
-
-                    // If we've failed to convert, throw a proper exception.
-                    if (output.Length == 1)
-                        throw new Exception($"Failed to convert '{CustomSong}', this may be due to a character in the filename or an unsupported filetype?");
-
-                    // Set the path to the song to our wav for the rest of the function.
-                    CustomSong = $@"{MainWindow.TemporaryDirectory}\tempWavs\roundclear.wav";
-                }
-
-                // Convert WAV file to XMA.
-                await Task.Run(() => Helpers.XMAEncode($@"{CustomSong}", $@"{ModDirectory}\xenon\sound\roundclear.xma"));
-            }
-        }
-
-        /// <summary>
-        /// Converts and saves a custom results theme randomisation's mod directory.
-        /// </summary>
-        /// <param name="CustomSong">The filepath to the current song to process.</param>
-        /// <param name="ModDirectory">The path to the randomisation's mod directory.</param>
-        public static async Task Results(string CustomSong, string ModDirectory)
-        {
-            // Set up values we'll use for looping.
-            int startLoop = 0;
-            int endLoop = 0;
-
-            // If this song is already an XMA we can just copy it straight over.
-            if (Path.GetExtension(CustomSong) == ".xma")
-                File.Copy(CustomSong, $@"{ModDirectory}\xenon\sound\result.xma");
-
-            // If not, we need to check for it in the cache if we're using it, or convert it.
-            else
-            {
-                // If this file isn't a WAV, try convert it using vgmstream.
-                if (Path.GetExtension(CustomSong) != ".wav")
-                {
-                    Process process = new();
-                    process.StartInfo.FileName = $"\"{Environment.CurrentDirectory}\\ExternalResources\\vgmstream\\vgmstream-cli.exe\"";
-                    process.StartInfo.Arguments = $"-o \"{MainWindow.TemporaryDirectory}\\tempWavs\\result.wav\" -L \"{CustomSong}\"";
-                    process.StartInfo.UseShellExecute = false;
-                    process.StartInfo.CreateNoWindow = true;
-                    process.StartInfo.RedirectStandardOutput = true;
-                    process.Start();
-
-                    StreamReader sr = process.StandardOutput;
-                    string[] output = sr.ReadToEnd().Split("\r\n");
-                    process.WaitForExit();
-
-                    // If vgmstream has reported any loop points, then store them.
-                    foreach (string value in output)
-                    {
-                        if (value.StartsWith("loop start"))
-                        {
-                            string[] split = value.Split(' ');
-                            startLoop = int.Parse(split[2]);
-                        }
-                        if (value.StartsWith("loop end"))
-                        {
-                            string[] split = value.Split(' ');
-                            endLoop = int.Parse(split[2]);
-                        }
-                    }
-
-                    // If we've failed to convert, throw a proper exception.
-                    if (output.Length == 1)
-                        throw new Exception($"Failed to convert '{CustomSong}', this may be due to a character in the filename or an unsupported filetype?");
-
-                    // Set the path to the song to our wav for the rest of the function.
-                    CustomSong = $@"{MainWindow.TemporaryDirectory}\tempWavs\result.wav";
-                }
-
-                // Convert WAV file to XMA.
-                await Task.Run(() => Helpers.XMAEncode($@"{CustomSong}", $@"{ModDirectory}\xenon\sound\result.xma"));
-
-                // If vgmstream didn't find any loop points, then patch in a start to end loop.
-                if (startLoop == 0 && endLoop == 0)
-                {
-                    byte[] xma = File.ReadAllBytes($@"{ModDirectory}\xenon\sound\result.xma");
-                    for (int x = 0; x < xma.Length; x += 4)
-                    {
-                        // Find the XMA2 Chunk Header
-                        if (xma[x] == 0x58 && xma[x + 1] == 0x4D && xma[x + 2] == 0x41 && xma[x + 3] == 0x32)
-                        {
-                            // Set the part of the file that controls the end loop (0x10 ahead of the XMA2 Chunk Header) to the sample count (0x20 ahead of the XMA2 Chunk Header).
-                            xma[x + 0x10] = xma[x + 0x20];
-                            xma[(x + 1) + 0x10] = xma[(x + 1) + 0x20];
-                            xma[(x + 2) + 0x10] = xma[(x + 2) + 0x20];
-                            xma[(x + 3) + 0x10] = xma[(x + 3) + 0x20];
-                        }
-                    }
-
-                    // Save the updated XMA.
-                    File.WriteAllBytes($@"{ModDirectory}\xenon\sound\result.xma", xma);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Converts and saves a custom invincibility jingle randomisation's mod directory.
-        /// </summary>
-        /// <param name="CustomSong">The filepath to the current song to process.</param>
-        /// <param name="ModDirectory">The path to the randomisation's mod directory.</param>
-        public static async Task Invincibility(string CustomSong, string ModDirectory)
-        {
-            // Set up values we'll use for looping.
-            int startLoop = 0;
-            int endLoop = 0;
-
-            // If this song is already an XMA we can just copy it straight over.
-            if (Path.GetExtension(CustomSong) == ".xma")
-                File.Copy(CustomSong, $@"{ModDirectory}\xenon\sound\speed_up.xma");
-
-            // If not, we need to check for it in the cache if we're using it, or convert it.
-            else
-            {
-                // If this file isn't a WAV, try convert it using vgmstream.
-                if (Path.GetExtension(CustomSong) != ".wav")
-                {
-                    Process process = new();
-                    process.StartInfo.FileName = $"\"{Environment.CurrentDirectory}\\ExternalResources\\vgmstream\\vgmstream-cli.exe\"";
-                    process.StartInfo.Arguments = $"-o \"{MainWindow.TemporaryDirectory}\\tempWavs\\speed_up.wav\" -L \"{CustomSong}\"";
-                    process.StartInfo.UseShellExecute = false;
-                    process.StartInfo.CreateNoWindow = true;
-                    process.StartInfo.RedirectStandardOutput = true;
-                    process.Start();
-
-                    StreamReader sr = process.StandardOutput;
-                    string[] output = sr.ReadToEnd().Split("\r\n");
-                    process.WaitForExit();
-
-                    // If vgmstream has reported any loop points, then store them.
-                    foreach (string value in output)
-                    {
-                        if (value.StartsWith("loop start"))
-                        {
-                            string[] split = value.Split(' ');
-                            startLoop = int.Parse(split[2]);
-                        }
-                        if (value.StartsWith("loop end"))
-                        {
-                            string[] split = value.Split(' ');
-                            endLoop = int.Parse(split[2]);
-                        }
-                    }
-
-                    // If we've failed to convert, throw a proper exception.
-                    if (output.Length == 1)
-                        throw new Exception($"Failed to convert '{CustomSong}', this may be due to a character in the filename or an unsupported filetype?");
-
-                    // Set the path to the song to our wav for the rest of the function.
-                    CustomSong = $@"{MainWindow.TemporaryDirectory}\tempWavs\speed_up.wav";
-                }
-
-                // Convert WAV file to XMA.
-                await Task.Run(() => Helpers.XMAEncode($@"{CustomSong}", $@"{ModDirectory}\xenon\sound\speed_up.xma"));
-            }
         }
     }
 }

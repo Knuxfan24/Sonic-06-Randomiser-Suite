@@ -1004,7 +1004,7 @@ namespace MarathonRandomiser
         public static async Task DuplicateCharacterBattleSpawns(string luaFile, int dupeCount, bool? setDoubleTroubleRando)
         {
             // Decompile this lua file.
-            await Task.Run(() => Helpers.LuaDecompile(luaFile));
+            await Task.Run(() => LuaDecompile(luaFile));
 
             // Read the decompiled lua file into a string array.
             string[] lua = File.ReadAllLines(luaFile);
