@@ -262,7 +262,7 @@ function on_event(_ARG_0_, _ARG_1_)
   elseif _ARG_1_ == "boss_is_dead" then
     if g_mission_information.mission_area == "boss/sonic_vs_silver" then
 	  bossKillCount = bossKillCount + 1
-	  if bossKillCount >= randomizerVal then
+	  if bossKillCount > randomizerVal then
         g_mission_information.mission_progress = 23
 		SetGlobalFlag(_ARG_0_, 4047, 1)
 		SetGlobalFlag(_ARG_0_, 50, 1)
