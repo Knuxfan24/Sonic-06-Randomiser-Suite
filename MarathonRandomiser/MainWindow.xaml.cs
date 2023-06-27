@@ -17,6 +17,7 @@ using System.Windows.Controls;
 
 namespace MarathonRandomiser
 {
+    // TODO: Some CreateDirectory calls here are now redundant.
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -58,6 +59,9 @@ namespace MarathonRandomiser
         /// </summary>
         public MainWindow()
         {
+            if (!Directory.Exists($@"{Environment.CurrentDirectory}\Configs"))
+                Directory.CreateDirectory($@"{Environment.CurrentDirectory}\Configs");
+
             InitializeComponent();
             GenerateDirectories();
             SetDefaults();
@@ -1154,7 +1158,8 @@ namespace MarathonRandomiser
                                                   "Skyth: Sonic Audio Tools.\n" +
                                                   "dwyl: Plain Text List of English Words.\n" +
                                                   "crash5band: XNCPLib.\n" +
-                                                  "Mark Heath: NAudio.",
+                                                  "Mark Heath: NAudio.\n" +
+                                                  "gordinramsey: Character Battle Mission Edits.",
                                                   "Sonic '06 Randomiser Suite",
                                                   MessageBoxButton.OK,
                                                   MessageBoxImage.Information);
@@ -1169,6 +1174,7 @@ namespace MarathonRandomiser
             {
                 Filter = "Randomiser Config (*.ini)|*.ini",
                 DefaultExt = ".ini",
+                InitialDirectory = $@"{Environment.CurrentDirectory}\Configs",
                 RestoreDirectory = true
             };
 
@@ -1186,7 +1192,9 @@ namespace MarathonRandomiser
             {
                 Title = "Select Configuration INI",
                 Multiselect = false,
-                Filter = "Randomiser Config (*.ini)|*.ini|Wildcard Log (*.log)|*.log"
+                Filter = "Randomiser Config (*.ini)|*.ini|Wildcard Log (*.log)|*.log",
+                InitialDirectory = $@"{Environment.CurrentDirectory}\Configs",
+                RestoreDirectory = true
             };
 
             if (OpenFileDialog.ShowDialog() == true)

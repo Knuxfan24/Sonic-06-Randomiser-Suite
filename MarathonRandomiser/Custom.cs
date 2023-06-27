@@ -30,6 +30,12 @@ namespace MarathonRandomiser
             if (isVoice)
                 targetDirectory = $@"{ModDirectory}\xenon\sound\voice\e";
 
+            // Create the target directory and temporary directory if they don't already exist.
+            if (!Directory.Exists(targetDirectory))
+                Directory.CreateDirectory(targetDirectory);
+            if (!Directory.Exists($@"{MainWindow.TemporaryDirectory}\tempWavs"))
+                Directory.CreateDirectory($@"{MainWindow.TemporaryDirectory}\tempWavs");
+
             // Update the mod.ini Custom file list if we need to.
             if (isCustom)
                 await Task.Run(() => Helpers.UpdateCustomFiles($"{audioName}.xma", ModDirectory));
