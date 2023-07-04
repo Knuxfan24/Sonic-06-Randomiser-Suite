@@ -85,7 +85,7 @@ namespace MarathonRandomiser
                 GlobalVersionNumber_Revision < int.Parse(versionCheck[1]) ||
                 GlobalVersionNumber_Release  < int.Parse(versionCheck[2]))
             {
-                Title = $"Sonic '06 Randomiser Suite ({VersionNumber}) - Version {versionCheck[0]}.{versionCheck[1]}.{versionCheck[2]} update available";
+                Title = $"Sonic '06 Randomiser Suite ({VersionNumber}) - Version {versionCheck[0]}.{versionCheck[1]}.{versionCheck[2]} update available!";
             }
 #endif
             // Clear out any temporary directories previously aborted randomisations left behind, as they can very quickly get large.

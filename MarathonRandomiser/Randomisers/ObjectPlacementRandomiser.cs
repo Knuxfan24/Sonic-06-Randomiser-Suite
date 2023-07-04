@@ -644,8 +644,17 @@ namespace MarathonRandomiser
                     setObject.Parameters[0].Data = MainWindow.Randomiser.Next(1, 15);
                     break;
 
+                // Choose a different icon for radarmapmarks and randomly pick whether or not to animate them.
+                // TODO: This seems to not affect town NPCs, those might create their OWN markers?
+                case "radarmapmark":
+                    setObject.Parameters[1].Data = MainWindow.Randomiser.Next(1, 10);
+                    if (MainWindow.Randomiser.Next(0, 2) == 0)
+                        setObject.Parameters[2].Data = false;
+                    else
+                        setObject.Parameters[2].Data = true;
+                    break;
+
                 // Choose different appearances for town NPCs in Soleanna.
-                // TODO: Maybe make this a seperate option?
                 case "townsman":
                     // Change mantype, exempt value 17 (the shopkeeper, as changing them seems to break the shop)
                     if ((int)setObject.Parameters[1].Data != 17)
