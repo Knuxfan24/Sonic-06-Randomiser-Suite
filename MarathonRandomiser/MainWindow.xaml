@@ -644,6 +644,7 @@
                         </hc:TabItem>
                     </hc:TabControl>
                     <CheckBox x:Name="CheckBox_Custom_Audio_XMACache" Content="Cache Custom Audio" IsEnabled="True" IsChecked="True" Margin="10,0,0,22" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="Auto"/>
+                    <CheckBox x:Name="CheckBox_Custom_Audio_Log" Content="Log All Custom Audio" IsEnabled="True" IsChecked="False" Margin="0,0,276,22" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="Auto" FlowDirection="RightToLeft"/>
                     <Button Content="Add" HorizontalAlignment="Left" Margin="148,0,0,10" VerticalAlignment="Bottom" Height="40" Width="128" Click="Custom_Browse" x:Name="Button_Custom_AddSelectAll"/>
                     <Button Content="Fetch Offical Packs" HorizontalAlignment="Left" Margin="281,0,0,10" VerticalAlignment="Bottom" Height="40" Width="128" Click="Custom_FetchVox" x:Name="Button_Custom_VoxFetch"/>
                     <Button Content="Refresh" HorizontalAlignment="Right" Margin="0,0,143,10" VerticalAlignment="Bottom" Height="40" Width="128" Click="Custom_RefreshVox" x:Name="Button_Custom_VoxRefresh"/>

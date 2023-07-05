@@ -1791,11 +1791,21 @@ namespace MarathonRandomiser
                     Directory.CreateDirectory($@"{TemporaryDirectory}\tempWavs");
                     Directory.CreateDirectory($@"{ModDirectory}\xenon\sound");
 
+                    // If we're not logging all the custom audio, then only say that we're importing [x] amount of files.
+                    if (CheckBox_Custom_Audio_Log.IsChecked == false)
+                        UpdateLogger($"Importing {CustomMusic.Count} custom songs.");
+
                     // Loops through the custom songs and process them.
                     for (int i = 0; i < CustomMusic.Count; i++)
                     {
-                        UpdateLogger($"Importing: '{CustomMusic[i]}' as custom music.");
+                        // If we are logging all the custom audio, then say what file is being imported.
+                        if (CheckBox_Custom_Audio_Log.IsChecked == true)
+                            UpdateLogger($"Importing: '{CustomMusic[i]}' as custom music.");
+
+                        // Process this file.
                         await Task.Run(() => Custom.Audio(false, true, $"custom{i}", CustomMusic[i], ModDirectory, "Music", true, EnableCache));
+                        
+                        // Add it to the list of music for the music randomiser.
                         AudioMusic.Add($"custom{i}");
                     }
 
@@ -1822,10 +1832,18 @@ namespace MarathonRandomiser
                     Directory.CreateDirectory($@"{TemporaryDirectory}\tempWavs");
                     Directory.CreateDirectory($@"{ModDirectory}\xenon\sound\voice\e");
 
+                    // If we're not logging all the custom audio, then only say that we're importing [x] amount of files.
+                    if (CheckBox_Custom_Audio_Log.IsChecked == false)
+                        UpdateLogger($"Importing {CustomVoices.Count} custom hint voice lines.");
+
                     // Loops through the custom songs and process them.
                     for (int i = 0; i < CustomVoices.Count; i++)
                     {
-                        UpdateLogger($"Importing: '{CustomVoices[i]}' as a custom hint voice line.");
+                        // If we are logging all the custom audio, then say what file is being imported.
+                        if (CheckBox_Custom_Audio_Log.IsChecked == true)
+                            UpdateLogger($"Importing: '{CustomVoices[i]}' as a custom hint voice line.");
+
+                        // Process this file.
                         await Task.Run(() => Custom.Audio(true, true, $"custom_hint{i}", CustomVoices[i], ModDirectory, "Voice", false, EnableCache));
                     }
 
@@ -2954,6 +2972,9 @@ namespace MarathonRandomiser
                                 UpdateLogger($"Generating Text to Speech for random dialog in '{message.Name}'.");
                                 await Task.Run(() => TextRandomiser.GenerateTTS(message, ModDirectory));
                             }
+
+                            // Make sure the MessageTable is unloaded to try and fix a crash caused in the Text Colouriser.
+                            ttsMST.Dispose();
                         }
                     }
                 }
