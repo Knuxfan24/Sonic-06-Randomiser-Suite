@@ -545,7 +545,7 @@
                         <CheckBox x:Name="CheckBox_Misc_PropPSIBehaviour" Content="Randomise Prop PSI Behaviour" Click="Dependency_CheckBox_Changed"/>
                         <CheckBox x:Name="CheckBox_Misc_PropPSIBehaviour_NoGrab" Content="Don't Disable Grabbing" IsEnabled="False"/>
                         <CheckBox x:Name="CheckBox_Misc_PropPSIBehaviour_NoDebris" Content="Ignore Debris" IsEnabled="False"/>
-                        <CheckBox x:Name="CheckBox_Misc_PropDebris" Content="Randomise Prop Debris"/>
+                        <CheckBox x:Name="CheckBox_Misc_PropDebris" Content="Randomise Prop Debris" Foreground="Firebrick"/>
                         <CheckBox x:Name="CheckBox_Misc_IntroVideos" Content="Randomise Intro Videos" IsChecked="True" Click="Dependency_CheckBox_Changed"/>
                         <CheckBox x:Name="CheckBox_Misc_IntroVideos_Orig" Content="Allow Original Videos" IsChecked="False" IsEnabled="True"/>
                     </StackPanel>
