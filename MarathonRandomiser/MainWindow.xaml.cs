@@ -363,6 +363,8 @@ namespace MarathonRandomiser
             Button_Custom_VoxRefresh.IsEnabled = true;
             Button_Custom_RemoveDeselectAll.Visibility = Visibility.Visible;
             Button_Custom_RemoveDeselectAll.IsEnabled = true;
+            CheckBox_Custom_Audio_Log.Visibility = Visibility.Visible;
+            CheckBox_Custom_Audio_Log.IsEnabled = true;
             TabControl_Custom.Margin = new(0, 0, 0, 60);
 
             // If we've selected the Voice Packs tab, then make the edits for that tab.
@@ -389,6 +391,8 @@ namespace MarathonRandomiser
                 Button_Custom_VoxRefresh.IsEnabled = false;
                 Button_Custom_RemoveDeselectAll.Visibility = Visibility.Hidden;
                 Button_Custom_RemoveDeselectAll.IsEnabled = false;
+                CheckBox_Custom_Audio_Log.Visibility = Visibility.Hidden;
+                CheckBox_Custom_Audio_Log.IsEnabled = false;
 
                 TabControl_Custom.Margin = new(0, 0, 0, 0);
             }
