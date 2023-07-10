@@ -2518,10 +2518,28 @@ namespace MarathonRandomiser
                     if (mab.Files.Count == 0 || Path.GetFileName(mabFile).StartsWith("e1"))
                         continue;
 
-                    // Loop through each file and do the retarget process if we need to.
+                    // Loop through each file in this mab.
                     foreach (CriwareFileRef file in mab.Files)
+                    {
+                        // If this is a character model, then do the retarget process.
                         if (modelLocations.ContainsKey(Path.GetFileNameWithoutExtension(file.Name)))
                             AnimationRandomiser.RetargetAnimations($@"{eventDataArchive}\win32\event\{Path.GetFileNameWithoutExtension(mabFile)}", Path.GetFileNameWithoutExtension(file.Name), modelLocations, file, animEventRetargetEnforceNewModel);
+
+                        // If this is a Chaos Emerald, then change the colour of it.
+                        if (file.Name.StartsWith("object/Common/chaosemerald"))
+                        {
+                            switch (Randomiser.Next(0, 7))
+                            {
+                                case 0: file.Name = "object/Common/chaosemerald/cmn_emeraldW.xno"; break;
+                                case 1: file.Name = "object/Common/chaosemerald/cmn_emeraldS.xno"; break;
+                                case 2: file.Name = "object/Common/chaosemerald/cmn_emeraldY.xno"; break;
+                                case 3: file.Name = "object/Common/chaosemerald/cmn_emeraldP.xno"; break;
+                                case 4: file.Name = "object/Common/chaosemerald/cmn_emeraldG.xno"; break;
+                                case 5: file.Name = "object/Common/chaosemerald/cmn_emeraldB.xno"; break;
+                                case 6: file.Name = "object/Common/chaosemerald/cmn_emeraldR.xno"; break;
+                            }
+                        }
+                    }
                     
                     // Resave the MAB file.
                     Helpers.SaveMAB(mab, mabFile);
