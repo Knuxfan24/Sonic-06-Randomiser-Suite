@@ -7,7 +7,7 @@
         xmlns:hc="https://handyorg.github.io/handycontrol"
         x:Class="MarathonRandomiser.MainWindow"
         mc:Ignorable="d"
-        Title="Sonic '06 Randomiser Suite" Height="820" Width="1750" MinHeight="820" MinWidth="1750">
+        Title="Sonic '06 Randomiser Suite" Height="820" Width="1750" MinHeight="820" MinWidth="1750" WindowStartupLocation="CenterScreen">
     <Grid Background="#FF181818">
         <hc:TabControl Style="{StaticResource TabControlInLine}" Margin="0,0,0,50" x:Name="TabControl_Main">
             <!--General Tab-->
