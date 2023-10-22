@@ -3033,13 +3033,21 @@ namespace MarathonRandomiser
                         // Extract event.arc.
                         string eventArc = await Task.Run(() => Helpers.ArchiveHandler(archive));
 
-                        // Run the LiT function on all the language versions.
+                        // Run the LiT function on all the language versions for e0026.
                         await Task.Run(() => TextRandomiser.LostInTranslation($@"{eventArc}\{corePath}\event\e0026\e0026.e.mst"));
                         await Task.Run(() => TextRandomiser.LostInTranslation($@"{eventArc}\{corePath}\event\e0026\e0026.f.mst"));
                         await Task.Run(() => TextRandomiser.LostInTranslation($@"{eventArc}\{corePath}\event\e0026\e0026.g.mst"));
                         await Task.Run(() => TextRandomiser.LostInTranslation($@"{eventArc}\{corePath}\event\e0026\e0026.i.mst"));
                         await Task.Run(() => TextRandomiser.LostInTranslation($@"{eventArc}\{corePath}\event\e0026\e0026.j.mst"));
                         await Task.Run(() => TextRandomiser.LostInTranslation($@"{eventArc}\{corePath}\event\e0026\e0026.s.mst"));
+
+                        // Run the LiT function on all the language versions for e0225.
+                        await Task.Run(() => TextRandomiser.LostInTranslation($@"{eventArc}\{corePath}\event\e0225\e0225.e.mst"));
+                        await Task.Run(() => TextRandomiser.LostInTranslation($@"{eventArc}\{corePath}\event\e0225\e0225.f.mst"));
+                        await Task.Run(() => TextRandomiser.LostInTranslation($@"{eventArc}\{corePath}\event\e0225\e0225.g.mst"));
+                        await Task.Run(() => TextRandomiser.LostInTranslation($@"{eventArc}\{corePath}\event\e0225\e0225.i.mst"));
+                        await Task.Run(() => TextRandomiser.LostInTranslation($@"{eventArc}\{corePath}\event\e0225\e0225.j.mst"));
+                        await Task.Run(() => TextRandomiser.LostInTranslation($@"{eventArc}\{corePath}\event\e0225\e0225.s.mst"));
                     }
                 }
             }

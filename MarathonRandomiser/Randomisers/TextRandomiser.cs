@@ -327,7 +327,7 @@ namespace MarathonRandomiser
         }
 
         /// <summary>
-        /// Replaces ev0026_12_sn in e0026 with Lost in Translation's best line.
+        /// Replaces ev0026_12_sn in e0026 and e0225 with Lost in Translation's best line.
         /// </summary>
         /// <param name="mstFile">The mst file to edit.</param>
         public static async Task LostInTranslation(string mstFile)
