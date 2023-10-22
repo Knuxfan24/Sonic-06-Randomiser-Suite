@@ -88,6 +88,8 @@ namespace MarathonRandomiser
                 message.Text = message.Text.Replace(",", " , ");
                 message.Text = message.Text.Replace("?", " ? ");
                 message.Text = message.Text.Replace("!", " ! ");
+                message.Text = message.Text.Replace("-", " - ");
+                message.Text = message.Text.Replace("\"", " \" ");
 
                 // Split this string into an array.
                 string[] split = message.Text.Split(' ');
@@ -96,7 +98,8 @@ namespace MarathonRandomiser
                 for (int i = 0; i < split.Length; i++)
                 {
                     // Check this isn't empty, a control character, basic punctuation or a number.
-                    if (split[i] is not "\n" and not "\f" and not "$" and not "" and not "." and not "," and not "?" and not "!" && !int.TryParse(split[i], out _))
+                    if (split[i] is not "\n" and not "\f" and not "$" and not "" and not "." and not "," and not "?" and not "!" and not "-" and not "\""
+                        && !int.TryParse(split[i], out _))
                     {
                         // Check the case of the word.
                         bool isAllUpper = false;
@@ -153,6 +156,8 @@ namespace MarathonRandomiser
                 message.Text = message.Text.Replace(" , ", ",");
                 message.Text = message.Text.Replace(" ? ", "?");
                 message.Text = message.Text.Replace(" ! ", "!");
+                message.Text = message.Text.Replace(" - ", "-");
+                message.Text = message.Text.Replace(" \" ", "\"");
             }
 
             // Save the MST.

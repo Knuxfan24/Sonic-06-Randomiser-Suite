@@ -1160,7 +1160,7 @@ namespace MarathonRandomiser
                                                   "Microsoft: xmaencode and texconv utilities.\n" +
                                                   "HandyControl: WPF Form Controls.\n" +
                                                   "Skyth: Sonic Audio Tools.\n" +
-                                                  "dwyl: Plain Text List of English Words.\n" +
+                                                  "Eric Price: Plain Text List of English Words.\n" +
                                                   "crash5band: XNCPLib.\n" +
                                                   "Mark Heath: NAudio.\n" +
                                                   "gordinramsey: Character Battle Mission Edits.",
@@ -2964,8 +2964,8 @@ namespace MarathonRandomiser
                 // Generate new random strings if we need to.
                 if (textGenerate == true)
                 {
-                    // Parse the list of English Words from https://github.com/dwyl/english-words into an array.
-                    string[] wordList = Properties.Resources.TextEnglishWords.Split("\r\n");
+                    // Parse the list of English Words from https://www.mit.edu/~ecprice/wordlist.10000 into an array.
+                    string[] wordList = Properties.Resources.TextEnglishWords.Split("\n");
 
                     // Loop through and process each MST.
                     foreach (string mstFile in mstFiles)
