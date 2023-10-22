@@ -3019,6 +3019,30 @@ namespace MarathonRandomiser
                     await Task.Run(() => TextRandomiser.ShuffleText(mstFiles));
                 }
             }
+
+            // Lost in Translation Easter Egg seed.
+            if (DisableEasterEggs == false && Seed.Contains("Google Translate"))
+            {
+                UpdateLogger($"Getting obsessed with money.");
+
+                // Loop through and find event.arc.
+                foreach (string archive in archives)
+                {
+                    if (Path.GetFileName(archive).ToLower() == "event.arc")
+                    {
+                        // Extract event.arc.
+                        string eventArc = await Task.Run(() => Helpers.ArchiveHandler(archive));
+
+                        // Run the LiT function on all the language versions.
+                        await Task.Run(() => TextRandomiser.LostInTranslation($@"{eventArc}\{corePath}\event\e0026\e0026.e.mst"));
+                        await Task.Run(() => TextRandomiser.LostInTranslation($@"{eventArc}\{corePath}\event\e0026\e0026.f.mst"));
+                        await Task.Run(() => TextRandomiser.LostInTranslation($@"{eventArc}\{corePath}\event\e0026\e0026.g.mst"));
+                        await Task.Run(() => TextRandomiser.LostInTranslation($@"{eventArc}\{corePath}\event\e0026\e0026.i.mst"));
+                        await Task.Run(() => TextRandomiser.LostInTranslation($@"{eventArc}\{corePath}\event\e0026\e0026.j.mst"));
+                        await Task.Run(() => TextRandomiser.LostInTranslation($@"{eventArc}\{corePath}\event\e0026\e0026.s.mst"));
+                    }
+                }
+            }
 #endregion
 
 #region UI Randomisers
@@ -3544,6 +3568,14 @@ namespace MarathonRandomiser
                                                           "Sonic '06 Randomiser Suite",
                                                           MessageBoxButton.OK,
                                                           MessageBoxImage.Error);
+                }
+
+                if (Seed.Contains("Google Translate"))
+                {
+                    HandyControl.Controls.MessageBox.Show("Where's my money?!",
+                                                          "Sonic '06 Randomiser Suite",
+                                                          MessageBoxButton.OK,
+                                                          MessageBoxImage.Information);
                 }
             }
         }

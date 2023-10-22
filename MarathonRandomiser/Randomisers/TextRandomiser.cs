@@ -95,18 +95,27 @@ namespace MarathonRandomiser
                 // Loop through and pick a random word for each array entry.
                 for (int i = 0; i < split.Length; i++)
                 {
-                    // Check this isn't empty, a control character or basic punctuation.
-                    if (split[i] is not "\n" and not "\f" and not "$" and not "" and not "." and not "," and not "?" and not "!")
+                    // Check this isn't empty, a control character, basic punctuation or a number.
+                    if (split[i] is not "\n" and not "\f" and not "$" and not "" and not "." and not "," and not "?" and not "!" && !int.TryParse(split[i], out _))
                     {
+                        // Check the case of the word.
+                        bool isAllUpper = false;
+                        bool isAllLower = false;
+
+                        if (split[i].ToLower() == split[i])
+                            isAllLower = true;
+                        if (split[i].ToUpper() == split[i])
+                            isAllUpper = true;
+
                         // If we're not enforcing the length of the words, pick any of them.
                         if (enforce == false)
-                            split[i] = wordList[MainWindow.Randomiser.Next(wordList.Length)].ToUpper();
+                            split[i] = wordList[MainWindow.Randomiser.Next(wordList.Length)];
 
                         // If we ARE enforcing the length of the words, then pick until it's the same length or we just give up.
                         else
                         {
                             // Choose a string to start with.
-                            string chosenString = wordList[MainWindow.Randomiser.Next(wordList.Length)].ToUpper();
+                            string chosenString = wordList[MainWindow.Randomiser.Next(wordList.Length)];
 
                             // Start with one million attempts.
                             int remainingAttempts = 1000000;
@@ -114,7 +123,7 @@ namespace MarathonRandomiser
                             // If the string is longer and we have attempts left, try again and deduct an attempt.
                             while (remainingAttempts != 0 && chosenString.Length != split[i].Length)
                             {
-                                chosenString = wordList[MainWindow.Randomiser.Next(wordList.Length)].ToUpper();
+                                chosenString = wordList[MainWindow.Randomiser.Next(wordList.Length)];
                                 remainingAttempts--;
                             }
 
@@ -123,8 +132,15 @@ namespace MarathonRandomiser
                                 System.Diagnostics.Debug.WriteLine($"Ran out of attempts to generate a word to replace \"{split[i]}\" for '{message.Name}' in '{mstFile}'.");
                             else
                                 split[i] = chosenString;
-
                         }
+
+                        // Change the case of the word/first character.
+                        if (isAllLower)
+                            split[i] = split[i].ToLower();
+                        else if (isAllUpper)
+                            split[i] = split[i].ToUpper();
+                        else
+                            split[i] = char.ToUpper(split[i][0]) + split[i][1..];
                     }
                 }
 
@@ -305,6 +321,24 @@ namespace MarathonRandomiser
                 message.Text = newMessage;
                 message.Placeholders = Placeholders.ToArray();
             }
+
+            // Save the MST.
+            mst.Save();
+        }
+
+        /// <summary>
+        /// Replaces ev0026_12_sn in e0026 with Lost in Translation's best line.
+        /// </summary>
+        /// <param name="mstFile">The mst file to edit.</param>
+        public static async Task LostInTranslation(string mstFile)
+        {
+            // Load the MST.
+            MessageTable mst = new(mstFile);
+
+            // Loop through each Message Entry in this MST to replace the correct one.
+            foreach (Message? message in mst.Data.Messages)
+                if (message.Name == "ev0026_12_sn")
+                    message.Text = "Thanks for the money";
 
             // Save the MST.
             mst.Save();
