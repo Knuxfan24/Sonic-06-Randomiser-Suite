@@ -26,7 +26,7 @@ namespace MarathonRandomiser
         // Version Number.
         public static readonly int GlobalVersionNumber_Rewrite = 2;
         public static readonly int GlobalVersionNumber_Revision = 1;
-        public static readonly int GlobalVersionNumber_Release = 22;
+        public static readonly int GlobalVersionNumber_Release = 23;
 
 #if !DEBUG
         public static readonly string VersionNumber = $"Version {GlobalVersionNumber_Rewrite}.{GlobalVersionNumber_Revision}.{GlobalVersionNumber_Release}";
