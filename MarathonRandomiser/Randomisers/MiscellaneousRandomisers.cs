@@ -336,5 +336,21 @@ namespace MarathonRandomiser
             // Tell the rando that we haven't replaced the title screen and can leave the XNCP alone.
             return false;
         }
+
+        /// <summary>
+        /// Replaces all the item capsule contents textures with the same question mark icon.
+        /// </summary>
+        /// <param name="archivePath">The path to the extracted object.arc.</param>
+        public static async Task HideItemCapsules(string archivePath)
+        {
+            File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\item_capsule_mystery.dds", $@"{archivePath}\win32\object\Common\itembox\cmn_baria_dflu_r.dds", true);
+            File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\item_capsule_mystery.dds", $@"{archivePath}\win32\object\Common\itembox\cmn_gageup_dflu_r.dds", true);
+            File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\item_capsule_mystery.dds", $@"{archivePath}\win32\object\Common\itembox\cmn_lvup_dflu_r.dds", true);
+            File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\item_capsule_mystery.dds", $@"{archivePath}\win32\object\Common\itembox\cmn_muteki_dflu_r.dds", true);
+            File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\item_capsule_mystery.dds", $@"{archivePath}\win32\object\Common\itembox\cmn_ring5_dflu_r.dds", true);
+            File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\item_capsule_mystery.dds", $@"{archivePath}\win32\object\Common\itembox\cmn_ring10_dflu_r.dds", true);
+            File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\item_capsule_mystery.dds", $@"{archivePath}\win32\object\Common\itembox\cmn_ring20_dflu_r.dds", true);
+            File.Copy($@"{Environment.CurrentDirectory}\ExternalResources\item_capsule_mystery.dds", $@"{archivePath}\win32\object\Common\itembox\cmn_speed_dflu_r.dds", true);
+        }
     }
 }

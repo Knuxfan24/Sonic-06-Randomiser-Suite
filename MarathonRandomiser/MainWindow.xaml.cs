@@ -3116,6 +3116,7 @@ namespace MarathonRandomiser
             bool? miscPropDebris = CheckBox_Misc_PropDebris.IsChecked;
             bool? miscIntroLogos = CheckBox_Misc_IntroVideos.IsChecked;
             bool? miscIntroLogosOrig = CheckBox_Misc_IntroVideos_Orig.IsChecked;
+            bool? miscMysteryCapsules = CheckBox_Misc_MysteryCapsules.IsChecked;
 
             // Check if we need to actually do enemy health randomisation.
             if (miscEnemyHealth == true)
@@ -3312,6 +3313,21 @@ namespace MarathonRandomiser
 
                             patchInfo.Close();
                         }
+                    }
+                }
+            }
+
+            // Check if we need to hide the Item Capsule contents.
+            if (miscMysteryCapsules == true)
+            {
+                UpdateLogger($"Hiding Item Capsules contents.");
+
+                foreach (string archive in archives)
+                {
+                    if (Path.GetFileName(archive).ToLower() == "object.arc")
+                    {
+                        string unpackedArchive = await Task.Run(() => Helpers.ArchiveHandler(archive));
+                        await Task.Run(() => MiscellaneousRandomisers.HideItemCapsules(unpackedArchive));
                     }
                 }
             }

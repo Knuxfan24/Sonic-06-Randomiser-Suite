@@ -153,6 +153,9 @@
     <None Update="ExternalResources\InvincibilityJingles\Sonic The Hedgehog 4.xma">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ExternalResources\item_capsule_mystery.dds">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ExternalResources\rando_obj_indicator.xno">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

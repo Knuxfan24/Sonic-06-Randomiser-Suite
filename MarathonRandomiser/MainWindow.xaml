@@ -548,6 +548,7 @@
                         <CheckBox x:Name="CheckBox_Misc_PropDebris" Content="Randomise Prop Debris" Foreground="Firebrick"/>
                         <CheckBox x:Name="CheckBox_Misc_IntroVideos" Content="Randomise Intro Videos" IsChecked="True" Click="Dependency_CheckBox_Changed"/>
                         <CheckBox x:Name="CheckBox_Misc_IntroVideos_Orig" Content="Allow Original Videos" IsChecked="False" IsEnabled="True"/>
+                        <CheckBox x:Name="CheckBox_Misc_MysteryCapsules" Content="Hide Item Capsule Contents" IsChecked="False"/>
                     </StackPanel>
 
                     <!--Miscellaneous Configuration Toggles-->
