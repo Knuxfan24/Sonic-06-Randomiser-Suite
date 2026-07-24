@@ -22,7 +22,7 @@
     <PackageReference Include="HandyControls" Version="3.4.5" />
     <PackageReference Include="NAudio" Version="2.1.0" />
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
-    <PackageReference Include="SharpCompress" Version="0.33.0" />
+    <PackageReference Include="SharpCompress" Version="0.48.0" />
     <PackageReference Include="System.Speech" Version="7.0.0" />
   </ItemGroup>
 
